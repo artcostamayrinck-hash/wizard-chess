@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta name="google-adsense-account" content="ca-pub-7015126547268342">
+  <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0a0e" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Wizard's Chess</title>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7015126547268342"
+     crossorigin="anonymous"></script>
+
+</head>
+  <body>
+    <div id="app"></div>
+    
+    <!-- Espaço reservado para o Banner de Publicidade Web -->
+    <div id="ad-container">
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:728px;height:90px"
+           data-ad-client="ca-pub-7015126547268342"
+           data-ad-slot="COLOQUE_O_SEU_SLOT_AQUI"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+  
+  <!-- Tipografia e Ícones do Material Design -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Onde o tabuleiro 3D é desenhado -->
+  <div id="canvas-container"></div>
+  <!-- Aviso de Xeque (Escondido por padrão) -->
+  <div id="check-warning" class="check-warning hidden">
+    <span class="material-symbols-rounded">warning</span>
+    <span>REI EM XEQUE!</span>
+  </div>
+
+  <!-- Menu Inicial -->
+  <!-- Botões do Menu -->
+      <div class="menu-actions">
+        <button id="btn-start-game" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Entrar na Catedral</button>
+      </div>
+  <!-- HUD Superior -->
+  <header class="hud-top">
+    <div class="brand-pill">
+      <span class="material-symbols-rounded">castle</span>
+      <span>WIZARD'S CHESS</span>
+    </div>
+    <div class="turn-container">
+      <!-- Cemitério de Peças Brancas (Mármore perdido) -->
+      <div id="grave-w" class="graveyard w-dead"></div>
+      
+      <div id="turn-banner" class="turn-pill">Turno:(Brancas)</div>
+      
+      <!-- Cemitério de Peças Pretas (Obsidiana perdida) -->
+      <div id="grave-b" class="graveyard b-dead"></div>
+    </div>
+  </header>
+
+  <!-- Barra de Navegação (Material Design 3) -->
+  <nav class="md3-dock">
+    <button id="btn-mode" class="dock-btn active" title="Alternar IA / 2 Jogadores">
+      <span class="material-symbols-rounded">smart_toy</span>
+      <span class="btn-label">vs IA</span>
+    </button>
+    <button id="btn-diff" class="dock-btn" title="Mudar Dificuldade da IA">
+      <span class="material-symbols-rounded">psychology</span>
+      <span class="btn-label">IA: Média</span>
+    </button>
+    <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
+      <span class="material-symbols-rounded">videocam</span>
+      <span class="btn-label">Câmera</span>
+    </button>
+    <button id="btn-hint" class="dock-btn" title="Pedir Dica ao Oráculo">
+      <span class="material-symbols-rounded">lightbulb</span>
+      <span class="btn-label">Oráculo</span>
+    </button>
+    
+    <button id="btn-fullscreen" class="dock-btn" title="Tela Cheia">
+      <span class="material-symbols-rounded">fullscreen</span>
+      <span class="btn-label">Tela Cheia</span>
+    </button>
+    <button id="btn-pause" class="dock-btn" title="Pausar Jogo">
+      <span class="material-symbols-rounded">pause</span>
+      <span class="btn-label">Pausar</span>
+    </button>
+    <button id="btn-online" class="dock-btn" title="Jogar Online">
+      <span class="material-symbols-rounded">public</span>
+      <span class="btn-label">Online</span>
+    </button> 
+    <button id="btn-undo" class="dock-btn" title="Desfazer Jogada">
+      <span class="material-symbols-rounded">undo</span>
+      <span class="btn-label">Desfazer</span>
+    </button>
+    <button id="btn-history" class="dock-btn" title="Histórico de Jogadas">
+      <span class="material-symbols-rounded">format_list_numbered</span>
+      <span class="btn-label">Registo</span>
+    </button>
+    <button id="btn-reset" class="dock-btn" title="Reiniciar Partida">
+      <span class="material-symbols-rounded">restart_alt</span>
+      <span class="btn-label">Reiniciar</span>
+    </button>
+  </nav>
+
+  <!-- Modal de Promoção do Peão -->
+  <div id="promotion-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3>Promover Peão</h3>
+      <div class="promo-options">
+        <button class="promo-btn" data-type="Q">
+          <span class="promo-icon">♕</span>
+          <span class="promo-text">Rainha</span>
+        </button>
+        <button class="promo-btn" data-type="R">
+          <span class="promo-icon">♖</span>
+          <span class="promo-text">Torre</span>
+        </button>
+        <button class="promo-btn" data-type="B">
+          <span class="promo-icon">♗</span>
+          <span class="promo-text">Bispo</span>
+        </button>
+        <button class="promo-btn" data-type="N">
+          <span class="promo-icon">♘</span>
+          <span class="promo-text">Cavalo</span>
+        </button>
+       
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Espera Online -->
+  <div id="waiting-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 style="font-size: 2rem;">A Aguardar Adversário...</h3>
+      <p style="margin-bottom: 24px; color: #d0bcff;">Envie o link abaixo para o seu amigo e espere que ele entre.</p>
+      
+      <!-- Caixa de texto com o link -->
+      <input type="text" id="room-link-input" readonly style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: #1a1721; color: #00f5d4; font-size: 1rem; text-align: center; outline: none;">
+      
+      <!-- Botão para copiar -->
+      <button id="btn-copy-link" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Copiar Link</button>
+    </div>
+  </div>
+
+  <!-- Modal de Fim de Jogo -->
+  <div id="game-over-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 id="game-over-title">Xeque-Mate!</h3>
+      <p id="game-over-msg" style="margin-bottom: 20px;">O Mármore venceu.</p>
+      <button id="btn-play-again" class="promo-btn">Jogar Novamente</button>
+    </div>
+  </div>
+
+ <!-- Painel de Histórico de Jogadas (Compacto) -->
+  <div id="history-panel" class="hidden" style="position: absolute; right: 20px; bottom: 90px; width: 170px; max-height: 250px; background: rgba(11, 10, 14, 0.9); border: 1px solid rgba(208, 188, 255, 0.3); border-radius: 12px; backdrop-filter: blur(6px); overflow-y: auto; padding: 12px; z-index: 15; box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
+    <h3 style="color: #f5c56b; text-align: center; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 1px solid #3b2d54; padding-bottom: 6px; letter-spacing: 1px;">REGISTO</h3>
+    <ol id="history-list" style="color: #d0bcff; font-family: monospace; font-size: 0.9rem; padding-left: 22px; line-height: 1.6; margin: 0;"></ol>
+  </div>
+
+  <!-- Modal de Pausa -->
+  <div id="pause-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 style="font-size: 2rem;">Jogo em Pausa</h3>
+      <button align="center" id="btn-resume" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px;">Continuar Batalha</button>
+    </div>
+  </div>
+
+  <!-- Modal de Espera Online -->
+  <div id="waiting-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 style="font-size: 2rem;">A Aguardar Adversário...</h3>
+      <p style="margin-bottom: 24px; color: #d0bcff;">Envie este link para o seu amigo e espere que ele entre na sala.</p>
+      
+      <input type="text" id="room-link-input" readonly style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: #1a1721; color: #00f5d4; font-size: 1rem; text-align: center; outline: none;">
+      
+      <button id="btn-copy-link" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Copiar Link</button>
+    </div>
+  </div>
+  
+  <!-- Módulo de Conexão Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    // A sua configuração exata do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtl1_ScEASiOlBgcVz0vaJ8tFC344PMoA",
+      authDomain: "wizard-chess-63c18.firebaseapp.com",
+      databaseURL: "https://wizard-chess-63c18-default-rtdb.firebaseio.com",
+      projectId: "wizard-chess-63c18",
+      storageBucket: "wizard-chess-63c18.firebasestorage.app",
+      messagingSenderId: "825912678494",
+      appId: "1:825912678494:web:6275022eab05cc3152fccf",
+      measurementId: "G-RDFLXNBHBW"
+    };
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Expõe as funções do Firebase globalmente para o seu main.js as conseguir usar
+    window.db = db;
+    window.dbRef = ref;
+    window.dbSet = set;
+    window.dbGet = get;
+    window.dbOnValue = onValue;
+    window.dbUpdate = update;
+    window.dbRemove = remove;
+  </script>
+
+
+
+  <!-- Ligação com a lógica do jogo -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
