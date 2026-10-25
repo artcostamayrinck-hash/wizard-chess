@@ -359,53 +359,60 @@ function createPieceMesh(type, color) {
     addTrim(0.75, 0.22); 
   } 
   else if (type === 'N') {
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.36, 0.2, 32), mat);
-    base.position.y = 0.1;
-    addTrim(0.05, 0.34);
-
+    createBase(); // Mantém a base circular padrão
+    
     const horseHead = new THREE.Group();
-    horseHead.position.y = 0.2; 
+    horseHead.position.y = 0.25; 
 
+    // Forma lateral exata do desenho (perfil do cavalo geométrico)
     const shape = new THREE.Shape();
-    shape.moveTo(-0.25, 0);       
-    shape.lineTo(0.25, 0);        
-    shape.lineTo(0.05, 0.45);     
-    shape.lineTo(0.35, 0.45);     
-    shape.lineTo(0.4, 0.65);      
-    shape.lineTo(-0.05, 0.95);    
-    shape.lineTo(-0.25, 0.9);     
-    shape.lineTo(-0.25, 0);       
+    shape.moveTo(-0.22, 0); 
+    shape.lineTo(0.22, 0);  
+    shape.lineTo(0.25, 0.45); 
+    shape.lineTo(0.38, 0.55); // Focinho quadrado/geométrico
+    shape.lineTo(0.38, 0.65); 
+    shape.lineTo(0.25, 0.68); 
+    shape.lineTo(0.08, 0.92); // Topo da cabeça / orelha pontiaguda do desenho
+    shape.lineTo(-0.25, 0.65); // nuca inclinada para trás
+    shape.lineTo(-0.22, 0);
 
-    const extrudeSettings = { depth: 0.26, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 4 };
+    const extrudeSettings = { depth: 0.18, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 4 };
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    geometry.translate(0, 0, -0.13); 
+    geometry.translate(0, 0, -0.09); 
     
     const mainBody = new THREE.Mesh(geometry, mat);
     horseHead.add(mainBody);
 
-    const stripe1 = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.7, 0.36), runeMat);
-    stripe1.position.set(-0.15, 0.35, 0);
-    const stripe2 = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.6, 0.36), runeMat);
-    stripe2.position.set(-0.02, 0.3, 0);
-    const stripe3 = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.4, 0.36), runeMat);
-    stripe3.position.set(0.11, 0.2, 0);
-    horseHead.add(stripe1, stripe2, stripe3);
+    // Orelha pontiaguda no topo exatamente como no rascunho
+    const earShape = new THREE.Shape();
+    earShape.moveTo(0, 0);
+    earShape.lineTo(0.06, 0.18);
+    earShape.lineTo(-0.04, 0.12);
+    earShape.closePath();
+    const earGeom = new THREE.ExtrudeGeometry(earShape, { depth: 0.06, bevelEnabled: false });
+    earGeom.translate(0.02, 0.88, -0.03);
+    const earMesh = new THREE.Mesh(earGeom, mat);
+    horseHead.add(earMesh);
 
-    for(let i = 0; i < 4; i++) {
-       const topStripe = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.2, 0.36), runeMat);
-       topStripe.position.set(-0.15 + (i * 0.12), 0.88 - (i * 0.08), 0);
-       topStripe.rotation.z = -0.8; 
-       horseHead.add(topStripe);
+    // Riscas horizontais amarelas/runas no pescoço (exatamente como desenhou)
+    const stripeYValues = [0.22, 0.35, 0.48, 0.61];
+    stripeYValues.forEach((yPos) => {
+      const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.025, 0.2), runeMat);
+      stripe.position.set(0.05, yPos, 0);
+      horseHead.add(stripe);
+    });
+
+    // Crina riscada na parte de trás
+    for(let i = 0; i < 5; i++) {
+       const t = i / 4;
+       const ridge = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.025, 0.16), runeMat); 
+       ridge.position.set(-0.2 - (t * 0.05), 0.75 - (t * 0.5), 0);
+       ridge.rotation.z = -0.4;
+       horseHead.add(ridge);
     }
 
-    const eye = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.36), runeMat);
-    eye.position.set(0.2, 0.7, 0);
-    eye.rotation.z = -0.5;
-    horseHead.add(eye);
-
-     horseHead.rotation.y = Math.PI / 2; 
-    
-    body.add(base, horseHead);
+    horseHead.rotation.y = -Math.PI / 2; 
+    body.add(horseHead);
   }
   else if (type === 'B') {
     createBase();
