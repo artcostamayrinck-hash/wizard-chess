@@ -1,77 +1,202 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
-  <meta name="google-adsense-account" content="ca-pub-7015126547268342">
   <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0a0e" />
+  <meta name="description"
+    content="Wizard's Chess 3D - Batalha de xadrez mágica na catedral gótica com inteligência artificial, física 3D e multiplayer online." />
   <link rel="manifest" href="/manifest.json" />
-  <title>Wizard's Chess</title>
+  <title>Wizard's Chess 3D</title>
 
+  <!-- Favicon e Ícones PWA -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/icon-512.png" />
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-7015126547268342">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7015126547268342"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
 
-</head>
-  <body>
-    <div id="app"></div>
-    
-    <!-- Espaço reservado para o Banner de Publicidade Web -->
-    <div id="ad-container">
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:728px;height:90px"
-           data-ad-client="ca-pub-7015126547268342"
-           data-ad-slot="COLOQUE_O_SEU_SLOT_AQUI"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-    
-    <script type="module" src="/src/main.js"></script>
-  
   <!-- Tipografia e Ícones do Material Design -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
+
 <body>
   <!-- Onde o tabuleiro 3D é desenhado -->
   <div id="canvas-container"></div>
-  <!-- Aviso de Xeque (Escondido por padrão) -->
+
+  <!-- Contêiner de Notificações de Emotes / Reações -->
+  <div id="emote-toast-container"></div>
+
+  <!-- Aviso de Xeque -->
   <div id="check-warning" class="check-warning hidden">
     <span class="material-symbols-rounded">warning</span>
     <span>REI EM XEQUE!</span>
   </div>
 
-  <!-- Menu Inicial -->
-  <!-- Botões do Menu -->
-      <div class="menu-actions">
-        <button id="btn-start-game" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Entrar na Catedral</button>
+  <!-- Barra de Avaliação Arcana (Eval Bar) -->
+  <div id="eval-bar-container" class="eval-bar-container" title="Balanço Arcano de Poder">
+    <div class="eval-bar-wrap">
+      <div id="eval-bar-fill-w" class="eval-bar-fill-w" style="height: 50%;"></div>
+    </div>
+    <div id="eval-score-badge" class="eval-score-badge">0.0</div>
+  </div>
+
+  <!-- Painel de Desafios por Arena e Nível -->
+  <div id="puzzle-hud" class="puzzle-hud hidden">
+    <div class="puzzle-hud-header">
+      <div class="puzzle-header-left">
+        <span id="puzzle-arena-icon" class="material-symbols-rounded puzzle-icon">castle</span>
+        <div>
+          <div id="puzzle-arena-name" class="puzzle-arena-tag">CATEDRAL ARCANA</div>
+          <div id="puzzle-title" class="puzzle-title">O Pastor Sagrado</div>
+        </div>
       </div>
+      <span id="puzzle-step-badge" class="puzzle-step-badge">Nível 1/4 • Iniciante</span>
+    </div>
+    <div id="puzzle-prompt" class="puzzle-prompt">Mate em 1 lance com a Rainha</div>
+    <div class="puzzle-hud-controls">
+      <div class="puzzle-arena-tabs">
+        <button class="puzzle-tab active" data-arena-challenge="cathedral"
+          title="Desafios da Catedral">Catedral</button>
+        <button class="puzzle-tab" data-arena-challenge="inferno" title="Desafios da Cripta">Cripta</button>
+        <button class="puzzle-tab" data-arena-challenge="frost" title="Desafios do Gelo">Gelo</button>
+      </div>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <button id="btn-puzzle-prev" class="puzzle-btn" title="Nível Anterior"><span
+            class="material-symbols-rounded">arrow_back</span></button>
+        <button id="btn-puzzle-hint" class="puzzle-btn hint-btn" title="Dica do Desafio"><span
+            class="material-symbols-rounded">lightbulb</span> Dica</button>
+        <button id="btn-puzzle-reset" class="puzzle-btn" title="Reiniciar Nível"><span
+            class="material-symbols-rounded">refresh</span></button>
+        <button id="btn-puzzle-next" class="puzzle-btn" title="Próximo Nível"><span
+            class="material-symbols-rounded">arrow_forward</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Inicial Pré-Jogo -->
+  <div id="start-menu" class="modal-overlay">
+    <div class="modal-content start-content">
+      <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
+        <span class="material-symbols-rounded">castle</span>
+        <span>CATEDRAL ARCANA</span>
+      </div>
+      <h2 class="game-title">WIZARD'S CHESS</h2>
+
+      <!-- Placar de Estatísticas Salvo no Navegador -->
+      <div id="stats-banner" class="stats-banner" title="Suas Estatísticas Salvas">
+        <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
+        <span class="stat-divider">•</span>
+        <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
+        <span class="stat-divider">•</span>
+        <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
+      </div>
+
+      <p style="color: #d0bcff; font-size: 0.95rem; margin-bottom: 24px;">Prepare suas runas e desafie o destino no
+        tabuleiro de pedra.</p>
+
+      <div class="setup-grid">
+        <!-- Modo de Jogo -->
+        <div class="setup-group">
+          <label class="setup-label">Modo de Batalha</label>
+          <div class="toggle-group" id="menu-mode-group">
+            <button class="toggle-btn active" data-mode="ai">vs IA</button>
+            <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
+            <button class="toggle-btn" data-mode="online">Online</button>
+            <button class="toggle-btn" data-mode="puzzle">Desafios</button>
+          </div>
+        </div>
+
+        <!-- Escolha de Arena / Atmosfera -->
+        <div class="setup-group">
+          <label class="setup-label">Arena da Batalha</label>
+          <div class="toggle-group" id="menu-arena-group">
+            <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
+            <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
+            <button class="toggle-btn" data-arena="frost">Templo de Gelo</button>
+          </div>
+        </div>
+
+        <!-- Escolha de Lado / Cor -->
+        <div class="setup-group">
+          <label class="setup-label">Seu Exército</label>
+          <div class="toggle-group" id="menu-color-group">
+            <button class="toggle-btn active" data-color="w">Mármore (Brancas)</button>
+            <button class="toggle-btn" data-color="b">Obsidiana (Pretas)</button>
+          </div>
+        </div>
+
+        <!-- Relógio / Tempo de Partida -->
+        <div class="setup-group">
+          <label class="setup-label">Relógio da Catedral</label>
+          <div class="toggle-group" id="menu-time-group">
+            <button class="toggle-btn" data-time="0">Livre</button>
+            <button class="toggle-btn" data-time="180">3 min</button>
+            <button class="toggle-btn active" data-time="300">5 min</button>
+            <button class="toggle-btn" data-time="600">10 min</button>
+          </div>
+        </div>
+
+        <!-- Dificuldade da IA -->
+        <div class="setup-group" id="menu-diff-section">
+          <label class="setup-label">Dificuldade da IA</label>
+          <div class="toggle-group" id="menu-diff-group">
+            <button class="toggle-btn" data-diff="1">Fácil</button>
+            <button class="toggle-btn active" data-diff="2">Média</button>
+            <button class="toggle-btn" data-diff="3">Difícil</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-actions" style="margin-top: 26px;">
+        <button id="btn-start-game" class="promo-btn" style="font-size: 1.15rem; padding: 16px 36px; width: 100%;">
+          Entrar na Catedral
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- HUD Superior -->
   <header class="hud-top">
-    <div class="brand-pill">
+    <div id="btn-open-menu" class="brand-pill" style="cursor: pointer;" title="Abrir Menu de Configuração">
       <span class="material-symbols-rounded">castle</span>
       <span>WIZARD'S CHESS</span>
     </div>
+
     <div class="turn-container">
-      <!-- Cemitério de Peças Brancas (Mármore perdido) -->
-      <div id="grave-w" class="graveyard w-dead"></div>
-      
-      <div id="turn-banner" class="turn-pill">Turno:(Brancas)</div>
-      
-      <!-- Cemitério de Peças Pretas (Obsidiana perdida) -->
-      <div id="grave-b" class="graveyard b-dead"></div>
+      <!-- Relógio Brancas -->
+      <div id="timer-w" class="chess-timer w-timer" title="Tempo das Brancas">
+        <span class="material-symbols-rounded timer-icon">timer</span>
+        <span class="timer-digits">05:00</span>
+      </div>
+
+      <!-- Cemitério de Peças Brancas -->
+      <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
+
+      <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
+
+      <!-- Cemitério de Peças Pretas -->
+      <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
+
+      <!-- Relógio Pretas -->
+      <div id="timer-b" class="chess-timer b-timer" title="Tempo das Pretas">
+        <span class="material-symbols-rounded timer-icon">timer</span>
+        <span class="timer-digits">05:00</span>
+      </div>
     </div>
   </header>
 
-  <!-- Barra de Navegação (Material Design 3) -->
+  <!-- Barra de Navegação Inferior (Material Design 3 Dock) -->
   <nav class="md3-dock">
-    <button id="btn-mode" class="dock-btn active" title="Alternar IA / 2 Jogadores">
+    <button id="btn-mode" class="dock-btn active" title="Alternar Modo de Jogo">
       <span class="material-symbols-rounded">smart_toy</span>
       <span class="btn-label">vs IA</span>
-    </button>
-    <button id="btn-diff" class="dock-btn" title="Mudar Dificuldade da IA">
-      <span class="material-symbols-rounded">psychology</span>
-      <span class="btn-label">IA: Média</span>
     </button>
     <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
       <span class="material-symbols-rounded">videocam</span>
@@ -81,22 +206,21 @@
       <span class="material-symbols-rounded">lightbulb</span>
       <span class="btn-label">Oráculo</span>
     </button>
-    
-    <button id="btn-fullscreen" class="dock-btn" title="Tela Cheia">
-      <span class="material-symbols-rounded">fullscreen</span>
-      <span class="btn-label">Tela Cheia</span>
+    <button id="btn-audio" class="dock-btn active" title="Efeitos Sonoros">
+      <span class="material-symbols-rounded">volume_up</span>
+      <span class="btn-label">Som</span>
     </button>
-    <button id="btn-pause" class="dock-btn" title="Pausar Jogo">
-      <span class="material-symbols-rounded">pause</span>
-      <span class="btn-label">Pausar</span>
+    <button id="btn-emotes" class="dock-btn" title="Emotes Mágicos">
+      <span class="material-symbols-rounded">sentiment_satisfied</span>
+      <span class="btn-label">Emotes</span>
     </button>
-    <button id="btn-online" class="dock-btn" title="Jogar Online">
-      <span class="material-symbols-rounded">public</span>
-      <span class="btn-label">Online</span>
-    </button> 
-    <button id="btn-undo" class="dock-btn" title="Desfazer Jogada">
-      <span class="material-symbols-rounded">undo</span>
-      <span class="btn-label">Desfazer</span>
+    <button id="btn-resign" class="dock-btn" title="Abandonar Partida (Rendição)">
+      <span class="material-symbols-rounded">flag</span>
+      <span class="btn-label">Desistir</span>
+    </button>
+    <button id="btn-pause" class="dock-btn" title="Menu de Pausa e Regras">
+      <span class="material-symbols-rounded">pause_circle</span>
+      <span class="btn-label">Menu de Pausa</span>
     </button>
     <button id="btn-history" class="dock-btn" title="Histórico de Jogadas">
       <span class="material-symbols-rounded">format_list_numbered</span>
@@ -106,12 +230,45 @@
       <span class="material-symbols-rounded">restart_alt</span>
       <span class="btn-label">Reiniciar</span>
     </button>
+    <button id="btn-fullscreen" class="dock-btn" title="Tela Cheia">
+      <span class="material-symbols-rounded">fullscreen</span>
+      <span class="btn-label">Tela Cheia</span>
+    </button>
   </nav>
+
+  <!-- Menu Flutuante de Emotes Mágicos -->
+  <div id="emotes-popup" class="emotes-popup hidden">
+    <div class="emotes-header">Reações Rápidas</div>
+    <div class="emotes-grid">
+      <button class="emote-btn" data-msg="⚔️ Em guarda!">⚔️ Em guarda!</button>
+      <button class="emote-btn" data-msg="👑 Rei em perigo!">👑 Rei em perigo!</button>
+      <button class="emote-btn" data-msg="🧙 Belo lance!">🧙 Belo lance!</button>
+      <button class="emote-btn" data-msg="🤝 Bom jogo!">🤝 Bom jogo!</button>
+      <button class="emote-btn" data-msg="⚡ O tempo ruge!">⚡ O tempo ruge!</button>
+      <button class="emote-btn" data-msg="🔮 Runa ativada!">🔮 Runa ativada!</button>
+    </div>
+  </div>
+
+  <!-- Modal de Rendição (Desistir) -->
+  <div id="resign-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 380px;">
+      <h3>RENDIÇÃO</h3>
+      <p style="color: #d0bcff; margin-bottom: 22px; font-size: 0.95rem;">Deseja realmente baixar suas armas e abandonar
+        a partida?</p>
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-confirm-resign" class="promo-btn"
+          style="flex: 1; background: rgba(255, 77, 109, 0.2); border-color: #ff4d6d; color: #ff4d6d;">Abandonar
+        </button>
+        <button id="btn-cancel-resign" class="promo-btn" style="flex: 1;">Continuar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal de Promoção do Peão -->
   <div id="promotion-modal" class="modal-overlay hidden">
     <div class="modal-content">
       <h3>Promover Peão</h3>
+      <p style="color: #d0bcff; margin-bottom: 18px; font-size: 0.9rem;">Escolha a nova forma mágica do seu peão:</p>
       <div class="promo-options">
         <button class="promo-btn" data-type="Q">
           <span class="promo-icon">♕</span>
@@ -129,66 +286,138 @@
           <span class="promo-icon">♘</span>
           <span class="promo-text">Cavalo</span>
         </button>
-       
       </div>
     </div>
   </div>
 
-  <!-- Modal de Espera Online -->
+  <!-- Modal Multijogador Online -->
   <div id="waiting-modal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <h3 style="font-size: 2rem;">A Aguardar Adversário...</h3>
-      <p style="margin-bottom: 24px; color: #d0bcff;">Envie o link abaixo para o seu amigo e espere que ele entre.</p>
-      
-      <!-- Caixa de texto com o link -->
-      <input type="text" id="room-link-input" readonly style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: #1a1721; color: #00f5d4; font-size: 1rem; text-align: center; outline: none;">
-      
-      <!-- Botão para copiar -->
-      <button id="btn-copy-link" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Copiar Link</button>
+    <div class="modal-content" style="max-width: 440px; width: 90%;">
+      <h3>SALA ONLINE</h3>
+      <p style="margin-bottom: 16px; color: #d0bcff;">Compartilhe este Código ou o Link com o seu adversário:</p>
+
+      <!-- Código Curto de Sala -->
+      <div class="short-code-box">
+        <span style="font-size: 0.8rem; letter-spacing: 1.5px; color: #f5c56b;">CÓDIGO DA SALA</span>
+        <div id="room-short-code" class="short-code-digits">----</div>
+      </div>
+
+      <!-- Caixa de texto com o link completo -->
+      <input type="text" id="room-link-input" readonly class="modal-input">
+
+      <div style="display: flex; gap: 10px; margin-top: 14px;">
+        <button id="btn-copy-link" class="promo-btn" style="flex: 1; padding: 12px;">Copiar Link</button>
+        <button id="btn-close-online" class="promo-btn"
+          style="flex: 1; padding: 12px; background: rgba(255,255,255,0.06);">Fechar</button>
+      </div>
+
+      <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--md-border);">
+        <p style="font-size: 0.85rem; color: #d0bcff; margin-bottom: 10px;">Ou entre em uma sala existente:</p>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="input-join-code" placeholder="Código (ex: WIZ7)" class="modal-input"
+            style="text-transform: uppercase; margin: 0;">
+          <button id="btn-join-code" class="promo-btn" style="padding: 10px 16px;">Entrar</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Modal de Fim de Jogo -->
   <div id="game-over-modal" class="modal-overlay hidden">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 440px;">
       <h3 id="game-over-title">Xeque-Mate!</h3>
-      <p id="game-over-msg" style="margin-bottom: 20px;">O Mármore venceu.</p>
-      <button id="btn-play-again" class="promo-btn">Jogar Novamente</button>
+      <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
+
+      <!-- Bloco de Anúncio AdSense no Fim de Jogo (Alta Rentabilidade) -->
+      <div class="ad-unit-card" id="ad-game-over-card">
+        <span class="ad-label">PUBLICIDADE</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342"
+          data-ad-slot="1463332817" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
+        Novamente</button>
     </div>
   </div>
 
- <!-- Painel de Histórico de Jogadas (Compacto) -->
-  <div id="history-panel" class="hidden" style="position: absolute; right: 20px; bottom: 90px; width: 170px; max-height: 250px; background: rgba(11, 10, 14, 0.9); border: 1px solid rgba(208, 188, 255, 0.3); border-radius: 12px; backdrop-filter: blur(6px); overflow-y: auto; padding: 12px; z-index: 15; box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
-    <h3 style="color: #f5c56b; text-align: center; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 1px solid #3b2d54; padding-bottom: 6px; letter-spacing: 1px;">REGISTO</h3>
-    <ol id="history-list" style="color: #d0bcff; font-family: monospace; font-size: 0.9rem; padding-left: 22px; line-height: 1.6; margin: 0;"></ol>
+  <!-- Painel de Histórico de Jogadas -->
+  <div id="history-panel" class="hidden">
+    <h3
+      style="color: #f5c56b; text-align: center; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 1px solid #3b2d54; padding-bottom: 6px; letter-spacing: 1px;">
+      REGISTO DE LANCES</h3>
+    <ol id="history-list"></ol>
+    <button id="btn-copy-pgn" class="promo-btn"
+      style="width: 100%; margin-top: 12px; padding: 8px 10px; font-size: 0.8rem; border-radius: 8px;">
+      Copiar PGN
+    </button>
   </div>
 
-  <!-- Modal de Pausa -->
+  <!-- Modal de Pausa / Menu da Partida -->
   <div id="pause-modal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <h3 style="font-size: 2rem;">Jogo em Pausa</h3>
-      <button align="center" id="btn-resume" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px;">Continuar Batalha</button>
+    <div class="modal-content pause-content" style="max-width: 440px;">
+      <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
+        <span class="material-symbols-rounded">pause_circle</span>
+        <span>PAUSA</span>
+      </div>
+      <h3 style="font-size: 1.8rem; margin-bottom: 8px;">MENU DA BATALHA</h3>
+      <p style="color: #d0bcff; font-size: 0.9rem; margin-bottom: 20px;">O tempo e os movimentos estão congelados.</p>
+
+      <!-- Alterar Modo de Jogo -->
+      <div class="setup-group" style="text-align: left; margin-bottom: 18px;">
+        <label class="setup-label">Alterar Modo de Jogo</label>
+        <div class="toggle-group" id="pause-mode-group">
+          <button class="toggle-btn active" data-mode="ai">vs IA</button>
+          <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
+          <button class="toggle-btn" data-mode="online">Online</button>
+          <button class="toggle-btn" data-mode="puzzle">Desafios</button>
+        </div>
+      </div>
+
+      <!-- Alterar Atmosfera da Arena -->
+      <div class="setup-group" style="text-align: left; margin-bottom: 22px;">
+        <label class="setup-label">Atmosfera da Arena</label>
+        <div class="toggle-group" id="pause-arena-group">
+          <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
+          <button class="toggle-btn" data-arena="inferno">Cripta</button>
+          <button class="toggle-btn" data-arena="frost">Gelo</button>
+        </div>
+      </div>
+
+      <!-- Ações do Menu de Pausa -->
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button id="btn-resume" class="promo-btn"
+          style="font-size: 1.05rem; padding: 14px 24px; width: 100%; font-weight: 700; background: rgba(208, 188, 255, 0.2); border-color: var(--md-primary);">
+          <span class="material-symbols-rounded"
+            style="vertical-align: middle; margin-right: 6px;">play_arrow</span>Continuar Batalha
+        </button>
+        <button id="btn-pause-restart" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem;">
+          <span class="material-symbols-rounded"
+            style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
+        </button>
+        <button id="btn-pause-main-menu" class="promo-btn"
+          style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
+          Inicial (Catedral)
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Modal de Espera Online -->
-  <div id="waiting-modal" class="modal-overlay hidden">
-    <div class="modal-content">
-      <h3 style="font-size: 2rem;">A Aguardar Adversário...</h3>
-      <p style="margin-bottom: 24px; color: #d0bcff;">Envie este link para o seu amigo e espere que ele entre na sala.</p>
-      
-      <input type="text" id="room-link-input" readonly style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: #1a1721; color: #00f5d4; font-size: 1rem; text-align: center; outline: none;">
-      
-      <button id="btn-copy-link" class="promo-btn" style="font-size: 1.1rem; padding: 14px 32px; width: 100%;">Copiar Link</button>
-    </div>
+  <!-- Espaço reservado para Publicidade Web (Banner Responsivo de Rodapé/Menu) -->
+  <div id="ad-container" class="ad-banner-wrapper">
+    <span class="ad-label">PUBLICIDADE</span>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342" data-ad-slot="9745233237"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+    </script>
   </div>
-  
+
   <!-- Módulo de Conexão Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-    // A sua configuração exata do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBtl1_ScEASiOlBgcVz0vaJ8tFC344PMoA",
       authDomain: "wizard-chess-63c18.firebaseapp.com",
@@ -200,23 +429,24 @@
       measurementId: "G-RDFLXNBHBW"
     };
 
-    // Inicializa o Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
 
-    // Expõe as funções do Firebase globalmente para o seu main.js as conseguir usar
-    window.db = db;
-    window.dbRef = ref;
-    window.dbSet = set;
-    window.dbGet = get;
-    window.dbOnValue = onValue;
-    window.dbUpdate = update;
-    window.dbRemove = remove;
+      window.db = db;
+      window.dbRef = ref;
+      window.dbSet = set;
+      window.dbGet = get;
+      window.dbOnValue = onValue;
+      window.dbUpdate = update;
+      window.dbRemove = remove;
+    } catch (err) {
+      console.warn("Firebase não inicializado no modo offline:", err);
+    }
   </script>
 
-
-
-  <!-- Ligação com a lógica do jogo -->
+  <!-- Ligação com a lógica central do jogo -->
   <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>
