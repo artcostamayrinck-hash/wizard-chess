@@ -1654,6 +1654,9 @@ document.querySelectorAll('#menu-mode-group .toggle-btn').forEach(btn => {
     isPuzzleMode = (mode === 'puzzle');
     vsAI = (mode === 'ai');
     isOnlineGame = (mode === 'online');
+
+    const puzzleHud = document.getElementById('puzzle-hud');
+    if (puzzleHud && !isPuzzleMode) puzzleHud.classList.add('hidden');
     
     const diffSection = document.getElementById('menu-diff-section');
     if (diffSection) diffSection.style.display = vsAI ? 'flex' : 'none';
@@ -1777,6 +1780,32 @@ if (btnPuzzleHint) {
   });
 }
 
+// Botão Fechar Painel de Desafios e Voltar ao Modo Normal
+const btnPuzzleClose = document.getElementById('btn-puzzle-close');
+if (btnPuzzleClose) {
+  btnPuzzleClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sfx.playClick();
+    isPuzzleMode = false;
+    vsAI = true;
+    const puzzleHud = document.getElementById('puzzle-hud');
+    if (puzzleHud) puzzleHud.classList.add('hidden');
+    
+    const elW = document.getElementById('timer-w');
+    const elB = document.getElementById('timer-b');
+    if (elW) elW.style.display = 'flex';
+    if (elB) elB.style.display = 'flex';
+
+    const btnMode = document.getElementById('btn-mode');
+    if (btnMode) {
+      btnMode.classList.add('active');
+      btnMode.querySelector('.btn-label').textContent = 'vs IA';
+    }
+
+    resetGame();
+  });
+}
+
 // INICIAR PARTIDA - O jogo APENAS começa ao clicar expressamente neste botão
 if (btnStartGame) {
   btnStartGame.addEventListener('click', (e) => {
@@ -1827,6 +1856,8 @@ if (btnOpenMenu && startMenu) {
     startMenu.classList.remove('hidden');
     isGameStarted = false;
     controls.enabled = false;
+    const puzzleHud = document.getElementById('puzzle-hud');
+    if (puzzleHud) puzzleHud.classList.add('hidden');
   });
 }
 
@@ -2172,6 +2203,15 @@ function resetGame(fullReset = true) {
   selectedSquare = null; validMoves = []; clearHighlights();
   while (lastMoveGroup.children.length > 0) lastMoveGroup.remove(lastMoveGroup.children[0]);
   
+  if (!isPuzzleMode) {
+    const puzzleHud = document.getElementById('puzzle-hud');
+    if (puzzleHud) puzzleHud.classList.add('hidden');
+    const elW = document.getElementById('timer-w');
+    const elB = document.getElementById('timer-b');
+    if (elW) elW.style.display = 'flex';
+    if (elB) elB.style.display = 'flex';
+  }
+
   engine.reset();
   syncBoardMeshes();
 

@@ -23,8 +23,8 @@
   <!-- Tipografia e Ícones do Material Design -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
-  <script type="module" crossorigin src="/assets/index-TFMz2Crd.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-D1ncpkza.css">
+  <script type="module" crossorigin src="/assets/index-Dmtay6rb.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CrO8ZqHi.css">
 </head>
 
 <body>
@@ -58,20 +58,30 @@
           <div id="puzzle-title" class="puzzle-title">O Pastor Sagrado</div>
         </div>
       </div>
-      <span id="puzzle-step-badge" class="puzzle-step-badge">Nível 1/4 • Iniciante</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="puzzle-step-badge" class="puzzle-step-badge">Nível 1/4 • Iniciante</span>
+        <button id="btn-puzzle-close" class="puzzle-close-btn" title="Fechar Desafios e Voltar ao Jogo">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
     </div>
     <div id="puzzle-prompt" class="puzzle-prompt">Mate em 1 lance com a Rainha</div>
     <div class="puzzle-hud-controls">
       <div class="puzzle-arena-tabs">
-        <button class="puzzle-tab active" data-arena-challenge="cathedral" title="Desafios da Catedral">Catedral</button>
+        <button class="puzzle-tab active" data-arena-challenge="cathedral"
+          title="Desafios da Catedral">Catedral</button>
         <button class="puzzle-tab" data-arena-challenge="inferno" title="Desafios da Cripta">Cripta</button>
         <button class="puzzle-tab" data-arena-challenge="frost" title="Desafios do Gelo">Gelo</button>
       </div>
       <div style="display: flex; gap: 6px; align-items: center;">
-        <button id="btn-puzzle-prev" class="puzzle-btn" title="Nível Anterior"><span class="material-symbols-rounded">arrow_back</span></button>
-        <button id="btn-puzzle-hint" class="puzzle-btn hint-btn" title="Dica do Desafio"><span class="material-symbols-rounded">lightbulb</span> Dica</button>
-        <button id="btn-puzzle-reset" class="puzzle-btn" title="Reiniciar Nível"><span class="material-symbols-rounded">refresh</span></button>
-        <button id="btn-puzzle-next" class="puzzle-btn" title="Próximo Nível"><span class="material-symbols-rounded">arrow_forward</span></button>
+        <button id="btn-puzzle-prev" class="puzzle-btn" title="Nível Anterior"><span
+            class="material-symbols-rounded">arrow_back</span></button>
+        <button id="btn-puzzle-hint" class="puzzle-btn hint-btn" title="Dica do Desafio"><span
+            class="material-symbols-rounded">lightbulb</span> Dica</button>
+        <button id="btn-puzzle-reset" class="puzzle-btn" title="Reiniciar Nível"><span
+            class="material-symbols-rounded">refresh</span></button>
+        <button id="btn-puzzle-next" class="puzzle-btn" title="Próximo Nível"><span
+            class="material-symbols-rounded">arrow_forward</span></button>
       </div>
     </div>
   </div>
@@ -323,16 +333,12 @@
     <div class="modal-content" style="max-width: 440px;">
       <h3 id="game-over-title">Xeque-Mate!</h3>
       <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
-      
+
       <!-- Bloco de Anúncio AdSense no Fim de Jogo (Alta Rentabilidade) -->
       <div class="ad-unit-card" id="ad-game-over-card">
         <span class="ad-label">PUBLICIDADE</span>
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-7015126547268342"
-          data-ad-slot="COLOQUE_SEU_SLOT_GAME_OVER"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342"
+          data-ad-slot="1463332817" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </div>
 
       <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
@@ -406,12 +412,8 @@
   <!-- Espaço reservado para Publicidade Web (Banner Responsivo de Rodapé/Menu) -->
   <div id="ad-container" class="ad-banner-wrapper">
     <span class="ad-label">PUBLICIDADE</span>
-    <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-7015126547268342"
-      data-ad-slot="COLOQUE_SEU_SLOT_BANNER"
-      data-ad-format="auto"
-      data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342" data-ad-slot="9745233237"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
     </script>

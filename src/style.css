@@ -240,9 +240,11 @@ html, body {
   pointer-events: auto;
 }
 
+.hidden,
+.puzzle-hud.hidden,
 .modal-overlay.hidden,
 #start-menu.hidden {
-  opacity: 0;
+  opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
   display: none !important;
@@ -746,6 +748,40 @@ html, body {
   gap: 8px;
   pointer-events: auto;
   animation: puzzleEntrance 0.5s ease-out;
+}
+
+.puzzle-hud.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+.puzzle-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--md-border);
+  color: var(--md-text);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  outline: none;
+}
+
+.puzzle-close-btn:hover {
+  background: rgba(255, 77, 109, 0.3);
+  border-color: var(--md-danger);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.puzzle-close-btn .material-symbols-rounded {
+  font-size: 1.15rem;
 }
 
 @keyframes puzzleEntrance {
