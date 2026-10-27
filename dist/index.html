@@ -126,6 +126,238 @@
     #btn-undo:hover {
       background: rgba(245, 197, 107, 0.25);
     }
+
+    /* XP e Hierarquia do Mago */
+    .xp-banner {
+      background: rgba(11, 10, 14, 0.85);
+      border: 1px solid rgba(245, 197, 107, 0.4);
+      border-radius: 16px;
+      padding: 10px 16px;
+      margin: 0 auto 16px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+    }
+    .xp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .xp-rank-title {
+      color: var(--md-gold);
+      letter-spacing: 0.5px;
+    }
+    .xp-rank-lvl {
+      background: rgba(208, 188, 255, 0.2);
+      border: 1px solid var(--md-primary);
+      color: var(--md-primary);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+    }
+    .xp-bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f5c56b, #00f5d4);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(0, 245, 212, 0.6);
+      transition: width 0.6s ease;
+    }
+    .xp-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #8c829e;
+    }
+    .player-rank-pill {
+      background: var(--md-surface);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--md-border);
+      padding: 8px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      pointer-events: auto;
+      color: var(--md-gold);
+      transition: transform 0.2s;
+    }
+    .player-rank-pill:hover {
+      transform: scale(1.04);
+      border-color: var(--md-gold);
+    }
+    .rank-tag {
+      background: rgba(245, 197, 107, 0.2);
+      color: var(--md-gold);
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    /* Conquistas (Achievements) */
+    .achievements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 52vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(14, 11, 20, 0.7);
+      border: 1px solid var(--md-border);
+      border-radius: 14px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .achievement-item.unlocked {
+      border-color: rgba(245, 197, 107, 0.45);
+      background: rgba(245, 197, 107, 0.08);
+    }
+    .achievement-item.locked {
+      opacity: 0.45;
+      filter: grayscale(0.8);
+    }
+    .ach-icon-box {
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      border: 1px solid var(--md-border);
+    }
+    .achievement-item.unlocked .ach-icon-box {
+      border-color: var(--md-gold);
+      box-shadow: 0 0 12px rgba(245, 197, 107, 0.3);
+    }
+    .ach-info {
+      flex: 1;
+    }
+    .ach-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .ach-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--md-text);
+    }
+    .achievement-item.unlocked .ach-title {
+      color: var(--md-gold);
+    }
+    .ach-xp-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--md-cyan);
+    }
+    .ach-desc {
+      font-size: 0.78rem;
+      color: #b0a4c4;
+      line-height: 1.3;
+    }
+    .ach-status-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .ach-status-tag.unlocked {
+      color: #00f5d4;
+    }
+    .ach-status-tag.locked {
+      color: #8c829e;
+    }
+
+    /* Console-Style Achievement Toast */
+    .achievement-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #120e1df2;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--md-gold);
+      border-radius: 18px;
+      padding: 12px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(245, 197, 107, 0.5);
+      max-width: 380px;
+      animation: achSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      pointer-events: auto;
+    }
+    .achievement-toast.hidden {
+      display: none !important;
+    }
+    @keyframes achSlideIn {
+      0% { transform: translateY(-60px) scale(0.9); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    @keyframes achSlideOut {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-40px) scale(0.9); opacity: 0; }
+    }
+    .ach-toast-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 8px rgba(245, 197, 107, 0.6));
+    }
+    .ach-toast-body {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .ach-toast-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--md-cyan);
+      text-transform: uppercase;
+    }
+    .ach-toast-title {
+      font-family: Cinzel, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--md-gold);
+      letter-spacing: 0.5px;
+    }
+    .ach-toast-desc {
+      font-size: 0.78rem;
+      color: #e2dbec;
+    }
+    @media (max-width: 600px) {
+      .achievement-toast {
+        top: 14px;
+        right: 14px;
+        left: 14px;
+        max-width: none;
+      }
+    }
   </style>
 </head>
 
@@ -206,6 +438,21 @@
         <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
       </div>
 
+      <!-- Grau do Mago & Barra de XP Arcana -->
+      <div id="player-xp-container" class="xp-banner" title="Nível e Experiência do Mago">
+        <div class="xp-header">
+          <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
+          <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
+        </div>
+        <div class="xp-bar-track">
+          <div id="menu-xp-bar-fill" class="xp-bar-fill" style="width: 15%;"></div>
+        </div>
+        <div class="xp-footer">
+          <span id="menu-xp-current">0 XP</span>
+          <span id="menu-xp-next">200 XP para o próximo grau</span>
+        </div>
+      </div>
+
       <p style="color: #d0bcff; font-size: 0.95rem; margin-bottom: 24px;">Prepare suas runas e desafie o destino no
         tabuleiro de pedra.</p>
 
@@ -228,6 +475,17 @@
             <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
             <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
             <button class="toggle-btn" data-arena="frost">Templo de Gelo</button>
+          </div>
+        </div>
+
+        <!-- Escolha de Skin das Peças -->
+        <div class="setup-group">
+          <label class="setup-label">Skin das Peças 3D</label>
+          <div class="toggle-group" id="menu-skin-group">
+            <button class="toggle-btn active" data-skin="classic">Clássico</button>
+            <button class="toggle-btn" data-skin="gold">Ouro Real</button>
+            <button class="toggle-btn" data-skin="amethyst">Ametista</button>
+            <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
           </div>
         </div>
 
@@ -272,9 +530,16 @@
 
   <!-- HUD Superior -->
   <header class="hud-top">
-    <div id="btn-open-menu" class="brand-pill" style="cursor: pointer;" title="Abrir Menu de Configuração">
-      <span class="material-symbols-rounded">castle</span>
-      <span>WIZARD'S CHESS</span>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <div id="btn-open-menu" class="brand-pill" style="cursor: pointer;" title="Abrir Menu de Configuração">
+        <span class="material-symbols-rounded">castle</span>
+        <span>WIZARD'S CHESS</span>
+      </div>
+      <div id="btn-achievements-hud" class="player-rank-pill" style="cursor: pointer;" title="Conquistas e Títulos">
+        <span class="material-symbols-rounded" style="font-size: 1.1rem; color: var(--md-gold);">military_tech</span>
+        <span id="hud-player-rank">Iniciado</span>
+        <span id="hud-player-lvl" class="rank-tag">Nv. 1</span>
+      </div>
     </div>
 
     <div class="turn-container">
@@ -325,6 +590,10 @@
     <button id="btn-audio" class="dock-btn active" title="Efeitos Sonoros">
       <span class="material-symbols-rounded">volume_up</span>
       <span class="btn-label">Som</span>
+    </button>
+    <button id="btn-achievements" class="dock-btn" title="Conquistas Arcanas">
+      <span class="material-symbols-rounded">emoji_events</span>
+      <span class="btn-label">Conquistas</span>
     </button>
     <button id="btn-emotes" class="dock-btn" title="Emotes Mágicos">
       <span class="material-symbols-rounded">sentiment_satisfied</span>
@@ -519,12 +788,23 @@
       </div>
 
       <!-- Alterar Atmosfera da Arena -->
-      <div class="setup-group" style="text-align: left; margin-bottom: 22px;">
+      <div class="setup-group" style="text-align: left; margin-bottom: 18px;">
         <label class="setup-label">Atmosfera da Arena</label>
         <div class="toggle-group" id="pause-arena-group">
           <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
           <button class="toggle-btn" data-arena="inferno">Cripta</button>
           <button class="toggle-btn" data-arena="frost">Gelo</button>
+        </div>
+      </div>
+
+      <!-- Alterar Skin das Peças -->
+      <div class="setup-group" style="text-align: left; margin-bottom: 22px;">
+        <label class="setup-label">Skin das Peças 3D</label>
+        <div class="toggle-group" id="pause-skin-group">
+          <button class="toggle-btn active" data-skin="classic">Clássico</button>
+          <button class="toggle-btn" data-skin="gold">Ouro Real</button>
+          <button class="toggle-btn" data-skin="amethyst">Ametista</button>
+          <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
         </div>
       </div>
 
@@ -545,6 +825,38 @@
           Inicial (Catedral)
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal de Conquistas Arcanas -->
+  <div id="achievements-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
+        <span class="material-symbols-rounded">emoji_events</span>
+        <span>GLÓRIA ARCANA</span>
+      </div>
+      <h3>CONQUISTAS DO MAGO</h3>
+      <p style="color: #d0bcff; font-size: 0.88rem; margin-bottom: 18px;">
+        Desbloqueie feitos heroicos no tabuleiro para ascender na hierarquia dos magos.
+      </p>
+
+      <div class="achievements-list" id="achievements-container">
+        <!-- Itens injetados via JS -->
+      </div>
+
+      <button id="btn-close-achievements" class="promo-btn" style="width: 100%; margin-top: 20px;">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+  <!-- Notificação Flutuante de Conquista (Estilo Console) -->
+  <div id="achievement-toast" class="achievement-toast hidden">
+    <div class="ach-toast-icon">🏆</div>
+    <div class="ach-toast-body">
+      <div class="ach-toast-badge">CONQUISTA DESBLOQUEADA!</div>
+      <div class="ach-toast-title" id="ach-toast-title">Primeiro Sangue</div>
+      <div class="ach-toast-desc" id="ach-toast-desc">Capture sua primeira peça no jogo.</div>
     </div>
   </div>
 
