@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wizard Chess</string>
+    <string name="title_activity_main">Wizard Chess</string>
+    <string name="package_name">com.wizardchess.app</string>
+    <string name="custom_url_scheme">com.wizardchess.app</string>
+</resources>
