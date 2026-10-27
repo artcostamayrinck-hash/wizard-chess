@@ -358,6 +358,246 @@
         max-width: none;
       }
     }
+  
+/* ==========================================================================
+   Centralização Universal de Menus e Modais
+   ========================================================================== */
+
+.modal-overlay,
+#start-menu,
+#pause-modal,
+#promotion-modal,
+#waiting-modal,
+#game-over-modal,
+#resign-modal,
+#achievements-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  background: rgba(11, 10, 14, 0.88) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  pointer-events: auto !important;
+}
+
+.modal-overlay.hidden,
+#start-menu.hidden,
+#pause-modal.hidden,
+#promotion-modal.hidden,
+#waiting-modal.hidden,
+#game-over-modal.hidden,
+#resign-modal.hidden,
+#achievements-modal.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.modal-content,
+.start-content,
+.pause-content {
+  margin: auto !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 90% !important;
+  max-width: 480px !important;
+  max-height: 88vh !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  border-radius: 28px !important;
+  border: 1px solid var(--md-border) !important;
+  background: var(--md-surface) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(245, 197, 107, 0.15) !important;
+}
+
+.start-content {
+  max-width: 520px !important;
+}
+
+.setup-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  text-align: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 18px !important;
+}
+
+.setup-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  text-align: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.setup-label {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: var(--md-gold) !important;
+  margin-bottom: 2px !important;
+}
+
+.toggle-group {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  background: rgba(11, 10, 14, 0.7) !important;
+  border: 1px solid var(--md-border) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+  gap: 4px !important;
+  flex-wrap: wrap !important;
+}
+
+.menu-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 24px !important;
+}
+
+#history-panel {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: 90% !important;
+  max-width: 360px !important;
+  max-height: 75vh !important;
+  background: rgba(14, 11, 20, 0.95) !important;
+  border: 1px solid var(--md-gold) !important;
+  border-radius: 24px !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  overflow-y: auto !important;
+  padding: 22px 20px !important;
+  z-index: 9999 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(245, 197, 107, 0.25) !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+#history-panel.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#history-list {
+  color: #d0bcff !important;
+  font-family: monospace !important;
+  font-size: 0.95rem !important;
+  padding: 0 !important;
+  line-height: 1.8 !important;
+  margin: 12px 0 !important;
+  list-style-position: inside !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.emotes-popup {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
+  background: rgba(14, 11, 20, 0.95) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--md-gold) !important;
+  border-radius: 24px !important;
+  padding: 20px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(245, 197, 107, 0.25) !important;
+  width: 90% !important;
+  max-width: 340px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.emotes-popup.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.emotes-header {
+  font-family: Cinzel, serif !important;
+  color: var(--md-gold) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  margin-bottom: 14px !important;
+  text-align: center !important;
+}
+
+.emotes-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+.emote-btn {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.puzzle-hud {
+  text-align: center !important;
+  align-items: center !important;
+}
+
+.puzzle-prompt {
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.puzzle-hud-controls {
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.puzzle-arena-tabs {
+  justify-content: center !important;
+  width: 100% !important;
+}
+
   </style>
 </head>
 
@@ -623,7 +863,13 @@
 
   <!-- Menu Flutuante de Emotes Mágicos -->
   <div id="emotes-popup" class="emotes-popup hidden">
-    <div class="emotes-header">Reações Rápidas</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 12px;">
+      <span style="width: 24px;"></span>
+      <div class="emotes-header" style="margin: 0;">Reações Rápidas</div>
+      <button id="btn-close-emotes" style="background: none; border: none; color: #d0bcff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;" title="Fechar">
+        <span class="material-symbols-rounded" style="font-size: 1.1rem;">close</span>
+      </button>
+    </div>
     <div class="emotes-grid">
       <button class="emote-btn" data-msg="⚔️ Em guarda!">⚔️ Em guarda!</button>
       <button class="emote-btn" data-msg="👑 Rei em perigo!">👑 Rei em perigo!</button>
@@ -756,9 +1002,15 @@
 
   <!-- Painel de Histórico de Jogadas -->
   <div id="history-panel" class="hidden">
-    <h3
-      style="color: #f5c56b; text-align: center; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 1px solid #3b2d54; padding-bottom: 6px; letter-spacing: 1px;">
-      REGISTO DE LANCES</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; border-bottom: 1px solid rgba(245, 197, 107, 0.3); padding-bottom: 8px;">
+      <span style="width: 28px;"></span>
+      <h3 style="color: #f5c56b; text-align: center; font-size: 1rem; margin: 0; letter-spacing: 1px; font-family: Cinzel, serif;">
+        REGISTO DE LANCES
+      </h3>
+      <button id="btn-close-history" style="background: none; border: none; color: #d0bcff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%;" title="Fechar">
+        <span class="material-symbols-rounded" style="font-size: 1.2rem;">close</span>
+      </button>
+    </div>
     <ol id="history-list"></ol>
     <button id="btn-copy-pgn" class="promo-btn"
       style="width: 100%; margin-top: 12px; padding: 8px 10px; font-size: 0.8rem; border-radius: 8px;">
@@ -777,7 +1029,7 @@
       <p style="color: #d0bcff; font-size: 0.9rem; margin-bottom: 20px;">O tempo e os movimentos estão congelados.</p>
 
       <!-- Alterar Modo de Jogo -->
-      <div class="setup-group" style="text-align: left; margin-bottom: 18px;">
+      <div class="setup-group" style="text-align: center; margin-bottom: 18px;">
         <label class="setup-label">Alterar Modo de Jogo</label>
         <div class="toggle-group" id="pause-mode-group">
           <button class="toggle-btn active" data-mode="ai">vs IA</button>
@@ -788,7 +1040,7 @@
       </div>
 
       <!-- Alterar Atmosfera da Arena -->
-      <div class="setup-group" style="text-align: left; margin-bottom: 18px;">
+      <div class="setup-group" style="text-align: center; margin-bottom: 18px;">
         <label class="setup-label">Atmosfera da Arena</label>
         <div class="toggle-group" id="pause-arena-group">
           <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
@@ -798,7 +1050,7 @@
       </div>
 
       <!-- Alterar Skin das Peças -->
-      <div class="setup-group" style="text-align: left; margin-bottom: 22px;">
+      <div class="setup-group" style="text-align: center; margin-bottom: 22px;">
         <label class="setup-label">Skin das Peças 3D</label>
         <div class="toggle-group" id="pause-skin-group">
           <button class="toggle-btn active" data-skin="classic">Clássico</button>

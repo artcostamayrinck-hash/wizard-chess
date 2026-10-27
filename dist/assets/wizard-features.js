@@ -551,3 +551,27 @@ function showToast(text, duration = 2200) {
     if (toast.parentElement) toast.parentElement.removeChild(toast);
   }, duration);
 }
+
+
+// Wire up centered modal close buttons
+document.addEventListener("DOMContentLoaded", () => {
+  const btnCloseHistory = document.getElementById("btn-close-history");
+  const historyPanel = document.getElementById("history-panel");
+  const btnHistoryDock = document.getElementById("btn-history");
+  if (btnCloseHistory && historyPanel) {
+    btnCloseHistory.addEventListener("click", () => {
+      historyPanel.classList.add("hidden");
+      if (btnHistoryDock) btnHistoryDock.classList.remove("active");
+    });
+  }
+
+  const btnCloseEmotes = document.getElementById("btn-close-emotes");
+  const emotesPopup = document.getElementById("emotes-popup");
+  const btnEmotesDock = document.getElementById("btn-emotes");
+  if (btnCloseEmotes && emotesPopup) {
+    btnCloseEmotes.addEventListener("click", () => {
+      emotesPopup.classList.add("hidden");
+      if (btnEmotesDock) btnEmotesDock.classList.remove("active");
+    });
+  }
+});
