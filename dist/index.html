@@ -25,6 +25,108 @@
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
   <script type="module" crossorigin src="/assets/index-Dmtay6rb.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-CrO8ZqHi.css">
+  <style>
+    #btn-whatsapp-share:hover {
+      background: #25d366 !important;
+      color: #121212 !important;
+      box-shadow: 0 0 16px rgba(37, 211, 102, 0.6);
+    }
+    .analysis-card {
+      background: rgba(14, 11, 20, 0.85);
+      border: 1px solid rgba(245, 197, 107, 0.35);
+      border-radius: 18px;
+      padding: 14px;
+      margin: 16px 0;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .analysis-card.hidden {
+      display: none !important;
+    }
+    .analysis-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--md-gold);
+      margin-bottom: 12px;
+    }
+    .analysis-accuracy-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--md-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+    .accuracy-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .accuracy-label {
+      font-size: 0.7rem;
+      color: #d0bcff;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .accuracy-val {
+      font-size: 1.35rem;
+      font-weight: 900;
+      font-family: monospace;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+    }
+    .accuracy-vs {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--md-gold);
+      letter-spacing: 1px;
+    }
+    .analysis-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .analysis-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .badge-brilliant {
+      background: rgba(0, 245, 212, 0.15);
+      border-color: rgba(0, 245, 212, 0.4);
+      color: #00f5d4;
+    }
+    .badge-great {
+      background: rgba(245, 197, 107, 0.15);
+      border-color: rgba(245, 197, 107, 0.4);
+      color: #f5c56b;
+    }
+    .badge-blunder {
+      background: rgba(255, 77, 109, 0.15);
+      border-color: rgba(255, 77, 109, 0.4);
+      color: #ff4d6d;
+    }
+    #btn-undo {
+      border-color: rgba(245, 197, 107, 0.4);
+      color: var(--md-gold);
+    }
+    #btn-undo:hover {
+      background: rgba(245, 197, 107, 0.25);
+    }
+  </style>
 </head>
 
 <body>
@@ -204,6 +306,10 @@
       <span class="material-symbols-rounded">smart_toy</span>
       <span class="btn-label">vs IA</span>
     </button>
+    <button id="btn-undo" class="dock-btn hidden" title="Desfazer Jogada (Modo Fácil)">
+      <span class="material-symbols-rounded">undo</span>
+      <span class="btn-label">Voltar</span>
+    </button>
     <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
       <span class="material-symbols-rounded">videocam</span>
       <span class="btn-label">Câmera</span>
@@ -211,6 +317,10 @@
     <button id="btn-hint" class="dock-btn" title="Pedir Dica ao Oráculo">
       <span class="material-symbols-rounded">lightbulb</span>
       <span class="btn-label">Oráculo</span>
+    </button>
+    <button id="btn-music" class="dock-btn" title="Música Arcana">
+      <span class="material-symbols-rounded">music_note</span>
+      <span class="btn-label">Música</span>
     </button>
     <button id="btn-audio" class="dock-btn active" title="Efeitos Sonoros">
       <span class="material-symbols-rounded">volume_up</span>
@@ -313,6 +423,11 @@
 
       <div style="display: flex; gap: 10px; margin-top: 14px;">
         <button id="btn-copy-link" class="promo-btn" style="flex: 1; padding: 12px;">Copiar Link</button>
+        <button id="btn-whatsapp-share" class="promo-btn"
+          style="flex: 1; padding: 12px; background: rgba(37, 211, 102, 0.2); border-color: #25d366; color: #25d366; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 700;">
+          <span class="material-symbols-rounded" style="font-size: 1.2rem;">chat</span>
+          WhatsApp
+        </button>
         <button id="btn-close-online" class="promo-btn"
           style="flex: 1; padding: 12px; background: rgba(255,255,255,0.06);">Fechar</button>
       </div>
@@ -333,6 +448,30 @@
     <div class="modal-content" style="max-width: 440px;">
       <h3 id="game-over-title">Xeque-Mate!</h3>
       <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
+
+      <!-- Análise Arcana de Lances -->
+      <div id="game-analysis-card" class="analysis-card hidden">
+        <div class="analysis-header">
+          <span class="material-symbols-rounded" style="color: var(--md-gold); font-size: 1.2rem;">auto_awesome</span>
+          <span>ANÁLISE ARCANA DA BATALHA</span>
+        </div>
+        <div class="analysis-accuracy-grid">
+          <div class="accuracy-box">
+            <span class="accuracy-label">Mármore</span>
+            <span id="analysis-acc-w" class="accuracy-val">84%</span>
+          </div>
+          <div class="accuracy-vs">VS</div>
+          <div class="accuracy-box">
+            <span class="accuracy-label">Obsidiana</span>
+            <span id="analysis-acc-b" class="accuracy-val">76%</span>
+          </div>
+        </div>
+        <div class="analysis-tags">
+          <span class="analysis-badge badge-brilliant"><span class="badge-icon">💎</span> <strong id="analysis-brilliant-count">2</strong> Brilhantes (!!)</span>
+          <span class="analysis-badge badge-great"><span class="badge-icon">⚔️</span> <strong id="analysis-great-count">5</strong> Melhores Lances (!)</span>
+          <span class="analysis-badge badge-blunder"><span class="badge-icon">💀</span> <strong id="analysis-blunder-count">1</strong> Gafes (??)</span>
+        </div>
+      </div>
 
       <!-- Bloco de Anúncio AdSense no Fim de Jogo (Alta Rentabilidade) -->
       <div class="ad-unit-card" id="ad-game-over-card">
@@ -422,6 +561,7 @@
   <!-- Módulo de Conexão Firebase -->
 
   <!-- Ligação com a lógica central do jogo -->
+  <script type="module" src="/assets/wizard-features.js"></script>
 </body>
 
 </html>
