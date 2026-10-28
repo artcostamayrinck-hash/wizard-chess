@@ -778,6 +778,170 @@
   font-weight: 600 !important;
 }
 
+  
+/* ==========================================================================
+   Design Fiel à Imagem 2 (Chess.com Mobile) - Barras de Jogador e Relógios
+   ========================================================================== */
+
+/* Barra do Oponente no Topo (acima do tabuleiro) */
+.opponent-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  background: rgba(14, 11, 20, 0.85) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(208, 188, 255, 0.2) !important;
+  border-radius: 14px !important;
+  padding: 6px 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  pointer-events: auto !important;
+  margin-top: 4px !important;
+}
+
+/* Barra do Jogador na Base (abaixo do tabuleiro e acima do dock) */
+.player-bar-bottom {
+  position: fixed !important;
+  bottom: calc(env(safe-area-inset-bottom, 16px) + 52px) !important;
+  left: 12px !important;
+  right: 12px !important;
+  z-index: 45 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(14, 11, 20, 0.9) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(245, 197, 107, 0.35) !important;
+  border-radius: 14px !important;
+  padding: 6px 12px !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.7), 0 0 16px rgba(245, 197, 107, 0.18) !important;
+  pointer-events: auto !important;
+}
+
+/* Perfil dos Jogadores (Avatar Circular + Nome + Rating/Rank) */
+.player-profile {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.chess-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+  flex-shrink: 0 !important;
+}
+
+.w-avatar {
+  background: linear-gradient(135deg, #f5c56b, #d0bcff) !important;
+  border: 2px solid #fff !important;
+}
+
+.b-avatar {
+  background: linear-gradient(135deg, #3b2d54, #120e1d) !important;
+  border: 2px solid rgba(208, 188, 255, 0.4) !important;
+}
+
+.player-details {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  text-align: left !important;
+}
+
+.player-name-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.player-title-badge {
+  background: rgba(245, 197, 107, 0.25) !important;
+  color: var(--md-gold) !important;
+  font-size: 0.62rem !important;
+  font-weight: 800 !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.player-name {
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: var(--md-text) !important;
+}
+
+.player-rating {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #a499b8 !important;
+}
+
+/* Relógios com Design Fiel ao Chess.com (Imagem 2) */
+.chess-timer {
+  background: rgba(10, 8, 16, 0.95) !important;
+  border: 1.5px solid rgba(208, 188, 255, 0.25) !important;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: monospace !important;
+  font-weight: 800 !important;
+  font-size: 0.98rem !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.25s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.chess-timer .timer-icon {
+  font-size: 1.05rem !important;
+  color: #a499b8 !important;
+}
+
+.chess-timer.active {
+  border-color: var(--md-gold) !important;
+  box-shadow: 0 0 16px rgba(245, 197, 107, 0.5), inset 0 0 8px rgba(245, 197, 107, 0.2) !important;
+  color: #fff !important;
+}
+
+.chess-timer.active .timer-icon {
+  color: var(--md-gold) !important;
+}
+
+.chess-timer.timer-critical {
+  border-color: #ff4d6d !important;
+  box-shadow: 0 0 16px rgba(255, 77, 109, 0.6) !important;
+  color: #ff4d6d !important;
+}
+
+.chess-timer.timer-critical .timer-icon {
+  color: #ff4d6d !important;
+}
+
+/* Turn banner discreto no topo */
+.turn-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin-top: 4px !important;
+}
+
+.turn-pill {
+  padding: 4px 12px !important;
+  font-size: 0.74rem !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
   </style>
 </head>
 
@@ -949,7 +1113,9 @@
   </div>
 
   <!-- HUD Superior -->
+    <!-- HUD Superior -->
   <header class="hud-top">
+    <!-- Linha Superior com Pílulas Compactas e Botão de Pausa (Roxo) -->
     <div class="hud-top-bar">
       <div class="hud-left-pills">
         <div id="btn-open-menu" class="brand-pill brand-pill-compact" style="cursor: pointer;" title="Abrir Menu de Configuração">
@@ -969,24 +1135,48 @@
       </button>
     </div>
 
-    <div class="turn-container">
-      <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
-
-      <!-- Cemitério e Relógio do Oponente (Pretas / Obsidiana) no Topo Direito -->
-      <div class="opponent-timer-group">
-        <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
-        <div id="timer-b" class="chess-timer b-timer" title="Tempo das Pretas">
-          <span class="material-symbols-rounded timer-icon">timer</span>
-          <span class="timer-digits">05:00</span>
+    <!-- Barra do Oponente no Topo (Baseada na Imagem 2 - Chess.com) -->
+    <div id="opponent-bar" class="player-bar opponent-bar">
+      <div class="player-profile">
+        <div class="chess-avatar b-avatar">💀</div>
+        <div class="player-details">
+          <div class="player-name-row">
+            <span class="player-title-badge">IA</span>
+            <span class="player-name">Obsidiana</span>
+            <span class="player-rating">(1200)</span>
+          </div>
+          <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
         </div>
       </div>
+
+      <!-- Relógio do Oponente no Topo Direito (como na Imagem 2) -->
+      <div id="timer-b" class="chess-timer b-timer" title="Tempo do Oponente (Pretas)">
+        <span class="material-symbols-rounded timer-icon">timer</span>
+        <span class="timer-digits">05:00</span>
+      </div>
+    </div>
+
+    <div class="turn-container">
+      <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
     </div>
   </header>
 
-  <!-- Relógio do Jogador (Mármore / Brancas) no Canto Inferior Esquerdo (Vermelho) -->
-  <div id="player-timer-container" class="player-timer-container">
-    <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
-    <div id="timer-w" class="chess-timer w-timer player-timer-bottom" title="Tempo das Brancas">
+  <!-- Barra do Jogador na Base (Vermelho / Baseada na Imagem 2 - Chess.com) -->
+  <div id="player-bar" class="player-bar player-bar-bottom">
+    <div class="player-profile">
+      <div class="chess-avatar w-avatar">🧙</div>
+      <div class="player-details">
+        <div class="player-name-row">
+          <span class="player-title-badge">MAGO</span>
+          <span class="player-name" id="hud-player-name-bottom">Mármore</span>
+          <span id="player-rating-bottom" class="player-rating">(Você)</span>
+        </div>
+        <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
+      </div>
+    </div>
+
+    <!-- Relógio do Jogador na Base Direita (como na Imagem 2) -->
+    <div id="timer-w" class="chess-timer w-timer" title="Seu Tempo (Brancas)">
       <span class="material-symbols-rounded timer-icon">timer</span>
       <span class="timer-digits">05:00</span>
     </div>

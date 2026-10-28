@@ -387,6 +387,7 @@ function updateProgressionUI(xp = getPlayerXP(), rank = getRankData(xp)) {
   if (rankLvl) rankLvl.textContent = `Nível ${rank.level}`;
   if (hudRank) hudRank.textContent = rank.title;
   if (hudLvl) hudLvl.textContent = `Nv. ${rank.level}`;
+  const rBottom = document.getElementById("player-rating-bottom"); if (rBottom) rBottom.textContent = `(Nv. ${rank.level})`;
 
   const currentLevelBase = rank.xpRequired;
   const nextLevelTarget = rank.nextXp;
