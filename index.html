@@ -1264,6 +1264,156 @@
   margin: 0 !important;
 }
 
+  
+/* ==========================================================================
+   Subviews for Menu Inicial (Home, Battle Setup, Settings)
+   ========================================================================== */
+
+.menu-subview {
+  display: none !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview.active {
+  display: flex !important;
+  animation: menuSubviewFade 0.22s cubic-bezier(0.2, 0, 0, 1) forwards !important;
+}
+
+@keyframes menuSubviewFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu-subview-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  position: relative !important;
+}
+
+.menu-back-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(14, 34, 58, 0.8) !important;
+  border: 1px solid rgba(100, 180, 240, 0.3) !important;
+  border-radius: 99px !important;
+  padding: 6px 12px !important;
+  color: #9ec6e9 !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.menu-back-pill:hover {
+  background: rgba(24, 54, 88, 0.9) !important;
+  color: #ffffff !important;
+  border-color: #64b5f6 !important;
+}
+
+.settings-options-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.settings-row-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(12, 30, 52, 0.75) !important;
+  border: 1px solid rgba(88, 166, 255, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.settings-row-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-align: left !important;
+  flex: 1 !important;
+}
+
+.settings-row-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.settings-row-text {
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.2 !important;
+}
+
+.settings-title {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.settings-desc {
+  font-size: 0.72rem !important;
+  color: #9ec6e9 !important;
+  margin-top: 2px !important;
+}
+
+.setting-switch-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  color: #9ec6e9 !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.setting-switch-btn.active {
+  background: rgba(46, 125, 50, 0.35) !important;
+  border-color: #81c784 !important;
+  color: #a5d6a7 !important;
+  box-shadow: 0 0 10px rgba(129, 199, 132, 0.3) !important;
+}
+
+.setting-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: #84bde9 !important;
+  color: #0b223c !important;
+  border: none !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.setting-action-btn:hover {
+  background: #9eccf5 !important;
+  transform: translateY(-1px) !important;
+}
+
   </style>
 </head>
 
@@ -1326,152 +1476,168 @@
     </div>
   </div>
 
-    <!-- Menu Inicial Baseado no Formato de Cards da Referência -->
+      <!-- Menu Inicial com Página Inicial, Preparação de Batalha e Configurações -->
   <div id="start-menu" class="modal-overlay">
     <div class="modal-content start-content menu-ref-modal">
-      <!-- 1. Linha Superior: Nível (Esquerda), Avatar Circular (Centro), Botão Fechar (Direita) -->
-      <div class="menu-ref-top-row">
-        <div id="menu-rank-badge" class="menu-ref-lvl-badge" title="Nível do Bruxo">
-          <span class="badge-sprout">🌱</span>
-          <span id="menu-rank-lvl-num">1</span>
+      
+      <!-- ========================================== -->
+      <!-- VIEW 1: PÁGINA INICIAL (Layout Referência) -->
+      <!-- ========================================== -->
+      <div id="menu-view-home" class="menu-subview active">
+        <!-- 1. Linha Superior: Nível (Esquerda), Avatar Circular (Centro), Botão Fechar (Direita) -->
+        <div class="menu-ref-top-row">
+          <div id="menu-rank-badge" class="menu-ref-lvl-badge" title="Nível do Bruxo">
+            <span class="badge-sprout">🌱</span>
+            <span id="menu-rank-lvl-num">1</span>
+          </div>
+
+          <div class="menu-ref-avatar-circle" title="Cavaleiro Arcano">
+            <svg class="menu-ref-knight-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 12C38 12 28 20 26 28C24 36 28 42 22 48C17 53 15 58 15 67C15 72 17 76 21 78C25 80 30 79 34 76C40 85 52 88 68 88C72 88 75 86 76 83C77 80 77 77 75 74C72 70 70 65 71 59C73 47 75 35 68 24C62 15 56 12 50 12Z" fill="#FFFFFF"/>
+              <circle cx="38" cy="30" r="3.5" fill="#1b4369"/>
+              <path d="M25 58C28 60 32 60 35 57C38 54 38 50 35 48" stroke="#1b4369" stroke-width="3" stroke-linecap="round"/>
+              <path d="M48 24C52 28 54 36 52 44" stroke="#1b4369" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <button type="button" id="btn-close-start-menu" class="menu-ref-close-btn" title="Fechar Menu">
+            <span class="material-symbols-rounded">close</span>
+          </button>
         </div>
 
-        <div class="menu-ref-avatar-circle" title="Cavaleiro Arcano">
-          <svg class="menu-ref-knight-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50 12C38 12 28 20 26 28C24 36 28 42 22 48C17 53 15 58 15 67C15 72 17 76 21 78C25 80 30 79 34 76C40 85 52 88 68 88C72 88 75 86 76 83C77 80 77 77 75 74C72 70 70 65 71 59C73 47 75 35 68 24C62 15 56 12 50 12Z" fill="#FFFFFF"/>
-            <circle cx="38" cy="30" r="3.5" fill="#1b4369"/>
-            <path d="M25 58C28 60 32 60 35 57C38 54 38 50 35 48" stroke="#1b4369" stroke-width="3" stroke-linecap="round"/>
-            <path d="M48 24C52 28 54 36 52 44" stroke="#1b4369" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
+        <!-- 2. Título Central no estilo CHECKMATE! -->
+        <h1 class="menu-ref-main-title">WIZARD'S CHESS</h1>
+
+        <!-- 3. Barra de Status ao Vivo e Botão de Áudio -->
+        <div class="menu-ref-status-row">
+          <span class="menu-ref-phase-icon">◐</span>
+          <span class="menu-ref-live-text"><strong>1.280.394</strong> Batalhas em 24h &nbsp; <strong>54.693</strong> Jogando Agora</span>
+          <button type="button" id="btn-menu-sound-toggle" class="menu-ref-audio-btn" title="Alternar Som">
+            <span class="material-symbols-rounded">music_note</span>
+          </button>
         </div>
 
-        <button type="button" id="btn-close-start-menu" class="menu-ref-close-btn" title="Fechar Menu">
-          <span class="material-symbols-rounded">close</span>
-        </button>
+        <!-- 4. Placar de Estatísticas e Progresso de XP Arcana -->
+        <div class="menu-ref-stats-panel" title="Suas Estatísticas Salvas">
+          <div class="menu-ref-record-row">
+            <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
+            <span class="stat-divider">•</span>
+            <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
+            <span class="stat-divider">•</span>
+            <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
+          </div>
+          <div class="menu-ref-xp-track">
+            <div id="menu-xp-bar-fill" class="xp-bar-fill" style="width: 15%;"></div>
+          </div>
+          <div class="menu-ref-xp-labels">
+            <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
+            <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
+            <span id="menu-xp-current" style="display:none;">0 XP</span>
+            <span id="menu-xp-next" style="display:none;">200 XP para o próximo grau</span>
+          </div>
+        </div>
+
+        <!-- 5. Grid 2x3 de Cards de Ação -->
+        <div class="menu-ref-cards-grid">
+          <!-- Card 1: Jogue Online -->
+          <button type="button" class="menu-ref-card card-dark" id="btn-card-online" data-target-mode="online">
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">public</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-small">Jogue</span>
+              <span class="card-line-bold">Online</span>
+            </div>
+          </button>
+
+          <!-- Card 2: Jogue com o computador -->
+          <button type="button" class="menu-ref-card card-dark active" id="btn-card-ai" data-target-mode="ai">
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">memory</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-small">Jogue</span>
+              <span class="card-line-bold">com o comput...</span>
+            </div>
+          </button>
+
+          <!-- Card 3: Jogue com os amigos -->
+          <button type="button" class="menu-ref-card card-dark" id="btn-card-2p" data-target-mode="2p">
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">group</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-small">Jogue</span>
+              <span class="card-line-bold">com os amigos</span>
+            </div>
+          </button>
+
+          <!-- Card 4: Quebra-cabeças -->
+          <button type="button" class="menu-ref-card card-dark" id="btn-card-puzzle" data-target-mode="puzzle">
+            <span class="card-badge-info" title="Desafios Táticos">ⓘ</span>
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">extension</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-small">Quebra</span>
+              <span class="card-line-bold">cabeças</span>
+            </div>
+          </button>
+
+          <!-- Card 5: Conquistas (Alterado de 'Classificações' para 'Conquistas') -->
+          <button type="button" class="menu-ref-card card-light" id="btn-menu-achievements">
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">military_tech</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-bold">Conquistas</span>
+            </div>
+          </button>
+
+          <!-- Card 6: Configurações -->
+          <button type="button" class="menu-ref-card card-light" id="btn-menu-settings">
+            <div class="card-icon-wrap">
+              <span class="material-symbols-rounded">settings</span>
+            </div>
+            <div class="card-text-block">
+              <span class="card-line-bold">Configurações</span>
+            </div>
+          </button>
+        </div>
       </div>
 
-      <!-- 2. Título Central no estilo CHECKMATE! -->
-      <h1 class="menu-ref-main-title">WIZARD'S CHESS</h1>
-
-      <!-- 3. Barra de Status ao Vivo e Botão de Áudio -->
-      <div class="menu-ref-status-row">
-        <span class="menu-ref-phase-icon">◐</span>
-        <span class="menu-ref-live-text"><strong>1.280.394</strong> Batalhas em 24h &nbsp; <strong>54.693</strong> Jogando Agora</span>
-        <button type="button" id="btn-menu-sound-toggle" class="menu-ref-audio-btn" title="Alternar Som">
-          <span class="material-symbols-rounded">music_note</span>
-        </button>
-      </div>
-
-      <!-- 4. Placar de Estatísticas e Progresso de XP Arcana -->
-      <div class="menu-ref-stats-panel" title="Suas Estatísticas Salvas">
-        <div class="menu-ref-record-row">
-          <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
-          <span class="stat-divider">•</span>
-          <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
-          <span class="stat-divider">•</span>
-          <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
+      <!-- ======================================================= -->
+      <!-- VIEW 2: PREPARAÇÃO DA BATALHA (Personalização do Jogo) -->
+      <!-- ======================================================= -->
+      <div id="menu-view-battle" class="menu-subview">
+        <div class="menu-subview-header">
+          <button type="button" class="menu-back-pill" id="btn-battle-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+          <div class="brand-pill">
+            <span class="material-symbols-rounded">swords</span>
+            <span id="menu-arena-pill-text">PREPARAR BATALHA</span>
+          </div>
         </div>
-        <div class="menu-ref-xp-track">
-          <div id="menu-xp-bar-fill" class="xp-bar-fill" style="width: 15%;"></div>
-        </div>
-        <div class="menu-ref-xp-labels">
-          <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
-          <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
-          <span id="menu-xp-current" style="display:none;">0 XP</span>
-          <span id="menu-xp-next" style="display:none;">200 XP para o próximo grau</span>
-        </div>
-      </div>
 
-      <!-- 5. Grid 2x3 de Cards de Ação idêntico à Referência -->
-      <div class="menu-ref-cards-grid">
-        <!-- Card 1: Jogue Online -->
-        <button type="button" class="menu-ref-card card-dark" id="btn-card-online" data-target-mode="online">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">public</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-small">Jogue</span>
-            <span class="card-line-bold">Online</span>
-          </div>
-        </button>
-
-        <!-- Card 2: Jogue com o computador -->
-        <button type="button" class="menu-ref-card card-dark active" id="btn-card-ai" data-target-mode="ai">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">memory</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-small">Jogue</span>
-            <span class="card-line-bold">com o comput...</span>
-          </div>
-        </button>
-
-        <!-- Card 3: Jogue com os amigos -->
-        <button type="button" class="menu-ref-card card-dark" id="btn-card-2p" data-target-mode="2p">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">group</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-small">Jogue</span>
-            <span class="card-line-bold">com os amigos</span>
-          </div>
-        </button>
-
-        <!-- Card 4: Quebra-cabeças -->
-        <button type="button" class="menu-ref-card card-dark" id="btn-card-puzzle" data-target-mode="puzzle">
-          <span class="card-badge-info" title="Desafios Táticos">ⓘ</span>
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">extension</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-small">Quebra</span>
-            <span class="card-line-bold">cabeças</span>
-          </div>
-        </button>
-
-        <!-- Card 5: Classificações (Card Azul Claro) -->
-        <button type="button" class="menu-ref-card card-light" id="btn-menu-achievements">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">leaderboard</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-bold">Classificações</span>
-          </div>
-        </button>
-
-        <!-- Card 6: Configurações (Card Azul Claro) -->
-        <button type="button" class="menu-ref-card card-light" id="btn-menu-settings">
-          <div class="card-icon-wrap">
-            <span class="material-symbols-rounded">settings</span>
-          </div>
-          <div class="card-text-block">
-            <span class="card-line-bold">Configurações</span>
-          </div>
-        </button>
-      </div>
-
-      <!-- Sincronizador Oculto do Modo de Jogo para Compatibilidade 100% -->
-      <div class="toggle-group" id="menu-mode-group" style="display: none !important;">
-        <button class="toggle-btn active" data-mode="ai">vs IA</button>
-        <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
-        <button class="toggle-btn" data-mode="online">Online</button>
-        <button class="toggle-btn" data-mode="puzzle">Desafios</button>
-      </div>
-
-      <!-- 6. Gaveta Expansível de Configurações (Arena, Peças 3D, Exército, Relógio, Dificuldade) -->
-      <div id="menu-settings-drawer" class="menu-settings-drawer">
-        <div class="drawer-header">
-          <div class="brand-pill" style="margin: 0 auto 8px; width: fit-content;">
-            <span class="material-symbols-rounded">castle</span>
-            <span id="menu-arena-pill-text">CATEDRAL ARCANA</span>
-          </div>
-          <p class="drawer-subtitle">Personalize sua atmosfera, peças 3D e regras</p>
-        </div>
+        <p class="drawer-subtitle" style="margin-bottom: 14px;">Personalize o modo, atmosfera e skin antes de batalhar:</p>
 
         <div class="setup-grid">
-          <!-- Arena / Atmosfera -->
+          <!-- 1. Modo de Batalha -->
           <div class="setup-group">
-            <label class="setup-label">Arena da Batalha</label>
+            <label class="setup-label">Modo de Batalha</label>
+            <div class="toggle-group" id="menu-mode-group">
+              <button class="toggle-btn active" data-mode="ai">vs IA</button>
+              <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
+              <button class="toggle-btn" data-mode="online">Online</button>
+              <button class="toggle-btn" data-mode="puzzle">Desafios</button>
+            </div>
+          </div>
+
+          <!-- 2. Atmosfera da Arena -->
+          <div class="setup-group">
+            <label class="setup-label">Atmosfera da Arena</label>
             <div class="toggle-group" id="menu-arena-group">
               <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
               <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
@@ -1479,9 +1645,9 @@
             </div>
           </div>
 
-          <!-- Skin das Peças 3D -->
+          <!-- 3. Skin das Peças (Sem o '3D' no nome) -->
           <div class="setup-group">
-            <label class="setup-label">Skin das Peças 3D</label>
+            <label class="setup-label">Skin das Peças</label>
             <div class="toggle-group" id="menu-skin-group">
               <button class="toggle-btn active" data-skin="classic">Clássico</button>
               <button class="toggle-btn" data-skin="gold">Ouro Real</button>
@@ -1490,7 +1656,7 @@
             </div>
           </div>
 
-          <!-- Cor / Exército -->
+          <!-- 4. Cor / Exército -->
           <div class="setup-group">
             <label class="setup-label">Seu Exército</label>
             <div class="toggle-group" id="menu-color-group">
@@ -1499,7 +1665,7 @@
             </div>
           </div>
 
-          <!-- Relógio -->
+          <!-- 5. Relógio -->
           <div class="setup-group">
             <label class="setup-label">Relógio da Catedral</label>
             <div class="toggle-group" id="menu-time-group">
@@ -1510,7 +1676,7 @@
             </div>
           </div>
 
-          <!-- Dificuldade IA -->
+          <!-- 6. Dificuldade IA -->
           <div class="setup-group" id="menu-diff-section">
             <label class="setup-label">Dificuldade da IA</label>
             <div class="toggle-group" id="menu-diff-group">
@@ -1520,14 +1686,90 @@
             </div>
           </div>
         </div>
+
+        <!-- Botão Iniciar Batalha -->
+        <div class="menu-actions" style="margin-top: 18px; width: 100%;">
+          <button id="btn-start-game" class="promo-btn" style="font-size: 1.15rem; padding: 15px 32px; width: 100%;">
+            ⚔️ Entrar na Catedral
+          </button>
+        </div>
       </div>
 
-      <!-- 7. Botão Principal de Ação -->
-      <div class="menu-actions" style="margin-top: 16px; width: 100%;">
-        <button id="btn-start-game" class="promo-btn" style="font-size: 1.15rem; padding: 15px 32px; width: 100%;">
-          Entrar na Catedral
-        </button>
+      <!-- ============================================================== -->
+      <!-- VIEW 3: CONFIGURAÇÕES (Som, Música e Conquistas conforme pedido) -->
+      <!-- ============================================================== -->
+      <div id="menu-view-settings" class="menu-subview">
+        <div class="menu-subview-header">
+          <button type="button" class="menu-back-pill" id="btn-settings-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+          <div class="brand-pill">
+            <span class="material-symbols-rounded">settings</span>
+            <span>CONFIGURAÇÕES</span>
+          </div>
+        </div>
+
+        <p class="drawer-subtitle" style="margin-bottom: 16px;">Ajustes de áudio e atalho para suas conquistas:</p>
+
+        <div class="settings-options-list">
+          <!-- 1. Efeitos de Som -->
+          <div class="settings-row-card">
+            <div class="settings-row-info">
+              <div class="settings-row-icon" style="background: rgba(88, 166, 255, 0.15); color: #64b5f6;">
+                <span class="material-symbols-rounded" id="icon-sound-status">volume_up</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Efeitos de Som</span>
+                <span class="settings-desc">Sons mágicos e de movimento das peças</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-sound-setting" class="setting-switch-btn active">
+              <span>Ativado</span>
+            </button>
+          </div>
+
+          <!-- 2. Música Arcana -->
+          <div class="settings-row-card">
+            <div class="settings-row-info">
+              <div class="settings-row-icon" style="background: rgba(245, 197, 107, 0.15); color: #f5c56b;">
+                <span class="material-symbols-rounded" id="icon-music-status">music_note</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Música Arcana</span>
+                <span class="settings-desc">Trilha sonora atmosférica da Catedral</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-music-setting" class="setting-switch-btn">
+              <span>Pausada</span>
+            </button>
+          </div>
+
+          <!-- 3. Conquistas & Títulos -->
+          <div class="settings-row-card">
+            <div class="settings-row-info">
+              <div class="settings-row-icon" style="background: rgba(129, 199, 132, 0.15); color: #81c784;">
+                <span class="material-symbols-rounded">military_tech</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Conquistas & Títulos</span>
+                <span class="settings-desc">Ver troféus, títulos e progresso de XP</span>
+              </div>
+            </div>
+            <button type="button" id="btn-open-achievements-setting" class="setting-action-btn">
+              <span>Abrir</span>
+              <span class="material-symbols-rounded" style="font-size: 1rem;">open_in_new</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-actions" style="margin-top: 20px; width: 100%;">
+          <button type="button" id="btn-settings-close-view" class="promo-btn" style="padding: 12px 28px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.08);">
+            Retornar ao Menu Inicial
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -1810,7 +2052,7 @@
     </button>
   </div>
 
-  <!-- Modal de Pausa / Menu da Partida -->
+    <!-- Modal de Pausa / Menu da Partida (Limpo, sem opções de personalização) -->
   <div id="pause-modal" class="modal-overlay hidden">
     <div class="modal-content pause-content" style="max-width: 440px;">
       <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
@@ -1820,40 +2062,8 @@
       <h3 style="font-size: 1.8rem; margin-bottom: 8px;">MENU DA BATALHA</h3>
       <p style="color: #d0bcff; font-size: 0.9rem; margin-bottom: 20px;">O tempo e os movimentos estão congelados.</p>
 
-      <!-- Alterar Modo de Jogo -->
-      <div class="setup-group" style="text-align: center; margin-bottom: 18px;">
-        <label class="setup-label">Alterar Modo de Jogo</label>
-        <div class="toggle-group" id="pause-mode-group">
-          <button class="toggle-btn active" data-mode="ai">vs IA</button>
-          <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
-          <button class="toggle-btn" data-mode="online">Online</button>
-          <button class="toggle-btn" data-mode="puzzle">Desafios</button>
-        </div>
-      </div>
-
-      <!-- Alterar Atmosfera da Arena -->
-      <div class="setup-group" style="text-align: center; margin-bottom: 18px;">
-        <label class="setup-label">Atmosfera da Arena</label>
-        <div class="toggle-group" id="pause-arena-group">
-          <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
-          <button class="toggle-btn" data-arena="inferno">Cripta</button>
-          <button class="toggle-btn" data-arena="frost">Gelo</button>
-        </div>
-      </div>
-
-      <!-- Alterar Skin das Peças -->
-      <div class="setup-group" style="text-align: center; margin-bottom: 22px;">
-        <label class="setup-label">Skin das Peças 3D</label>
-        <div class="toggle-group" id="pause-skin-group">
-          <button class="toggle-btn active" data-skin="classic">Clássico</button>
-          <button class="toggle-btn" data-skin="gold">Ouro Real</button>
-          <button class="toggle-btn" data-skin="amethyst">Ametista</button>
-          <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
-        </div>
-      </div>
-
       <!-- Ações do Menu de Pausa -->
-      <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
         <button id="btn-resume" class="promo-btn"
           style="font-size: 1.05rem; padding: 14px 24px; width: 100%; font-weight: 700; background: rgba(208, 188, 255, 0.2); border-color: var(--md-primary);">
           <span class="material-symbols-rounded"
@@ -1868,6 +2078,27 @@
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
           Inicial (Catedral)
         </button>
+      </div>
+
+      <!-- Grupos ocultos para manter compatibilidade com event listeners legados -->
+      <div style="display: none !important;">
+        <div id="pause-mode-group">
+          <button class="toggle-btn active" data-mode="ai"></button>
+          <button class="toggle-btn" data-mode="2p"></button>
+          <button class="toggle-btn" data-mode="online"></button>
+          <button class="toggle-btn" data-mode="puzzle"></button>
+        </div>
+        <div id="pause-arena-group">
+          <button class="toggle-btn active" data-arena="cathedral"></button>
+          <button class="toggle-btn" data-arena="inferno"></button>
+          <button class="toggle-btn" data-arena="frost"></button>
+        </div>
+        <div id="pause-skin-group">
+          <button class="toggle-btn active" data-skin="classic"></button>
+          <button class="toggle-btn" data-skin="gold"></button>
+          <button class="toggle-btn" data-skin="amethyst"></button>
+          <button class="toggle-btn" data-skin="emerald"></button>
+        </div>
       </div>
     </div>
   </div>

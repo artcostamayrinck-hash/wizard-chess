@@ -906,3 +906,153 @@
   color: #9ec6e9 !important;
   margin: 0 !important;
 }
+
+
+/* ==========================================================================
+   Subviews for Menu Inicial (Home, Battle Setup, Settings)
+   ========================================================================== */
+
+.menu-subview {
+  display: none !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview.active {
+  display: flex !important;
+  animation: menuSubviewFade 0.22s cubic-bezier(0.2, 0, 0, 1) forwards !important;
+}
+
+@keyframes menuSubviewFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu-subview-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  position: relative !important;
+}
+
+.menu-back-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(14, 34, 58, 0.8) !important;
+  border: 1px solid rgba(100, 180, 240, 0.3) !important;
+  border-radius: 99px !important;
+  padding: 6px 12px !important;
+  color: #9ec6e9 !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.menu-back-pill:hover {
+  background: rgba(24, 54, 88, 0.9) !important;
+  color: #ffffff !important;
+  border-color: #64b5f6 !important;
+}
+
+.settings-options-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.settings-row-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(12, 30, 52, 0.75) !important;
+  border: 1px solid rgba(88, 166, 255, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.settings-row-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-align: left !important;
+  flex: 1 !important;
+}
+
+.settings-row-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.settings-row-text {
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.2 !important;
+}
+
+.settings-title {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.settings-desc {
+  font-size: 0.72rem !important;
+  color: #9ec6e9 !important;
+  margin-top: 2px !important;
+}
+
+.setting-switch-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  color: #9ec6e9 !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.setting-switch-btn.active {
+  background: rgba(46, 125, 50, 0.35) !important;
+  border-color: #81c784 !important;
+  color: #a5d6a7 !important;
+  box-shadow: 0 0 10px rgba(129, 199, 132, 0.3) !important;
+}
+
+.setting-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: #84bde9 !important;
+  color: #0b223c !important;
+  border: none !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.setting-action-btn:hover {
+  background: #9eccf5 !important;
+  transform: translateY(-1px) !important;
+}

@@ -633,15 +633,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --------------------------------------------------------
 // 8. Reference Start Menu 2x3 Grid Controller
+
+// --------------------------------------------------------
+// 8. Menu Inicial com Home, Preparação de Batalha e Configurações
 // --------------------------------------------------------
 function setupStartMenuGrid() {
-  const btnClose = document.getElementById("btn-close-start-menu");
   const startMenu = document.getElementById("start-menu");
-  const btnSettings = document.getElementById("btn-menu-settings");
-  const settingsDrawer = document.getElementById("menu-settings-drawer");
-  const btnAch = document.getElementById("btn-menu-achievements");
-  const modalAch = document.getElementById("achievements-modal");
+  const btnClose = document.getElementById("btn-close-start-menu");
+  const btnBattleBack = document.getElementById("btn-battle-back");
+  const btnSettingsBack = document.getElementById("btn-settings-back");
+  const btnSettingsClose = document.getElementById("btn-settings-close-view");
   const btnStart = document.getElementById("btn-start-game");
+
+  // Subview Switcher
+  function switchSubView(viewName) {
+    document.querySelectorAll(".menu-subview").forEach(v => v.classList.remove("active"));
+    const target = document.getElementById(`menu-view-${viewName}`);
+    if (target) {
+      target.classList.add("active");
+    }
+    const modalContent = document.querySelector("#start-menu .modal-content");
+    if (modalContent) modalContent.scrollTop = 0;
+  }
 
   // Close Start Menu
   if (btnClose && startMenu) {
@@ -654,70 +667,139 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Toggle Settings Drawer
-  if (btnSettings && settingsDrawer) {
-    btnSettings.addEventListener("click", (e) => {
+  // Back buttons
+  if (btnBattleBack) {
+    btnBattleBack.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = settingsDrawer.classList.toggle("open");
-      btnSettings.classList.toggle("active", isOpen);
-      if (isOpen) {
-        setTimeout(() => {
-          settingsDrawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }, 150);
-      }
+      switchSubView("home");
+    });
+  }
+  if (btnSettingsBack) {
+    btnSettingsBack.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("home");
+    });
+  }
+  if (btnSettingsClose) {
+    btnSettingsClose.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("home");
     });
   }
 
-  // Open Achievements
-  if (btnAch && modalAch) {
-    btnAch.addEventListener("click", (e) => {
+  // Reset to Home on Open
+  const btnOpenMenu = document.getElementById("btn-open-menu");
+  if (btnOpenMenu) {
+    btnOpenMenu.addEventListener("click", () => {
+      switchSubView("home");
+    });
+  }
+  const btnPauseMainMenu = document.getElementById("btn-pause-main-menu");
+  if (btnPauseMainMenu) {
+    btnPauseMainMenu.addEventListener("click", () => {
+      switchSubView("home");
+    });
+  }
+
+  // Home Screen Cards
+  const modeCards = [
+    { id: "btn-card-ai", mode: "ai" },
+    { id: "btn-card-2p", mode: "2p" },
+    { id: "btn-card-online", mode: "online" },
+    { id: "btn-card-puzzle", mode: "puzzle" }
+  ];
+
+  modeCards.forEach(({ id, mode }) => {
+    const card = document.getElementById(id);
+    if (!card) return;
+
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // Trigger selection in #menu-mode-group
+      const targetBtn = document.querySelector(`#menu-mode-group .toggle-btn[data-mode="${mode}"]`);
+      if (targetBtn) {
+        targetBtn.click();
+      }
+
+      // Switch to Battle Preparation View
+      switchSubView("battle");
+    });
+  });
+
+  // Achievements Card (Card 5)
+  const btnAchCard = document.getElementById("btn-menu-achievements");
+  const modalAch = document.getElementById("achievements-modal");
+  if (btnAchCard && modalAch) {
+    btnAchCard.addEventListener("click", (e) => {
       e.stopPropagation();
       renderAchievementsList();
       modalAch.classList.remove("hidden");
     });
   }
 
-  // Mode Cards Mapping
-  const modeCards = [
-    { id: "btn-card-ai", mode: "ai", immediate: false },
-    { id: "btn-card-2p", mode: "2p", immediate: false },
-    { id: "btn-card-online", mode: "online", immediate: true },
-    { id: "btn-card-puzzle", mode: "puzzle", immediate: true }
-  ];
-
-  function setActiveCard(activeMode) {
-    modeCards.forEach(({ id, mode }) => {
-      const card = document.getElementById(id);
-      if (card) card.classList.toggle("active", mode === activeMode);
+  // Settings Card (Card 6)
+  const btnSettingsCard = document.getElementById("btn-menu-settings");
+  if (btnSettingsCard) {
+    btnSettingsCard.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("settings");
+      updateSettingsUI();
     });
   }
 
-  modeCards.forEach(({ id, mode, immediate }) => {
-    const card = document.getElementById(id);
-    if (!card) return;
-
-    card.addEventListener("click", (e) => {
+  // Settings View: Sound Toggle
+  const btnSound = document.getElementById("btn-toggle-sound-setting");
+  const iconSound = document.getElementById("icon-sound-status");
+  if (btnSound) {
+    btnSound.addEventListener("click", (e) => {
       e.stopPropagation();
-      setActiveCard(mode);
-
-      // Trigger standard #menu-mode-group toggle button
-      const targetBtn = document.querySelector(`#menu-mode-group .toggle-btn[data-mode="${mode}"]`);
-      if (targetBtn) {
-        targetBtn.click();
-      }
-
-      if (immediate && btnStart) {
-        // Online and Puzzle directly jump into their mode
-        btnStart.click();
+      if (window._WIZARD_GAME && window._WIZARD_GAME.Ie) {
+        window._WIZARD_GAME.Ie.enabled = !window._WIZARD_GAME.Ie.enabled;
+        const isEnabled = window._WIZARD_GAME.Ie.enabled;
+        btnSound.classList.toggle("active", isEnabled);
+        btnSound.querySelector("span").textContent = isEnabled ? "Ativado" : "Mudo";
+        if (iconSound) iconSound.textContent = isEnabled ? "volume_up" : "volume_off";
+        showToast(isEnabled ? "🔊 Efeitos de som ativados" : "🔇 Efeitos de som silenciados");
       }
     });
-  });
+  }
 
-  // Sync mode cards whenever #menu-mode-group buttons are clicked
-  document.querySelectorAll("#menu-mode-group .toggle-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const mode = btn.dataset.mode;
-      if (mode) setActiveCard(mode);
+  // Settings View: Music Toggle
+  const btnMusic = document.getElementById("btn-toggle-music-setting");
+  const iconMusic = document.getElementById("icon-music-status");
+  if (btnMusic) {
+    btnMusic.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (window._WIZARD_GAME && window._WIZARD_GAME.toggleMusic) {
+        const isPlaying = window._WIZARD_GAME.toggleMusic();
+        btnMusic.classList.toggle("active", isPlaying);
+        btnMusic.querySelector("span").textContent = isPlaying ? "Tocando" : "Pausada";
+        if (iconMusic) iconMusic.textContent = isPlaying ? "music_note" : "music_off";
+        showToast(isPlaying ? "🎶 Música Arcana iniciada" : "🔇 Música pausada");
+        if (isPlaying) unlockAchievement("music_lover");
+      }
     });
-  });
+  }
+
+  // Settings View: Open Achievements Button
+  const btnOpenAch = document.getElementById("btn-open-achievements-setting");
+  if (btnOpenAch && modalAch) {
+    btnOpenAch.addEventListener("click", (e) => {
+      e.stopPropagation();
+      renderAchievementsList();
+      modalAch.classList.remove("hidden");
+    });
+  }
+
+  function updateSettingsUI() {
+    if (window._WIZARD_GAME && window._WIZARD_GAME.Ie) {
+      const isSound = window._WIZARD_GAME.Ie.enabled !== false;
+      if (btnSound) {
+        btnSound.classList.toggle("active", isSound);
+        btnSound.querySelector("span").textContent = isSound ? "Ativado" : "Mudo";
+      }
+      if (iconSound) iconSound.textContent = isSound ? "volume_up" : "volume_off";
+    }
+  }
 }
