@@ -636,19 +636,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --------------------------------------------------------
 // 8. Menu Inicial com Home, Preparação de Batalha e Configurações
+
+// --------------------------------------------------------
+// 8. Menu Inicial Foto 2: Comece a Batalha, Puzzles Aleatórios e Configurações
 // --------------------------------------------------------
 function setupStartMenuGrid() {
   const startMenu = document.getElementById("start-menu");
-  const btnClose = document.getElementById("btn-close-start-menu");
+  const btnHeroBattle = document.getElementById("btn-hero-battle");
+  const btnCardPuzzle = document.getElementById("btn-card-puzzle");
+  const btnAchCard = document.getElementById("btn-menu-achievements");
+  const btnSettingsCard = document.getElementById("btn-menu-settings");
   const btnBattleBack = document.getElementById("btn-battle-back");
   const btnSettingsBack = document.getElementById("btn-settings-back");
   const btnSettingsClose = document.getElementById("btn-settings-close-view");
+  const modalAch = document.getElementById("achievements-modal");
   const btnStart = document.getElementById("btn-start-game");
 
   // Subview Switcher
   function switchSubView(viewName) {
     document.querySelectorAll(".menu-subview").forEach(v => v.classList.remove("active"));
-    const target = document.getElementById(`menu-view-${viewName}`);
+    const target = document.getElementById('menu-view-' + viewName);
     if (target) {
       target.classList.add("active");
     }
@@ -656,18 +663,65 @@ function setupStartMenuGrid() {
     if (modalContent) modalContent.scrollTop = 0;
   }
 
-  // Close Start Menu
-  if (btnClose && startMenu) {
-    btnClose.addEventListener("click", (e) => {
+  // 1. Hero Card: "Comece a Batalha" -> Abre Preparação da Batalha (Foto 2)
+  if (btnHeroBattle) {
+    btnHeroBattle.addEventListener("click", (e) => {
       e.stopPropagation();
-      startMenu.classList.add("hidden");
-      if (window._WIZARD_GAME && window._WIZARD_GAME.at) {
-        window._WIZARD_GAME.at.enabled = true;
-      }
+      switchSubView("battle");
     });
   }
 
-  // Back buttons
+  // 2. Quebra-cabeças Card: Inicia direto com Arena e Skin Aleatórias!
+  if (btnCardPuzzle) {
+    btnCardPuzzle.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // Estilos e Skins no Aleatório
+      const arenas = ["cathedral", "inferno", "frost"];
+      const skins = ["classic", "gold", "amethyst", "emerald"];
+      const randArena = arenas[Math.floor(Math.random() * arenas.length)];
+      const randSkin = skins[Math.floor(Math.random() * skins.length)];
+
+      const arenaBtn = document.querySelector('#menu-arena-group .toggle-btn[data-arena="' + randArena + '"]');
+      if (arenaBtn) arenaBtn.click();
+
+      const skinBtn = document.querySelector('#menu-skin-group .toggle-btn[data-skin="' + randSkin + '"]');
+      if (skinBtn) skinBtn.click();
+
+      // Modo Puzzle via trigger oculto
+      const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
+      if (puzzleTrigger) {
+        puzzleTrigger.click();
+      }
+
+      // Inicia direto a partida de desafios
+      if (btnStart) {
+        btnStart.click();
+      }
+
+      showToast("🧩 Desafio iniciado! Arena e Skin aleatórias.");
+    });
+  }
+
+  // 3. Conquistas Card -> Abre Modal de Conquistas
+  if (btnAchCard && modalAch) {
+    btnAchCard.addEventListener("click", (e) => {
+      e.stopPropagation();
+      renderAchievementsList();
+      modalAch.classList.remove("hidden");
+    });
+  }
+
+  // 4. Configurações Card -> Abre View de Configurações
+  if (btnSettingsCard) {
+    btnSettingsCard.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("settings");
+      updateSettingsUI();
+    });
+  }
+
+  // Botões Voltar
   if (btnBattleBack) {
     btnBattleBack.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -687,7 +741,7 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Reset to Home on Open
+  // Ao reabrir pelo HUD ou pelo Menu de Pausa, reseta para a Home
   const btnOpenMenu = document.getElementById("btn-open-menu");
   if (btnOpenMenu) {
     btnOpenMenu.addEventListener("click", () => {
@@ -701,54 +755,7 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Home Screen Cards
-  const modeCards = [
-    { id: "btn-card-ai", mode: "ai" },
-    { id: "btn-card-2p", mode: "2p" },
-    { id: "btn-card-online", mode: "online" },
-    { id: "btn-card-puzzle", mode: "puzzle" }
-  ];
-
-  modeCards.forEach(({ id, mode }) => {
-    const card = document.getElementById(id);
-    if (!card) return;
-
-    card.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      // Trigger selection in #menu-mode-group
-      const targetBtn = document.querySelector(`#menu-mode-group .toggle-btn[data-mode="${mode}"]`);
-      if (targetBtn) {
-        targetBtn.click();
-      }
-
-      // Switch to Battle Preparation View
-      switchSubView("battle");
-    });
-  });
-
-  // Achievements Card (Card 5)
-  const btnAchCard = document.getElementById("btn-menu-achievements");
-  const modalAch = document.getElementById("achievements-modal");
-  if (btnAchCard && modalAch) {
-    btnAchCard.addEventListener("click", (e) => {
-      e.stopPropagation();
-      renderAchievementsList();
-      modalAch.classList.remove("hidden");
-    });
-  }
-
-  // Settings Card (Card 6)
-  const btnSettingsCard = document.getElementById("btn-menu-settings");
-  if (btnSettingsCard) {
-    btnSettingsCard.addEventListener("click", (e) => {
-      e.stopPropagation();
-      switchSubView("settings");
-      updateSettingsUI();
-    });
-  }
-
-  // Settings View: Sound Toggle
+  // Configurações: Alternar Som
   const btnSound = document.getElementById("btn-toggle-sound-setting");
   const iconSound = document.getElementById("icon-sound-status");
   if (btnSound) {
@@ -760,12 +767,12 @@ function setupStartMenuGrid() {
         btnSound.classList.toggle("active", isEnabled);
         btnSound.querySelector("span").textContent = isEnabled ? "Ativado" : "Mudo";
         if (iconSound) iconSound.textContent = isEnabled ? "volume_up" : "volume_off";
-        showToast(isEnabled ? "🔊 Efeitos de som ativados" : "🔇 Efeitos de som silenciados");
+        showToast(isEnabled ? "🔊 Sons ativados" : "🔇 Sons desativados");
       }
     });
   }
 
-  // Settings View: Music Toggle
+  // Configurações: Alternar Música
   const btnMusic = document.getElementById("btn-toggle-music-setting");
   const iconMusic = document.getElementById("icon-music-status");
   if (btnMusic) {
@@ -782,7 +789,7 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Settings View: Open Achievements Button
+  // Configurações: Abrir Conquistas
   const btnOpenAch = document.getElementById("btn-open-achievements-setting");
   if (btnOpenAch && modalAch) {
     btnOpenAch.addEventListener("click", (e) => {
@@ -802,4 +809,15 @@ function setupStartMenuGrid() {
       if (iconSound) iconSound.textContent = isSound ? "volume_up" : "volume_off";
     }
   }
+
+  // Sincroniza estatísticas espelhadas na view de batalha
+  const syncStatsMirror = () => {
+    const w = document.getElementById("stat-wins")?.textContent || "0";
+    const d = document.getElementById("stat-draws")?.textContent || "0";
+    const l = document.getElementById("stat-losses")?.textContent || "0";
+    document.querySelectorAll(".stat-wins-mirror").forEach(el => el.textContent = w);
+    document.querySelectorAll(".stat-draws-mirror").forEach(el => el.textContent = d);
+    document.querySelectorAll(".stat-losses-mirror").forEach(el => el.textContent = l);
+  };
+  setTimeout(syncStatsMirror, 200);
 }

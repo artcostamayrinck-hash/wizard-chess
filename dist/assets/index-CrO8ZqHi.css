@@ -1056,3 +1056,356 @@
   background: #9eccf5 !important;
   transform: translateY(-1px) !important;
 }
+
+
+/* ==========================================================================
+   Tema da Foto 2: Obsidian, Ouro Imperial e Lilás/Lavanda (#c8b6ff)
+   ========================================================================== */
+
+#start-menu .start-content.menu-photo2-modal {
+  max-width: 440px !important;
+  width: 92% !important;
+  padding: 22px 20px 24px !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+  border: 1px solid rgba(245, 197, 107, 0.28) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.12) !important;
+  border-radius: 28px !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.photo2-title {
+  font-family: 'Cinzel', serif !important;
+  color: #f5c56b !important;
+  font-size: 2.1rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 2px !important;
+  text-shadow: 0 0 18px rgba(245, 197, 107, 0.45) !important;
+  margin: 6px 0 10px 0 !important;
+  text-align: center !important;
+}
+
+.photo2-stats {
+  background: rgba(18, 14, 25, 0.85) !important;
+  border: 1px solid rgba(245, 197, 107, 0.25) !important;
+  border-radius: 99px !important;
+  padding: 6px 16px !important;
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  margin: 0 auto 10px !important;
+  width: fit-content !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.photo2-subtitle {
+  color: #d0bcff !important;
+  font-size: 0.88rem !important;
+  text-align: center !important;
+  margin: 0 auto 14px !important;
+  line-height: 1.35 !important;
+}
+
+.photo2-xp-banner {
+  width: 100% !important;
+  background: rgba(18, 14, 26, 0.6) !important;
+  border: 1px solid rgba(200, 182, 255, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  box-sizing: border-box !important;
+}
+
+.photo2-xp-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 0.74rem !important;
+  color: #d0bcff !important;
+  font-weight: 700 !important;
+}
+
+.photo2-xp-track {
+  width: 100% !important;
+  height: 5px !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 99px !important;
+  overflow: hidden !important;
+}
+
+/* Home Cards Container */
+.home-cards-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Card Unificado Hero "Comece a Batalha" */
+.hero-battle-card {
+  width: 100% !important;
+  background: linear-gradient(135deg, rgba(35, 27, 52, 0.95) 0%, rgba(18, 14, 28, 0.98) 100%) !important;
+  border: 1.5px solid rgba(245, 197, 107, 0.45) !important;
+  border-radius: 18px !important;
+  padding: 16px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 18px rgba(245, 197, 107, 0.15) !important;
+  transition: all 0.22s cubic-bezier(0.2, 0, 0, 1) !important;
+  box-sizing: border-box !important;
+}
+
+.hero-battle-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #f5c56b !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), 0 0 24px rgba(245, 197, 107, 0.3) !important;
+}
+
+.hero-battle-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  text-align: left !important;
+}
+
+.hero-battle-icon {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  background: rgba(245, 197, 107, 0.15) !important;
+  border: 1px solid rgba(245, 197, 107, 0.4) !important;
+  color: #f5c56b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.hero-battle-icon .material-symbols-rounded {
+  font-size: 26px !important;
+}
+
+.hero-battle-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.hero-battle-title {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.3px !important;
+}
+
+.hero-battle-sub {
+  font-size: 0.74rem !important;
+  color: #d0bcff !important;
+  font-weight: 500 !important;
+}
+
+.hero-battle-arrow {
+  color: #f5c56b !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Subgrid de 3 Cards */
+.home-cards-subgrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.photo2-card {
+  background: rgba(22, 17, 33, 0.85) !important;
+  border: 1px solid rgba(200, 182, 255, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 12px 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+  min-height: 74px !important;
+  box-sizing: border-box !important;
+}
+
+.photo2-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #c8b6ff !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(200, 182, 255, 0.25) !important;
+}
+
+.photo2-card-icon .material-symbols-rounded {
+  font-size: 26px !important;
+}
+
+.photo2-card-label {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  line-height: 1.15 !important;
+}
+
+/* Battle Subview Header & Elements */
+.photo2-subview-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+}
+
+.photo2-back-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(24, 18, 36, 0.85) !important;
+  border: 1px solid rgba(200, 182, 255, 0.25) !important;
+  border-radius: 99px !important;
+  padding: 5px 12px !important;
+  color: #d0bcff !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.photo2-back-btn:hover {
+  background: rgba(36, 28, 54, 0.95) !important;
+  color: #ffffff !important;
+  border-color: #c8b6ff !important;
+}
+
+/* Photo 2 Labels & Toggle Groups */
+.photo2-label {
+  color: #f5c56b !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.2px !important;
+  margin-bottom: 4px !important;
+}
+
+.photo2-toggle-group {
+  background: #110e19 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  padding: 4px !important;
+}
+
+.photo2-toggle-group .toggle-btn {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  font-size: 0.82rem !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+.photo2-toggle-group .toggle-btn.active {
+  background: #c8b6ff !important;
+  color: #161026 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 16px rgba(200, 182, 255, 0.5) !important;
+}
+
+/* Primary Button Idêntico à Foto 2 */
+.photo2-btn-start {
+  background: linear-gradient(180deg, #1e192b 0%, #151120 100%) !important;
+  border: 1px solid rgba(245, 197, 107, 0.5) !important;
+  box-shadow: 0 0 20px rgba(245, 197, 107, 0.2), inset 0 1px 0 rgba(245, 197, 107, 0.25) !important;
+  color: #ffffff !important;
+  font-size: 1.12rem !important;
+  font-weight: 800 !important;
+  padding: 16px 32px !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.photo2-btn-start:hover {
+  box-shadow: 0 0 26px rgba(245, 197, 107, 0.4), inset 0 1px 0 rgba(245, 197, 107, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Settings Cards Photo 2 */
+.photo2-setting-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(18, 14, 28, 0.8) !important;
+  border: 1px solid rgba(200, 182, 255, 0.18) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  box-sizing: border-box !important;
+}
+
+.photo2-setting-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.photo2-switch-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  color: #d0bcff !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.photo2-switch-btn.active {
+  background: rgba(76, 175, 80, 0.28) !important;
+  border-color: #81c784 !important;
+  color: #a5d6a7 !important;
+  box-shadow: 0 0 10px rgba(129, 199, 132, 0.3) !important;
+}
+
+.photo2-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: #c8b6ff !important;
+  color: #161026 !important;
+  border: none !important;
+  border-radius: 99px !important;
+  padding: 6px 14px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.photo2-btn-return {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(200, 182, 255, 0.2) !important;
+  color: #ffffff !important;
+  font-size: 0.95rem !important;
+  padding: 12px 24px !important;
+  width: 100% !important;
+}
