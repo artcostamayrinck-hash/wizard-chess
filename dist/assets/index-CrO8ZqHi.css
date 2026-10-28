@@ -583,3 +583,326 @@
   font-size: 0.74rem !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
 }
+
+
+/* ==========================================================================
+   Reference-based Start Menu Redesign (2x3 Card Grid Format)
+   ========================================================================== */
+
+#start-menu .start-content.menu-ref-modal {
+  max-width: 440px !important;
+  width: 92% !important;
+  padding: 18px 18px 22px !important;
+  background: radial-gradient(circle at 50% 12%, rgba(21, 52, 86, 0.96) 0%, rgba(9, 21, 37, 0.98) 100%) !important;
+  border: 1px solid rgba(100, 180, 255, 0.28) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(45, 120, 200, 0.25) !important;
+  border-radius: 28px !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+.menu-ref-lvl-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(10, 32, 54, 0.85) !important;
+  border: 1px solid rgba(80, 200, 120, 0.45) !important;
+  border-radius: 12px !important;
+  padding: 4px 10px !important;
+  color: #81c784 !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.menu-ref-avatar-circle {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, #3d79b4 0%, #102d4d 90%) !important;
+  border: 2.5px solid #64b5f6 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 18px rgba(100, 181, 246, 0.45) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.menu-ref-knight-svg {
+  width: 38px !important;
+  height: 38px !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.menu-ref-close-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: none !important;
+  color: #e2e8f0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.menu-ref-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+}
+
+.menu-ref-main-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 2px !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.95), -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000 !important;
+  margin: 6px 0 4px 0 !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+}
+
+.menu-ref-status-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  font-size: 0.76rem !important;
+  color: #a4c9e8 !important;
+  margin: 4px 0 10px 0 !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-phase-icon {
+  font-size: 0.95rem !important;
+  color: #82b1ff !important;
+}
+
+.menu-ref-live-text {
+  flex: 1 !important;
+  text-align: center !important;
+}
+
+.menu-ref-live-text strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.menu-ref-audio-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #82b1ff !important;
+  cursor: pointer !important;
+  padding: 2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s ease !important;
+}
+
+.menu-ref-audio-btn:hover {
+  transform: scale(1.15) !important;
+  color: #ffffff !important;
+}
+
+.menu-ref-stats-panel {
+  width: 100% !important;
+  background: rgba(12, 28, 48, 0.65) !important;
+  border: 1px solid rgba(88, 166, 255, 0.18) !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-record-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-size: 0.74rem !important;
+  color: #c7def2 !important;
+  font-weight: 600 !important;
+}
+
+.menu-ref-xp-track {
+  width: 100% !important;
+  height: 5px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 99px !important;
+  overflow: hidden !important;
+}
+
+.menu-ref-xp-labels {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 0.72rem !important;
+  color: #90b8da !important;
+  font-weight: 600 !important;
+}
+
+/* The 2x3 Grid */
+.menu-ref-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-card {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 10px !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+  min-height: 58px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  user-select: none !important;
+  outline: none !important;
+}
+
+/* Dark Mode Cards (Top 4) */
+.menu-ref-card.card-dark {
+  background: #143d66 !important;
+  border: 1px solid rgba(100, 180, 240, 0.22) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+.menu-ref-card.card-dark .card-icon-wrap {
+  color: #88c0ee !important;
+}
+
+.menu-ref-card.card-dark .card-line-small {
+  font-size: 0.72rem !important;
+  color: #9ec6e9 !important;
+  display: block !important;
+  line-height: 1.1 !important;
+}
+
+.menu-ref-card.card-dark .card-line-bold {
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  display: block !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.2px !important;
+}
+
+.menu-ref-card.card-dark:hover {
+  background: #1b4d80 !important;
+  border-color: rgba(100, 180, 255, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+.menu-ref-card.card-dark.active {
+  background: #1d568f !important;
+  border-color: #64b5f6 !important;
+  box-shadow: 0 0 16px rgba(100, 181, 246, 0.55), inset 0 0 8px rgba(100, 181, 246, 0.2) !important;
+}
+
+/* Light Sky Blue Cards (Bottom 2: Classificações, Configurações) */
+.menu-ref-card.card-light {
+  background: #84bde9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  color: #0b223c !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.menu-ref-card.card-light .card-icon-wrap {
+  color: #0b223c !important;
+}
+
+.menu-ref-card.card-light .card-line-bold {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #0b223c !important;
+  display: block !important;
+}
+
+.menu-ref-card.card-light:hover {
+  background: #99cef5 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.card-icon-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.card-icon-wrap .material-symbols-rounded {
+  font-size: 26px !important;
+}
+
+.card-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.card-badge-info {
+  position: absolute !important;
+  top: 5px !important;
+  right: 6px !important;
+  font-size: 11px !important;
+  color: #88c0ee !important;
+  line-height: 1 !important;
+  opacity: 0.8 !important;
+}
+
+/* Expandable Settings Drawer */
+.menu-settings-drawer {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease, margin 0.3s ease !important;
+  opacity: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+}
+
+.menu-settings-drawer.open {
+  max-height: 800px !important;
+  opacity: 1 !important;
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(88, 166, 255, 0.2) !important;
+}
+
+.drawer-header {
+  margin-bottom: 12px !important;
+}
+
+.drawer-subtitle {
+  font-size: 0.78rem !important;
+  color: #9ec6e9 !important;
+  margin: 0 !important;
+}

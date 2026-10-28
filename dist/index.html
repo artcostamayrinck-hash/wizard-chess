@@ -942,6 +942,329 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
 }
 
+  
+/* ==========================================================================
+   Reference-based Start Menu Redesign (2x3 Card Grid Format)
+   ========================================================================== */
+
+#start-menu .start-content.menu-ref-modal {
+  max-width: 440px !important;
+  width: 92% !important;
+  padding: 18px 18px 22px !important;
+  background: radial-gradient(circle at 50% 12%, rgba(21, 52, 86, 0.96) 0%, rgba(9, 21, 37, 0.98) 100%) !important;
+  border: 1px solid rgba(100, 180, 255, 0.28) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(45, 120, 200, 0.25) !important;
+  border-radius: 28px !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+.menu-ref-lvl-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(10, 32, 54, 0.85) !important;
+  border: 1px solid rgba(80, 200, 120, 0.45) !important;
+  border-radius: 12px !important;
+  padding: 4px 10px !important;
+  color: #81c784 !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.menu-ref-avatar-circle {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, #3d79b4 0%, #102d4d 90%) !important;
+  border: 2.5px solid #64b5f6 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 18px rgba(100, 181, 246, 0.45) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.menu-ref-knight-svg {
+  width: 38px !important;
+  height: 38px !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.menu-ref-close-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: none !important;
+  color: #e2e8f0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.menu-ref-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+}
+
+.menu-ref-main-title {
+  font-family: 'Cinzel', serif !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 2px !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.95), -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000 !important;
+  margin: 6px 0 4px 0 !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+}
+
+.menu-ref-status-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  font-size: 0.76rem !important;
+  color: #a4c9e8 !important;
+  margin: 4px 0 10px 0 !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-phase-icon {
+  font-size: 0.95rem !important;
+  color: #82b1ff !important;
+}
+
+.menu-ref-live-text {
+  flex: 1 !important;
+  text-align: center !important;
+}
+
+.menu-ref-live-text strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.menu-ref-audio-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #82b1ff !important;
+  cursor: pointer !important;
+  padding: 2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s ease !important;
+}
+
+.menu-ref-audio-btn:hover {
+  transform: scale(1.15) !important;
+  color: #ffffff !important;
+}
+
+.menu-ref-stats-panel {
+  width: 100% !important;
+  background: rgba(12, 28, 48, 0.65) !important;
+  border: 1px solid rgba(88, 166, 255, 0.18) !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-record-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-size: 0.74rem !important;
+  color: #c7def2 !important;
+  font-weight: 600 !important;
+}
+
+.menu-ref-xp-track {
+  width: 100% !important;
+  height: 5px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 99px !important;
+  overflow: hidden !important;
+}
+
+.menu-ref-xp-labels {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 0.72rem !important;
+  color: #90b8da !important;
+  font-weight: 600 !important;
+}
+
+/* The 2x3 Grid */
+.menu-ref-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.menu-ref-card {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 10px !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+  min-height: 58px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  user-select: none !important;
+  outline: none !important;
+}
+
+/* Dark Mode Cards (Top 4) */
+.menu-ref-card.card-dark {
+  background: #143d66 !important;
+  border: 1px solid rgba(100, 180, 240, 0.22) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+.menu-ref-card.card-dark .card-icon-wrap {
+  color: #88c0ee !important;
+}
+
+.menu-ref-card.card-dark .card-line-small {
+  font-size: 0.72rem !important;
+  color: #9ec6e9 !important;
+  display: block !important;
+  line-height: 1.1 !important;
+}
+
+.menu-ref-card.card-dark .card-line-bold {
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  display: block !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.2px !important;
+}
+
+.menu-ref-card.card-dark:hover {
+  background: #1b4d80 !important;
+  border-color: rgba(100, 180, 255, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+.menu-ref-card.card-dark.active {
+  background: #1d568f !important;
+  border-color: #64b5f6 !important;
+  box-shadow: 0 0 16px rgba(100, 181, 246, 0.55), inset 0 0 8px rgba(100, 181, 246, 0.2) !important;
+}
+
+/* Light Sky Blue Cards (Bottom 2: Classificações, Configurações) */
+.menu-ref-card.card-light {
+  background: #84bde9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  color: #0b223c !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.menu-ref-card.card-light .card-icon-wrap {
+  color: #0b223c !important;
+}
+
+.menu-ref-card.card-light .card-line-bold {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #0b223c !important;
+  display: block !important;
+}
+
+.menu-ref-card.card-light:hover {
+  background: #99cef5 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.card-icon-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.card-icon-wrap .material-symbols-rounded {
+  font-size: 26px !important;
+}
+
+.card-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.card-badge-info {
+  position: absolute !important;
+  top: 5px !important;
+  right: 6px !important;
+  font-size: 11px !important;
+  color: #88c0ee !important;
+  line-height: 1 !important;
+  opacity: 0.8 !important;
+}
+
+/* Expandable Settings Drawer */
+.menu-settings-drawer {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease, margin 0.3s ease !important;
+  opacity: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+}
+
+.menu-settings-drawer.open {
+  max-height: 800px !important;
+  opacity: 1 !important;
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(88, 166, 255, 0.2) !important;
+}
+
+.drawer-header {
+  margin-bottom: 12px !important;
+}
+
+.drawer-subtitle {
+  font-size: 0.78rem !important;
+  color: #9ec6e9 !important;
+  margin: 0 !important;
+}
+
   </style>
 </head>
 
@@ -1004,108 +1327,205 @@
     </div>
   </div>
 
-  <!-- Menu Inicial Pré-Jogo -->
+    <!-- Menu Inicial Baseado no Formato de Cards da Referência -->
   <div id="start-menu" class="modal-overlay">
-    <div class="modal-content start-content">
-      <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
-        <span class="material-symbols-rounded">castle</span>
-        <span>CATEDRAL ARCANA</span>
-      </div>
-      <h2 class="game-title">WIZARD'S CHESS</h2>
-
-      <!-- Placar de Estatísticas Salvo no Navegador -->
-      <div id="stats-banner" class="stats-banner" title="Suas Estatísticas Salvas">
-        <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
-        <span class="stat-divider">•</span>
-        <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
-        <span class="stat-divider">•</span>
-        <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
-      </div>
-
-      <!-- Grau do Mago & Barra de XP Arcana -->
-      <div id="player-xp-container" class="xp-banner" title="Nível e Experiência do Mago">
-        <div class="xp-header">
-          <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
-          <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
+    <div class="modal-content start-content menu-ref-modal">
+      <!-- 1. Linha Superior: Nível (Esquerda), Avatar Circular (Centro), Botão Fechar (Direita) -->
+      <div class="menu-ref-top-row">
+        <div id="menu-rank-badge" class="menu-ref-lvl-badge" title="Nível do Bruxo">
+          <span class="badge-sprout">🌱</span>
+          <span id="menu-rank-lvl-num">1</span>
         </div>
-        <div class="xp-bar-track">
+
+        <div class="menu-ref-avatar-circle" title="Cavaleiro Arcano">
+          <svg class="menu-ref-knight-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 12C38 12 28 20 26 28C24 36 28 42 22 48C17 53 15 58 15 67C15 72 17 76 21 78C25 80 30 79 34 76C40 85 52 88 68 88C72 88 75 86 76 83C77 80 77 77 75 74C72 70 70 65 71 59C73 47 75 35 68 24C62 15 56 12 50 12Z" fill="#FFFFFF"/>
+            <circle cx="38" cy="30" r="3.5" fill="#1b4369"/>
+            <path d="M25 58C28 60 32 60 35 57C38 54 38 50 35 48" stroke="#1b4369" stroke-width="3" stroke-linecap="round"/>
+            <path d="M48 24C52 28 54 36 52 44" stroke="#1b4369" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <button type="button" id="btn-close-start-menu" class="menu-ref-close-btn" title="Fechar Menu">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <!-- 2. Título Central no estilo CHECKMATE! -->
+      <h1 class="menu-ref-main-title">WIZARD'S CHESS</h1>
+
+      <!-- 3. Barra de Status ao Vivo e Botão de Áudio -->
+      <div class="menu-ref-status-row">
+        <span class="menu-ref-phase-icon">◐</span>
+        <span class="menu-ref-live-text"><strong>1.280.394</strong> Batalhas em 24h &nbsp; <strong>54.693</strong> Jogando Agora</span>
+        <button type="button" id="btn-menu-sound-toggle" class="menu-ref-audio-btn" title="Alternar Som">
+          <span class="material-symbols-rounded">music_note</span>
+        </button>
+      </div>
+
+      <!-- 4. Placar de Estatísticas e Progresso de XP Arcana -->
+      <div class="menu-ref-stats-panel" title="Suas Estatísticas Salvas">
+        <div class="menu-ref-record-row">
+          <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
+          <span class="stat-divider">•</span>
+          <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
+          <span class="stat-divider">•</span>
+          <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
+        </div>
+        <div class="menu-ref-xp-track">
           <div id="menu-xp-bar-fill" class="xp-bar-fill" style="width: 15%;"></div>
         </div>
-        <div class="xp-footer">
-          <span id="menu-xp-current">0 XP</span>
-          <span id="menu-xp-next">200 XP para o próximo grau</span>
+        <div class="menu-ref-xp-labels">
+          <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
+          <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
+          <span id="menu-xp-current" style="display:none;">0 XP</span>
+          <span id="menu-xp-next" style="display:none;">200 XP para o próximo grau</span>
         </div>
       </div>
 
-      <p style="color: #d0bcff; font-size: 0.95rem; margin-bottom: 24px;">Prepare suas runas e desafie o destino no
-        tabuleiro de pedra.</p>
-
-      <div class="setup-grid">
-        <!-- Modo de Jogo -->
-        <div class="setup-group">
-          <label class="setup-label">Modo de Batalha</label>
-          <div class="toggle-group" id="menu-mode-group">
-            <button class="toggle-btn active" data-mode="ai">vs IA</button>
-            <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
-            <button class="toggle-btn" data-mode="online">Online</button>
-            <button class="toggle-btn" data-mode="puzzle">Desafios</button>
+      <!-- 5. Grid 2x3 de Cards de Ação idêntico à Referência -->
+      <div class="menu-ref-cards-grid">
+        <!-- Card 1: Jogue Online -->
+        <button type="button" class="menu-ref-card card-dark" id="btn-card-online" data-target-mode="online">
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">public</span>
           </div>
+          <div class="card-text-block">
+            <span class="card-line-small">Jogue</span>
+            <span class="card-line-bold">Online</span>
+          </div>
+        </button>
+
+        <!-- Card 2: Jogue com o computador -->
+        <button type="button" class="menu-ref-card card-dark active" id="btn-card-ai" data-target-mode="ai">
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">memory</span>
+          </div>
+          <div class="card-text-block">
+            <span class="card-line-small">Jogue</span>
+            <span class="card-line-bold">com o comput...</span>
+          </div>
+        </button>
+
+        <!-- Card 3: Jogue com os amigos -->
+        <button type="button" class="menu-ref-card card-dark" id="btn-card-2p" data-target-mode="2p">
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">group</span>
+          </div>
+          <div class="card-text-block">
+            <span class="card-line-small">Jogue</span>
+            <span class="card-line-bold">com os amigos</span>
+          </div>
+        </button>
+
+        <!-- Card 4: Quebra-cabeças -->
+        <button type="button" class="menu-ref-card card-dark" id="btn-card-puzzle" data-target-mode="puzzle">
+          <span class="card-badge-info" title="Desafios Táticos">ⓘ</span>
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">extension</span>
+          </div>
+          <div class="card-text-block">
+            <span class="card-line-small">Quebra</span>
+            <span class="card-line-bold">cabeças</span>
+          </div>
+        </button>
+
+        <!-- Card 5: Classificações (Card Azul Claro) -->
+        <button type="button" class="menu-ref-card card-light" id="btn-menu-achievements">
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">leaderboard</span>
+          </div>
+          <div class="card-text-block">
+            <span class="card-line-bold">Classificações</span>
+          </div>
+        </button>
+
+        <!-- Card 6: Configurações (Card Azul Claro) -->
+        <button type="button" class="menu-ref-card card-light" id="btn-menu-settings">
+          <div class="card-icon-wrap">
+            <span class="material-symbols-rounded">settings</span>
+          </div>
+          <div class="card-text-block">
+            <span class="card-line-bold">Configurações</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Sincronizador Oculto do Modo de Jogo para Compatibilidade 100% -->
+      <div class="toggle-group" id="menu-mode-group" style="display: none !important;">
+        <button class="toggle-btn active" data-mode="ai">vs IA</button>
+        <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
+        <button class="toggle-btn" data-mode="online">Online</button>
+        <button class="toggle-btn" data-mode="puzzle">Desafios</button>
+      </div>
+
+      <!-- 6. Gaveta Expansível de Configurações (Arena, Peças 3D, Exército, Relógio, Dificuldade) -->
+      <div id="menu-settings-drawer" class="menu-settings-drawer">
+        <div class="drawer-header">
+          <div class="brand-pill" style="margin: 0 auto 8px; width: fit-content;">
+            <span class="material-symbols-rounded">castle</span>
+            <span id="menu-arena-pill-text">CATEDRAL ARCANA</span>
+          </div>
+          <p class="drawer-subtitle">Personalize sua atmosfera, peças 3D e regras</p>
         </div>
 
-        <!-- Escolha de Arena / Atmosfera -->
-        <div class="setup-group">
-          <label class="setup-label">Arena da Batalha</label>
-          <div class="toggle-group" id="menu-arena-group">
-            <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
-            <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
-            <button class="toggle-btn" data-arena="frost">Templo de Gelo</button>
+        <div class="setup-grid">
+          <!-- Arena / Atmosfera -->
+          <div class="setup-group">
+            <label class="setup-label">Arena da Batalha</label>
+            <div class="toggle-group" id="menu-arena-group">
+              <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
+              <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
+              <button class="toggle-btn" data-arena="frost">Templo de Gelo</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Escolha de Skin das Peças -->
-        <div class="setup-group">
-          <label class="setup-label">Skin das Peças 3D</label>
-          <div class="toggle-group" id="menu-skin-group">
-            <button class="toggle-btn active" data-skin="classic">Clássico</button>
-            <button class="toggle-btn" data-skin="gold">Ouro Real</button>
-            <button class="toggle-btn" data-skin="amethyst">Ametista</button>
-            <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
+          <!-- Skin das Peças 3D -->
+          <div class="setup-group">
+            <label class="setup-label">Skin das Peças 3D</label>
+            <div class="toggle-group" id="menu-skin-group">
+              <button class="toggle-btn active" data-skin="classic">Clássico</button>
+              <button class="toggle-btn" data-skin="gold">Ouro Real</button>
+              <button class="toggle-btn" data-skin="amethyst">Ametista</button>
+              <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Escolha de Lado / Cor -->
-        <div class="setup-group">
-          <label class="setup-label">Seu Exército</label>
-          <div class="toggle-group" id="menu-color-group">
-            <button class="toggle-btn active" data-color="w">Mármore (Brancas)</button>
-            <button class="toggle-btn" data-color="b">Obsidiana (Pretas)</button>
+          <!-- Cor / Exército -->
+          <div class="setup-group">
+            <label class="setup-label">Seu Exército</label>
+            <div class="toggle-group" id="menu-color-group">
+              <button class="toggle-btn active" data-color="w">Mármore (Brancas)</button>
+              <button class="toggle-btn" data-color="b">Obsidiana (Pretas)</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Relógio / Tempo de Partida -->
-        <div class="setup-group">
-          <label class="setup-label">Relógio da Catedral</label>
-          <div class="toggle-group" id="menu-time-group">
-            <button class="toggle-btn" data-time="0">Livre</button>
-            <button class="toggle-btn" data-time="180">3 min</button>
-            <button class="toggle-btn active" data-time="300">5 min</button>
-            <button class="toggle-btn" data-time="600">10 min</button>
+          <!-- Relógio -->
+          <div class="setup-group">
+            <label class="setup-label">Relógio da Catedral</label>
+            <div class="toggle-group" id="menu-time-group">
+              <button class="toggle-btn" data-time="0">Livre</button>
+              <button class="toggle-btn" data-time="180">3 min</button>
+              <button class="toggle-btn active" data-time="300">5 min</button>
+              <button class="toggle-btn" data-time="600">10 min</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Dificuldade da IA -->
-        <div class="setup-group" id="menu-diff-section">
-          <label class="setup-label">Dificuldade da IA</label>
-          <div class="toggle-group" id="menu-diff-group">
-            <button class="toggle-btn" data-diff="1">Fácil</button>
-            <button class="toggle-btn active" data-diff="2">Média</button>
-            <button class="toggle-btn" data-diff="3">Difícil</button>
+          <!-- Dificuldade IA -->
+          <div class="setup-group" id="menu-diff-section">
+            <label class="setup-label">Dificuldade da IA</label>
+            <div class="toggle-group" id="menu-diff-group">
+              <button class="toggle-btn" data-diff="1">Fácil</button>
+              <button class="toggle-btn active" data-diff="2">Média</button>
+              <button class="toggle-btn" data-diff="3">Difícil</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="menu-actions" style="margin-top: 26px;">
-        <button id="btn-start-game" class="promo-btn" style="font-size: 1.15rem; padding: 16px 36px; width: 100%;">
+      <!-- 7. Botão Principal de Ação -->
+      <div class="menu-actions" style="margin-top: 16px; width: 100%;">
+        <button id="btn-start-game" class="promo-btn" style="font-size: 1.15rem; padding: 15px 32px; width: 100%;">
           Entrar na Catedral
         </button>
       </div>

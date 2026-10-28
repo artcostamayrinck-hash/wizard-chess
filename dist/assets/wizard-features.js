@@ -14,6 +14,7 @@ function initWizardFeatures() {
   setupMusicControls();
   setupProgressionAndAchievements();
   setupSkinsSystem();
+  setupStartMenuGrid();
 }
 
 // --------------------------------------------------------
@@ -267,15 +268,24 @@ function handleGameOverRewards() {
 // --------------------------------------------------------
 function setupMusicControls() {
   const btnMusic = document.getElementById("btn-music");
-  if (!btnMusic) return;
+  const btnMenuAudio = document.getElementById("btn-menu-sound-toggle");
 
-  btnMusic.addEventListener("click", () => {
+  const toggle = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     if (!window._WIZARD_GAME) return;
     const isPlaying = window._WIZARD_GAME.toggleMusic();
-    btnMusic.classList.toggle("active", isPlaying);
+    if (btnMusic) btnMusic.classList.toggle("active", isPlaying);
+    if (btnMenuAudio) {
+      btnMenuAudio.classList.toggle("active", isPlaying);
+      const icon = btnMenuAudio.querySelector(".material-symbols-rounded");
+      if (icon) icon.textContent = isPlaying ? "music_note" : "music_off";
+    }
     showToast(isPlaying ? "🎶 Música Arcana iniciada" : "🔇 Música pausada");
     if (isPlaying) unlockAchievement("music_lover");
-  });
+  };
+
+  if (btnMusic) btnMusic.addEventListener("click", toggle);
+  if (btnMenuAudio) btnMenuAudio.addEventListener("click", toggle);
 }
 
 // --------------------------------------------------------
@@ -387,6 +397,7 @@ function updateProgressionUI(xp = getPlayerXP(), rank = getRankData(xp)) {
   if (rankLvl) rankLvl.textContent = `Nível ${rank.level}`;
   if (hudRank) hudRank.textContent = rank.title;
   if (hudLvl) hudLvl.textContent = `Nv. ${rank.level}`;
+  const menuLvlNum = document.getElementById("menu-rank-lvl-num"); if (menuLvlNum) menuLvlNum.textContent = rank.level;
   const rBottom = document.getElementById("player-rating-bottom"); if (rBottom) rBottom.textContent = `(Nv. ${rank.level})`;
 
   const currentLevelBase = rank.xpRequired;
@@ -618,3 +629,95 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+// --------------------------------------------------------
+// 8. Reference Start Menu 2x3 Grid Controller
+// --------------------------------------------------------
+function setupStartMenuGrid() {
+  const btnClose = document.getElementById("btn-close-start-menu");
+  const startMenu = document.getElementById("start-menu");
+  const btnSettings = document.getElementById("btn-menu-settings");
+  const settingsDrawer = document.getElementById("menu-settings-drawer");
+  const btnAch = document.getElementById("btn-menu-achievements");
+  const modalAch = document.getElementById("achievements-modal");
+  const btnStart = document.getElementById("btn-start-game");
+
+  // Close Start Menu
+  if (btnClose && startMenu) {
+    btnClose.addEventListener("click", (e) => {
+      e.stopPropagation();
+      startMenu.classList.add("hidden");
+      if (window._WIZARD_GAME && window._WIZARD_GAME.at) {
+        window._WIZARD_GAME.at.enabled = true;
+      }
+    });
+  }
+
+  // Toggle Settings Drawer
+  if (btnSettings && settingsDrawer) {
+    btnSettings.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = settingsDrawer.classList.toggle("open");
+      btnSettings.classList.toggle("active", isOpen);
+      if (isOpen) {
+        setTimeout(() => {
+          settingsDrawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 150);
+      }
+    });
+  }
+
+  // Open Achievements
+  if (btnAch && modalAch) {
+    btnAch.addEventListener("click", (e) => {
+      e.stopPropagation();
+      renderAchievementsList();
+      modalAch.classList.remove("hidden");
+    });
+  }
+
+  // Mode Cards Mapping
+  const modeCards = [
+    { id: "btn-card-ai", mode: "ai", immediate: false },
+    { id: "btn-card-2p", mode: "2p", immediate: false },
+    { id: "btn-card-online", mode: "online", immediate: true },
+    { id: "btn-card-puzzle", mode: "puzzle", immediate: true }
+  ];
+
+  function setActiveCard(activeMode) {
+    modeCards.forEach(({ id, mode }) => {
+      const card = document.getElementById(id);
+      if (card) card.classList.toggle("active", mode === activeMode);
+    });
+  }
+
+  modeCards.forEach(({ id, mode, immediate }) => {
+    const card = document.getElementById(id);
+    if (!card) return;
+
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setActiveCard(mode);
+
+      // Trigger standard #menu-mode-group toggle button
+      const targetBtn = document.querySelector(`#menu-mode-group .toggle-btn[data-mode="${mode}"]`);
+      if (targetBtn) {
+        targetBtn.click();
+      }
+
+      if (immediate && btnStart) {
+        // Online and Puzzle directly jump into their mode
+        btnStart.click();
+      }
+    });
+  });
+
+  // Sync mode cards whenever #menu-mode-group buttons are clicked
+  document.querySelectorAll("#menu-mode-group .toggle-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.mode;
+      if (mode) setActiveCard(mode);
+    });
+  });
+}
