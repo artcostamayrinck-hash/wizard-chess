@@ -597,6 +597,186 @@
   width: 100% !important;
 }
 
+  
+/* ==========================================================================
+   Ajustes Visuais do Layout Solicitados
+   ========================================================================== */
+
+/* Barra Superior com Pílulas Compactas e Botão de Pausa no Canto Superior Direito */
+.hud-top {
+  position: fixed !important;
+  top: env(safe-area-inset-top, 14px) !important;
+  left: 12px !important;
+  right: 12px !important;
+  z-index: 40 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  pointer-events: none !important;
+}
+
+.hud-top-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  pointer-events: auto !important;
+}
+
+.hud-left-pills {
+  display: flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+/* Verde: Diminuir Pílulas Superiores */
+.brand-pill-compact,
+.brand-pill {
+  padding: 4px 10px !important;
+  font-size: 0.72rem !important;
+  gap: 5px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+}
+
+.brand-pill-compact .material-symbols-rounded,
+.brand-pill .material-symbols-rounded {
+  font-size: 0.95rem !important;
+}
+
+.player-rank-pill-compact,
+.player-rank-pill {
+  padding: 4px 10px !important;
+  font-size: 0.72rem !important;
+  gap: 5px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+}
+
+.player-rank-pill-compact .material-symbols-rounded,
+.player-rank-pill .material-symbols-rounded {
+  font-size: 0.95rem !important;
+}
+
+/* Roxo: Botão de Pausa no Topo Direito */
+.hud-pause-btn {
+  background: var(--md-surface) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--md-gold) !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--md-gold) !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 16px rgba(245, 197, 107, 0.4) !important;
+  transition: transform 0.15s, background 0.2s, box-shadow 0.2s !important;
+  pointer-events: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.hud-pause-btn:hover {
+  transform: scale(1.08) !important;
+  background: rgba(245, 197, 107, 0.2) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 197, 107, 0.6) !important;
+}
+
+.hud-pause-btn:active {
+  transform: scale(0.9) !important;
+}
+
+.hud-pause-btn .material-symbols-rounded {
+  font-size: 1.35rem !important;
+}
+
+/* Linha de Turno e Relógio do Oponente no Topo */
+.turn-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  pointer-events: auto !important;
+}
+
+.turn-pill {
+  padding: 5px 12px !important;
+  font-size: 0.78rem !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+.opponent-timer-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* Vermelho: Relógio do Jogador na Parte Inferior Esquerda */
+.player-timer-container {
+  position: fixed !important;
+  bottom: calc(env(safe-area-inset-bottom, 16px) + 54px) !important;
+  left: 14px !important;
+  z-index: 45 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  pointer-events: auto !important;
+}
+
+.player-timer-bottom {
+  background: var(--md-surface) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--md-gold) !important;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 14px rgba(245, 197, 107, 0.35) !important;
+}
+
+/* Verde: Diminuir Barra Inferior (Dock) */
+.md3-dock {
+  position: fixed !important;
+  bottom: calc(env(safe-area-inset-bottom, 16px) + 6px) !important;
+  left: 50% !important;
+  transform: translate(-50%) !important;
+  z-index: 50 !important;
+  display: flex !important;
+  gap: 2px !important;
+  padding: 3px 8px !important;
+  background: var(--md-surface) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--md-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65) !important;
+  max-width: 96vw !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  pointer-events: auto !important;
+}
+
+.dock-btn {
+  padding: 3px 6px !important;
+  gap: 2px !important;
+  border-radius: 10px !important;
+}
+
+.dock-btn .material-symbols-rounded {
+  font-size: 1.15rem !important;
+}
+
+.btn-label {
+  font-size: 0.58rem !important;
+  font-weight: 600 !important;
+}
+
   </style>
 </head>
 
@@ -769,40 +949,47 @@
 
   <!-- HUD Superior -->
   <header class="hud-top">
-    <div style="display: flex; gap: 8px; align-items: center;">
-      <div id="btn-open-menu" class="brand-pill" style="cursor: pointer;" title="Abrir Menu de Configuração">
-        <span class="material-symbols-rounded">castle</span>
-        <span>WIZARD'S CHESS</span>
+    <div class="hud-top-bar">
+      <div class="hud-left-pills">
+        <div id="btn-open-menu" class="brand-pill brand-pill-compact" style="cursor: pointer;" title="Abrir Menu de Configuração">
+          <span class="material-symbols-rounded">castle</span>
+          <span>WIZARD'S CHESS</span>
+        </div>
+        <div id="btn-achievements-hud" class="player-rank-pill player-rank-pill-compact" style="cursor: pointer;" title="Conquistas e Títulos">
+          <span class="material-symbols-rounded" style="color: var(--md-gold);">military_tech</span>
+          <span id="hud-player-rank">Iniciado</span>
+          <span id="hud-player-lvl" class="rank-tag">Nv. 1</span>
+        </div>
       </div>
-      <div id="btn-achievements-hud" class="player-rank-pill" style="cursor: pointer;" title="Conquistas e Títulos">
-        <span class="material-symbols-rounded" style="font-size: 1.1rem; color: var(--md-gold);">military_tech</span>
-        <span id="hud-player-rank">Iniciado</span>
-        <span id="hud-player-lvl" class="rank-tag">Nv. 1</span>
-      </div>
+
+      <!-- Botão de Pausa no Canto Superior Direito (Roxo) -->
+      <button id="btn-pause" class="hud-pause-btn" title="Pausar / Menu da Batalha">
+        <span class="material-symbols-rounded">pause</span>
+      </button>
     </div>
 
     <div class="turn-container">
-      <!-- Relógio Brancas -->
-      <div id="timer-w" class="chess-timer w-timer" title="Tempo das Brancas">
-        <span class="material-symbols-rounded timer-icon">timer</span>
-        <span class="timer-digits">05:00</span>
-      </div>
-
-      <!-- Cemitério de Peças Brancas -->
-      <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
-
       <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
 
-      <!-- Cemitério de Peças Pretas -->
-      <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
-
-      <!-- Relógio Pretas -->
-      <div id="timer-b" class="chess-timer b-timer" title="Tempo das Pretas">
-        <span class="material-symbols-rounded timer-icon">timer</span>
-        <span class="timer-digits">05:00</span>
+      <!-- Cemitério e Relógio do Oponente (Pretas / Obsidiana) no Topo Direito -->
+      <div class="opponent-timer-group">
+        <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
+        <div id="timer-b" class="chess-timer b-timer" title="Tempo das Pretas">
+          <span class="material-symbols-rounded timer-icon">timer</span>
+          <span class="timer-digits">05:00</span>
+        </div>
       </div>
     </div>
   </header>
+
+  <!-- Relógio do Jogador (Mármore / Brancas) no Canto Inferior Esquerdo (Vermelho) -->
+  <div id="player-timer-container" class="player-timer-container">
+    <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
+    <div id="timer-w" class="chess-timer w-timer player-timer-bottom" title="Tempo das Brancas">
+      <span class="material-symbols-rounded timer-icon">timer</span>
+      <span class="timer-digits">05:00</span>
+    </div>
+  </div>
 
   <!-- Barra de Navegação Inferior (Material Design 3 Dock) -->
   <nav class="md3-dock">
@@ -841,10 +1028,6 @@
     <button id="btn-resign" class="dock-btn" title="Abandonar Partida (Rendição)">
       <span class="material-symbols-rounded">flag</span>
       <span class="btn-label">Desistir</span>
-    </button>
-    <button id="btn-pause" class="dock-btn" title="Menu de Pausa e Regras">
-      <span class="material-symbols-rounded">pause_circle</span>
-      <span class="btn-label">Menu de Pausa</span>
     </button>
     <button id="btn-history" class="dock-btn" title="Histórico de Jogadas">
       <span class="material-symbols-rounded">format_list_numbered</span>

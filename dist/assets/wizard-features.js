@@ -176,13 +176,55 @@ function generateMatchAnalysis() {
 
   const historyList = document.querySelectorAll("#history-list li");
   const totalMoves = historyList.length || 8;
+  const game = window._WIZARD_GAME;
+  const history = game && game.xe && game.xe.history ? game.xe.history : [];
+  const engine = game && game.xe ? game.xe : null;
 
-  const accW = Math.min(96, Math.max(72, Math.floor(84 + (Math.random() * 10 - 5))));
-  const accB = Math.min(94, Math.max(68, Math.floor(79 + (Math.random() * 12 - 6))));
+  let brilliant = 0;
+  let great = 0;
+  let blunders = 0;
+  let totalLossW = 0;
+  let totalLossB = 0;
+  let movesW = 0;
+  let movesB = 0;
 
-  const brilliant = Math.max(1, Math.floor(totalMoves / 10) + (Math.random() > 0.4 ? 1 : 0));
-  const great = Math.max(2, Math.floor(totalMoves / 5) + 1);
-  const blunders = Math.max(0, Math.floor(totalMoves / 12));
+  if (engine && history.length > 1) {
+    let prevEval = 0;
+    for (let i = 0; i < history.length; i++) {
+      const snap = history[i];
+      if (!snap || !snap.board) continue;
+      const currentEval = typeof engine.evaluateBoard === "function"
+        ? engine.evaluateBoard(snap.board, "w")
+        : 0;
+      
+      const moveColor = (i % 2 === 0) ? "w" : "b";
+      const evalDelta = moveColor === "w" ? (currentEval - prevEval) : (prevEval - currentEval);
+
+      if (moveColor === "w") {
+        movesW++;
+        if (evalDelta < -150) blunders++;
+        else if (evalDelta > 180) brilliant++;
+        else if (evalDelta >= -20) great++;
+        totalLossW += Math.max(0, -evalDelta);
+      } else {
+        movesB++;
+        if (evalDelta < -150) blunders++;
+        else if (evalDelta > 180) brilliant++;
+        else if (evalDelta >= -20) great++;
+        totalLossB += Math.max(0, -evalDelta);
+      }
+      prevEval = currentEval;
+    }
+  }
+
+  const avgLossW = movesW > 0 ? (totalLossW / movesW) : 25;
+  const avgLossB = movesB > 0 ? (totalLossB / movesB) : 32;
+
+  const accW = Math.round(Math.max(55, Math.min(98, 100 - (avgLossW * 0.12))));
+  const accB = Math.round(Math.max(50, Math.min(97, 100 - (avgLossB * 0.12))));
+
+  if (great === 0) great = Math.max(1, Math.floor(totalMoves / 4));
+  if (brilliant === 0 && (accW > 85 || accB > 85)) brilliant = 1;
 
   const elAccW = document.getElementById("analysis-acc-w");
   const elAccB = document.getElementById("analysis-acc-b");
