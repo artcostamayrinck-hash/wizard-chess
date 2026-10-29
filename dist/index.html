@@ -1421,9 +1421,11 @@
    ========================================================================== */
 
 #start-menu .start-content.menu-photo2-modal {
-  max-width: 440px !important;
-  width: 92% !important;
-  padding: 22px 20px 24px !important;
+  max-width: 520px !important;
+  width: 95% !important;
+  max-height: 94vh !important;
+  min-height: 84vh !important;
+  padding: 24px 20px 26px !important;
   background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
   border: 1px solid rgba(245, 197, 107, 0.28) !important;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.12) !important;
@@ -1769,37 +1771,90 @@
 }
 
 /* ==============================================================
-   Alinhamento Universal e Simétrico de Todos os Menus
+   Alinhamento Universal e Menus Ampliados (Inspirados na Imagem 3)
    ============================================================== */
-.menu-photo2-modal {
-  max-width: 440px !important;
-  width: 92% !important;
+.menu-photo2-modal,
+#start-menu .start-content.menu-photo2-modal {
+  max-width: 520px !important;
+  width: 95% !important;
+  max-height: 94vh !important;
+  min-height: 84vh !important;
   margin: auto !important;
+  padding: 24px 20px 26px !important;
+  border-radius: 28px !important;
   text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+.modal-content {
+  touch-action: pan-y !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview:not(.active) {
+  display: none !important;
+}
+
+/* Home Cards Container & Subgrid */
+.home-cards-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 4px !important;
+}
+
+.hero-battle-card {
+  width: 100% !important;
+  min-height: 84px !important;
+  padding: 16px 20px !important;
+  border-radius: 20px !important;
+  box-sizing: border-box !important;
 }
 
 .home-cards-subgrid {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
-  gap: 10px !important;
+  gap: 12px !important;
   width: 100% !important;
   box-sizing: border-box !important;
 }
 
 .photo2-card {
-  min-height: 80px !important;
-  padding: 10px 8px !important;
+  min-height: 92px !important;
+  padding: 14px 10px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 6px !important;
-  border-radius: 16px !important;
+  gap: 8px !important;
+  border-radius: 18px !important;
   box-sizing: border-box !important;
 }
 
+.photo2-card-icon .material-symbols-rounded {
+  font-size: 28px !important;
+}
+
 .photo2-card-label {
-  font-size: 0.78rem !important;
+  font-size: 0.82rem !important;
   font-weight: 700 !important;
   color: #ffffff !important;
   text-align: center !important;
@@ -1810,25 +1865,31 @@
 .setup-grid.photo2-grid {
   display: flex !important;
   flex-direction: column !important;
-  gap: 14px !important;
+  gap: 12px !important;
   width: 100% !important;
   align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 .setup-group {
   display: flex !important;
   flex-direction: column !important;
-  gap: 5px !important;
+  gap: 4px !important;
   width: 100% !important;
   align-items: center !important;
   text-align: center !important;
+  box-sizing: border-box !important;
 }
 
 .photo2-label {
   text-align: center !important;
   width: 100% !important;
   display: block !important;
-  margin-bottom: 4px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #f5c56b !important;
+  letter-spacing: 1.2px !important;
+  margin-bottom: 3px !important;
 }
 
 .photo2-toggle-group {
@@ -1850,62 +1911,206 @@
   justify-content: center !important;
   display: flex !important;
   align-items: center !important;
-  padding: 8px 4px !important;
-  font-size: 0.78rem !important;
+  padding: 9px 4px !important;
+  font-size: 0.8rem !important;
   border-radius: 10px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
 
+#btn-start-game,
+.photo2-btn-start {
+  margin-top: 14px !important;
+  margin-bottom: 12px !important;
+  padding: 16px 28px !important;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  border-radius: 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
 /* ==============================================================
-   Aba de Conquistas Reduzida (Diminuição da Aba Solicitada)
+   Modal de Conquistas Ampliado e Anti-Sobreposição (Imagem 2)
    ============================================================== */
 #achievements-modal .modal-content {
-  max-width: 360px !important;
-  width: 88% !important;
-  max-height: 74vh !important;
-  padding: 16px 14px 18px !important;
-  border-radius: 22px !important;
+  max-width: 520px !important;
+  width: 95% !important;
+  max-height: 92vh !important;
+  min-height: 75vh !important;
+  padding: 24px 20px 24px !important;
+  border-radius: 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+  border: 1px solid rgba(245, 197, 107, 0.28) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.12) !important;
 }
 
 .achievements-list {
-  max-height: 38vh !important;
-  gap: 6px !important;
-  padding-right: 4px !important;
+  max-height: 62vh !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 4px 6px 6px 2px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
 }
 
 .achievement-item {
-  padding: 6px 10px !important;
-  border-radius: 10px !important;
-  gap: 8px !important;
-  min-height: 46px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-shrink: 0 !important; /* CRÍTICO: nunca encolher nem sobrepor outros itens */
+  min-height: 68px !important;
+  height: auto !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: visible !important;
+  width: 100% !important;
+  background: rgba(18, 14, 28, 0.8) !important;
+  border: 1px solid rgba(200, 182, 255, 0.18) !important;
+  transition: all 0.2s ease !important;
+}
+
+.achievement-item.unlocked {
+  border-color: rgba(245, 197, 107, 0.5) !important;
+  background: rgba(245, 197, 107, 0.08) !important;
+  box-shadow: 0 0 16px rgba(245, 197, 107, 0.12) !important;
+}
+
+.achievement-item.locked {
+  opacity: 0.55 !important;
+  filter: grayscale(0.7) !important;
 }
 
 .ach-icon-box {
-  min-width: 32px !important;
-  width: 32px !important;
-  height: 32px !important;
-  font-size: 1.15rem !important;
-  border-radius: 8px !important;
+  min-width: 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 1.4rem !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(200, 182, 255, 0.25) !important;
+}
+
+.achievement-item.unlocked .ach-icon-box {
+  border-color: #f5c56b !important;
+  box-shadow: 0 0 12px rgba(245, 197, 107, 0.3) !important;
+}
+
+.ach-info {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.ach-title-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 8px !important;
 }
 
 .ach-title {
-  font-size: 0.8rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-.ach-desc {
-  font-size: 0.69rem !important;
-  line-height: 1.2 !important;
+.achievement-item.unlocked .ach-title {
+  color: #f5c56b !important;
 }
 
 .ach-xp-tag {
-  font-size: 0.64rem !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  color: #00f5d4 !important;
+  background: rgba(0, 245, 212, 0.12) !important;
+  border: 1px solid rgba(0, 245, 212, 0.28) !important;
+  border-radius: 99px !important;
+  padding: 2px 8px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.ach-desc {
+  font-size: 0.78rem !important;
+  line-height: 1.35 !important;
+  color: #b0a4c4 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  margin: 1px 0 !important;
 }
 
 .ach-status-tag {
-  font-size: 0.6rem !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
   margin-top: 2px !important;
+}
+
+.ach-status-tag.unlocked {
+  color: #00f5d4 !important;
+}
+
+.ach-status-tag.locked {
+  color: #8c829e !important;
+}
+
+#btn-close-achievements {
+  width: 100% !important;
+  margin-top: 14px !important;
+  padding: 13px 20px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* ==============================================================
+   Modais Gerais Expandidos (Proporção Harmoniosa da Imagem 3)
+   ============================================================== */
+#custom-modal .modal-content,
+#puzzle-modal .modal-content,
+#pause-modal .modal-content,
+#game-over-modal .modal-content,
+#resign-modal .modal-content,
+#promotion-modal .modal-content,
+#waiting-modal .modal-content {
+  max-width: 520px !important;
+  width: 95% !important;
+  max-height: 92vh !important;
+  border-radius: 28px !important;
+  padding: 24px 20px 24px !important;
+  box-sizing: border-box !important;
 }
 
 /* ==============================================================
@@ -2879,7 +3084,7 @@
 
   <!-- Modal de Rendição (Desistir) -->
   <div id="resign-modal" class="modal-overlay hidden">
-    <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-content" style="max-width: 480px; width: 92%; border-radius: 26px; padding: 24px 20px;">
       <h3>RENDIÇÃO</h3>
       <p style="color: #d0bcff; margin-bottom: 22px; font-size: 0.95rem;">Deseja realmente baixar suas armas e abandonar
         a partida?</p>
@@ -2920,7 +3125,7 @@
 
   <!-- Modal Multijogador Online -->
   <div id="waiting-modal" class="modal-overlay hidden">
-    <div class="modal-content" style="max-width: 440px; width: 90%;">
+    <div class="modal-content" style="max-width: 520px; width: 95%; border-radius: 28px; padding: 24px 20px;">
       <h3>SALA ONLINE</h3>
       <p style="margin-bottom: 16px; color: #d0bcff;">Compartilhe este Código ou o Link com o seu adversário:</p>
 
@@ -2957,7 +3162,7 @@
 
   <!-- Modal de Fim de Jogo -->
   <div id="game-over-modal" class="modal-overlay hidden">
-    <div class="modal-content" style="max-width: 440px;">
+    <div class="modal-content" style="max-width: 520px; width: 95%; border-radius: 28px; padding: 24px 20px;">
       <h3 id="game-over-title">Xeque-Mate!</h3>
       <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
 
@@ -3017,7 +3222,7 @@
 
     <!-- Modal de Pausa / Menu da Partida (Limpo, sem opções de personalização) -->
   <div id="pause-modal" class="modal-overlay hidden">
-    <div class="modal-content pause-content" style="max-width: 440px;">
+    <div class="modal-content pause-content" style="max-width: 520px; width: 95%; border-radius: 28px; padding: 24px 20px;">
       <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
         <span class="material-symbols-rounded">pause_circle</span>
         <span>PAUSA</span>
@@ -3066,15 +3271,15 @@
     </div>
   </div>
 
-  <!-- Modal de Conquistas Arcanas (Diminuído e Compacto) -->
+  <!-- Modal de Conquistas Arcanas (Ampliado e Anti-Sobreposição) -->
   <div id="achievements-modal" class="modal-overlay hidden">
-    <div class="modal-content" style="max-width: 360px; width: 88%; max-height: 74vh; padding: 16px 14px 18px; border-radius: 22px;">
-      <div class="brand-pill" style="margin: 0 auto 8px; padding: 3px 10px; font-size: 0.7rem; width: fit-content;">
-        <span class="material-symbols-rounded" style="font-size: 1rem;">emoji_events</span>
+    <div class="modal-content" style="max-width: 520px; width: 95%; max-height: 92vh; padding: 24px 20px 24px; border-radius: 28px;">
+      <div class="brand-pill" style="margin: 0 auto 10px; padding: 4px 12px; font-size: 0.76rem; width: fit-content;">
+        <span class="material-symbols-rounded" style="font-size: 1.1rem;">emoji_events</span>
         <span>GLÓRIA ARCANA</span>
       </div>
-      <h3 style="font-size: 1.15rem; margin: 0 0 4px; letter-spacing: 1px; color: #f5c56b; font-family: 'Cinzel', serif;">CONQUISTAS DO MAGO</h3>
-      <p style="color: #d0bcff; font-size: 0.76rem; margin: 0 0 10px; line-height: 1.3;">
+      <h3 style="font-size: 1.35rem; margin: 0 0 6px; letter-spacing: 1px; color: #f5c56b; font-family: 'Cinzel', serif;">CONQUISTAS DO MAGO</h3>
+      <p style="color: #d0bcff; font-size: 0.82rem; margin: 0 0 14px; line-height: 1.35;">
         Desbloqueie feitos heroicos para ascender na hierarquia dos magos.
       </p>
 
@@ -3082,7 +3287,7 @@
         <!-- Itens injetados via JS -->
       </div>
 
-      <button id="btn-close-achievements" class="promo-btn" style="width: 100%; margin-top: 12px; padding: 9px 18px; font-size: 0.85rem; border-radius: 12px;">
+      <button id="btn-close-achievements" class="promo-btn" style="width: 100%; margin-top: 14px; padding: 13px 20px; font-size: 0.95rem; font-weight: 700; border-radius: 14px;">
         Fechar
       </button>
     </div>
@@ -3109,6 +3314,36 @@
   </div>
 
   <!-- Módulo de Conexão Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtl1_ScEASiOlBgcVz0vaJ8tFC344PMoA",
+      authDomain: "wizard-chess-63c18.firebaseapp.com",
+      databaseURL: "https://wizard-chess-63c18-default-rtdb.firebaseio.com",
+      projectId: "wizard-chess-63c18",
+      storageBucket: "wizard-chess-63c18.firebasestorage.app",
+      messagingSenderId: "825912678494",
+      appId: "1:825912678494:web:6275022eab05cc3152fccf",
+      measurementId: "G-RDFLXNBHBW"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      window.db = db;
+      window.dbRef = ref;
+      window.dbSet = set;
+      window.dbGet = get;
+      window.dbOnValue = onValue;
+      window.dbUpdate = update;
+      window.dbRemove = remove;
+    } catch (err) {
+      console.warn("Firebase não inicializado no modo offline:", err);
+    }
+  </script>
 
   <!-- Ligação com a lógica central do jogo -->
   <script type="module" src="/assets/wizard-features.js"></script>
