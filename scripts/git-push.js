@@ -24,3 +24,4 @@ try {
   console.error('\n❌ Erro durante o processo de sincronização:', error.message);
   process.exit(1);
 }
+
