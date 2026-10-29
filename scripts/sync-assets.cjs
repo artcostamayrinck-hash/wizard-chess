@@ -33,3 +33,4 @@ publicFiles.forEach(f => {
 });
 
 console.log('Asset synchronization complete!');
+
