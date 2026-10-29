@@ -3,46 +3,31 @@
 // ========================================================
 
 // Helper unificado para toque imediato no mobile e clique seguro
-function bindAction(el, handler) {
+function bindAction(el, handler, actionKey = "") {
   if (!el) return;
-  if (el._wizardBound) return;
-  el._wizardBound = true;
+  el._wizardActions = el._wizardActions || new Set();
+  const key = actionKey || handler.toString();
+  if (el._wizardActions.has(key)) return;
+  el._wizardActions.add(key);
 
   let lastTrigger = 0;
-  let startX = 0;
-  let startY = 0;
 
-  const run = (e) => {
+  const trigger = (e) => {
     if (e && typeof e.stopPropagation === "function") {
       e.stopPropagation();
     }
     const now = Date.now();
     if (now - lastTrigger < 250) return;
     lastTrigger = now;
-    handler(e);
+    try {
+      handler(e);
+    } catch (err) {
+      console.error("[WizardChess] Erro ao executar ação:", err);
+    }
   };
 
-  el.addEventListener("touchstart", (e) => {
-    if (e.touches && e.touches[0]) {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  el.addEventListener("touchend", (e) => {
-    if (e.changedTouches && e.changedTouches[0]) {
-      const dx = Math.abs(e.changedTouches[0].clientX - startX);
-      const dy = Math.abs(e.changedTouches[0].clientY - startY);
-      // Se não foi rolagem da tela (movimento < 14px), dispara imediatamente o botão
-      if (dx < 14 && dy < 14) {
-        run(e);
-      }
-    }
-  }, { passive: true });
-
-  el.addEventListener("click", (e) => {
-    run(e);
-  });
+  el.addEventListener("click", trigger);
+  el.addEventListener("touchend", trigger, { passive: true });
 }
 
 function initWizardFeatures() {
@@ -66,21 +51,6 @@ function initWizardFeatures() {
     }
   }
 }
-
-// Inicialização imediata sem depender do evento DOMContentLoaded se o documento já estiver pronto
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    initWizardFeatures();
-  });
-} else {
-  initWizardFeatures();
-}
-
-// Repasse de segurança caso scripts assíncronos terminem um pouco depois
-setTimeout(() => {
-  try { setupStartMenuGrid(); } catch (e) {}
-  try { setupCenteredModalsClose(); } catch (e) {}
-}, 300);
 
 
 // --------------------------------------------------------
@@ -577,6 +547,18 @@ function setupSkinsSystem() {
   const savedSkin = localStorage.getItem("wizard_chess_skin") || "classic";
 
   function applyPieceSkin(skinName) {
+    try {
+      localStorage.setItem("wizard_chess_skin", skinName);
+    } catch(e) {}
+
+    // Atualiza visual ativo dos seletores
+    document.querySelectorAll("#menu-skin-group .toggle-btn, #pause-skin-group .toggle-btn")
+      .forEach(btn => btn.classList.toggle("active", btn.dataset.skin === skinName));
+
+    if (skinName !== "classic") {
+      unlockAchievement("skin_collector");
+    }
+
     if (!window._WIZARD_GAME || !window._WIZARD_GAME.Ft) return;
     const Ft = window._WIZARD_GAME.Ft;
 
@@ -654,24 +636,14 @@ function setupSkinsSystem() {
     if (window._WIZARD_GAME.Ds) {
       window._WIZARD_GAME.Ds();
     }
-
-    localStorage.setItem("wizard_chess_skin", skinName);
-
-    // Update active button state in both menus
-    document.querySelectorAll("#menu-skin-group .toggle-btn, #pause-skin-group .toggle-btn")
-      .forEach(btn => btn.classList.toggle("active", btn.dataset.skin === skinName));
-
-    if (skinName !== "classic") {
-      unlockAchievement("skin_collector");
-    }
   }
 
   // Bind skin buttons
   document.querySelectorAll("#menu-skin-group .toggle-btn, #pause-skin-group .toggle-btn").forEach(btn => {
-    btn.addEventListener("click", e => {
-      const skin = e.currentTarget.dataset.skin;
+    bindAction(btn, (e) => {
+      const skin = btn.dataset.skin;
       applyPieceSkin(skin);
-      showToast(`🎨 Skin das peças: ${e.currentTarget.textContent}`);
+      showToast(`🎨 Skin das peças: ${btn.textContent.trim()}`);
     });
   });
 
@@ -964,6 +936,24 @@ function setupStartMenuGrid() {
     document.querySelectorAll(".stat-losses-mirror").forEach(el => el.textContent = l);
   };
   setTimeout(syncStatsMirror, 200);
+
+  // Botão Entrar na Catedral (Iniciar Jogo)
+  if (btnStart) {
+    bindAction(btnStart, (e) => {
+      if (e && e.type === "touchend") {
+        btnStart.click();
+      }
+    });
+  }
+
+  // Toque rápido em seletores da Batalha (Modo, Arena, Cor, Tempo, Dificuldade)
+  document.querySelectorAll(".photo2-toggle-group .toggle-btn").forEach(btn => {
+    bindAction(btn, (e) => {
+      if (e && e.type === "touchend") {
+        btn.click();
+      }
+    });
+  });
 }
 
 // --------------------------------------------------------
@@ -1060,3 +1050,25 @@ function updateTutorialStepUI() {
     if (labelSpan) labelSpan.textContent = isLast ? "Concluir" : "Próximo";
   }
 }
+
+// ========================================================
+// Inicialização Segura (Após todas as constantes e funções)
+// ========================================================
+function startWizardApp() {
+  try {
+    initWizardFeatures();
+  } catch (err) {
+    console.error("[WizardChess] Erro no startWizardApp:", err);
+  }
+}
+
+// Execução imediata garantida (script está no final do documento, DOM já está presente)
+startWizardApp();
+
+// Execução complementar para navegadores lentos ou carregamentos assíncronos
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startWizardApp);
+}
+window.addEventListener("load", startWizardApp);
+setTimeout(startWizardApp, 150);
+

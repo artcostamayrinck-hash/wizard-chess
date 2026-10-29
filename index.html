@@ -23,7 +23,8 @@
   <!-- Tipografia e Ícones do Material Design -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
-  <link rel="stylesheet" href="/src/style.css" />
+  <script type="module" crossorigin src="/assets/index-Dmtay6rb.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CrO8ZqHi.css">
   <style>
     #btn-whatsapp-share:hover {
       background: #25d366 !important;
@@ -2184,7 +2185,12 @@
 .tut-btn-oracle,
 .tut-guide-close,
 .promo-btn,
-.toggle-btn {
+.toggle-btn,
+.hud-pause-btn,
+.dock-btn,
+.puzzle-btn,
+.puzzle-close-btn,
+.puzzle-tab {
   cursor: pointer !important;
   pointer-events: auto !important;
   touch-action: manipulation !important;
@@ -2203,8 +2209,17 @@
 .tut-btn-oracle *,
 .tut-guide-close *,
 .promo-btn *,
-.toggle-btn * {
+.toggle-btn *,
+.hud-pause-btn *,
+.dock-btn *,
+.puzzle-btn *,
+.puzzle-close-btn *,
+.puzzle-tab * {
   pointer-events: none !important;
+}
+
+.modal-content {
+  touch-action: pan-y !important;
 }
 
   </style>
@@ -3126,7 +3141,6 @@
   </script>
 
   <!-- Ligação com a lógica central do jogo -->
-  <script type="module" src="/src/main.js"></script>
   <script type="module" src="/assets/wizard-features.js"></script>
 </body>
 

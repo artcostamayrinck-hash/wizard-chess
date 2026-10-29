@@ -2185,7 +2185,12 @@
 .tut-btn-oracle,
 .tut-guide-close,
 .promo-btn,
-.toggle-btn {
+.toggle-btn,
+.hud-pause-btn,
+.dock-btn,
+.puzzle-btn,
+.puzzle-close-btn,
+.puzzle-tab {
   cursor: pointer !important;
   pointer-events: auto !important;
   touch-action: manipulation !important;
@@ -2204,8 +2209,17 @@
 .tut-btn-oracle *,
 .tut-guide-close *,
 .promo-btn *,
-.toggle-btn * {
+.toggle-btn *,
+.hud-pause-btn *,
+.dock-btn *,
+.puzzle-btn *,
+.puzzle-close-btn *,
+.puzzle-tab * {
   pointer-events: none !important;
+}
+
+.modal-content {
+  touch-action: pan-y !important;
 }
 
   </style>
