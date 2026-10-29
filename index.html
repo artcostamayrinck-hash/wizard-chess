@@ -120,11 +120,9 @@
       color: #ff4d6d;
     }
     #btn-undo {
-      border-color: rgba(245, 197, 107, 0.4);
-      color: var(--md-gold);
-    }
-    #btn-undo:hover {
-      background: rgba(245, 197, 107, 0.25);
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
     /* XP e Hierarquia do Mago */
@@ -483,27 +481,28 @@
 
 #history-panel {
   position: fixed !important;
-  top: 50% !important;
+  top: calc(env(safe-area-inset-top, 14px) + 48px) !important;
   left: 50% !important;
   right: auto !important;
   bottom: auto !important;
-  transform: translate(-50%, -50%) !important;
+  transform: translateX(-50%) !important;
   width: 90% !important;
-  max-width: 360px !important;
-  max-height: 75vh !important;
-  background: rgba(14, 11, 20, 0.95) !important;
-  border: 1px solid var(--md-gold) !important;
-  border-radius: 24px !important;
+  max-width: 320px !important;
+  max-height: 230px !important;
+  background: rgba(14, 11, 20, 0.96) !important;
+  border: 1px solid rgba(245, 197, 107, 0.45) !important;
+  border-radius: 18px !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
-  overflow-y: auto !important;
-  padding: 22px 20px !important;
+  overflow: hidden !important;
+  padding: 10px 14px 12px !important;
   z-index: 9999 !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(245, 197, 107, 0.25) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.88), 0 0 20px rgba(245, 197, 107, 0.25) !important;
   text-align: center !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 #history-panel.hidden {
@@ -516,13 +515,15 @@
 #history-list {
   color: #d0bcff !important;
   font-family: monospace !important;
-  font-size: 0.95rem !important;
-  padding: 0 !important;
-  line-height: 1.8 !important;
-  margin: 12px 0 !important;
-  list-style-position: inside !important;
-  text-align: center !important;
+  font-size: 0.82rem !important;
+  padding: 0 4px !important;
+  margin: 2px 0 6px 0 !important;
+  max-height: 95px !important;
+  overflow-y: auto !important;
   width: 100% !important;
+  list-style-position: inside !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
 }
 
 .emotes-popup {
@@ -2103,7 +2104,6 @@
 #pause-modal .modal-content,
 #game-over-modal .modal-content,
 #resign-modal .modal-content,
-#promotion-modal .modal-content,
 #waiting-modal .modal-content {
   max-width: 520px !important;
   width: 95% !important;
@@ -2111,6 +2111,54 @@
   border-radius: 28px !important;
   padding: 24px 20px 24px !important;
   box-sizing: border-box !important;
+}
+
+/* Modal de Promoção com Opções Encaixadas Perfeitamente (Imagem 5) */
+#promotion-modal .modal-content {
+  max-width: 420px !important;
+  width: 94% !important;
+  padding: 22px 14px 20px !important;
+  border-radius: 24px !important;
+  box-sizing: border-box !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+  border: 1px solid rgba(245, 197, 107, 0.35) !important;
+}
+
+#promotion-modal .promo-options {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 14px !important;
+  box-sizing: border-box !important;
+}
+
+#promotion-modal .promo-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 12px 2px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+}
+
+#promotion-modal .promo-icon {
+  font-size: 1.8rem !important;
+  line-height: 1 !important;
+  display: block !important;
+}
+
+#promotion-modal .promo-text {
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  color: var(--md-text) !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
 }
 
 /* ==============================================================
@@ -2250,15 +2298,15 @@
 /* In-Game Tutorial Banner */
 .tutorial-guide-banner {
   position: fixed !important;
-  top: 64px !important;
+  top: calc(env(safe-area-inset-top, 10px) + 6px) !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  width: 90% !important;
-  max-width: 440px !important;
-  background: rgba(18, 14, 28, 0.94) !important;
+  width: 92% !important;
+  max-width: 420px !important;
+  background: rgba(18, 14, 28, 0.95) !important;
   border: 1px solid rgba(100, 181, 246, 0.5) !important;
-  border-radius: 18px !important;
-  padding: 12px 14px !important;
+  border-radius: 16px !important;
+  padding: 9px 12px 10px !important;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(100, 181, 246, 0.25) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
@@ -2634,7 +2682,7 @@
 
         <h2 class="game-title photo2-title" style="font-size: 1.8rem; margin: 4px 0 8px 0;">WIZARD’S CHESS</h2>
 
-        <div class="stats-banner photo2-stats" style="margin-bottom: 8px;">
+        <div class="stats-banner photo2-stats" style="margin: 0 auto 12px auto; width: fit-content; max-width: 95%;">
           <span class="stat-item"><span class="stat-icon">🏆</span> <span class="stat-wins-mirror">0</span> Vitórias</span>
           <span class="stat-divider">•</span>
           <span class="stat-item"><span class="stat-icon">⚖️</span> <span class="stat-draws-mirror">0</span> Empates</span>
@@ -2645,14 +2693,13 @@
         <p class="photo2-subtitle" style="margin-bottom: 14px;">Prepare suas runas e desafie o destino no tabuleiro de pedra.</p>
 
         <div class="setup-grid photo2-grid">
-          <!-- 1. Modo de Batalha (vs IA, 2 Jogadores, Online, Tutorial) -->
+          <!-- 1. Modo de Batalha (vs IA, 2 Jogadores, Online) -->
           <div class="setup-group">
             <label class="setup-label photo2-label">MODO DE BATALHA</label>
             <div class="toggle-group photo2-toggle-group" id="menu-mode-group">
               <button class="toggle-btn active" data-mode="ai">vs IA</button>
               <button class="toggle-btn" data-mode="2p">2 Jogadores</button>
               <button class="toggle-btn" data-mode="online">Online</button>
-              <button class="toggle-btn" data-mode="tutorial">Tutorial</button>
             </div>
           </div>
 
@@ -3017,7 +3064,7 @@
       <span class="material-symbols-rounded">smart_toy</span>
       <span class="btn-label">vs IA</span>
     </button>
-    <button id="btn-undo" class="dock-btn hidden" title="Desfazer Jogada (Modo Fácil)">
+    <button id="btn-undo" class="dock-btn hidden" style="display: none !important;" title="Desfazer Jogada (Modo Fácil)">
       <span class="material-symbols-rounded">undo</span>
       <span class="btn-label">Voltar</span>
     </button>
@@ -3204,19 +3251,22 @@
 
   <!-- Painel de Histórico de Jogadas -->
   <div id="history-panel" class="hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; border-bottom: 1px solid rgba(245, 197, 107, 0.3); padding-bottom: 8px;">
-      <span style="width: 28px;"></span>
-      <h3 style="color: #f5c56b; text-align: center; font-size: 1rem; margin: 0; letter-spacing: 1px; font-family: Cinzel, serif;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 6px; border-bottom: 1px solid rgba(245, 197, 107, 0.3); padding-bottom: 4px;">
+      <span style="width: 24px;"></span>
+      <h3 style="color: #f5c56b; text-align: center; font-size: 0.88rem; margin: 0; letter-spacing: 1px; font-family: Cinzel, serif;">
         REGISTO DE LANCES
       </h3>
-      <button id="btn-close-history" style="background: none; border: none; color: #d0bcff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%;" title="Fechar">
-        <span class="material-symbols-rounded" style="font-size: 1.2rem;">close</span>
+      <button id="btn-close-history" style="background: none; border: none; color: #d0bcff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%;" title="Fechar">
+        <span class="material-symbols-rounded" style="font-size: 1.1rem;">close</span>
       </button>
+    </div>
+    <div id="history-summary-box" style="font-size: 0.72rem; color: #d0bcff; margin-bottom: 6px; text-align: center; line-height: 1.3;">
+      <span id="history-user-domain">Seu domínio: Mármore (Brancas)</span> • <span id="history-game-status">Em andamento</span>
     </div>
     <ol id="history-list"></ol>
     <button id="btn-copy-pgn" class="promo-btn"
-      style="width: 100%; margin-top: 12px; padding: 8px 10px; font-size: 0.8rem; border-radius: 8px;">
-      Copiar PGN
+      style="width: 100%; margin-top: 6px; padding: 7px 10px; font-size: 0.78rem; border-radius: 8px;">
+      Copiar Registro
     </button>
   </div>
 

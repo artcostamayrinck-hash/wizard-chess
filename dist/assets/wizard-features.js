@@ -39,6 +39,7 @@ function initWizardFeatures() {
     { name: "MusicControls", fn: setupMusicControls },
     { name: "BackButtonIntegration", fn: setupBackButtonIntegration },
     { name: "UndoFeature", fn: setupUndoFeature },
+    { name: "CustomPGNCopy", fn: setupCustomPGNCopy },
     { name: "WhatsAppShare", fn: setupWhatsAppShare },
     { name: "MoveAnalysis", fn: setupMoveAnalysis }
   ];
@@ -89,45 +90,14 @@ function openWhatsAppFallback(msg) {
 }
 
 // --------------------------------------------------------
-// 2. Undo Feature (Only vs AI on Easy)
+// 2. Undo Feature (Desativado e Oculto conforme solicitado)
 // --------------------------------------------------------
 function setupUndoFeature() {
   const btnUndo = document.getElementById("btn-undo");
-  if (!btnUndo) return;
-
-  function updateUndoVisibility() {
-    if (!window._WIZARD_GAME) return;
-    const mode = window._WIZARD_GAME.getMode();
-    const diff = window._WIZARD_GAME.getDiff();
-
-    if (mode === "ai" && diff === 1) {
-      btnUndo.classList.remove("hidden");
-    } else {
-      btnUndo.classList.add("hidden");
-    }
+  if (btnUndo) {
+    btnUndo.style.display = "none";
+    btnUndo.classList.add("hidden");
   }
-
-  document.querySelectorAll("#menu-mode-group .toggle-btn, #menu-diff-group .toggle-btn, #pause-mode-group .toggle-btn")
-    .forEach(btn => btn.addEventListener("click", () => setTimeout(updateUndoVisibility, 100)));
-
-  const btnStart = document.getElementById("btn-start-game");
-  if (btnStart) btnStart.addEventListener("click", () => setTimeout(updateUndoVisibility, 200));
-
-  btnUndo.addEventListener("click", () => {
-    if (!window._WIZARD_GAME) return;
-    const mode = window._WIZARD_GAME.getMode();
-    const diff = window._WIZARD_GAME.getDiff();
-
-    if (mode === "ai" && diff === 1) {
-      window._WIZARD_GAME.undoMove();
-      showToast("↩️ Lance desfeito!");
-      unlockAchievement("undo_apprentice");
-    } else {
-      showToast("⚠️ Desfazer só é permitido contra IA no modo Fácil.");
-    }
-  });
-
-  setTimeout(updateUndoVisibility, 600);
 }
 
 // --------------------------------------------------------
@@ -691,6 +661,107 @@ function setupCenteredModalsClose() {
       emotesPopup.classList.add("hidden");
       if (btnEmotesDock) btnEmotesDock.classList.remove("active");
     });
+  }
+}
+
+// --------------------------------------------------------
+// 7b. Copiar Registro no Formato Personalizado (Imagem 1)
+// --------------------------------------------------------
+function setupCustomPGNCopy() {
+  const btnCopy = document.getElementById("btn-copy-pgn");
+  const btnHistory = document.getElementById("btn-history");
+  const domainEl = document.getElementById("history-user-domain");
+  const statusEl = document.getElementById("history-game-status");
+
+  function getMatchDetails() {
+    let userColor = "Mármore (Brancas)";
+    const colorActiveBtn = document.querySelector('#menu-color-group .toggle-btn.active');
+    if (colorActiveBtn && colorActiveBtn.dataset.color === 'b') {
+      userColor = "Obsidiana (Pretas)";
+    } else if (window._WIZARD_GAME && window._WIZARD_GAME.color === 'b') {
+      userColor = "Obsidiana (Pretas)";
+    }
+
+    let result = "Em andamento";
+    const game = window._WIZARD_GAME;
+    if (game && game.chess) {
+      if (game.chess.isGameOver) {
+        if (game.chess.inCheckmate) {
+          result = game.chess.turn === 'w' ? 'Obsidiana (Pretas)' : 'Mármore (Brancas)';
+        } else {
+          result = "Empate";
+        }
+      }
+    }
+    return { userColor, result };
+  }
+
+  function updateHistorySummary() {
+    const { userColor, result } = getMatchDetails();
+    if (domainEl) domainEl.textContent = `Seu domínio: ${userColor}`;
+    if (statusEl) statusEl.textContent = `Status: ${result}`;
+  }
+
+  if (btnHistory) {
+    btnHistory.addEventListener("click", () => setTimeout(updateHistorySummary, 50));
+  }
+
+  if (btnCopy) {
+    btnCopy.textContent = "Copiar Registro";
+    btnCopy.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      const { userColor, result } = getMatchDetails();
+
+      const listItems = document.querySelectorAll("#history-list li");
+      let movesText = "";
+      listItems.forEach((li) => {
+        const cleanMove = li.innerText.replace(/\s+/g, " ").trim();
+        movesText += `${cleanMove}\n`;
+      });
+
+      const output = `Wizard's Chess 3D!
+Seu domínio: ${userColor}
+Vitória de: ${result}
+${movesText ? `\n${movesText.trim()}` : ""}`;
+
+      const onSuccess = () => {
+        const oldText = btnCopy.textContent;
+        btnCopy.textContent = "Registro Copiado!";
+        btnCopy.style.background = "#00f5d4";
+        btnCopy.style.color = "#000000";
+        setTimeout(() => {
+          btnCopy.textContent = oldText;
+          btnCopy.style.background = "";
+          btnCopy.style.color = "";
+        }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(output).then(onSuccess).catch(() => {
+          fallbackCopy(output, onSuccess);
+        });
+      } else {
+        fallbackCopy(output, onSuccess);
+      }
+    }, { capture: true });
+  }
+
+  function fallbackCopy(text, cb) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (cb) cb();
+    } catch (e) {
+      console.warn("Copy fallback error", e);
+    }
   }
 }
 
