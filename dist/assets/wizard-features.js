@@ -310,7 +310,8 @@ const ACHIEVEMENTS_DATA = [
   { id: "music_lover", icon: "🎶", title: "Sinfonia Arcana", desc: "Ative a música ambiente da Catedral.", xp: 20 },
   { id: "whatsapp_challenger", icon: "📲", title: "Convocação Mágica", desc: "Convide um amigo para o jogo pelo WhatsApp.", xp: 25 },
   { id: "skin_collector", icon: "🎨", title: "Guarda-Roupa Mágico", desc: "Experimente uma nova Skin de peças 3D.", xp: 25 },
-  { id: "puzzle_wizard", icon: "🧩", title: "Mente Iluminada", desc: "Jogue no modo de Desafios da Catedral.", xp: 35 }
+  { id: "puzzle_wizard", icon: "🧩", title: "Mente Iluminada", desc: "Jogue no modo de Desafios da Catedral.", xp: 35 },
+  { id: "tutorial_master", icon: "📜", title: "Academia Arcana", desc: "Complete ou pratique no Modo de Tutorial.", xp: 50 }
 ];
 
 function getPlayerXP() {
@@ -332,6 +333,15 @@ function getRankData(xp) {
   return RANKS[0];
 }
 
+// Verifica se uma partida está ativamente em andamento no tabuleiro
+function isMatchInProgress() {
+  const startMenu = document.getElementById("start-menu");
+  const gameOverModal = document.getElementById("game-over-modal");
+  const isMenuHidden = !startMenu || startMenu.classList.contains("hidden") || getComputedStyle(startMenu).display === "none";
+  const isGameOverHidden = !gameOverModal || gameOverModal.classList.contains("hidden") || getComputedStyle(gameOverModal).display === "none";
+  return isMenuHidden && isGameOverHidden;
+}
+
 function addXP(amount, reason = "") {
   const currentXP = getPlayerXP();
   const oldRank = getRankData(currentXP);
@@ -340,6 +350,11 @@ function addXP(amount, reason = "") {
 
   const newRank = getRankData(newXP);
   updateProgressionUI(newXP, newRank);
+
+  // Requisito: Não mostrar toasts ou avisos de XP durante a partida
+  if (isMatchInProgress()) {
+    return;
+  }
 
   if (newRank.level > oldRank.level) {
     showAchievementToast("🎉 EVOLUÇÃO DE GRAU!", `${newRank.title} (Nível ${newRank.level})`, "🔮");
@@ -358,7 +373,10 @@ function unlockAchievement(id) {
   unlocked[id] = Date.now();
   localStorage.setItem("wizard_chess_achievements", JSON.stringify(unlocked));
 
-  showAchievementToast(data.title, data.desc, data.icon);
+  // Apenas notifica toast se não estiver jogando partida
+  if (!isMatchInProgress()) {
+    showAchievementToast(data.title, data.desc, data.icon);
+  }
   addXP(data.xp, `Conquista: ${data.title}`);
   renderAchievementsList();
 }
@@ -398,7 +416,8 @@ function updateProgressionUI(xp = getPlayerXP(), rank = getRankData(xp)) {
   if (hudRank) hudRank.textContent = rank.title;
   if (hudLvl) hudLvl.textContent = `Nv. ${rank.level}`;
   const menuLvlNum = document.getElementById("menu-rank-lvl-num"); if (menuLvlNum) menuLvlNum.textContent = rank.level;
-  const rBottom = document.getElementById("player-rating-bottom"); if (rBottom) rBottom.textContent = `(Nv. ${rank.level})`;
+  // Requisito: Não mostrar Nível/XP na barra do jogador durante a partida
+  const rBottom = document.getElementById("player-rating-bottom"); if (rBottom) rBottom.textContent = `(Você)`;
 
   const currentLevelBase = rank.xpRequired;
   const nextLevelTarget = rank.nextXp;
@@ -721,6 +740,80 @@ function setupStartMenuGrid() {
     });
   }
 
+  // 5. Tutorial Card & Settings Shortcut -> Abre View de Tutorial
+  const btnCardTutorial = document.getElementById("btn-card-tutorial");
+  const btnTutorialBack = document.getElementById("btn-tutorial-back");
+  const btnOpenTutSetting = document.getElementById("btn-open-tutorial-setting");
+  const btnStartTutMode = document.getElementById("btn-start-tutorial-mode");
+
+  if (btnCardTutorial) {
+    btnCardTutorial.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("tutorial");
+    });
+  }
+  if (btnOpenTutSetting) {
+    btnOpenTutSetting.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("tutorial");
+    });
+  }
+  if (btnTutorialBack) {
+    btnTutorialBack.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("home");
+    });
+  }
+
+  // Abas internas do Tutorial (Peças, Magias, Xeque-Mate)
+  document.querySelectorAll(".tutorial-tab-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".tutorial-tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tutorial-tab-pane").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      const tabKey = btn.getAttribute("data-tab");
+      const targetPane = document.getElementById("tut-pane-" + tabKey);
+      if (targetPane) targetPane.classList.add("active");
+    });
+  });
+
+  // Iniciar Partida Guiada de Tutorial
+  function launchGuidedTutorialMatch() {
+    // Define modo vs IA Fácil, Mármore, Livre
+    const aiBtn = document.querySelector('#menu-mode-group .toggle-btn[data-mode="ai"]');
+    if (aiBtn) aiBtn.click();
+    const easyBtn = document.querySelector('#menu-diff-group .toggle-btn[data-diff="1"]');
+    if (easyBtn) easyBtn.click();
+    const timeFreeBtn = document.querySelector('#menu-time-group .toggle-btn[data-time="0"]');
+    if (timeFreeBtn) timeFreeBtn.click();
+    const whiteColorBtn = document.querySelector('#menu-color-group .toggle-btn[data-color="w"]');
+    if (whiteColorBtn) whiteColorBtn.click();
+
+    // Inicia a partida na Catedral
+    if (btnStart) btnStart.click();
+
+    // Ativa banner flutuante do tutorial na partida
+    initTutorialBannerHUD();
+    unlockAchievement("tutorial_master");
+    showToast("🎓 Modo Tutorial ativado! Siga o Guia.");
+  }
+
+  if (btnStartTutMode) {
+    btnStartTutMode.addEventListener("click", (e) => {
+      e.stopPropagation();
+      launchGuidedTutorialMatch();
+    });
+  }
+
+  // Opção 'Tutorial' no seletor de modo da Preparação de Batalha
+  document.querySelectorAll("#menu-mode-group .toggle-btn[data-mode='tutorial']").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchSubView("tutorial");
+    });
+  });
+
   // Botões Voltar
   if (btnBattleBack) {
     btnBattleBack.addEventListener("click", (e) => {
@@ -741,7 +834,7 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Ao reabrir pelo HUD ou pelo Menu de Pausa, reseta para a Home
+  // Ao reabrir pelo HUD ou pelo Menu de Pausa, reseta para a Home e esconde banner do tutorial se pausado
   const btnOpenMenu = document.getElementById("btn-open-menu");
   if (btnOpenMenu) {
     btnOpenMenu.addEventListener("click", () => {
@@ -752,6 +845,8 @@ function setupStartMenuGrid() {
   if (btnPauseMainMenu) {
     btnPauseMainMenu.addEventListener("click", () => {
       switchSubView("home");
+      const tutBanner = document.getElementById("tutorial-guide-banner");
+      if (tutBanner) tutBanner.classList.add("hidden");
     });
   }
 
@@ -820,4 +915,99 @@ function setupStartMenuGrid() {
     document.querySelectorAll(".stat-losses-mirror").forEach(el => el.textContent = l);
   };
   setTimeout(syncStatsMirror, 200);
+}
+
+// --------------------------------------------------------
+// 9. Controlador do Banner de Tutorial Interativo Durante a Partida
+// --------------------------------------------------------
+const TUTORIAL_STEPS = [
+  {
+    step: "PASSO 1 DE 5",
+    text: "🧙 <strong>Abertura Arcana:</strong> Toque no seu Peão à frente do Rei (casa e2) e avance 2 casas para o centro. As runas mágicas no chão mostram os destinos válidos!"
+  },
+  {
+    step: "PASSO 2 DE 5",
+    text: "🐎 <strong>Salto dos Cavalos:</strong> Mova seu Cavalo para dominar o centro (f3 ou c3). Ele é a única peça que salta sobre as outras no tabuleiro de pedra em formato de 'L'!"
+  },
+  {
+    step: "PASSO 3 DE 5",
+    text: "⚡ <strong>Bispos e Ataque Diagonais:</strong> Deslize seu Bispo para as diagonais abertas (c4 ou b5). Ele alcança o campo inimigo com magia de longo alcance!"
+  },
+  {
+    step: "PASSO 4 DE 5",
+    text: "🔮 <strong>Iluminação do Oráculo:</strong> Em dúvida sobre o melhor lance? Toque em 'Dica do Oráculo' abaixo para o motor calcular e iluminar a melhor jogada na pedra!"
+  },
+  {
+    step: "PASSO 5 DE 5",
+    text: "👑 <strong>O Xeque-Mate Final:</strong> Encurrale o Rei adversário atacando-o sem dar rota de fuga para conquistar a vitória da Catedral!"
+  }
+];
+
+let currentTutorialStep = 0;
+
+function initTutorialBannerHUD() {
+  const banner = document.getElementById("tutorial-guide-banner");
+  if (!banner) return;
+
+  banner.classList.remove("hidden");
+  currentTutorialStep = 0;
+  updateTutorialStepUI();
+
+  const btnPrev = document.getElementById("btn-tut-prev");
+  const btnNext = document.getElementById("btn-tut-next");
+  const btnOracle = document.getElementById("btn-tut-oracle");
+  const btnClose = document.getElementById("btn-close-tutorial-guide");
+
+  if (btnPrev) {
+    btnPrev.onclick = () => {
+      if (currentTutorialStep > 0) {
+        currentTutorialStep--;
+        updateTutorialStepUI();
+      }
+    };
+  }
+
+  if (btnNext) {
+    btnNext.onclick = () => {
+      if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
+        currentTutorialStep++;
+        updateTutorialStepUI();
+      } else {
+        banner.classList.add("hidden");
+        showToast("🎓 Parabéns! Você concluiu os fundamentos arcanos.");
+      }
+    };
+  }
+
+  if (btnOracle) {
+    btnOracle.onclick = () => {
+      const btnHint = document.getElementById("btn-hint");
+      if (btnHint) btnHint.click();
+    };
+  }
+
+  if (btnClose) {
+    btnClose.onclick = () => {
+      banner.classList.add("hidden");
+    };
+  }
+}
+
+function updateTutorialStepUI() {
+  const stepNum = document.getElementById("tut-guide-step-num");
+  const stepText = document.getElementById("tut-guide-instruction");
+  const btnPrev = document.getElementById("btn-tut-prev");
+  const btnNext = document.getElementById("btn-tut-next");
+
+  const data = TUTORIAL_STEPS[currentTutorialStep];
+  if (!data) return;
+
+  if (stepNum) stepNum.textContent = data.step;
+  if (stepText) stepText.innerHTML = data.text;
+  if (btnPrev) btnPrev.disabled = currentTutorialStep === 0;
+  if (btnNext) {
+    const isLast = currentTutorialStep === TUTORIAL_STEPS.length - 1;
+    const labelSpan = btnNext.querySelector("span:first-child");
+    if (labelSpan) labelSpan.textContent = isLast ? "Concluir" : "Próximo";
+  }
 }
