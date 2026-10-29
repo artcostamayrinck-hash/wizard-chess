@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "echo Assets ready in dist",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "push": "node scripts/git-push.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
