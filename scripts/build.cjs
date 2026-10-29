@@ -30,4 +30,3 @@ try {
 }
 
 console.log('[Build] Build concluído com sucesso!');
-

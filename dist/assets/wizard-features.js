@@ -33,7 +33,6 @@ function bindAction(el, handler, actionKey = "") {
 function initWizardFeatures() {
   const tasks = [
     { name: "StartMenuGrid", fn: setupStartMenuGrid },
-    { name: "ProfileCustomization", fn: setupProfileCustomization },
     { name: "CenteredModalsClose", fn: setupCenteredModalsClose },
     { name: "ProgressionAndAchievements", fn: setupProgressionAndAchievements },
     { name: "SkinsSystem", fn: setupSkinsSystem },
@@ -680,70 +679,10 @@ function showToast(text, duration = 2200) {
   setTimeout(() => {
     if (toast.parentElement) toast.parentElement.removeChild(toast);
   }, duration);
-
-  // Bottom Navigation Bar & Top Bar Bindings
-  const btnNavProfile = document.getElementById("btn-nav-profile");
-  const btnNavHome = document.getElementById("btn-nav-home");
-  const btnNavAch = document.getElementById("btn-nav-achievements");
-  const btnNavSettings = document.getElementById("btn-nav-settings");
-  const btnTopProfile = document.getElementById("btn-top-profile");
-  const btnTopSettings = document.getElementById("btn-top-settings");
-  const btnProfileBack = document.getElementById("btn-profile-back");
-
-  function updateActiveNav(activeTab) {
-    document.querySelectorAll(".rpg-nav-tab").forEach(tab => tab.classList.remove("active"));
-    if (activeTab === "profile" && btnNavProfile) btnNavProfile.classList.add("active");
-    else if (activeTab === "home" && btnNavHome) btnNavHome.classList.add("active");
-    else if (activeTab === "settings" && btnNavSettings) btnNavSettings.classList.add("active");
-  }
-
-  if (btnNavProfile) {
-    bindAction(btnNavProfile, () => {
-      switchSubView("profile");
-      updateActiveNav("profile");
-    });
-  }
-  if (btnNavHome) {
-    bindAction(btnNavHome, () => {
-      switchSubView("home");
-      updateActiveNav("home");
-    });
-  }
-  if (btnNavAch && modalAch) {
-    bindAction(btnNavAch, () => {
-      renderAchievementsList();
-      modalAch.classList.remove("hidden");
-    });
-  }
-  if (btnNavSettings) {
-    bindAction(btnNavSettings, () => {
-      switchSubView("settings");
-      updateSettingsUI();
-      updateActiveNav("settings");
-    });
-  }
-  if (btnTopSettings) {
-    bindAction(btnTopSettings, () => {
-      switchSubView("settings");
-      updateSettingsUI();
-      updateActiveNav("settings");
-    });
-  }
-  if (btnTopProfile) {
-    bindAction(btnTopProfile, () => {
-      switchSubView("profile");
-      updateActiveNav("profile");
-    });
-  }
-  if (btnProfileBack) {
-    bindAction(btnProfileBack, () => {
-      switchSubView("home");
-      updateActiveNav("home");
-    });
-  }
-
 }
 
+
+// Wire up centered modal close buttons
 function setupCenteredModalsClose() {
   const btnCloseHistory = document.getElementById("btn-close-history");
   const historyPanel = document.getElementById("history-panel");
@@ -769,160 +708,6 @@ function setupCenteredModalsClose() {
 // --------------------------------------------------------
 // 7b. Copiar Registro no Formato Personalizado (Imagem 1)
 // --------------------------------------------------------
-
-// --------------------------------------------------------
-// 8b. Perfil Personalizável do Mago (Aba Solicitada)
-// --------------------------------------------------------
-function setupProfileCustomization() {
-  const defaultAvatar = "🧙‍♂️";
-  const defaultName = "Mago Arcano";
-  const defaultTitle = "Arquimago Supremo";
-
-  function getProfile() {
-    return {
-      name: localStorage.getItem("wizard_chess_user_name") || defaultName,
-      avatar: localStorage.getItem("wizard_chess_user_avatar") || defaultAvatar,
-      title: localStorage.getItem("wizard_chess_user_title") || defaultTitle
-    };
-  }
-
-  function updateProfileUI() {
-    const p = getProfile();
-    const xp = getPlayerXP();
-    const rank = getRankData(xp);
-
-    // Top Bar Badge
-    const topAvatar = document.getElementById("top-profile-avatar");
-    const topName = document.getElementById("top-profile-name");
-    const topTitle = document.getElementById("top-profile-title");
-    const topLvl = document.getElementById("top-profile-lvl");
-
-    if (topAvatar) topAvatar.textContent = p.avatar;
-    if (topName) topName.textContent = p.name;
-    if (topTitle) topTitle.textContent = p.title || rank.title;
-    if (topLvl) topLvl.textContent = rank.level;
-
-    // Profile Subview Showcase
-    const profAvatar = document.getElementById("profile-showcase-avatar");
-    const profName = document.getElementById("profile-showcase-name");
-    const profTitle = document.getElementById("profile-showcase-title");
-    const profLvl = document.getElementById("profile-showcase-lvl");
-    const profXp = document.getElementById("profile-showcase-xp");
-    const profWinrate = document.getElementById("profile-showcase-winrate");
-
-    if (profAvatar) profAvatar.textContent = p.avatar;
-    if (profName) profName.textContent = p.name;
-    if (profTitle) profTitle.textContent = p.title || rank.title;
-    if (profLvl) profLvl.textContent = `Nv. ${rank.level}`;
-    if (profXp) profXp.textContent = `${xp} XP`;
-
-    // Input field
-    const nameInput = document.getElementById("profile-name-input");
-    if (nameInput && document.activeElement !== nameInput) {
-      nameInput.value = p.name;
-    }
-
-    // Stats
-    const w = parseInt(document.getElementById("stat-wins")?.textContent || "0", 10);
-    const d = parseInt(document.getElementById("stat-draws")?.textContent || "0", 10);
-    const l = parseInt(document.getElementById("stat-losses")?.textContent || "0", 10);
-    const total = w + d + l;
-    const wr = total > 0 ? Math.round((w / total) * 100) : 100;
-
-    const pw = document.getElementById("prof-stat-wins");
-    const pd = document.getElementById("prof-stat-draws");
-    const pl = document.getElementById("prof-stat-losses");
-    const pwr = document.getElementById("prof-stat-winrate");
-    if (pw) pw.textContent = w;
-    if (pd) pd.textContent = d;
-    if (pl) pl.textContent = l;
-    if (pwr) pwr.textContent = `${wr}%`;
-    if (profWinrate) profWinrate.textContent = `${wr}% Vitórias`;
-
-    // Active Avatar Options
-    document.querySelectorAll(".profile-avatar-option").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.avatar === p.avatar);
-    });
-
-    // Active Title Pills
-    document.querySelectorAll(".profile-title-pill").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.title === p.title);
-    });
-
-    // In-Game HUD: update player card with customized avatar and name
-    document.querySelectorAll(".player-emoji").forEach(el => el.textContent = p.avatar);
-    document.querySelectorAll(".player-name").forEach(el => {
-      if (el.closest(".player-bottom")) {
-        el.textContent = p.name;
-      }
-    });
-  }
-
-  // Bind avatar selection
-  document.querySelectorAll(".profile-avatar-option").forEach(btn => {
-    bindAction(btn, () => {
-      const av = btn.dataset.avatar;
-      if (av) {
-        localStorage.setItem("wizard_chess_user_avatar", av);
-        updateProfileUI();
-        showToast(`✨ Avatar alterado para ${btn.querySelector(".opt-label")?.textContent || av}`);
-      }
-    });
-  });
-
-  // Bind title selection
-  document.querySelectorAll(".profile-title-pill").forEach(btn => {
-    bindAction(btn, () => {
-      const t = btn.dataset.title;
-      if (t) {
-        localStorage.setItem("wizard_chess_user_title", t);
-        updateProfileUI();
-        showToast(`👑 Título de Honra: ${t}`);
-      }
-    });
-  });
-
-  // Bind name input & save button
-  const nameInput = document.getElementById("profile-name-input");
-  const btnSaveName = document.getElementById("btn-save-profile-name");
-
-  const saveName = () => {
-    if (!nameInput) return;
-    const clean = nameInput.value.trim();
-    if (clean) {
-      localStorage.setItem("wizard_chess_user_name", clean);
-      updateProfileUI();
-      showToast(`🧙‍♂️ Nome salvo: ${clean}`);
-    }
-  };
-
-  if (nameInput) {
-    nameInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") saveName();
-    });
-    nameInput.addEventListener("blur", saveName);
-  }
-  if (btnSaveName) {
-    bindAction(btnSaveName, saveName);
-  }
-
-  // Profile Skin Group
-  const savedSkin = localStorage.getItem("wizard_chess_skin") || "classic";
-  document.querySelectorAll("#profile-skin-group .toggle-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.skin === savedSkin);
-    bindAction(btn, () => {
-      const skin = btn.dataset.skin;
-      const targetMainBtn = document.querySelector('#menu-skin-group .toggle-btn[data-skin="' + skin + '"]');
-      if (targetMainBtn) targetMainBtn.click();
-      document.querySelectorAll("#profile-skin-group .toggle-btn").forEach(b => b.classList.toggle("active", b.dataset.skin === skin));
-    });
-  });
-
-  updateProfileUI();
-  setTimeout(updateProfileUI, 350);
-}
-
-
 function setupCustomPGNCopy() {
   const btnCopy = document.getElementById("btn-copy-pgn");
   const btnHistory = document.getElementById("btn-history");
