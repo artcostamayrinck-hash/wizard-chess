@@ -2,20 +2,86 @@
 // Wizard's Chess 3D - Advanced Features, Progression & Skins
 // ========================================================
 
-document.addEventListener("DOMContentLoaded", () => {
-  initWizardFeatures();
-});
+// Helper unificado para toque imediato no mobile e clique seguro
+function bindAction(el, handler) {
+  if (!el) return;
+  if (el._wizardBound) return;
+  el._wizardBound = true;
+
+  let lastTrigger = 0;
+  let startX = 0;
+  let startY = 0;
+
+  const run = (e) => {
+    if (e && typeof e.stopPropagation === "function") {
+      e.stopPropagation();
+    }
+    const now = Date.now();
+    if (now - lastTrigger < 250) return;
+    lastTrigger = now;
+    handler(e);
+  };
+
+  el.addEventListener("touchstart", (e) => {
+    if (e.touches && e.touches[0]) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  el.addEventListener("touchend", (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      const dx = Math.abs(e.changedTouches[0].clientX - startX);
+      const dy = Math.abs(e.changedTouches[0].clientY - startY);
+      // Se não foi rolagem da tela (movimento < 14px), dispara imediatamente o botão
+      if (dx < 14 && dy < 14) {
+        run(e);
+      }
+    }
+  }, { passive: true });
+
+  el.addEventListener("click", (e) => {
+    run(e);
+  });
+}
 
 function initWizardFeatures() {
-  setupWhatsAppShare();
-  setupUndoFeature();
-  setupBackButtonIntegration();
-  setupMoveAnalysis();
-  setupMusicControls();
-  setupProgressionAndAchievements();
-  setupSkinsSystem();
-  setupStartMenuGrid();
+  const tasks = [
+    { name: "StartMenuGrid", fn: setupStartMenuGrid },
+    { name: "CenteredModalsClose", fn: setupCenteredModalsClose },
+    { name: "ProgressionAndAchievements", fn: setupProgressionAndAchievements },
+    { name: "SkinsSystem", fn: setupSkinsSystem },
+    { name: "MusicControls", fn: setupMusicControls },
+    { name: "BackButtonIntegration", fn: setupBackButtonIntegration },
+    { name: "UndoFeature", fn: setupUndoFeature },
+    { name: "WhatsAppShare", fn: setupWhatsAppShare },
+    { name: "MoveAnalysis", fn: setupMoveAnalysis }
+  ];
+
+  for (const task of tasks) {
+    try {
+      task.fn();
+    } catch (err) {
+      console.warn(`[WizardChess] Erro ao inicializar ${task.name}:`, err);
+    }
+  }
 }
+
+// Inicialização imediata sem depender do evento DOMContentLoaded se o documento já estiver pronto
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initWizardFeatures();
+  });
+} else {
+  initWizardFeatures();
+}
+
+// Repasse de segurança caso scripts assíncronos terminem um pouco depois
+setTimeout(() => {
+  try { setupStartMenuGrid(); } catch (e) {}
+  try { setupCenteredModalsClose(); } catch (e) {}
+}, 300);
+
 
 // --------------------------------------------------------
 // 1. WhatsApp Share
@@ -315,7 +381,12 @@ const ACHIEVEMENTS_DATA = [
 ];
 
 function getPlayerXP() {
-  return parseInt(localStorage.getItem("wizard_chess_xp") || "0", 10);
+  try {
+    const val = parseInt(localStorage.getItem("wizard_chess_xp") || "0", 10);
+    return isNaN(val) ? 0 : val;
+  } catch (e) {
+    return 0;
+  }
 }
 
 function getUnlockedAchievements() {
@@ -346,7 +417,9 @@ function addXP(amount, reason = "") {
   const currentXP = getPlayerXP();
   const oldRank = getRankData(currentXP);
   const newXP = currentXP + amount;
-  localStorage.setItem("wizard_chess_xp", newXP.toString());
+  try {
+    localStorage.setItem("wizard_chess_xp", newXP.toString());
+  } catch (e) {}
 
   const newRank = getRankData(newXP);
   updateProgressionUI(newXP, newRank);
@@ -473,9 +546,9 @@ function setupProgressionAndAchievements() {
     if (modalAch) modalAch.classList.remove("hidden");
   };
 
-  if (btnAchDock) btnAchDock.addEventListener("click", openAch);
-  if (btnAchHud) btnAchHud.addEventListener("click", openAch);
-  if (btnCloseAch && modalAch) btnCloseAch.addEventListener("click", () => modalAch.classList.add("hidden"));
+  if (btnAchDock) bindAction(btnAchDock, openAch);
+  if (btnAchHud) bindAction(btnAchHud, openAch);
+  if (btnCloseAch && modalAch) bindAction(btnCloseAch, () => modalAch.classList.add("hidden"));
 
   // Track captures for First Blood
   const graveW = document.getElementById("grave-w");
@@ -627,12 +700,12 @@ function showToast(text, duration = 2200) {
 
 
 // Wire up centered modal close buttons
-document.addEventListener("DOMContentLoaded", () => {
+function setupCenteredModalsClose() {
   const btnCloseHistory = document.getElementById("btn-close-history");
   const historyPanel = document.getElementById("history-panel");
   const btnHistoryDock = document.getElementById("btn-history");
   if (btnCloseHistory && historyPanel) {
-    btnCloseHistory.addEventListener("click", () => {
+    bindAction(btnCloseHistory, () => {
       historyPanel.classList.add("hidden");
       if (btnHistoryDock) btnHistoryDock.classList.remove("active");
     });
@@ -642,19 +715,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const emotesPopup = document.getElementById("emotes-popup");
   const btnEmotesDock = document.getElementById("btn-emotes");
   if (btnCloseEmotes && emotesPopup) {
-    btnCloseEmotes.addEventListener("click", () => {
+    bindAction(btnCloseEmotes, () => {
       emotesPopup.classList.add("hidden");
       if (btnEmotesDock) btnEmotesDock.classList.remove("active");
     });
   }
-});
-
-
-// --------------------------------------------------------
-// 8. Reference Start Menu 2x3 Grid Controller
-
-// --------------------------------------------------------
-// 8. Menu Inicial com Home, Preparação de Batalha e Configurações
+}
 
 // --------------------------------------------------------
 // 8. Menu Inicial Foto 2: Comece a Batalha, Puzzles Aleatórios e Configurações
@@ -684,17 +750,14 @@ function setupStartMenuGrid() {
 
   // 1. Hero Card: "Comece a Batalha" -> Abre Preparação da Batalha (Foto 2)
   if (btnHeroBattle) {
-    btnHeroBattle.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnHeroBattle, () => {
       switchSubView("battle");
     });
   }
 
   // 2. Quebra-cabeças Card: Inicia direto com Arena e Skin Aleatórias!
   if (btnCardPuzzle) {
-    btnCardPuzzle.addEventListener("click", (e) => {
-      e.stopPropagation();
-
+    bindAction(btnCardPuzzle, () => {
       // Estilos e Skins no Aleatório
       const arenas = ["cathedral", "inferno", "frost"];
       const skins = ["classic", "gold", "amethyst", "emerald"];
@@ -724,8 +787,7 @@ function setupStartMenuGrid() {
 
   // 3. Conquistas Card -> Abre Modal de Conquistas
   if (btnAchCard && modalAch) {
-    btnAchCard.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnAchCard, () => {
       renderAchievementsList();
       modalAch.classList.remove("hidden");
     });
@@ -733,8 +795,7 @@ function setupStartMenuGrid() {
 
   // 4. Configurações Card -> Abre View de Configurações
   if (btnSettingsCard) {
-    btnSettingsCard.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnSettingsCard, () => {
       switchSubView("settings");
       updateSettingsUI();
     });
@@ -747,28 +808,24 @@ function setupStartMenuGrid() {
   const btnStartTutMode = document.getElementById("btn-start-tutorial-mode");
 
   if (btnCardTutorial) {
-    btnCardTutorial.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnCardTutorial, () => {
       switchSubView("tutorial");
     });
   }
   if (btnOpenTutSetting) {
-    btnOpenTutSetting.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnOpenTutSetting, () => {
       switchSubView("tutorial");
     });
   }
   if (btnTutorialBack) {
-    btnTutorialBack.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnTutorialBack, () => {
       switchSubView("home");
     });
   }
 
   // Abas internas do Tutorial (Peças, Magias, Xeque-Mate)
   document.querySelectorAll(".tutorial-tab-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btn, () => {
       document.querySelectorAll(".tutorial-tab-btn").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tutorial-tab-pane").forEach(p => p.classList.remove("active"));
       btn.classList.add("active");
@@ -800,36 +857,31 @@ function setupStartMenuGrid() {
   }
 
   if (btnStartTutMode) {
-    btnStartTutMode.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnStartTutMode, () => {
       launchGuidedTutorialMatch();
     });
   }
 
   // Opção 'Tutorial' no seletor de modo da Preparação de Batalha
   document.querySelectorAll("#menu-mode-group .toggle-btn[data-mode='tutorial']").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btn, () => {
       switchSubView("tutorial");
     });
   });
 
   // Botões Voltar
   if (btnBattleBack) {
-    btnBattleBack.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnBattleBack, () => {
       switchSubView("home");
     });
   }
   if (btnSettingsBack) {
-    btnSettingsBack.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnSettingsBack, () => {
       switchSubView("home");
     });
   }
   if (btnSettingsClose) {
-    btnSettingsClose.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnSettingsClose, () => {
       switchSubView("home");
     });
   }
@@ -837,13 +889,13 @@ function setupStartMenuGrid() {
   // Ao reabrir pelo HUD ou pelo Menu de Pausa, reseta para a Home e esconde banner do tutorial se pausado
   const btnOpenMenu = document.getElementById("btn-open-menu");
   if (btnOpenMenu) {
-    btnOpenMenu.addEventListener("click", () => {
+    bindAction(btnOpenMenu, () => {
       switchSubView("home");
     });
   }
   const btnPauseMainMenu = document.getElementById("btn-pause-main-menu");
   if (btnPauseMainMenu) {
-    btnPauseMainMenu.addEventListener("click", () => {
+    bindAction(btnPauseMainMenu, () => {
       switchSubView("home");
       const tutBanner = document.getElementById("tutorial-guide-banner");
       if (tutBanner) tutBanner.classList.add("hidden");
@@ -854,8 +906,7 @@ function setupStartMenuGrid() {
   const btnSound = document.getElementById("btn-toggle-sound-setting");
   const iconSound = document.getElementById("icon-sound-status");
   if (btnSound) {
-    btnSound.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnSound, () => {
       if (window._WIZARD_GAME && window._WIZARD_GAME.Ie) {
         window._WIZARD_GAME.Ie.enabled = !window._WIZARD_GAME.Ie.enabled;
         const isEnabled = window._WIZARD_GAME.Ie.enabled;
@@ -871,8 +922,7 @@ function setupStartMenuGrid() {
   const btnMusic = document.getElementById("btn-toggle-music-setting");
   const iconMusic = document.getElementById("icon-music-status");
   if (btnMusic) {
-    btnMusic.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnMusic, () => {
       if (window._WIZARD_GAME && window._WIZARD_GAME.toggleMusic) {
         const isPlaying = window._WIZARD_GAME.toggleMusic();
         btnMusic.classList.toggle("active", isPlaying);
@@ -887,8 +937,7 @@ function setupStartMenuGrid() {
   // Configurações: Abrir Conquistas
   const btnOpenAch = document.getElementById("btn-open-achievements-setting");
   if (btnOpenAch && modalAch) {
-    btnOpenAch.addEventListener("click", (e) => {
-      e.stopPropagation();
+    bindAction(btnOpenAch, () => {
       renderAchievementsList();
       modalAch.classList.remove("hidden");
     });
@@ -959,16 +1008,16 @@ function initTutorialBannerHUD() {
   const btnClose = document.getElementById("btn-close-tutorial-guide");
 
   if (btnPrev) {
-    btnPrev.onclick = () => {
+    bindAction(btnPrev, () => {
       if (currentTutorialStep > 0) {
         currentTutorialStep--;
         updateTutorialStepUI();
       }
-    };
+    });
   }
 
   if (btnNext) {
-    btnNext.onclick = () => {
+    bindAction(btnNext, () => {
       if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
         currentTutorialStep++;
         updateTutorialStepUI();
@@ -976,20 +1025,20 @@ function initTutorialBannerHUD() {
         banner.classList.add("hidden");
         showToast("🎓 Parabéns! Você concluiu os fundamentos arcanos.");
       }
-    };
+    });
   }
 
   if (btnOracle) {
-    btnOracle.onclick = () => {
+    bindAction(btnOracle, () => {
       const btnHint = document.getElementById("btn-hint");
       if (btnHint) btnHint.click();
-    };
+    });
   }
 
   if (btnClose) {
-    btnClose.onclick = () => {
+    bindAction(btnClose, () => {
       banner.classList.add("hidden");
-    };
+    });
   }
 }
 

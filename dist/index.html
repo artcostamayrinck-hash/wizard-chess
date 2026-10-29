@@ -2174,6 +2174,40 @@
   cursor: pointer !important;
 }
 
+/* Resposta Imediata de Toque e Cliques para Todos os Botões e Menus */
+.hero-battle-card,
+.photo2-card,
+.photo2-back-btn,
+.photo2-switch-btn,
+.photo2-action-btn,
+.tutorial-tab-btn,
+.tut-btn-nav,
+.tut-btn-oracle,
+.tut-guide-close,
+.promo-btn,
+.toggle-btn {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.hero-battle-card *,
+.photo2-card *,
+.photo2-back-btn *,
+.photo2-switch-btn *,
+.photo2-action-btn *,
+.tutorial-tab-btn *,
+.tut-btn-nav *,
+.tut-btn-oracle *,
+.tut-guide-close *,
+.promo-btn *,
+.toggle-btn * {
+  pointer-events: none !important;
+}
+
   </style>
 </head>
 
