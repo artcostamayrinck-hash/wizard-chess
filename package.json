@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "echo Assets ready in dist",
+    "build": "node scripts/build.cjs",
     "preview": "vite preview",
     "push": "node scripts/git-push.js"
   },

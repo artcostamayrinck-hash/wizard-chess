@@ -394,6 +394,27 @@ function unlockAchievement(id) {
   renderAchievementsList();
 }
 
+function unlockAllAchievements(notify = true) {
+  const unlocked = getUnlockedAchievements();
+  ACHIEVEMENTS_DATA.forEach(ach => {
+    unlocked[ach.id] = Date.now();
+  });
+  try {
+    localStorage.setItem("wizard_chess_achievements", JSON.stringify(unlocked));
+    localStorage.setItem("wizard_chess_xp", "6000");
+    localStorage.setItem("wizard_chess_all_unlocked", "true");
+  } catch (e) {}
+
+  const rank = getRankData(6000);
+  updateProgressionUI(6000, rank);
+  renderAchievementsList();
+
+  if (notify) {
+    showToast("⚡ Todas as funções, conquistas e títulos foram desbloqueados!");
+    showAchievementToast("👑 GRAU MÁXIMO!", "Arquimago Supremo (Nível 6)", "🔮");
+  }
+}
+
 function showAchievementToast(title, desc, icon = "🏆") {
   const toast = document.getElementById("achievement-toast");
   const titleEl = document.getElementById("ach-toast-title");
@@ -489,6 +510,26 @@ function setupProgressionAndAchievements() {
   if (btnAchDock) bindAction(btnAchDock, openAch);
   if (btnAchHud) bindAction(btnAchHud, openAch);
   if (btnCloseAch && modalAch) bindAction(btnCloseAch, () => modalAch.classList.add("hidden"));
+
+  // Botão para Desbloqueio Geral de Feitos
+  const btnUnlockAll = document.getElementById("btn-unlock-all-achievements");
+  if (btnUnlockAll) {
+    bindAction(btnUnlockAll, () => {
+      unlockAllAchievements(true);
+    });
+  }
+
+  // Desbloqueio automático de funções para a versão web / site
+  try {
+    const isNative = typeof window.Capacitor !== "undefined" && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+    if (!isNative) {
+      if (localStorage.getItem("wizard_chess_all_unlocked") !== "false") {
+        unlockAllAchievements(false);
+      }
+    } else if (localStorage.getItem("wizard_chess_all_unlocked") === "true") {
+      unlockAllAchievements(false);
+    }
+  } catch (e) {}
 
   // Track captures for First Blood
   const graveW = document.getElementById("grave-w");
