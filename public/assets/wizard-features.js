@@ -133,6 +133,25 @@ function setupBackButtonIntegration() {
       }
     }
 
+        // Se estiver em uma subview do menu inicial diferente de home, volta para a tela inicial
+    const activeSubView = document.querySelector(".menu-subview.active:not(#menu-view-home)");
+    if (activeSubView) {
+      const homeView = document.getElementById("menu-view-home");
+      document.querySelectorAll(".menu-subview").forEach(v => {
+        v.classList.remove("active");
+        v.style.setProperty("display", "none", "important");
+      });
+      if (homeView) {
+        homeView.classList.add("active");
+        homeView.style.setProperty("display", "flex", "important");
+      }
+      document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
+      const btnNavHome = document.getElementById("btn-nav-home");
+      if (btnNavHome) btnNavHome.classList.add("active");
+      try { window.history.pushState({ wizardChess: true }, ""); } catch (err) {}
+      return;
+    }
+
     const startMenu = document.getElementById("start-menu");
     const pauseModal = document.getElementById("pause-modal");
     if (startMenu && startMenu.classList.contains("hidden")) {
@@ -1080,10 +1099,17 @@ function setupStartMenuGrid() {
       v.style.setProperty("display", "none", "important");
     });
     const target = document.getElementById('menu-view-' + viewName);
-    if (target) {
-      target.classList.add("active");
-      target.style.setProperty("display", "flex", "important");
+    if (!target) {
+      console.warn('[WizardChess] Subview não encontrada: ' + viewName);
+      const fallback = document.getElementById('menu-view-home');
+      if (fallback) {
+        fallback.classList.add('active');
+        fallback.style.setProperty('display', 'flex', 'important');
+      }
+      return;
     }
+    target.classList.add("active");
+    target.style.setProperty("display", "flex", "important");
 
     // Atualiza aba ativa na barra de navegação inferior
     document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
@@ -1157,11 +1183,15 @@ function setupStartMenuGrid() {
       switchSubView("customize");
     });
   }
-  if (btnKnightBadge) {
-    bindAction(btnKnightBadge, () => {
-      switchSubView("customize");
-    });
-  }
+  const homeKnightCol = document.getElementById("home-knight-col");
+  const homeKnightShowcase = document.getElementById("home-knight-showcase");
+  const openCustomize = () => {
+    switchSubView("customize");
+  };
+
+  if (homeKnightCol) bindAction(homeKnightCol, openCustomize, "openCustomizeKnightCol");
+  if (homeKnightShowcase) bindAction(homeKnightShowcase, openCustomize, "openCustomizeKnightSvg");
+  if (btnKnightBadge) bindAction(btnKnightBadge, openCustomize, "openCustomizeKnightBadge");
 
   // 6. Botões Voltar
   if (btnCustomizeBack) bindAction(btnCustomizeBack, () => switchSubView("home"));
@@ -1201,7 +1231,8 @@ function setupStartMenuGrid() {
 
   // 9. Lançar Desafios na Aba de Desafios
   const launchPuzzleGame = () => {
-    const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
+    const puzzleTrigger = document.querySelector('#menu-mode-group .toggle-btn[data-mode="puzzle"]') ||
+                          document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
     if (puzzleTrigger) puzzleTrigger.click();
     if (btnStart) btnStart.click();
     showToast("🧩 Desafio Arcano iniciado!");
@@ -1340,7 +1371,7 @@ function setupStartMenuGrid() {
         const arenaBtn = document.querySelector('#menu-arena-group .toggle-btn[data-arena="' + randArena + '"]');
         if (arenaBtn) arenaBtn.click();
 
-        const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
+        const puzzleTrigger = document.querySelector('#menu-mode-group .toggle-btn[data-mode="puzzle"]') || document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
         if (puzzleTrigger) puzzleTrigger.click();
         if (btnStart) btnStart.click();
 
