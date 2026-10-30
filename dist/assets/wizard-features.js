@@ -42,7 +42,8 @@ function initWizardFeatures() {
     { name: "UndoFeature", fn: setupUndoFeature },
     { name: "CustomPGNCopy", fn: setupCustomPGNCopy },
     { name: "WhatsAppShare", fn: setupWhatsAppShare },
-    { name: "MoveAnalysis", fn: setupMoveAnalysis }
+    { name: "MoveAnalysis", fn: setupMoveAnalysis },
+    { name: "ChessDynamics", fn: setupChessDynamics }
   ];
 
   for (const task of tasks) {
@@ -1066,6 +1067,26 @@ ${movesText ? `\n${movesText.trim()}` : ""}`;
 // 8. Menu Inicial Foto 2: Comece a Batalha, Puzzles Aleatórios e Configurações
 // --------------------------------------------------------
 function setupStartMenuGrid() {
+  // Sincronização rigorosa da visibilidade da Dificuldade da IA
+  function syncAiDifficulty() {
+    const diffSection = document.getElementById("menu-diff-section");
+    if (!diffSection) return;
+    const activeModeBtn = document.querySelector("#menu-mode-group .toggle-btn.active");
+    const mode = activeModeBtn ? activeModeBtn.dataset.mode : "ai";
+
+    if (mode === "online" || mode === "2p") {
+      diffSection.classList.add("hidden");
+      diffSection.classList.add("is-hidden");
+      diffSection.setAttribute("data-visible", "false");
+      diffSection.style.setProperty("display", "none", "important");
+    } else {
+      diffSection.classList.remove("hidden");
+      diffSection.classList.remove("is-hidden");
+      diffSection.setAttribute("data-visible", "true");
+      diffSection.style.setProperty("display", "flex", "important");
+    }
+  }
+
   const startMenu = document.getElementById("start-menu");
   const btnHeroBattle = document.getElementById("btn-hero-battle");
   const btnCardChallenges = document.getElementById("btn-card-challenges");
@@ -1112,6 +1133,7 @@ function setupStartMenuGrid() {
     }
     target.classList.add("active");
     target.style.setProperty("display", "flex", "important");
+    if (viewName === "battle") syncAiDifficulty();
 
     // Atualiza aba ativa na barra de navegação inferior
     document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
@@ -1249,6 +1271,55 @@ function setupStartMenuGrid() {
   });
 
   // Inicializa o Cavalo em Destaque com a skin salva
+  
+  // Monitorar seleção de Modo de Batalha (Oculta dificuldade da IA quando Online ou 2 Jogadores)
+  document.querySelectorAll("#menu-mode-group .toggle-btn").forEach(btn => {
+    const updateModeSelection = () => {
+      document.querySelectorAll("#menu-mode-group .toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      syncAiDifficulty();
+      const m = btn.dataset.mode;
+      const r = document.getElementById("btn-mode");
+      if (r) {
+        const lbl = r.querySelector(".btn-label");
+        if (lbl) lbl.textContent = m === "online" ? "Online" : m === "2p" ? "2 Jogadores" : "vs IA";
+      }
+    };
+    btn.addEventListener("click", updateModeSelection);
+    btn.addEventListener("touchend", updateModeSelection, { passive: true });
+  });
+
+  // Monitorar seleção do Relógio da Catedral (5 Ritmos: Livre, 1m Bala, 3m Blitz, 5m Rápida, 10m Clássica)
+  document.querySelectorAll("#menu-time-group .toggle-btn").forEach(btn => {
+    bindAction(btn, () => {
+      document.querySelectorAll("#menu-time-group .toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const seconds = parseInt(btn.dataset.time, 10) || 0;
+      try { localStorage.setItem("wizard_chess_time", seconds); } catch(e) {}
+      showToast("⏱️ Relógio: " + btn.textContent.trim());
+    }, "timeToggle_" + btn.dataset.time);
+  });
+
+  // Monitorar seleção da Dinâmica de Jogo (Clássico, Arcano com Feitiços, Morte Súbita)
+  document.querySelectorAll("#menu-dynamic-group .toggle-btn").forEach(btn => {
+    bindAction(btn, () => {
+      document.querySelectorAll("#menu-dynamic-group .toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const dyn = btn.dataset.dynamic || "classic";
+      try { localStorage.setItem("wizard_chess_dynamic", dyn); } catch(e) {}
+      if (dyn === "arcane") {
+        showToast("🔮 Modo Arcano: Feitiços, Oráculo e Visão Cósmica ativados!");
+      } else if (dyn === "sudden") {
+        showToast("⚡ Modo Morte Súbita: Tensão máxima e lances decisivos!");
+      } else {
+        showToast("♟️ Xadrez Clássico FIDE selecionado.");
+      }
+    }, "dynamicToggle_" + btn.dataset.dynamic);
+  });
+
+  // Sincroniza estado inicial da dificuldade da IA
+  syncAiDifficulty();
+
   const currentSkin = localStorage.getItem("wizard_chess_skin") || "classic";
   updateKnightShowcase(currentSkin);
 
@@ -1660,5 +1731,41 @@ function setupProfileSystem() {
         window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg), "_blank");
       }
     }, "settingsShareWA");
+  }
+}
+
+
+// =========================================================================
+// DINÂMICAS DE XADREZ ADICIONAIS & ALERTAS MÍSTICOS
+// =========================================================================
+function setupChessDynamics() {
+  const checkWarning = document.getElementById("check-warning");
+  if (checkWarning) {
+    let lastNotifiedTime = 0;
+    const observer = new MutationObserver(() => {
+      const isVisible = !checkWarning.classList.contains("hidden") && checkWarning.style.display !== "none";
+      const now = Date.now();
+      if (isVisible && now - lastNotifiedTime > 4000) {
+        lastNotifiedTime = now;
+        const dyn = localStorage.getItem("wizard_chess_dynamic") || "classic";
+        if (dyn === "arcane") {
+          showToast("👑 XEQUE REAL! O Monarca invoca proteção cósmica!", 3000);
+        } else {
+          showToast("👑 XEQUE! Proteja seu Monarca!", 2500);
+        }
+      }
+    });
+    observer.observe(checkWarning, { attributes: true, attributeFilter: ["class", "style"] });
+  }
+
+  // Interação especial do Oráculo Arcano
+  const btnHint = document.getElementById("btn-hint");
+  if (btnHint) {
+    btnHint.addEventListener("click", () => {
+      const dyn = localStorage.getItem("wizard_chess_dynamic") || "classic";
+      if (dyn === "arcane") {
+        showToast("🔮 Oráculo Arcano: Revelando as correntes místicas do tabuleiro!", 2500);
+      }
+    });
   }
 }

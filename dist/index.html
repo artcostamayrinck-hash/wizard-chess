@@ -2819,7 +2819,7 @@
         <div style="margin-top: 14px;">
           <button type="button" class="btn-primary-action" id="btn-customize-apply">
             <span class="material-symbols-rounded">check</span>
-            <span>Confirmar & Voltar</span>
+            <span>Confirmar & Voltar ao Menu</span>
           </button>
         </div>
       </div>
@@ -2980,44 +2980,52 @@
             </div>
           </div>
 
-          <!-- 3. Skin das Peças (Sem o '3D') -->
-          <div class="setup-group">
-            <label class="setup-label photo2-label">SKIN DAS PEÇAS</label>
-            <div class="toggle-group photo2-toggle-group" id="menu-skin-group">
-              <button class="toggle-btn active" data-skin="classic">Clássico</button>
-              <button class="toggle-btn" data-skin="gold">Ouro Real</button>
-              <button class="toggle-btn" data-skin="amethyst">Ametista</button>
-              <button class="toggle-btn" data-skin="emerald">Esmeralda</button>
-            </div>
+          <!-- Skin das Peças (Oculto na view da batalha, configurado na aba Personalizar - Imagem 1) -->
+          <div id="menu-skin-group" style="display: none !important;" aria-hidden="true">
+            <button type="button" class="toggle-btn active" data-skin="classic"></button>
+            <button type="button" class="toggle-btn" data-skin="gold"></button>
+            <button type="button" class="toggle-btn" data-skin="amethyst"></button>
+            <button type="button" class="toggle-btn" data-skin="emerald"></button>
           </div>
 
-          <!-- 4. Seu Exército -->
+          <!-- 3. Seu Exército -->
           <div class="setup-group">
             <label class="setup-label photo2-label">SEU EXÉRCITO</label>
             <div class="toggle-group photo2-toggle-group" id="menu-color-group">
-              <button class="toggle-btn active" data-color="w">Mármore (Brancas)</button>
-              <button class="toggle-btn" data-color="b">Obsidiana (Pretas)</button>
+              <button type="button" class="toggle-btn active" data-color="w">Mármore (Brancas)</button>
+              <button type="button" class="toggle-btn" data-color="b">Obsidiana (Pretas)</button>
             </div>
           </div>
 
-          <!-- 5. Relógio da Catedral -->
+          <!-- 4. Relógio da Catedral (Mais Ritmos de Xadrez: Livre, 1m Bala, 3m Blitz, 5m Rápida, 10m Clássica) -->
           <div class="setup-group">
             <label class="setup-label photo2-label">RELÓGIO DA CATEDRAL</label>
             <div class="toggle-group photo2-toggle-group" id="menu-time-group">
-              <button class="toggle-btn" data-time="0">Livre</button>
-              <button class="toggle-btn" data-time="180">3 min</button>
-              <button class="toggle-btn active" data-time="300">5 min</button>
-              <button class="toggle-btn" data-time="600">10 min</button>
+              <button type="button" class="toggle-btn" data-time="0">Livre</button>
+              <button type="button" class="toggle-btn" data-time="60">1 min</button>
+              <button type="button" class="toggle-btn" data-time="180">3 min</button>
+              <button type="button" class="toggle-btn active" data-time="300">5 min</button>
+              <button type="button" class="toggle-btn" data-time="600">10 min</button>
             </div>
           </div>
 
-          <!-- 6. Dificuldade da IA -->
+          <!-- 5. Dinâmica de Jogo (Mais Dinâmicas de Xadrez!) -->
+          <div class="setup-group" id="menu-chess-dynamics-section">
+            <label class="setup-label photo2-label">DINÂMICA DE JOGO</label>
+            <div class="toggle-group photo2-toggle-group" id="menu-dynamic-group">
+              <button type="button" class="toggle-btn active" data-dynamic="classic" title="Regras Tradicionais de Torneio">♟️ Clássico</button>
+              <button type="button" class="toggle-btn" data-dynamic="arcane" title="Xadrez com Feitiços, Oráculo e Visão Mística">🔮 Arcano (Feitiços)</button>
+              <button type="button" class="toggle-btn" data-dynamic="sudden" title="Ritmo Rápido e Morte Súbita">⚡ Morte Súbita</button>
+            </div>
+          </div>
+
+          <!-- 6. Dificuldade da IA (Ocultado quando Online ou 2 Jogadores) -->
           <div class="setup-group" id="menu-diff-section">
             <label class="setup-label photo2-label">DIFICULDADE DA IA</label>
             <div class="toggle-group photo2-toggle-group" id="menu-diff-group">
-              <button class="toggle-btn" data-diff="1">Fácil</button>
-              <button class="toggle-btn active" data-diff="2">Média</button>
-              <button class="toggle-btn" data-diff="3">Difícil</button>
+              <button type="button" class="toggle-btn" data-diff="1">Fácil</button>
+              <button type="button" class="toggle-btn active" data-diff="2">Média</button>
+              <button type="button" class="toggle-btn" data-diff="3">Difícil</button>
             </div>
           </div>
         </div>
