@@ -554,6 +554,240 @@ function setupProgressionAndAchievements() {
 // --------------------------------------------------------
 // 7. Visual Skins System (Custom 3D Pieces & Runes)
 // --------------------------------------------------------
+
+// ========================================================
+// RENDERIZADOR DINÂMICO DO CAVALO ARCANO (PEÇA EM DESTAQUE)
+// ========================================================
+function getKnightSvg(skinName) {
+  const configs = {
+    classic: {
+      bodyGradStart: "#2e2945",
+      bodyGradMid: "#1a162b",
+      bodyGradEnd: "#0e0c18",
+      rimLight: "#695999",
+      accent: "#e6af2e",
+      runeColor: "#ffd166",
+      runeGlow: "#f39c12",
+      eyeGlow: "#ffeaa7",
+      bridleColor: "#cca028",
+      bridleTrim: "#ffd166",
+      gemColor: "#ff4d6d",
+      baseGrad1: "#262238",
+      baseGrad2: "#12101e",
+      baseRing: "#ffd166",
+      pedestalGlow: "rgba(255, 209, 102, 0.35)",
+      name: "Cavalo Clássico",
+      desc: "Mármore e obsidiana pura esculpidos com runas douradas arcanas."
+    },
+    gold: {
+      bodyGradStart: "#fff3b0",
+      bodyGradMid: "#ffb703",
+      bodyGradEnd: "#b8860b",
+      rimLight: "#ffffff",
+      accent: "#ffffff",
+      runeColor: "#ffffff",
+      runeGlow: "#00f5d4",
+      eyeGlow: "#ffffff",
+      bridleColor: "#e0e6ed",
+      bridleTrim: "#ffffff",
+      gemColor: "#00f5d4",
+      baseGrad1: "#ffe259",
+      baseGrad2: "#a67c00",
+      baseRing: "#ffffff",
+      pedestalGlow: "rgba(255, 215, 0, 0.45)",
+      name: "Cavalo de Ouro Real",
+      desc: "Ouro maciço polido com incrustações de diamante e runas ciano brilhantes."
+    },
+    amethyst: {
+      bodyGradStart: "#5a189a",
+      bodyGradMid: "#240046",
+      bodyGradEnd: "#10002b",
+      rimLight: "#9d4edd",
+      accent: "#f72585",
+      runeColor: "#f72585",
+      runeGlow: "#7209b7",
+      eyeGlow: "#ff007f",
+      bridleColor: "#7b2cbf",
+      bridleTrim: "#f72585",
+      gemColor: "#4cc9f0",
+      baseGrad1: "#3c096c",
+      baseGrad2: "#10002b",
+      baseRing: "#f72585",
+      pedestalGlow: "rgba(247, 37, 133, 0.45)",
+      name: "Cavalo de Ametista",
+      desc: "Cristal cósmico translúcido púrpura com runas de fogo magenta neon."
+    },
+    emerald: {
+      bodyGradStart: "#00b4d8",
+      bodyGradMid: "#00796b",
+      bodyGradEnd: "#00352c",
+      rimLight: "#00f5d4",
+      accent: "#52b788",
+      runeColor: "#00ffcc",
+      runeGlow: "#00f5d4",
+      eyeGlow: "#00ffcc",
+      bridleColor: "#c1121f",
+      bridleTrim: "#52b788",
+      gemColor: "#ff4d6d",
+      baseGrad1: "#004d40",
+      baseGrad2: "#02211b",
+      baseRing: "#00ffcc",
+      pedestalGlow: "rgba(0, 245, 212, 0.45)",
+      name: "Cavalo de Esmeralda",
+      desc: "Esmeralda mística pura com runas de marfim encantado e olhos de rubi."
+    }
+  };
+
+  const c = configs[skinName] || configs.classic;
+
+  return `
+  <svg class="rpg-knight-svg" viewBox="0 0 280 340" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="rune-glow-${skinName}" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="3.5" result="blur1" />
+        <feGaussianBlur stdDeviation="7" result="blur2" />
+        <feMerge>
+          <feMergeNode in="blur2" />
+          <feMergeNode in="blur1" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="pedestal-blur-${skinName}" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="8" />
+      </filter>
+
+      <linearGradient id="knight-body-${skinName}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${c.bodyGradStart}" />
+        <stop offset="45%" stop-color="${c.bodyGradMid}" />
+        <stop offset="100%" stop-color="${c.bodyGradEnd}" />
+      </linearGradient>
+
+      <linearGradient id="knight-jaw-${skinName}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${c.bodyGradStart}" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="${c.bodyGradEnd}" />
+      </linearGradient>
+
+      <linearGradient id="knight-mane-${skinName}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${c.bodyGradStart}" />
+        <stop offset="100%" stop-color="${c.bodyGradEnd}" />
+      </linearGradient>
+
+      <linearGradient id="pedestal-${skinName}" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="${c.baseGrad1}" />
+        <stop offset="100%" stop-color="${c.baseGrad2}" />
+      </linearGradient>
+
+      <radialGradient id="aura-${skinName}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="${c.runeGlow}" stop-opacity="0.35" />
+        <stop offset="100%" stop-color="${c.runeGlow}" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <circle cx="140" cy="180" r="110" fill="url(#aura-${skinName})" filter="url(#pedestal-blur-${skinName})" />
+    <ellipse cx="140" cy="318" rx="85" ry="14" fill="${c.pedestalGlow}" filter="url(#pedestal-blur-${skinName})" />
+    <ellipse cx="140" cy="315" rx="80" ry="18" fill="url(#pedestal-${skinName})" stroke="${c.baseRing}" stroke-width="2" />
+    <path d="M60 315 v-10 c0 10 160 10 160 0 v10 c0 10 -160 10 -160 0 Z" fill="${c.baseGrad2}" stroke="${c.baseRing}" stroke-width="1.5" />
+    <ellipse cx="140" cy="302" rx="72" ry="14" fill="url(#pedestal-${skinName})" stroke="${c.baseRing}" stroke-width="2.5" />
+
+    <g transform="translate(140, 302) scale(0.9, 0.45)" filter="url(#rune-glow-${skinName})">
+      <path d="M0 -30 L5 -5 L30 0 L5 5 L0 30 L-5 5 L-30 0 L-5 -5 Z" fill="${c.runeColor}" />
+      <circle cx="0" cy="0" r="16" fill="none" stroke="${c.runeColor}" stroke-width="2.5" stroke-dasharray="4,3" />
+      <circle cx="0" cy="0" r="4" fill="${c.gemColor}" />
+    </g>
+
+    <g transform="translate(0, 5)">
+      <g fill="url(#knight-mane-${skinName})" stroke="${c.rimLight}" stroke-width="1.5">
+        <path d="M 108 52 C 90 70 78 98 72 130 C 65 142 55 160 62 175 C 72 168 80 165 84 168 C 76 182 68 200 74 216 C 85 208 94 205 98 210 C 90 228 85 248 94 266 C 105 258 116 256 122 264 L 118 290 L 140 292 Z" />
+        <path d="M 112 55 L 94 65 L 116 75 L 96 90 L 120 102 L 95 120 L 122 135 L 94 158 L 122 172 L 98 198 L 126 215 L 105 245 L 132 262 Z" fill="${c.bodyGradEnd}" stroke="${c.rimLight}" stroke-width="1.5" />
+      </g>
+
+      <path d="M 112 52 C 125 45 145 42 160 52 C 172 60 178 72 184 92 C 195 104 220 120 226 138 C 229 148 225 158 216 162 C 205 167 195 165 186 160 C 182 178 188 202 198 226 C 208 250 216 272 210 292 C 180 296 100 296 74 290 C 80 262 90 230 96 200 C 102 168 106 130 112 52 Z" 
+            fill="url(#knight-body-${skinName})" stroke="${c.rimLight}" stroke-width="2.5" />
+
+      <path d="M 160 52 C 175 62 196 85 212 110 C 224 122 232 136 226 145 C 220 152 208 152 196 142 C 186 134 176 122 168 112 Z" 
+            fill="url(#knight-jaw-${skinName})" stroke="${c.rimLight}" stroke-width="2" />
+
+      <ellipse cx="218" cy="140" rx="3.5" ry="2" fill="${c.bodyGradEnd}" stroke="${c.accent}" stroke-width="1" />
+
+      <path d="M 125 46 L 136 15 L 148 40 Z" fill="${c.bodyGradStart}" stroke="${c.rimLight}" stroke-width="2" />
+      <path d="M 132 38 L 138 24 L 143 36 Z" fill="${c.runeColor}" opacity="0.6" />
+
+      <path d="M 144 48 C 158 56 168 70 176 86 L 164 88 C 158 76 150 64 140 56 Z" fill="${c.accent}" opacity="0.8" />
+
+      <g filter="url(#rune-glow-${skinName})">
+        <ellipse cx="178" cy="88" rx="8" ry="5" fill="${c.eyeGlow}" />
+        <ellipse cx="178" cy="88" rx="4" ry="2.5" fill="#ffffff" />
+        <line x1="166" y1="88" x2="190" y2="88" stroke="${c.eyeGlow}" stroke-width="1.5" />
+      </g>
+
+      <g stroke="${c.bridleColor}" stroke-width="3" fill="none">
+        <path d="M 142 42 C 160 65 174 95 186 135" />
+        <path d="M 174 95 C 185 110 198 122 216 132" stroke-width="2.5" />
+        <path d="M 186 135 C 168 145 152 152 136 156" stroke-width="2.5" />
+      </g>
+      <g filter="url(#rune-glow-${skinName})">
+        <circle cx="186" cy="135" r="7" fill="${c.bridleTrim}" />
+        <circle cx="186" cy="135" r="4.5" fill="${c.gemColor}" />
+      </g>
+      <circle cx="142" cy="42" r="4" fill="${c.bridleTrim}" />
+
+      <g filter="url(#rune-glow-${skinName})" fill="none" stroke="${c.runeColor}" stroke-width="2.8" stroke-linecap="round">
+        <path d="M 134 110 L 146 122 M 146 110 L 134 122" />
+        <circle cx="140" cy="116" r="1.5" fill="${c.runeColor}" />
+        <path d="M 152 180 L 152 208 M 138 194 L 166 194" stroke-width="3" />
+        <path d="M 143 185 L 161 203 M 161 185 L 143 203" stroke-width="2" />
+        <circle cx="152" cy="194" r="5" fill="none" stroke="${c.runeColor}" stroke-width="2" />
+        <circle cx="152" cy="194" r="2.5" fill="${c.gemColor}" />
+        <path d="M 168 228 L 180 244 L 172 258" />
+        <path d="M 132 232 L 140 248 L 130 262" />
+        <path d="M 148 240 L 160 252" />
+        <polygon points="120,165 130,150 135,168" stroke-width="1.8" />
+        <polygon points="172,168 180,156 186,170" stroke-width="1.8" />
+      </g>
+
+      <path d="M 125 48 C 142 56 156 75 168 96 C 178 114 186 142 192 170 C 200 206 206 244 204 286" 
+            fill="none" stroke="${c.rimLight}" stroke-width="2" opacity="0.6" />
+      <path d="M 116 60 C 122 100 118 150 110 200 C 104 235 96 265 88 288" 
+            fill="none" stroke="${c.rimLight}" stroke-width="1.5" opacity="0.4" />
+    </g>
+  </svg>
+  `;
+}
+
+function updateKnightShowcase(skinName) {
+  const configs = {
+    classic: { name: "Cavalo Clássico", desc: "Mármore e obsidiana pura esculpidos com runas douradas arcanas." },
+    gold: { name: "Cavalo de Ouro Real", desc: "Ouro maciço polido com incrustações de diamante e runas ciano brilhantes." },
+    amethyst: { name: "Cavalo de Ametista", desc: "Cristal cósmico translúcido púrpura com runas de fogo magenta neon." },
+    emerald: { name: "Cavalo de Esmeralda", desc: "Esmeralda mística pura com runas de marfim encantado e olhos de rubi." }
+  };
+  const info = configs[skinName] || configs.classic;
+
+  const homeShowcase = document.getElementById("home-knight-showcase");
+  if (homeShowcase) {
+    homeShowcase.innerHTML = getKnightSvg(skinName);
+  }
+
+  const customPreview = document.getElementById("customize-knight-preview");
+  if (customPreview) {
+    customPreview.innerHTML = getKnightSvg(skinName);
+  }
+
+  const badgeName = document.getElementById("knight-badge-skin-name");
+  if (badgeName) badgeName.textContent = info.name;
+
+  const selName = document.getElementById("customize-selected-skin-name");
+  if (selName) selName.textContent = info.name;
+
+  const selDesc = document.getElementById("customize-selected-skin-desc");
+  if (selDesc) selDesc.textContent = info.desc;
+
+  // Atualiza classes ativas nos cards de customização
+  document.querySelectorAll("#customize-skin-grid .custom-card").forEach(card => {
+    card.classList.toggle("active", card.dataset.skin === skinName);
+  });
+}
+
 function setupSkinsSystem() {
   const savedSkin = localStorage.getItem("wizard_chess_skin") || "classic";
 
@@ -563,6 +797,7 @@ function setupSkinsSystem() {
     } catch(e) {}
 
     // Atualiza visual ativo dos seletores
+    updateKnightShowcase(skinName);
     document.querySelectorAll("#menu-skin-group .toggle-btn, #pause-skin-group .toggle-btn")
       .forEach(btn => btn.classList.toggle("active", btn.dataset.skin === skinName));
 
@@ -812,14 +1047,31 @@ ${movesText ? `\n${movesText.trim()}` : ""}`;
 function setupStartMenuGrid() {
   const startMenu = document.getElementById("start-menu");
   const btnHeroBattle = document.getElementById("btn-hero-battle");
-  const btnCardPuzzle = document.getElementById("btn-card-puzzle");
-  const btnAchCard = document.getElementById("btn-menu-achievements");
-  const btnSettingsCard = document.getElementById("btn-menu-settings");
-  const btnBattleBack = document.getElementById("btn-battle-back");
-  const btnSettingsBack = document.getElementById("btn-settings-back");
-  const btnSettingsClose = document.getElementById("btn-settings-close-view");
+  const btnCardChallenges = document.getElementById("btn-card-challenges");
+  const btnCardTutorial = document.getElementById("btn-card-tutorial");
   const modalAch = document.getElementById("achievements-modal");
   const btnStart = document.getElementById("btn-start-game");
+
+  // Nav Items
+  const btnNavCustomize = document.getElementById("btn-nav-customize");
+  const btnNavHome = document.getElementById("btn-nav-home");
+  const btnNavChallenges = document.getElementById("btn-nav-challenges");
+  const btnNavAch = document.getElementById("btn-nav-achievements");
+  const btnNavSettings = document.getElementById("btn-nav-settings");
+
+  // Top Buttons
+  const btnTopSettings = document.getElementById("btn-top-settings");
+  const btnTopProfile = document.getElementById("btn-top-profile");
+  const btnKnightBadge = document.getElementById("btn-knight-badge-custom");
+
+  // Back Buttons
+  const btnBattleBack = document.getElementById("btn-battle-back");
+  const btnCustomizeBack = document.getElementById("btn-customize-back");
+  const btnCustomizeApply = document.getElementById("btn-customize-apply");
+  const btnChallengesBack = document.getElementById("btn-challenges-back");
+  const btnSettingsBack = document.getElementById("btn-settings-back");
+  const btnSettingsClose = document.getElementById("btn-settings-close-view");
+  const btnTutorialBack = document.getElementById("btn-tutorial-back");
 
   // Subview Switcher
   function switchSubView(viewName) {
@@ -828,86 +1080,149 @@ function setupStartMenuGrid() {
     if (target) {
       target.classList.add("active");
     }
+
+    // Atualiza aba ativa na barra de navegação inferior
+    document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
+    if (viewName === "home" && btnNavHome) btnNavHome.classList.add("active");
+    if (viewName === "customize" && btnNavCustomize) btnNavCustomize.classList.add("active");
+    if (viewName === "challenges" && btnNavChallenges) btnNavChallenges.classList.add("active");
+    if (viewName === "settings" && btnNavSettings) btnNavSettings.classList.add("active");
+
     const modalContent = document.querySelector("#start-menu .modal-content");
     if (modalContent) modalContent.scrollTop = 0;
   }
 
-  // 1. Hero Card: "Comece a Batalha" -> Abre Preparação da Batalha (Foto 2)
+  // 1. Card Laranja: Comece a Batalha -> Abre Preparação da Batalha
   if (btnHeroBattle) {
     bindAction(btnHeroBattle, () => {
       switchSubView("battle");
     });
   }
 
-  // 2. Quebra-cabeças Card: Inicia direto com Arena e Skin Aleatórias!
-  if (btnCardPuzzle) {
-    bindAction(btnCardPuzzle, () => {
-      // Estilos e Skins no Aleatório
-      const arenas = ["cathedral", "inferno", "frost"];
-      const skins = ["classic", "gold", "amethyst", "emerald"];
-      const randArena = arenas[Math.floor(Math.random() * arenas.length)];
-      const randSkin = skins[Math.floor(Math.random() * skins.length)];
-
-      const arenaBtn = document.querySelector('#menu-arena-group .toggle-btn[data-arena="' + randArena + '"]');
-      if (arenaBtn) arenaBtn.click();
-
-      const skinBtn = document.querySelector('#menu-skin-group .toggle-btn[data-skin="' + randSkin + '"]');
-      if (skinBtn) skinBtn.click();
-
-      // Modo Puzzle via trigger oculto
-      const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
-      if (puzzleTrigger) {
-        puzzleTrigger.click();
-      }
-
-      // Inicia direto a partida de desafios
-      if (btnStart) {
-        btnStart.click();
-      }
-
-      showToast("🧩 Desafio iniciado! Arena e Skin aleatórias.");
+  // 2. Card Rosa: Aba dos Desafios -> Abre View de Desafios
+  if (btnCardChallenges) {
+    bindAction(btnCardChallenges, () => {
+      switchSubView("challenges");
     });
   }
 
-  // 3. Conquistas Card -> Abre Modal de Conquistas
-  if (btnAchCard && modalAch) {
-    bindAction(btnAchCard, () => {
-      renderAchievementsList();
-      modalAch.classList.remove("hidden");
-    });
-  }
-
-  // 4. Configurações Card -> Abre View de Configurações
-  if (btnSettingsCard) {
-    bindAction(btnSettingsCard, () => {
-      switchSubView("settings");
-      updateSettingsUI();
-    });
-  }
-
-  // 5. Tutorial Card & Settings Shortcut -> Abre View de Tutorial
-  const btnCardTutorial = document.getElementById("btn-card-tutorial");
-  const btnTutorialBack = document.getElementById("btn-tutorial-back");
-  const btnOpenTutSetting = document.getElementById("btn-open-tutorial-setting");
-  const btnStartTutMode = document.getElementById("btn-start-tutorial-mode");
-
+  // 3. Card Tutorial -> Abre View de Tutorial
   if (btnCardTutorial) {
     bindAction(btnCardTutorial, () => {
       switchSubView("tutorial");
     });
   }
-  if (btnOpenTutSetting) {
-    bindAction(btnOpenTutSetting, () => {
-      switchSubView("tutorial");
+
+  // 4. Barra de Navegação Inferior
+  if (btnNavCustomize) {
+    bindAction(btnNavCustomize, () => {
+      switchSubView("customize");
     });
   }
-  if (btnTutorialBack) {
-    bindAction(btnTutorialBack, () => {
+  if (btnNavHome) {
+    bindAction(btnNavHome, () => {
       switchSubView("home");
     });
   }
+  if (btnNavChallenges) {
+    bindAction(btnNavChallenges, () => {
+      switchSubView("challenges");
+    });
+  }
+  if (btnNavAch && modalAch) {
+    bindAction(btnNavAch, () => {
+      renderAchievementsList();
+      modalAch.classList.remove("hidden");
+    });
+  }
+  if (btnNavSettings) {
+    bindAction(btnNavSettings, () => {
+      switchSubView("settings");
+      updateSettingsUI();
+    });
+  }
 
-  // Abas internas do Tutorial (Peças, Magias, Xeque-Mate)
+  // 5. Botões do Topo e do Cavalo
+  if (btnTopSettings) {
+    bindAction(btnTopSettings, () => {
+      switchSubView("settings");
+      updateSettingsUI();
+    });
+  }
+  if (btnTopProfile) {
+    bindAction(btnTopProfile, () => {
+      switchSubView("customize");
+    });
+  }
+  if (btnKnightBadge) {
+    bindAction(btnKnightBadge, () => {
+      switchSubView("customize");
+    });
+  }
+
+  // 6. Botões Voltar
+  if (btnCustomizeBack) bindAction(btnCustomizeBack, () => switchSubView("home"));
+  if (btnCustomizeApply) bindAction(btnCustomizeApply, () => switchSubView("home"));
+  if (btnChallengesBack) bindAction(btnChallengesBack, () => switchSubView("home"));
+  if (btnBattleBack) bindAction(btnBattleBack, () => switchSubView("home"));
+  if (btnSettingsBack) bindAction(btnSettingsBack, () => switchSubView("home"));
+  if (btnSettingsClose) bindAction(btnSettingsClose, () => switchSubView("home"));
+  if (btnTutorialBack) bindAction(btnTutorialBack, () => switchSubView("home"));
+
+  // 7. Seleção de Peças na Aba Personalizar
+  document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {
+    bindAction(card, () => {
+      const skin = card.dataset.skin;
+      // Aplica via sistema de skins
+      const skinBtn = document.querySelector('#menu-skin-group .toggle-btn[data-skin="' + skin + '"]');
+      if (skinBtn) {
+        skinBtn.click();
+      } else {
+        const savedSkin = localStorage.getItem("wizard_chess_skin") || "classic";
+        updateKnightShowcase(skin);
+      }
+      showToast("🎨 Modelo do Cavalo: " + (card.querySelector(".custom-card-name")?.textContent || skin));
+    });
+  });
+
+  // 8. Seleção de Tabuleiro na Aba Personalizar
+  document.querySelectorAll("#customize-arena-grid .custom-card[data-arena]").forEach(card => {
+    bindAction(card, () => {
+      const arena = card.dataset.arena;
+      document.querySelectorAll("#customize-arena-grid .custom-card").forEach(c => c.classList.toggle("active", c === card));
+      const arenaBtn = document.querySelector('#menu-arena-group .toggle-btn[data-arena="' + arena + '"]');
+      if (arenaBtn) arenaBtn.click();
+      showToast("🏰 Tabuleiro: " + (card.querySelector(".custom-card-name")?.textContent || arena));
+    });
+  });
+
+  // 9. Lançar Desafios na Aba de Desafios
+  const launchPuzzleGame = () => {
+    const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
+    if (puzzleTrigger) puzzleTrigger.click();
+    if (btnStart) btnStart.click();
+    showToast("🧩 Desafio Arcano iniciado!");
+  };
+
+  const btnRandomPuzzle = document.getElementById("btn-launch-random-puzzle");
+  if (btnRandomPuzzle) {
+    bindAction(btnRandomPuzzle, launchPuzzleGame);
+  }
+  document.querySelectorAll(".challenge-play-btn").forEach(btn => {
+    bindAction(btn, launchPuzzleGame);
+  });
+
+  // Inicializa o Cavalo em Destaque com a skin salva
+  const currentSkin = localStorage.getItem("wizard_chess_skin") || "classic";
+  updateKnightShowcase(currentSkin);
+
+  // Sincroniza arena ativa na personalização
+  const savedArena = localStorage.getItem("wizard_chess_arena") || "cathedral";
+  document.querySelectorAll("#customize-arena-grid .custom-card").forEach(c => {
+    c.classList.toggle("active", c.dataset.arena === savedArena);
+  });
+
+  // Subview Tutorial Internals
   document.querySelectorAll(".tutorial-tab-btn").forEach(btn => {
     bindAction(btn, () => {
       document.querySelectorAll(".tutorial-tab-btn").forEach(b => b.classList.remove("active"));
@@ -919,74 +1234,7 @@ function setupStartMenuGrid() {
     });
   });
 
-  // Iniciar Partida Guiada de Tutorial
-  function launchGuidedTutorialMatch() {
-    // Define modo vs IA Fácil, Mármore, Livre
-    const aiBtn = document.querySelector('#menu-mode-group .toggle-btn[data-mode="ai"]');
-    if (aiBtn) aiBtn.click();
-    const easyBtn = document.querySelector('#menu-diff-group .toggle-btn[data-diff="1"]');
-    if (easyBtn) easyBtn.click();
-    const timeFreeBtn = document.querySelector('#menu-time-group .toggle-btn[data-time="0"]');
-    if (timeFreeBtn) timeFreeBtn.click();
-    const whiteColorBtn = document.querySelector('#menu-color-group .toggle-btn[data-color="w"]');
-    if (whiteColorBtn) whiteColorBtn.click();
-
-    // Inicia a partida na Catedral
-    if (btnStart) btnStart.click();
-
-    // Ativa banner flutuante do tutorial na partida
-    initTutorialBannerHUD();
-    unlockAchievement("tutorial_master");
-    showToast("🎓 Modo Tutorial ativado! Siga o Guia.");
-  }
-
-  if (btnStartTutMode) {
-    bindAction(btnStartTutMode, () => {
-      launchGuidedTutorialMatch();
-    });
-  }
-
-  // Opção 'Tutorial' no seletor de modo da Preparação de Batalha
-  document.querySelectorAll("#menu-mode-group .toggle-btn[data-mode='tutorial']").forEach(btn => {
-    bindAction(btn, () => {
-      switchSubView("tutorial");
-    });
-  });
-
-  // Botões Voltar
-  if (btnBattleBack) {
-    bindAction(btnBattleBack, () => {
-      switchSubView("home");
-    });
-  }
-  if (btnSettingsBack) {
-    bindAction(btnSettingsBack, () => {
-      switchSubView("home");
-    });
-  }
-  if (btnSettingsClose) {
-    bindAction(btnSettingsClose, () => {
-      switchSubView("home");
-    });
-  }
-
-  // Ao reabrir pelo HUD ou pelo Menu de Pausa, reseta para a Home e esconde banner do tutorial se pausado
-  const btnOpenMenu = document.getElementById("btn-open-menu");
-  if (btnOpenMenu) {
-    bindAction(btnOpenMenu, () => {
-      switchSubView("home");
-    });
-  }
-  const btnPauseMainMenu = document.getElementById("btn-pause-main-menu");
-  if (btnPauseMainMenu) {
-    bindAction(btnPauseMainMenu, () => {
-      switchSubView("home");
-      const tutBanner = document.getElementById("tutorial-guide-banner");
-      if (tutBanner) tutBanner.classList.add("hidden");
-    });
-  }
-
-  // Configurações: Alternar Som
+  // Configurações: Alternar Som e Música
   const btnSound = document.getElementById("btn-toggle-sound-setting");
   const iconSound = document.getElementById("icon-sound-status");
   if (btnSound) {
@@ -1002,7 +1250,6 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Configurações: Alternar Música
   const btnMusic = document.getElementById("btn-toggle-music-setting");
   const iconMusic = document.getElementById("icon-music-status");
   if (btnMusic) {
@@ -1018,15 +1265,6 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Configurações: Abrir Conquistas
-  const btnOpenAch = document.getElementById("btn-open-achievements-setting");
-  if (btnOpenAch && modalAch) {
-    bindAction(btnOpenAch, () => {
-      renderAchievementsList();
-      modalAch.classList.remove("hidden");
-    });
-  }
-
   function updateSettingsUI() {
     if (window._WIZARD_GAME && window._WIZARD_GAME.Ie) {
       const isSound = window._WIZARD_GAME.Ie.enabled !== false;
@@ -1038,7 +1276,6 @@ function setupStartMenuGrid() {
     }
   }
 
-  // Sincroniza estatísticas espelhadas na view de batalha
   const syncStatsMirror = () => {
     const w = document.getElementById("stat-wins")?.textContent || "0";
     const d = document.getElementById("stat-draws")?.textContent || "0";
@@ -1049,7 +1286,6 @@ function setupStartMenuGrid() {
   };
   setTimeout(syncStatsMirror, 200);
 
-  // Botão Entrar na Catedral (Iniciar Jogo)
   if (btnStart) {
     bindAction(btnStart, (e) => {
       if (e && e.type === "touchend") {
@@ -1058,7 +1294,6 @@ function setupStartMenuGrid() {
     });
   }
 
-  // Toque rápido em seletores da Batalha (Modo, Arena, Cor, Tempo, Dificuldade)
   document.querySelectorAll(".photo2-toggle-group .toggle-btn").forEach(btn => {
     bindAction(btn, (e) => {
       if (e && e.type === "touchend") {
@@ -1068,119 +1303,5 @@ function setupStartMenuGrid() {
   });
 }
 
-// --------------------------------------------------------
-// 9. Controlador do Banner de Tutorial Interativo Durante a Partida
-// --------------------------------------------------------
-const TUTORIAL_STEPS = [
-  {
-    step: "PASSO 1 DE 5",
-    text: "🧙 <strong>Abertura Arcana:</strong> Toque no seu Peão à frente do Rei (casa e2) e avance 2 casas para o centro. As runas mágicas no chão mostram os destinos válidos!"
-  },
-  {
-    step: "PASSO 2 DE 5",
-    text: "🐎 <strong>Salto dos Cavalos:</strong> Mova seu Cavalo para dominar o centro (f3 ou c3). Ele é a única peça que salta sobre as outras no tabuleiro de pedra em formato de 'L'!"
-  },
-  {
-    step: "PASSO 3 DE 5",
-    text: "⚡ <strong>Bispos e Ataque Diagonais:</strong> Deslize seu Bispo para as diagonais abertas (c4 ou b5). Ele alcança o campo inimigo com magia de longo alcance!"
-  },
-  {
-    step: "PASSO 4 DE 5",
-    text: "🔮 <strong>Iluminação do Oráculo:</strong> Em dúvida sobre o melhor lance? Toque em 'Dica do Oráculo' abaixo para o motor calcular e iluminar a melhor jogada na pedra!"
-  },
-  {
-    step: "PASSO 5 DE 5",
-    text: "👑 <strong>O Xeque-Mate Final:</strong> Encurrale o Rei adversário atacando-o sem dar rota de fuga para conquistar a vitória da Catedral!"
-  }
-];
 
-let currentTutorialStep = 0;
-
-function initTutorialBannerHUD() {
-  const banner = document.getElementById("tutorial-guide-banner");
-  if (!banner) return;
-
-  banner.classList.remove("hidden");
-  currentTutorialStep = 0;
-  updateTutorialStepUI();
-
-  const btnPrev = document.getElementById("btn-tut-prev");
-  const btnNext = document.getElementById("btn-tut-next");
-  const btnOracle = document.getElementById("btn-tut-oracle");
-  const btnClose = document.getElementById("btn-close-tutorial-guide");
-
-  if (btnPrev) {
-    bindAction(btnPrev, () => {
-      if (currentTutorialStep > 0) {
-        currentTutorialStep--;
-        updateTutorialStepUI();
-      }
-    });
-  }
-
-  if (btnNext) {
-    bindAction(btnNext, () => {
-      if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
-        currentTutorialStep++;
-        updateTutorialStepUI();
-      } else {
-        banner.classList.add("hidden");
-        showToast("🎓 Parabéns! Você concluiu os fundamentos arcanos.");
-      }
-    });
-  }
-
-  if (btnOracle) {
-    bindAction(btnOracle, () => {
-      const btnHint = document.getElementById("btn-hint");
-      if (btnHint) btnHint.click();
-    });
-  }
-
-  if (btnClose) {
-    bindAction(btnClose, () => {
-      banner.classList.add("hidden");
-    });
-  }
-}
-
-function updateTutorialStepUI() {
-  const stepNum = document.getElementById("tut-guide-step-num");
-  const stepText = document.getElementById("tut-guide-instruction");
-  const btnPrev = document.getElementById("btn-tut-prev");
-  const btnNext = document.getElementById("btn-tut-next");
-
-  const data = TUTORIAL_STEPS[currentTutorialStep];
-  if (!data) return;
-
-  if (stepNum) stepNum.textContent = data.step;
-  if (stepText) stepText.innerHTML = data.text;
-  if (btnPrev) btnPrev.disabled = currentTutorialStep === 0;
-  if (btnNext) {
-    const isLast = currentTutorialStep === TUTORIAL_STEPS.length - 1;
-    const labelSpan = btnNext.querySelector("span:first-child");
-    if (labelSpan) labelSpan.textContent = isLast ? "Concluir" : "Próximo";
-  }
-}
-
-// ========================================================
-// Inicialização Segura (Após todas as constantes e funções)
-// ========================================================
-function startWizardApp() {
-  try {
-    initWizardFeatures();
-  } catch (err) {
-    console.error("[WizardChess] Erro no startWizardApp:", err);
-  }
-}
-
-// Execução imediata garantida (script está no final do documento, DOM já está presente)
-startWizardApp();
-
-// Execução complementar para navegadores lentos ou carregamentos assíncronos
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", startWizardApp);
-}
-window.addEventListener("load", startWizardApp);
-setTimeout(startWizardApp, 150);
 

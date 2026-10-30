@@ -2127,3 +2127,547 @@
   touch-action: pan-y !important;
 }
 
+
+
+/* ============================================================== */
+/* MENU INICIAL CUSTOMIZADO - CAVALO EM DESTAQUE, CARDS E NAV      */
+/* ============================================================== */
+.rpg-top-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
+}
+.rpg-top-icon-btn {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(245, 197, 107, 0.3) !important;
+  color: #f5c56b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+.rpg-top-icon-btn:hover {
+  background: rgba(245, 197, 107, 0.2) !important;
+  transform: scale(1.05) !important;
+}
+.rpg-top-title-wrap {
+  text-align: center !important;
+  flex: 1 !important;
+}
+.rpg-mini-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  color: #c8b6ff !important;
+  opacity: 0.85 !important;
+  text-transform: uppercase !important;
+}
+.rpg-mini-brand .material-symbols-rounded {
+  font-size: 13px !important;
+}
+.rpg-top-game-title {
+  font-family: 'Cinzel', serif, Georgia !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px !important;
+  margin: 2px 0 0 !important;
+  color: #ffd700 !important;
+  text-shadow: 0 0 15px rgba(245, 197, 107, 0.5), 0 2px 4px rgba(0,0,0,0.8) !important;
+}
+.rpg-top-profile {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 10px 4px 6px !important;
+  background: rgba(30, 18, 48, 0.85) !important;
+  border: 1px solid rgba(245, 197, 107, 0.35) !important;
+  border-radius: 24px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+  transition: all 0.2s ease !important;
+}
+.rpg-top-profile:hover {
+  border-color: #ffd700 !important;
+  background: rgba(45, 25, 75, 0.95) !important;
+}
+.rpg-top-avatar {
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+.rpg-top-lvl-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  background: linear-gradient(135deg, #f5c56b, #b8860b) !important;
+  color: #1a162b !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 1px 6px !important;
+  border-radius: 10px !important;
+}
+.stats-banner-mini {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-size: 11.5px !important;
+  color: #e2d9f3 !important;
+  margin-bottom: 8px !important;
+}
+.home-hero-split {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 6px 0 14px !important;
+  box-sizing: border-box !important;
+}
+.home-knight-col {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.home-knight-card {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 240px !important;
+  max-height: 280px !important;
+  background: radial-gradient(circle at 50% 35%, rgba(65, 30, 105, 0.55) 0%, rgba(12, 7, 20, 0.9) 100%) !important;
+  border: 1px solid rgba(200, 182, 255, 0.25) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), inset 0 0 25px rgba(140, 70, 220, 0.15) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 8px 12px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.home-knight-svg-wrap {
+  flex: 1 !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  max-height: 205px !important;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.85)) !important;
+  animation: knightFloat 4s ease-in-out infinite alternate !important;
+}
+@keyframes knightFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-6px); }
+}
+.knight-model-badge {
+  background: rgba(18, 12, 30, 0.9) !important;
+  border: 1px solid rgba(245, 197, 107, 0.4) !important;
+  border-radius: 16px !important;
+  padding: 4px 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+  transition: all 0.2s ease !important;
+}
+.knight-model-badge:hover {
+  border-color: #ffd700 !important;
+  transform: scale(1.03) !important;
+}
+.badge-edit-pill {
+  background: rgba(33, 150, 243, 0.25) !important;
+  border: 1px solid rgba(33, 150, 243, 0.5) !important;
+  color: #90caf9 !important;
+  border-radius: 8px !important;
+  padding: 1px 6px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+.home-actions-col {
+  flex: 1.15 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  justify-content: center !important;
+}
+.orange-action-card {
+  background: linear-gradient(135deg, #f39c12 0%, #d35400 50%, #962d00 100%) !important;
+  border: 1.5px solid rgba(255, 215, 140, 0.65) !important;
+  box-shadow: 0 8px 24px rgba(211, 84, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-radius: 18px !important;
+  padding: 12px 14px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.orange-action-card:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 28px rgba(211, 84, 0, 0.6) !important;
+}
+.pink-action-card {
+  background: linear-gradient(135deg, #e91e63 0%, #ad1457 50%, #6a0080 100%) !important;
+  border: 1.5px solid rgba(255, 150, 205, 0.65) !important;
+  box-shadow: 0 8px 24px rgba(233, 30, 99, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-radius: 18px !important;
+  padding: 12px 14px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.pink-action-card:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 28px rgba(233, 30, 99, 0.6) !important;
+}
+.indigo-action-card {
+  background: linear-gradient(135deg, #3f51b5 0%, #283593 60%, #1a237e 100%) !important;
+  border: 1.5px solid rgba(179, 190, 255, 0.45) !important;
+  box-shadow: 0 6px 18px rgba(40, 53, 147, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  border-radius: 16px !important;
+  padding: 9px 12px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.indigo-action-card:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+}
+.rpg-card-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+.rpg-card-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.rpg-card-icon-box {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+.rpg-card-icon-box .material-symbols-rounded {
+  font-size: 22px !important;
+  color: #ffffff !important;
+}
+.rpg-card-text {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+}
+.rpg-card-title {
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1.2 !important;
+  color: #ffffff !important;
+}
+.rpg-card-subtitle {
+  font-size: 10.5px !important;
+  opacity: 0.9 !important;
+  margin-top: 2px !important;
+  line-height: 1.1 !important;
+  color: #fff !important;
+}
+.rpg-card-arrow {
+  font-size: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #fff !important;
+}
+.rpg-bottom-nav {
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  background: rgba(14, 10, 22, 0.96) !important;
+  border: 1px solid rgba(245, 197, 107, 0.25) !important;
+  border-radius: 20px !important;
+  padding: 6px 4px !important;
+  margin-top: auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+}
+.rpg-nav-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 3px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #9c92b2 !important;
+  cursor: pointer !important;
+  padding: 6px 2px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+.rpg-nav-item .rpg-nav-icon .material-symbols-rounded {
+  font-size: 22px !important;
+  line-height: 1 !important;
+}
+.rpg-nav-item .rpg-nav-label {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+.rpg-nav-item.active {
+  color: #ffd700 !important;
+  background: rgba(245, 197, 107, 0.12) !important;
+}
+.rpg-nav-item.active .rpg-nav-icon .material-symbols-rounded {
+  color: #ffd700 !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important;
+}
+.nav-highlight-blue {
+  border: 1.5px solid #2196f3 !important;
+  background: rgba(33, 150, 243, 0.15) !important;
+  color: #90caf9 !important;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.35) !important;
+}
+.nav-highlight-blue.active {
+  background: rgba(33, 150, 243, 0.28) !important;
+  color: #64b5f6 !important;
+}
+.customize-showcase-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  background: radial-gradient(circle at 30% 50%, rgba(45, 25, 75, 0.7) 0%, rgba(14, 9, 24, 0.9) 100%) !important;
+  border: 1px solid rgba(144, 202, 249, 0.35) !important;
+  border-radius: 18px !important;
+  padding: 10px 14px !important;
+  margin-bottom: 14px !important;
+  text-align: left !important;
+}
+.customize-knight-render {
+  width: 85px !important;
+  height: 105px !important;
+  flex-shrink: 0 !important;
+}
+.customize-knight-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+.customize-knight-tag {
+  font-size: 10px !important;
+  color: #90caf9 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+.customize-knight-title {
+  font-size: 15px !important;
+  color: #ffd700 !important;
+  margin: 0 !important;
+  font-family: 'Cinzel', serif, Georgia !important;
+}
+.customize-knight-desc {
+  font-size: 11px !important;
+  color: #d1c4e9 !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+}
+.customize-section {
+  margin-bottom: 14px !important;
+  text-align: left !important;
+}
+.customize-section-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #ffd700 !important;
+  letter-spacing: 0.8px !important;
+  margin-bottom: 8px !important;
+  text-transform: uppercase !important;
+}
+.customize-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+}
+.custom-card {
+  background: rgba(22, 15, 36, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  padding: 10px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
+}
+.custom-card:hover {
+  border-color: rgba(245, 197, 107, 0.5) !important;
+  background: rgba(36, 22, 58, 0.9) !important;
+}
+.custom-card.active {
+  border: 2px solid #ffd700 !important;
+  background: rgba(55, 30, 90, 0.9) !important;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.35) !important;
+}
+.custom-card-color {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+.classic-preview { background: linear-gradient(135deg, #e0e0e0, #2b263e) !important; }
+.gold-preview { background: linear-gradient(135deg, #ffd700, #ff8c00) !important; }
+.amethyst-preview { background: linear-gradient(135deg, #9b5de5, #240046) !important; }
+.emerald-preview { background: linear-gradient(135deg, #00f5d4, #004d40) !important; }
+.cathedral-preview { background: linear-gradient(135deg, #3d2668, #120b22) !important; }
+.inferno-preview { background: linear-gradient(135deg, #ff4500, #3a0000) !important; }
+.frost-preview { background: linear-gradient(135deg, #80deea, #004d80) !important; }
+.custom-card-info {
+  display: flex !important;
+  flex-direction: column !important;
+}
+.custom-card-name {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+.custom-card-detail {
+  font-size: 9.5px !important;
+  color: #b3a7cb !important;
+}
+.custom-card-check {
+  position: absolute !important;
+  top: 4px !important;
+  right: 6px !important;
+  color: #ffd700 !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  display: none !important;
+}
+.custom-card.active .custom-card-check {
+  display: block !important;
+}
+.challenges-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+}
+.challenge-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: rgba(24, 14, 38, 0.85) !important;
+  border: 1px solid rgba(233, 30, 99, 0.25) !important;
+  border-radius: 16px !important;
+  padding: 10px 12px !important;
+  text-align: left !important;
+}
+.challenge-item-icon {
+  font-size: 24px !important;
+}
+.challenge-item-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+.challenge-item-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+}
+.challenge-title {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+.challenge-difficulty {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  padding: 1px 6px !important;
+  border-radius: 8px !important;
+}
+.diff-easy { background: rgba(76, 175, 80, 0.2) !important; color: #81c784 !important; border: 1px solid rgba(76, 175, 80, 0.4) !important; }
+.diff-med { background: rgba(255, 152, 0, 0.2) !important; color: #ffb74d !important; border: 1px solid rgba(255, 152, 0, 0.4) !important; }
+.diff-hard { background: rgba(244, 67, 54, 0.2) !important; color: #e57373 !important; border: 1px solid rgba(244, 67, 54, 0.4) !important; }
+.challenge-desc {
+  font-size: 10.5px !important;
+  color: #b3a7cb !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+}
+.challenge-play-btn {
+  background: linear-gradient(135deg, #e91e63, #ad1457) !important;
+  border: 1px solid #ff80ab !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 6px 14px !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.challenge-play-btn:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 14px rgba(233, 30, 99, 0.5) !important;
+}
+.rpg-card-battle *,
+.rpg-card-challenges *,
+.rpg-card-tutorial *,
+.rpg-nav-item *,
+.knight-model-badge *,
+.custom-card *,
+.challenge-item * {
+  pointer-events: none !important;
+}
+@media (max-width: 380px) {
+  .home-hero-split {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .home-knight-card {
+    min-height: 180px !important;
+    max-height: 200px !important;
+  }
+  .home-knight-svg-wrap {
+    max-height: 150px !important;
+  }
+  .customize-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

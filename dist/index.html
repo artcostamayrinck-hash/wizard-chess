@@ -2571,21 +2571,35 @@
   <div id="start-menu" class="modal-overlay">
     <div class="modal-content start-content menu-photo2-modal">
       
-      <!-- ========================================== -->
-      <!-- VIEW 1: PÁGINA INICIAL (Cores da Foto 2)   -->
-      <!-- ========================================== -->
+      <!-- ============================================================== -->
+      <!-- VIEW 1: PÁGINA INICIAL (Layout Inspirado na Referência)         -->
+      <!-- ============================================================== -->
       <div id="menu-view-home" class="menu-subview active">
-        <!-- Emblema do Topo: CATEDRAL ARCANA -->
-        <div class="brand-pill" style="margin: 0 auto 10px; width: fit-content;">
-          <span class="material-symbols-rounded">castle</span>
-          <span>CATEDRAL ARCANA</span>
+        <!-- Topo: Configurações (Esq) + Título (Centro) + Perfil/Nível (Dir) -->
+        <div class="rpg-top-bar">
+          <button type="button" class="rpg-top-icon-btn" id="btn-top-settings" title="Configurações">
+            <span class="material-symbols-rounded">settings</span>
+          </button>
+          
+          <div class="rpg-top-title-wrap">
+            <div class="rpg-mini-brand">
+              <span class="material-symbols-rounded">castle</span>
+              <span>CATEDRAL ARCANA</span>
+            </div>
+            <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
+          </div>
+
+          <div class="rpg-top-profile" id="btn-top-profile" title="Perfil e Estatísticas">
+            <div class="rpg-top-avatar" id="top-player-avatar">🧙‍♂️</div>
+            <div class="rpg-top-lvl-badge">
+              <span class="star-icon">⭐</span>
+              <span id="top-player-lvl">1</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Título Dourado Cinzel -->
-        <h1 class="game-title photo2-title">WIZARD’S CHESS</h1>
-
-        <!-- Placar de Estatísticas: Vitórias - Empates - Derrotas (Ordem Solicitada) -->
-        <div id="stats-banner" class="stats-banner photo2-stats" title="Suas Estatísticas Salvas">
+        <!-- Banner Discreto de Estatísticas -->
+        <div class="stats-banner-mini" title="Suas Estatísticas Salvas">
           <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
           <span class="stat-divider">•</span>
           <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
@@ -2593,73 +2607,311 @@
           <span class="stat-item"><span class="stat-icon">💀</span> <span id="stat-losses">0</span> Derrotas</span>
         </div>
 
-        <!-- Subtítulo Lavanda da Foto 2 -->
-        <p class="photo2-subtitle">Prepare suas runas e desafie o destino no tabuleiro de pedra.</p>
+        <!-- Centro: Divisão Split Hero (Cavalo à Esquerda + Cards Laranja e Rosa à Direita) -->
+        <div class="home-hero-split">
+          <!-- Canto Central-Esquerdo: Apenas o Cavalo do Modelo Escolhido em Destaque -->
+          <div class="home-knight-col" id="home-knight-col">
+            <div class="home-knight-card">
+              <div class="home-knight-svg-wrap" id="home-knight-showcase">
+                <!-- SVG do Cavalo inserido dinamicamente pelo JS -->
+              </div>
+              <button type="button" class="knight-model-badge" id="btn-knight-badge-custom" title="Toque para personalizar o modelo do cavalo e tabuleiro">
+                <span class="badge-icon">🐴</span>
+                <span class="badge-name" id="knight-badge-skin-name">Cavalo Clássico</span>
+                <span class="badge-edit-pill">Alterar</span>
+              </button>
+            </div>
+          </div>
 
-        <!-- Barra de Progresso de Nível e XP Arcana -->
-        <div class="photo2-xp-banner" title="Nível e Experiência do Bruxo">
-          <div class="photo2-xp-header">
-            <span class="xp-rank-title" id="menu-rank-title">🧙 Iniciado Arcano</span>
-            <span class="xp-rank-lvl" id="menu-rank-lvl">Nível 1</span>
+          <!-- Lado Direito: Cards de Ação Verticais -->
+          <div class="home-actions-col">
+            <!-- Card Laranja: Comece a Batalha -->
+            <button type="button" class="rpg-card-battle orange-action-card" id="btn-hero-battle">
+              <div class="rpg-card-inner">
+                <div class="rpg-card-left">
+                  <div class="rpg-card-icon-box orange-glow">
+                    <span class="material-symbols-rounded">swords</span>
+                  </div>
+                  <div class="rpg-card-text">
+                    <span class="rpg-card-title">Comece a Batalha</span>
+                    <span class="rpg-card-subtitle">vs IA • 2 Jogadores • Online</span>
+                  </div>
+                </div>
+                <div class="rpg-card-arrow orange-arrow">
+                  <span class="material-symbols-rounded">arrow_forward</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- Card Rosa: Aba dos Desafios (Quebra-cabeças) -->
+            <button type="button" class="rpg-card-challenges pink-action-card" id="btn-card-challenges">
+              <div class="rpg-card-inner">
+                <div class="rpg-card-left">
+                  <div class="rpg-card-icon-box pink-glow">
+                    <span class="material-symbols-rounded">extension</span>
+                  </div>
+                  <div class="rpg-card-text">
+                    <span class="rpg-card-title">Desafios Arcanos</span>
+                    <span class="rpg-card-subtitle">Quebra-cabeças táticos</span>
+                  </div>
+                </div>
+                <div class="rpg-card-arrow pink-arrow">
+                  <span class="material-symbols-rounded">arrow_forward</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- Card Tutorial: Academia Arcana -->
+            <button type="button" class="rpg-card-tutorial indigo-action-card" id="btn-card-tutorial">
+              <div class="rpg-card-inner">
+                <div class="rpg-card-left">
+                  <div class="rpg-card-icon-box indigo-glow">
+                    <span class="material-symbols-rounded">school</span>
+                  </div>
+                  <div class="rpg-card-text">
+                    <span class="rpg-card-title">Modo Tutorial</span>
+                    <span class="rpg-card-subtitle">Academia Arcana de Xadrez</span>
+                  </div>
+                </div>
+                <div class="rpg-card-arrow indigo-arrow">
+                  <span class="material-symbols-rounded">arrow_forward</span>
+                </div>
+              </div>
+            </button>
           </div>
-          <div class="photo2-xp-track">
-            <div id="menu-xp-bar-fill" class="xp-bar-fill" style="width: 15%;"></div>
-          </div>
-          <span id="menu-xp-current" style="display:none;">0 XP</span>
-          <span id="menu-xp-next" style="display:none;">200 XP para o próximo grau</span>
         </div>
 
-        <!-- Painel de Ações: Comece a Batalha (Unificado) + Subgrid de Cards -->
-        <div class="home-cards-container">
-          <!-- Card Unificado: Comece a Batalha (Verde na referência) -->
-          <button type="button" class="hero-battle-card" id="btn-hero-battle">
-            <div class="hero-battle-left">
-              <div class="hero-battle-icon">
-                <span class="material-symbols-rounded">swords</span>
-              </div>
-              <div class="hero-battle-text">
-                <span class="hero-battle-title">Comece a Batalha</span>
-                <span class="hero-battle-sub">vs IA • 2 Jogadores • Online</span>
-              </div>
+        <!-- Barra Inferior: Personalizar (Azul) • Principal • Desafios • Conquistas • Ajustes -->
+        <nav class="rpg-bottom-nav">
+          <button type="button" class="rpg-nav-item nav-highlight-blue" id="btn-nav-customize" title="Personalizar o Tabuleiro e as Peças">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">palette</span>
             </div>
-            <div class="hero-battle-arrow">
-              <span class="material-symbols-rounded">arrow_forward</span>
-            </div>
+            <span class="rpg-nav-label">Personalizar</span>
           </button>
 
-          <!-- Subgrid de 4 Cards Perfeitamente Alinhados (2x2): Quebra-cabeças, Tutorial, Conquistas, Configurações -->
-          <div class="home-cards-subgrid">
-            <!-- Card 1: Quebra-cabeças -->
-            <button type="button" class="photo2-card" id="btn-card-puzzle">
-              <div class="photo2-card-icon" style="color: #c8b6ff;">
-                <span class="material-symbols-rounded">extension</span>
+          <button type="button" class="rpg-nav-item active" id="btn-nav-home" title="Início">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">castle</span>
+            </div>
+            <span class="rpg-nav-label">Principal</span>
+          </button>
+
+          <button type="button" class="rpg-nav-item" id="btn-nav-challenges" title="Desafios Arcanos">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">extension</span>
+            </div>
+            <span class="rpg-nav-label">Desafios</span>
+          </button>
+
+          <button type="button" class="rpg-nav-item" id="btn-nav-achievements" title="Conquistas">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">military_tech</span>
+            </div>
+            <span class="rpg-nav-label">Conquistas</span>
+          </button>
+
+          <button type="button" class="rpg-nav-item" id="btn-nav-settings" title="Configurações">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">settings</span>
+            </div>
+            <span class="rpg-nav-label">Ajustes</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- VIEW: PERSONALIZAR (TABULEIRO E PEÇAS - Marcado em Azul)       -->
+      <!-- ============================================================== -->
+      <div id="menu-view-customize" class="menu-subview">
+        <div class="menu-view-header">
+          <button type="button" class="btn-subview-back" id="btn-customize-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+          <div class="brand-pill" style="border-color: rgba(33, 150, 243, 0.4); color: #90caf9;">
+            <span class="material-symbols-rounded">palette</span>
+            <span>PERSONALIZAR TABULEIRO & PEÇAS</span>
+          </div>
+        </div>
+
+        <h2 class="subview-title">Personalização do Xadrez</h2>
+        <p class="subview-desc">Escolha o modelo da peça para deixá-la em destaque e escolha o ambiente do tabuleiro.</p>
+
+        <!-- Caixa de Prévia da Peça Selecionada -->
+        <div class="customize-showcase-box">
+          <div class="customize-knight-render" id="customize-knight-preview">
+            <!-- Render dinâmico do Cavalo da Skin -->
+          </div>
+          <div class="customize-knight-info">
+            <span class="customize-knight-tag">Peça em Destaque (Cavalo)</span>
+            <h3 id="customize-selected-skin-name" class="customize-knight-title">Cavalo Clássico</h3>
+            <p id="customize-selected-skin-desc" class="customize-knight-desc">Mármore e obsidiana pura esculpidos com runas douradas arcanas.</p>
+          </div>
+        </div>
+
+        <!-- Seção: Modelo das Peças -->
+        <div class="customize-section">
+          <label class="customize-section-label">
+            <span class="material-symbols-rounded">chess</span>
+            <span>MODELO DAS PEÇAS (SKIN)</span>
+          </label>
+          <div class="customize-grid" id="customize-skin-grid">
+            <button type="button" class="custom-card active" data-skin="classic">
+              <div class="custom-card-color classic-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Clássico</span>
+                <span class="custom-card-detail">Mármore & Obsidiana</span>
               </div>
-              <span class="photo2-card-label">Quebra-cabeças</span>
+              <span class="custom-card-check">✓</span>
             </button>
 
-            <!-- Card 2: Modo Tutorial -->
-            <button type="button" class="photo2-card" id="btn-card-tutorial">
-              <div class="photo2-card-icon" style="color: #64b5f6;">
-                <span class="material-symbols-rounded">school</span>
+            <button type="button" class="custom-card" data-skin="gold">
+              <div class="custom-card-color gold-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Ouro Real</span>
+                <span class="custom-card-detail">Ouro Polido & Prata</span>
               </div>
-              <span class="photo2-card-label">Modo Tutorial</span>
+              <span class="custom-card-check">✓</span>
             </button>
 
-            <!-- Card 3: Conquistas -->
-            <button type="button" class="photo2-card" id="btn-menu-achievements">
-              <div class="photo2-card-icon" style="color: #f5c56b;">
-                <span class="material-symbols-rounded">military_tech</span>
+            <button type="button" class="custom-card" data-skin="amethyst">
+              <div class="custom-card-color amethyst-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Ametista</span>
+                <span class="custom-card-detail">Cristal Cósmico & Ônix</span>
               </div>
-              <span class="photo2-card-label">Conquistas</span>
+              <span class="custom-card-check">✓</span>
             </button>
 
-            <!-- Card 4: Configurações -->
-            <button type="button" class="photo2-card" id="btn-menu-settings">
-              <div class="photo2-card-icon" style="color: #81c784;">
-                <span class="material-symbols-rounded">settings</span>
+            <button type="button" class="custom-card" data-skin="emerald">
+              <div class="custom-card-color emerald-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Esmeralda</span>
+                <span class="custom-card-detail">Esmeralda Viva & Rubi</span>
               </div>
-              <span class="photo2-card-label">Configurações</span>
+              <span class="custom-card-check">✓</span>
             </button>
+          </div>
+        </div>
+
+        <!-- Seção: Arena e Tabuleiro -->
+        <div class="customize-section">
+          <label class="customize-section-label">
+            <span class="material-symbols-rounded">grid_view</span>
+            <span>TABULEIRO & ARENA</span>
+          </label>
+          <div class="customize-grid" id="customize-arena-grid">
+            <button type="button" class="custom-card active" data-arena="cathedral">
+              <div class="custom-card-color cathedral-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Catedral Arcana</span>
+                <span class="custom-card-detail">Mármore Gótico & Vitrais</span>
+              </div>
+              <span class="custom-card-check">✓</span>
+            </button>
+
+            <button type="button" class="custom-card" data-arena="inferno">
+              <div class="custom-card-color inferno-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Cripta Infernal</span>
+                <span class="custom-card-detail">Rocha Vulcânica & Lava</span>
+              </div>
+              <span class="custom-card-check">✓</span>
+            </button>
+
+            <button type="button" class="custom-card" data-arena="frost">
+              <div class="custom-card-color frost-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Templo de Gelo</span>
+                <span class="custom-card-detail">Gelo Místico & Cristais</span>
+              </div>
+              <span class="custom-card-check">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botão Confirmar -->
+        <div style="margin-top: 14px;">
+          <button type="button" class="btn-primary-action" id="btn-customize-apply">
+            <span>Confirmar & Voltar ao Menu</span>
+            <span class="material-symbols-rounded">check</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- VIEW: ABA DOS DESAFIOS (Marcado em Rosa)                      -->
+      <!-- ============================================================== -->
+      <div id="menu-view-challenges" class="menu-subview">
+        <div class="menu-view-header">
+          <button type="button" class="btn-subview-back" id="btn-challenges-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+          <div class="brand-pill" style="border-color: rgba(233, 30, 99, 0.4); color: #f48fb1;">
+            <span class="material-symbols-rounded">extension</span>
+            <span>ABA DOS DESAFIOS</span>
+          </div>
+        </div>
+
+        <h2 class="subview-title" style="color: #f06292;">Desafios & Enigmas Arcanos</h2>
+        <p class="subview-desc">Encontre o lance vencedor e decifre as posições mágicas no tabuleiro.</p>
+
+        <!-- Botão de Iniciar Desafio Rápido -->
+        <button type="button" class="rpg-card-challenges pink-action-card" id="btn-launch-random-puzzle" style="margin-bottom: 14px;">
+          <div class="rpg-card-inner">
+            <div class="rpg-card-left">
+              <div class="rpg-card-icon-box pink-glow">
+                <span class="material-symbols-rounded">play_arrow</span>
+              </div>
+              <div class="rpg-card-text">
+                <span class="rpg-card-title">Desafio Rápido</span>
+                <span class="rpg-card-subtitle">Inicia um enigma tático instantâneo</span>
+              </div>
+            </div>
+            <div class="rpg-card-arrow pink-arrow">
+              <span class="material-symbols-rounded">arrow_forward</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Lista de Desafios -->
+        <div class="challenges-list">
+          <div class="challenge-item">
+            <div class="challenge-item-icon">🧩</div>
+            <div class="challenge-item-info">
+              <div class="challenge-item-header">
+                <span class="challenge-title">Mate do Pastor Arcano</span>
+                <span class="challenge-difficulty diff-easy">Fácil • 1 Lance</span>
+              </div>
+              <p class="challenge-desc">Ataque fulminante de Dama com suporte rúnico do Bispo.</p>
+            </div>
+            <button type="button" class="challenge-play-btn" data-challenge="mate-pastor">Jogar</button>
+          </div>
+
+          <div class="challenge-item">
+            <div class="challenge-item-icon">⚡</div>
+            <div class="challenge-item-info">
+              <div class="challenge-item-header">
+                <span class="challenge-title">Ataque Duplo de Cavalo</span>
+                <span class="challenge-difficulty diff-med">Médio • Garfo Real</span>
+              </div>
+              <p class="challenge-desc">O Cavalo salta pelas runas ameaçando Rei e Dama ao mesmo tempo.</p>
+            </div>
+            <button type="button" class="challenge-play-btn" data-challenge="garfo-cavalo">Jogar</button>
+          </div>
+
+          <div class="challenge-item">
+            <div class="challenge-item-icon">🔮</div>
+            <div class="challenge-item-info">
+              <div class="challenge-item-header">
+                <span class="challenge-title">O Sacrifício do Bispo de Fogo</span>
+                <span class="challenge-difficulty diff-hard">Difícil • Mate em 2</span>
+              </div>
+              <p class="challenge-desc">Rompa a fortaleza inimiga sacrificando o bispo na ala do rei.</p>
+            </div>
+            <button type="button" class="challenge-play-btn" data-challenge="sacrificio-bispo">Jogar</button>
           </div>
         </div>
       </div>
