@@ -2691,7 +2691,7 @@
   box-sizing: border-box !important;
 }
 
-#menu-view-home {
+#menu-view-home.active {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
@@ -2859,4 +2859,157 @@
     min-height: 160px !important;
     max-height: 180px !important;
   }
+}
+
+
+/* ============================================================== */
+/* ISOLAMENTO RIGOROSO DE SUBVIEWS: CADA TELA É 100% INDEPENDENTE */
+/* ============================================================== */
+.menu-subview {
+  display: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview.active {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  animation: menuSubviewFade 0.22s cubic-bezier(0.2, 0, 0, 1) forwards !important;
+}
+
+#menu-view-home:not(.active),
+#menu-view-customize:not(.active),
+#menu-view-challenges:not(.active),
+#menu-view-battle:not(.active),
+#menu-view-settings:not(.active),
+#menu-view-tutorial:not(.active) {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* CARD DO DESAFIO DIÁRIO */
+.daily-challenge-card {
+  width: 100% !important;
+  background: radial-gradient(circle at 50% 0%, rgba(90, 24, 154, 0.7) 0%, rgba(20, 10, 35, 0.95) 100%) !important;
+  border: 1.5px solid rgba(245, 197, 107, 0.5) !important;
+  border-radius: 18px !important;
+  padding: 14px 14px 12px !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(245, 197, 107, 0.12) !important;
+  margin-bottom: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  text-align: left !important;
+}
+
+.daily-card-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.8px !important;
+  color: #ffd700 !important;
+  text-transform: uppercase !important;
+}
+
+.daily-card-badge .material-symbols-rounded {
+  font-size: 14px !important;
+  margin-right: 4px !important;
+  vertical-align: middle !important;
+}
+
+.daily-xp-pill {
+  background: linear-gradient(135deg, #f5c56b, #b8860b) !important;
+  color: #1a162b !important;
+  padding: 2px 8px !important;
+  border-radius: 12px !important;
+  font-size: 10.5px !important;
+  font-weight: 800 !important;
+}
+
+.daily-card-body {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.daily-card-icon {
+  font-size: 32px !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)) !important;
+}
+
+.daily-card-text {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.daily-challenge-title {
+  font-family: 'Cinzel', serif, Georgia !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8) !important;
+}
+
+.daily-challenge-desc {
+  font-size: 11px !important;
+  color: #d1c4e9 !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.daily-challenge-status {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #81c784 !important;
+  margin-top: 2px !important;
+}
+
+.status-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #81c784 !important;
+  box-shadow: 0 0 8px #81c784 !important;
+}
+
+.btn-play-daily {
+  width: 100% !important;
+  background: linear-gradient(135deg, #f39c12 0%, #d35400 50%, #962d00 100%) !important;
+  border: 1.5px solid rgba(255, 215, 140, 0.6) !important;
+  border-radius: 14px !important;
+  padding: 10px 14px !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 16px rgba(211, 84, 0, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-play-daily:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 22px rgba(211, 84, 0, 0.6) !important;
+}
+
+.btn-play-daily *,
+.daily-challenge-card * {
+  pointer-events: none !important;
+}
+.btn-play-daily {
+  pointer-events: auto !important;
 }

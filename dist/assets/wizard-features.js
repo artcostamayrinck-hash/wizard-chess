@@ -1075,10 +1075,14 @@ function setupStartMenuGrid() {
 
   // Subview Switcher
   function switchSubView(viewName) {
-    document.querySelectorAll(".menu-subview").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".menu-subview").forEach(v => {
+      v.classList.remove("active");
+      v.style.setProperty("display", "none", "important");
+    });
     const target = document.getElementById('menu-view-' + viewName);
     if (target) {
       target.classList.add("active");
+      target.style.setProperty("display", "flex", "important");
     }
 
     // Atualiza aba ativa na barra de navegação inferior
@@ -1086,7 +1090,6 @@ function setupStartMenuGrid() {
     if (viewName === "home" && btnNavHome) btnNavHome.classList.add("active");
     if (viewName === "customize" && btnNavCustomize) btnNavCustomize.classList.add("active");
     if (viewName === "challenges" && btnNavChallenges) btnNavChallenges.classList.add("active");
-    if (viewName === "settings" && btnNavSettings) btnNavSettings.classList.add("active");
 
     const modalContent = document.querySelector("#start-menu .modal-content");
     if (modalContent) modalContent.scrollTop = 0;
@@ -1301,6 +1304,65 @@ function setupStartMenuGrid() {
       }
     });
   });
+
+
+
+  // --------------------------------------------------------
+  // Modo de Desafios Diários (Daily Challenge)
+  // --------------------------------------------------------
+  function setupDailyChallenges() {
+    const today = new Date();
+    const dateStr = today.toLocaleDateString("pt-BR", { day: "numeric", month: "long" });
+    const dateKey = 'daily_puzzle_' + today.getFullYear() + '_' + (today.getMonth() + 1) + '_' + today.getDate();
+    const isCompleted = localStorage.getItem(dateKey) === "completed";
+
+    const dateEl = document.getElementById("daily-challenge-date");
+    if (dateEl) dateEl.textContent = 'DESAFIO DE HOJE • ' + dateStr.toUpperCase();
+
+    const statusEl = document.getElementById("daily-challenge-status");
+    const statusText = document.getElementById("daily-status-text");
+    const btnPlayDaily = document.getElementById("btn-play-daily-challenge");
+
+    if (isCompleted) {
+      if (statusText) statusText.textContent = "Concluído Hoje ✓ (+100 XP obtido)";
+      if (statusEl) statusEl.style.color = "#ffd700";
+      if (btnPlayDaily) {
+        const label = btnPlayDaily.querySelector("span:first-child");
+        if (label) label.textContent = "Jogar Novamente";
+      }
+    }
+
+    if (btnPlayDaily) {
+      bindAction(btnPlayDaily, () => {
+        // Dispara o motor de quebra-cabeça
+        const arenas = ["cathedral", "inferno", "frost"];
+        const randArena = arenas[Math.floor(Math.random() * arenas.length)];
+        const arenaBtn = document.querySelector('#menu-arena-group .toggle-btn[data-arena="' + randArena + '"]');
+        if (arenaBtn) arenaBtn.click();
+
+        const puzzleTrigger = document.querySelector('#menu-mode-group-hidden .toggle-btn[data-mode="puzzle"]');
+        if (puzzleTrigger) puzzleTrigger.click();
+        if (btnStart) btnStart.click();
+
+        try {
+          localStorage.setItem(dateKey, "completed");
+          if (typeof addXP === "function") {
+            addXP(100, "Desafio Diário Concluído");
+          }
+        } catch(e) {}
+
+        showToast("⭐ Desafio Diário Arcano iniciado! (+100 XP)");
+      });
+    }
+
+    const btnChFooterBack = document.getElementById("btn-challenges-footer-back");
+    if (btnChFooterBack) {
+      bindAction(btnChFooterBack, () => switchSubView("home"));
+    }
+  }
+
+  setupDailyChallenges();
+
 }
 
 // --------------------------------------------------------

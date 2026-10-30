@@ -2818,6 +2818,8 @@
         <!-- Botão Confirmar -->
         <div style="margin-top: 14px;">
           <button type="button" class="btn-primary-action" id="btn-customize-apply">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Confirmar & Voltar ao Menu Principal</span>
             <span>Confirmar & Voltar ao Menu</span>
             <span class="material-symbols-rounded">check</span>
           </button>
@@ -2841,6 +2843,29 @@
 
         <h2 class="subview-title" style="color: #f06292;">Desafios & Enigmas Arcanos</h2>
         <p class="subview-desc">Encontre o lance vencedor e decifre as posições mágicas no tabuleiro.</p>
+
+<!-- CARD DO DESAFIO DIÁRIO (MODO DE DESAFIOS DIÁRIOS) -->
+        <div class="daily-challenge-card" id="daily-challenge-card">
+          <div class="daily-card-badge">
+            <span><span class="material-symbols-rounded">calendar_today</span> <span id="daily-challenge-date">DESAFIO DIÁRIO DE HOJE</span></span>
+            <span class="daily-xp-pill">⭐ +100 XP</span>
+          </div>
+          <div class="daily-card-body">
+            <div class="daily-card-icon">⚡</div>
+            <div class="daily-card-text">
+              <h3 class="daily-challenge-title" id="daily-challenge-title">Enigma das Runas do Solstício</h3>
+              <p class="daily-challenge-desc" id="daily-challenge-desc">Encontre o mate tático em 2 lances com o Cavalo Arcano e domine as energias cósmicas do tabuleiro!</p>
+              <div class="daily-challenge-status" id="daily-challenge-status">
+                <span class="status-dot"></span>
+                <span id="daily-status-text">Disponível para jogar hoje</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn-play-daily" id="btn-play-daily-challenge">
+            <span>Jogar Desafio Diário</span>
+            <span class="material-symbols-rounded">swords</span>
+          </button>
+        </div>
 
         <!-- Botão de Iniciar Desafio Rápido -->
         <button type="button" class="rpg-card-challenges pink-action-card" id="btn-launch-random-puzzle" style="margin-bottom: 14px;">
@@ -2897,6 +2922,13 @@
             </div>
             <button type="button" class="challenge-play-btn" data-challenge="sacrificio-bispo">Jogar</button>
           </div>
+        </div>
+
+        <div style="margin-top: 14px;">
+          <button type="button" class="btn-primary-action" id="btn-challenges-footer-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar ao Menu Principal</span>
+          </button>
         </div>
       </div>
 
