@@ -2671,3 +2671,192 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* ============================================================== */
+/* AJUSTES SOLICITADOS: APROVEITAMENTO DE TELA, CAVALO SEM CAIXA, */
+/* E ABA PRINCIPAL CENTRALIZADA                                   */
+/* ============================================================== */
+
+#start-menu .modal-content.menu-photo2-modal {
+  width: 96% !important;
+  max-width: 480px !important;
+  height: 94vh !important;
+  max-height: 96vh !important;
+  min-height: 88vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 16px 14px 14px !important;
+  box-sizing: border-box !important;
+}
+
+#menu-view-home {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
+}
+
+.home-hero-split {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin: 10px 0 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* CAVALO SEM CAIXA EM VOLTA - FLOATING DIRETAMENTE NO CENÁRIO */
+.home-knight-col {
+  flex: 1.1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.home-knight-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.home-knight-svg-wrap {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 220px !important;
+  max-height: 290px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: knightFloat 4s ease-in-out infinite alternate !important;
+}
+
+.rpg-knight-svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 280px !important;
+  display: block !important;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95)) !important;
+}
+
+.knight-model-badge {
+  margin-top: 8px !important;
+  background: rgba(22, 14, 36, 0.9) !important;
+  border: 1px solid rgba(245, 197, 107, 0.4) !important;
+  border-radius: 20px !important;
+  padding: 5px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: #fff !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.2s ease !important;
+}
+
+.knight-model-badge:hover {
+  border-color: #ffd700 !important;
+  transform: scale(1.05) !important;
+}
+
+/* CARDS DE AÇÃO APROVEITANDO MELHOR A ALTURA */
+.home-actions-col {
+  flex: 1.15 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  height: 100% !important;
+}
+
+.orange-action-card,
+.pink-action-card,
+.indigo-action-card {
+  padding: 14px 14px !important;
+  min-height: 64px !important;
+  box-sizing: border-box !important;
+}
+
+/* BARRA DE NAVEGAÇÃO COM ABA PRINCIPAL CENTRALIZADA (3 ITENS) */
+.rpg-bottom-nav {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(14, 10, 22, 0.96) !important;
+  border: 1px solid rgba(245, 197, 107, 0.28) !important;
+  border-radius: 22px !important;
+  padding: 6px 8px !important;
+  margin-top: auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75) !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #9c92b2 !important;
+  cursor: pointer !important;
+  padding: 7px 4px !important;
+  border-radius: 14px !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-item-center {
+  margin: 0 4px !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.active {
+  color: #ffd700 !important;
+  background: rgba(245, 197, 107, 0.15) !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.active .material-symbols-rounded {
+  color: #ffd700 !important;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.7) !important;
+}
+
+.rpg-bottom-nav .nav-highlight-blue {
+  border: 1.5px solid #2196f3 !important;
+  background: rgba(33, 150, 243, 0.16) !important;
+  color: #90caf9 !important;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.35) !important;
+}
+
+@media (max-width: 380px) {
+  #start-menu .modal-content.menu-photo2-modal {
+    padding: 12px 10px 10px !important;
+    height: 98vh !important;
+  }
+  .home-hero-split {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .home-knight-svg-wrap {
+    min-height: 160px !important;
+    max-height: 180px !important;
+  }
+}

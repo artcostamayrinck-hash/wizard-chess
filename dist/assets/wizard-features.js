@@ -1303,5 +1303,118 @@ function setupStartMenuGrid() {
   });
 }
 
+// --------------------------------------------------------
+// 9. Controlador do Banner de Tutorial Interativo Durante a Partida
+// --------------------------------------------------------
+const TUTORIAL_STEPS = [
+  {
+    step: "PASSO 1 DE 5",
+    text: "🧙 <strong>Abertura Arcana:</strong> Toque no seu Peão à frente do Rei (casa e2) e avance 2 casas para o centro. As runas mágicas no chão mostram os destinos válidos!"
+  },
+  {
+    step: "PASSO 2 DE 5",
+    text: "🐎 <strong>Salto dos Cavalos:</strong> Mova seu Cavalo para dominar o centro (f3 ou c3). Ele é a única peça que salta sobre as outras no tabuleiro de pedra em formato de 'L'!"
+  },
+  {
+    step: "PASSO 3 DE 5",
+    text: "⚡ <strong>Bispos e Ataque Diagonais:</strong> Deslize seu Bispo para as diagonais abertas (c4 ou b5). Ele alcança o campo inimigo com magia de longo alcance!"
+  },
+  {
+    step: "PASSO 4 DE 5",
+    text: "🔮 <strong>Iluminação do Oráculo:</strong> Em dúvida sobre o melhor lance? Toque em 'Dica do Oráculo' abaixo para o motor calcular e iluminar a melhor jogada na pedra!"
+  },
+  {
+    step: "PASSO 5 DE 5",
+    text: "👑 <strong>O Xeque-Mate Final:</strong> Encurrale o Rei adversário atacando-o sem dar rota de fuga para conquistar a vitória da Catedral!"
+  }
+];
 
+let currentTutorialStep = 0;
 
+function initTutorialBannerHUD() {
+  const banner = document.getElementById("tutorial-guide-banner");
+  if (!banner) return;
+
+  banner.classList.remove("hidden");
+  currentTutorialStep = 0;
+  updateTutorialStepUI();
+
+  const btnPrev = document.getElementById("btn-tut-prev");
+  const btnNext = document.getElementById("btn-tut-next");
+  const btnOracle = document.getElementById("btn-tut-oracle");
+  const btnClose = document.getElementById("btn-close-tutorial-guide");
+
+  if (btnPrev) {
+    bindAction(btnPrev, () => {
+      if (currentTutorialStep > 0) {
+        currentTutorialStep--;
+        updateTutorialStepUI();
+      }
+    });
+  }
+
+  if (btnNext) {
+    bindAction(btnNext, () => {
+      if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
+        currentTutorialStep++;
+        updateTutorialStepUI();
+      } else {
+        banner.classList.add("hidden");
+        showToast("🎓 Parabéns! Você concluiu os fundamentos arcanos.");
+      }
+    });
+  }
+
+  if (btnOracle) {
+    bindAction(btnOracle, () => {
+      const btnHint = document.getElementById("btn-hint");
+      if (btnHint) btnHint.click();
+    });
+  }
+
+  if (btnClose) {
+    bindAction(btnClose, () => {
+      banner.classList.add("hidden");
+    });
+  }
+}
+
+function updateTutorialStepUI() {
+  const stepNum = document.getElementById("tut-guide-step-num");
+  const stepText = document.getElementById("tut-guide-instruction");
+  const btnPrev = document.getElementById("btn-tut-prev");
+  const btnNext = document.getElementById("btn-tut-next");
+
+  const data = TUTORIAL_STEPS[currentTutorialStep];
+  if (!data) return;
+
+  if (stepNum) stepNum.textContent = data.step;
+  if (stepText) stepText.innerHTML = data.text;
+  if (btnPrev) btnPrev.disabled = currentTutorialStep === 0;
+  if (btnNext) {
+    const isLast = currentTutorialStep === TUTORIAL_STEPS.length - 1;
+    const labelSpan = btnNext.querySelector("span:first-child");
+    if (labelSpan) labelSpan.textContent = isLast ? "Concluir" : "Próximo";
+  }
+}
+
+// ========================================================
+// Inicialização Segura (Após todas as constantes e funções)
+// ========================================================
+function startWizardApp() {
+  try {
+    initWizardFeatures();
+  } catch (err) {
+    console.error("[WizardChess] Erro no startWizardApp:", err);
+  }
+}
+
+// Execução imediata garantida (script está no final do documento, DOM já está presente)
+startWizardApp();
+
+// Execução complementar para navegadores lentos ou carregamentos assíncronos
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startWizardApp);
+}
+window.addEventListener("load", startWizardApp);
+setTimeout(startWizardApp, 150);
