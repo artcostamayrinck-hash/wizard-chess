@@ -3013,3 +3013,140 @@
 .btn-play-daily {
   pointer-events: auto !important;
 }
+
+
+/* ============================================================== */
+/* ESTILIZAÇÃO E ALINHAMENTO PERFEITO DOS BOTÕES VOLTAR E HEADER   */
+/* ============================================================== */
+
+.menu-view-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin-bottom: 10px !important;
+  padding: 0 2px !important;
+  box-sizing: border-box !important;
+  gap: 8px !important;
+}
+
+.btn-subview-back,
+.photo2-back-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: rgba(30, 18, 48, 0.92) !important;
+  border: 1px solid rgba(245, 197, 107, 0.45) !important;
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  color: #ffd700 !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+.btn-subview-back:hover,
+.photo2-back-btn:hover {
+  background: rgba(55, 30, 90, 0.95) !important;
+  border-color: #ffd700 !important;
+  color: #ffffff !important;
+  transform: translateX(-2px) !important;
+  box-shadow: 0 6px 16px rgba(245, 197, 107, 0.35) !important;
+}
+
+.btn-subview-back .material-symbols-rounded,
+.photo2-back-btn .material-symbols-rounded {
+  font-size: 17px !important;
+  color: #ffd700 !important;
+  line-height: 1 !important;
+}
+
+/* BOTÃO DE AÇÃO PRINCIPAL / VOLTAR NO RODAPÉ */
+.btn-primary-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  background: linear-gradient(135deg, #f39c12 0%, #d35400 50%, #962d00 100%) !important;
+  border: 1.5px solid rgba(255, 215, 140, 0.65) !important;
+  border-radius: 16px !important;
+  padding: 12px 18px !important;
+  color: #ffffff !important;
+  font-family: 'Cinzel', serif, Georgia !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 20px rgba(211, 84, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  margin-top: 14px !important;
+  text-align: center !important;
+}
+
+.btn-primary-action:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 26px rgba(211, 84, 0, 0.65) !important;
+  border-color: #ffd700 !important;
+}
+
+.btn-primary-action .material-symbols-rounded {
+  font-size: 18px !important;
+  color: #ffffff !important;
+}
+
+/* ALINHAMENTOS DE TEXTO E SEÇÕES */
+.subview-title {
+  text-align: center !important;
+  font-family: 'Cinzel', serif, Georgia !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  color: #ffd700 !important;
+  margin: 4px 0 6px !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 197, 107, 0.4) !important;
+}
+
+.subview-desc {
+  text-align: center !important;
+  font-size: 11px !important;
+  color: #d1c4e9 !important;
+  margin: 0 auto 14px !important;
+  max-width: 92% !important;
+  line-height: 1.35 !important;
+}
+
+/* ALINHAMENTO DO TABULEIRO & ARENA (ITEM ÍMPAR PREENCHE AS 2 COLUNAS) */
+#customize-arena-grid .custom-card:last-child {
+  grid-column: span 2 !important;
+}
+
+/* EVITA QUEBRA DE TEXTO NO XP DO DESAFIO DIÁRIO */
+.daily-xp-pill {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  flex-shrink: 0 !important;
+}
+
+.daily-card-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+.btn-subview-back *,
+.photo2-back-btn *,
+.btn-primary-action * {
+  pointer-events: none !important;
+}
