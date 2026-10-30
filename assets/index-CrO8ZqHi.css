@@ -2227,22 +2227,24 @@
   margin-bottom: 8px !important;
 }
 .home-hero-split {
+  flex: 1 !important;
   display: flex !important;
-  flex-direction: row !important;
-  gap: 12px !important;
-  align-items: stretch !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  margin: 6px 0 14px !important;
+  margin: 4px 0 10px !important;
   box-sizing: border-box !important;
 }
 .home-knight-col {
-  flex: 1 !important;
-  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 320px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  margin: 0 auto !important;
 }
 .home-knight-card {
   width: 100% !important;
@@ -2703,19 +2705,19 @@
 .home-hero-split {
   flex: 1 !important;
   display: flex !important;
-  flex-direction: row !important;
-  gap: 12px !important;
+  flex-direction: column !important;
+  gap: 10px !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   width: 100% !important;
-  margin: 10px 0 16px !important;
+  margin: 4px 0 10px !important;
   box-sizing: border-box !important;
 }
 
-/* CAVALO SEM CAIXA EM VOLTA - FLOATING DIRETAMENTE NO CENÁRIO */
+/* CAVALO CENTRALIZADO NO MEIO (ÁREA ROSA) */
 .home-knight-col {
-  flex: 1.1 !important;
-  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 320px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -2724,7 +2726,8 @@
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
+  cursor: pointer !important;
 }
 
 .home-knight-card {
@@ -2736,9 +2739,10 @@
 
 .home-knight-svg-wrap {
   width: 100% !important;
-  height: 100% !important;
-  min-height: 220px !important;
-  max-height: 290px !important;
+  max-width: 250px !important;
+  height: 180px !important;
+  min-height: 150px !important;
+  max-height: 200px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2748,17 +2752,17 @@
 .rpg-knight-svg {
   width: 100% !important;
   height: 100% !important;
-  max-height: 280px !important;
+  max-height: 180px !important;
   display: block !important;
-  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95)) !important;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.95)) !important;
 }
 
 .knight-model-badge {
-  margin-top: 8px !important;
-  background: rgba(22, 14, 36, 0.9) !important;
-  border: 1px solid rgba(245, 197, 107, 0.4) !important;
+  margin-top: 4px !important;
+  background: rgba(22, 14, 36, 0.92) !important;
+  border: 1px solid rgba(245, 197, 107, 0.45) !important;
   border-radius: 20px !important;
-  padding: 5px 12px !important;
+  padding: 5px 14px !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
@@ -2775,23 +2779,108 @@
   transform: scale(1.05) !important;
 }
 
-/* CARDS DE AÇÃO APROVEITANDO MELHOR A ALTURA */
+/* CARDS DE AÇÃO: OS TRÊS TÓPICOS ABAIXO DO CAVALO (ONDE MARCADO DE AZUL) */
 .home-actions-col {
-  flex: 1.15 !important;
-  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 440px !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 12px !important;
+  gap: 8px !important;
   justify-content: center !important;
-  height: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
 }
 
 .orange-action-card,
 .pink-action-card,
 .indigo-action-card {
-  padding: 14px 14px !important;
-  min-height: 64px !important;
+  width: 100% !important;
+  padding: 10px 14px !important;
+  min-height: 52px !important;
+  border-radius: 16px !important;
   box-sizing: border-box !important;
+  display: block !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.orange-action-card:hover,
+.pink-action-card:hover,
+.indigo-action-card:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6) !important;
+}
+
+.rpg-card-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+.rpg-card-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.rpg-card-icon-box {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.rpg-card-icon-box .material-symbols-rounded {
+  font-size: 20px !important;
+  color: #ffffff !important;
+}
+
+.rpg-card-text {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.rpg-card-title {
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1.2 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.rpg-card-subtitle {
+  font-size: 10.5px !important;
+  opacity: 0.9 !important;
+  margin-top: 1px !important;
+  line-height: 1.1 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.rpg-card-arrow {
+  font-size: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #fff !important;
+  flex-shrink: 0 !important;
+  margin-left: 8px !important;
 }
 
 /* BARRA DE NAVEGAÇÃO COM ABA PRINCIPAL CENTRALIZADA (3 ITENS) */
@@ -2848,16 +2937,26 @@
 
 @media (max-width: 380px) {
   #start-menu .modal-content.menu-photo2-modal {
-    padding: 12px 10px 10px !important;
+    padding: 10px 8px 8px !important;
     height: 98vh !important;
   }
   .home-hero-split {
     flex-direction: column !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
   .home-knight-svg-wrap {
-    min-height: 160px !important;
-    max-height: 180px !important;
+    min-height: 130px !important;
+    max-height: 160px !important;
+    height: 145px !important;
+  }
+  .rpg-knight-svg {
+    max-height: 140px !important;
+  }
+  .orange-action-card,
+  .pink-action-card,
+  .indigo-action-card {
+    padding: 8px 12px !important;
+    min-height: 48px !important;
   }
 }
 
