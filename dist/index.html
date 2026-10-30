@@ -3045,7 +3045,25 @@
           </div>
         </div>
 
-        <p class="photo2-subtitle" style="margin-bottom: 16px;">Ajustes de som, música arcana e suas conquistas:</p>
+        <p class="photo2-subtitle" style="margin-bottom: 12px;">Ajustes de som, jogabilidade, gráficos e seu perfil arcano:</p>
+
+        <!-- Card de Resumo do Perfil (Aproveitamento Máximo da Tela) -->
+        <div class="settings-profile-summary-card">
+          <div class="settings-profile-avatar" id="settings-player-avatar">🧙‍♂️</div>
+          <div class="settings-profile-info">
+            <div class="settings-profile-name" id="settings-player-name">Mago</div>
+            <div class="settings-profile-subtitle">Mestre Arcano da Catedral</div>
+            <div class="settings-profile-stats">
+              <span>⭐ Nível <strong id="settings-player-lvl">1</strong></span>
+              <span>•</span>
+              <span>🏆 <strong class="stat-wins-mirror">0</strong> Vitórias</span>
+            </div>
+          </div>
+          <button type="button" class="btn-settings-edit-profile" id="btn-settings-to-profile">
+            <span class="material-symbols-rounded" style="font-size: 1rem;">edit</span>
+            <span>Editar Perfil</span>
+          </button>
+        </div>
 
         <div class="settings-options-list">
           <!-- 1. Efeitos de Som -->
@@ -3080,7 +3098,39 @@
             </button>
           </div>
 
-          <!-- 3. Conquistas & Títulos -->
+          <!-- 3. Partículas & Efeitos Mágicos -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #ce93d8; background: rgba(206, 147, 216, 0.12);">
+                <span class="material-symbols-rounded">auto_awesome</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Partículas Mágicas</span>
+                <span class="settings-desc">Efeitos visuais nas capturas e feitiços</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-particles-setting" class="photo2-switch-btn active">
+              <span>Ativado</span>
+            </button>
+          </div>
+
+          <!-- 4. Destacar Casas de Lance -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #4dd0e1; background: rgba(77, 208, 225, 0.12);">
+                <span class="material-symbols-rounded">highlight</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Destacar Movimentos</span>
+                <span class="settings-desc">Caminhos e casas válidas ao tocar na peça</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-hints-setting" class="photo2-switch-btn active">
+              <span>Ativado</span>
+            </button>
+          </div>
+
+          <!-- 5. Conquistas & Títulos -->
           <div class="photo2-setting-card">
             <div class="settings-row-info">
               <div class="photo2-setting-icon" style="color: #81c784; background: rgba(129, 199, 132, 0.12);">
@@ -3097,7 +3147,7 @@
             </button>
           </div>
 
-          <!-- 4. Modo Tutorial -->
+          <!-- 6. Modo Tutorial -->
           <div class="photo2-setting-card">
             <div class="settings-row-info">
               <div class="photo2-setting-icon" style="color: #64b5f6; background: rgba(100, 181, 246, 0.12);">
@@ -3113,12 +3163,33 @@
               <span class="material-symbols-rounded" style="font-size: 1rem;">open_in_new</span>
             </button>
           </div>
+
+          <!-- 7. Convidar Amigos -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #25d366; background: rgba(37, 211, 102, 0.12);">
+                <span class="material-symbols-rounded">share</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Convidar Amigo</span>
+                <span class="settings-desc">Compartilhar duelo no WhatsApp</span>
+              </div>
+            </div>
+            <button type="button" id="btn-settings-share-whatsapp" class="photo2-action-btn">
+              <span>Convidar</span>
+              <span class="material-symbols-rounded" style="font-size: 1rem;">send</span>
+            </button>
+          </div>
         </div>
 
-        <div class="menu-actions" style="margin-top: 20px; width: 100%;">
-          <button type="button" id="btn-settings-close-view" class="promo-btn photo2-btn-return">
-            Retornar ao Menu Inicial
+        <div class="settings-footer-wrap" style="margin-top: 14px; width: 100%;">
+          <button type="button" id="btn-settings-close-view" class="promo-btn photo2-btn-return" style="width: 100%; padding: 13px 20px; font-weight: 700; border-radius: 16px;">
+            <span class="material-symbols-rounded" style="margin-right: 6px;">arrow_back</span>
+            <span>Retornar ao Menu Inicial</span>
           </button>
+          <div class="settings-version-badge">
+            <span>WIZARD’S CHESS 3D • Versão 2.5.0 Arcana</span>
+          </div>
         </div>
       </div>
 
@@ -3588,7 +3659,84 @@
     </div>
   </div>
 
-  <!-- Modal de Conquistas Arcanas (Ampliado e Anti-Sobreposição) -->
+    <!-- Modal de Perfil do Jogador (Personalizar Nome, Foto e Ver Conquistas) -->
+  <div id="profile-modal" class="modal-overlay hidden">
+    <div class="modal-content profile-modal-content" style="max-width: 480px; width: 92%; max-height: 90vh; padding: 22px 18px 20px; border-radius: 28px;">
+      <div class="brand-pill" style="margin: 0 auto 8px; padding: 4px 14px; font-size: 0.76rem; width: fit-content; border-color: rgba(245, 197, 107, 0.45); color: #f5c56b;">
+        <span class="material-symbols-rounded" style="font-size: 1.1rem;">person</span>
+        <span>PERFIL DO MAGO</span>
+      </div>
+
+      <h3 style="font-size: 1.35rem; margin: 0 0 4px; letter-spacing: 1px; color: #f5c56b; font-family: 'Cinzel', serif;">PERSONALIZAR PERFIL</h3>
+      <p style="color: #c8b6ff; font-size: 0.8rem; margin: 0 0 12px; line-height: 1.3;">Defina seu nome, escolha sua foto de perfil e veja suas conquistas.</p>
+
+      <!-- Destaque do Avatar e Nível -->
+      <div class="profile-hero-card">
+        <div class="profile-avatar-large" id="profile-avatar-preview">🧙‍♂️</div>
+        <div class="profile-hero-info">
+          <div class="profile-name-display" id="profile-name-display">Mago</div>
+          <div class="profile-title-display">Mestre Arcano do Tabuleiro</div>
+          <div class="profile-stats-tag">⭐ Nível <span id="profile-lvl-number">1</span> • <span id="profile-xp-display">0 XP</span></div>
+        </div>
+      </div>
+
+      <!-- 1. Campo de Nome -->
+      <div class="profile-edit-section">
+        <label class="profile-section-label">
+          <span class="material-symbols-rounded">edit</span>
+          <span>NOME DO MAGO</span>
+        </label>
+        <div class="profile-input-row">
+          <input type="text" id="profile-name-input" maxlength="18" placeholder="Digite seu nome..." value="Mago" />
+          <button type="button" id="btn-save-profile-name" class="profile-save-btn" title="Salvar Nome">
+            <span class="material-symbols-rounded">check</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Escolha de Avatar (Foto de Perfil) -->
+      <div class="profile-edit-section">
+        <label class="profile-section-label">
+          <span class="material-symbols-rounded">face</span>
+          <span>ESCOLHA SUA FOTO DE PERFIL</span>
+        </label>
+        <div class="profile-avatars-grid" id="profile-avatars-grid">
+          <button type="button" class="avatar-option active" data-avatar="🧙‍♂️">🧙‍♂️</button>
+          <button type="button" class="avatar-option" data-avatar="🧙‍♀️">🧙‍♀️</button>
+          <button type="button" class="avatar-option" data-avatar="👑">👑</button>
+          <button type="button" class="avatar-option" data-avatar="⚔️">⚔️</button>
+          <button type="button" class="avatar-option" data-avatar="🧝">🧝</button>
+          <button type="button" class="avatar-option" data-avatar="🐉">🐉</button>
+          <button type="button" class="avatar-option" data-avatar="💀">💀</button>
+          <button type="button" class="avatar-option" data-avatar="🦁">🦁</button>
+          <button type="button" class="avatar-option" data-avatar="🔮">🔮</button>
+          <button type="button" class="avatar-option" data-avatar="🐺">🐺</button>
+        </div>
+      </div>
+
+      <!-- 3. Botão Conquistas (Abre as conquistas) -->
+      <div style="margin: 10px 0 6px; width: 100%;">
+        <button type="button" id="btn-profile-open-achievements" class="btn-profile-achievements">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-rounded" style="color: #ffd700; font-size: 1.3rem;">military_tech</span>
+            <span style="font-weight: 800; font-size: 0.95rem; color: #ffd700;">Conquistas & Títulos</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <span style="font-size: 0.78rem; color: #c8b6ff; opacity: 0.9;">Visualizar</span>
+            <span class="material-symbols-rounded" style="font-size: 1.1rem; color: #ffd700;">arrow_forward</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Botão Confirmar & Fechar -->
+      <button type="button" id="btn-close-profile-modal" class="btn-primary-action" style="margin-top: 8px; width: 100%;">
+        <span class="material-symbols-rounded">check</span>
+        <span>Confirmar & Salvar</span>
+      </button>
+    </div>
+  </div>
+
+<!-- Modal de Conquistas Arcanas (Ampliado e Anti-Sobreposição) -->
   <div id="achievements-modal" class="modal-overlay hidden">
     <div class="modal-content" style="max-width: 520px; width: 95%; max-height: 92vh; padding: 24px 20px 24px; border-radius: 28px;">
       <div class="brand-pill" style="margin: 0 auto 10px; padding: 4px 12px; font-size: 0.76rem; width: fit-content;">

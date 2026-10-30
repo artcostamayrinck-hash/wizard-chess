@@ -33,6 +33,7 @@ function bindAction(el, handler, actionKey = "") {
 function initWizardFeatures() {
   const tasks = [
     { name: "StartMenuGrid", fn: setupStartMenuGrid },
+    { name: "ProfileSystem", fn: setupProfileSystem },
     { name: "CenteredModalsClose", fn: setupCenteredModalsClose },
     { name: "ProgressionAndAchievements", fn: setupProgressionAndAchievements },
     { name: "SkinsSystem", fn: setupSkinsSystem },
@@ -114,6 +115,7 @@ function setupBackButtonIntegration() {
     if (e && typeof e.preventDefault === "function") e.preventDefault();
 
     const modalSelectors = [
+      "#profile-modal",
       "#achievements-modal",
       "#waiting-modal",
       "#pause-modal",
@@ -1511,3 +1513,152 @@ if (document.readyState === "loading") {
 }
 window.addEventListener("load", startWizardApp);
 setTimeout(startWizardApp, 150);
+
+
+// --------------------------------------------------------
+// 11. Profile System: Customize Name, Avatar & View Achievements
+// --------------------------------------------------------
+function setupProfileSystem() {
+  const profileModal = document.getElementById("profile-modal");
+  const btnTopProfile = document.getElementById("btn-top-profile");
+  const btnCloseProfile = document.getElementById("btn-close-profile-modal");
+  const btnProfileAch = document.getElementById("btn-profile-open-achievements");
+  const nameInput = document.getElementById("profile-name-input");
+  const btnSaveName = document.getElementById("btn-save-profile-name");
+  const previewAvatar = document.getElementById("profile-avatar-preview");
+  const previewName = document.getElementById("profile-name-display");
+  const topAvatar = document.getElementById("top-player-avatar");
+  const hudAvatar = document.getElementById("player-avatar-hud");
+  const hudName = document.getElementById("player-name-hud");
+
+  let currentName = localStorage.getItem("wizard_chess_player_name") || "Mago";
+  let currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
+
+  function applyProfileUI() {
+    if (nameInput) nameInput.value = currentName;
+    if (previewName) previewName.textContent = currentName;
+    if (previewAvatar) previewAvatar.textContent = currentAvatar;
+    if (topAvatar) topAvatar.textContent = currentAvatar;
+    if (hudAvatar) hudAvatar.textContent = currentAvatar;
+    if (hudName) hudName.textContent = currentName + " (Você)";
+
+    document.querySelectorAll(".avatar-option").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.avatar === currentAvatar);
+    });
+
+    const setAvatar = document.getElementById("settings-player-avatar");
+    const setName = document.getElementById("settings-player-name");
+    if (setAvatar) setAvatar.textContent = currentAvatar;
+    if (setName) setName.textContent = currentName;
+  }
+
+  applyProfileUI();
+
+  // Abrir Modal de Perfil ao clicar no perfil do topo
+  if (btnTopProfile && profileModal) {
+    bindAction(btnTopProfile, () => {
+      applyProfileUI();
+      profileModal.classList.remove("hidden");
+    }, "openProfileModalFromTop");
+  }
+
+  // Também permitir abrir pelo resumo nas configurações
+  const btnSettingsToProfile = document.getElementById("btn-settings-to-profile");
+  if (btnSettingsToProfile && profileModal) {
+    bindAction(btnSettingsToProfile, () => {
+      applyProfileUI();
+      profileModal.classList.remove("hidden");
+    }, "openProfileModalFromSettings");
+  }
+
+  // Selecionar Avatar
+  document.querySelectorAll(".avatar-option").forEach(btn => {
+    bindAction(btn, () => {
+      currentAvatar = btn.dataset.avatar || "🧙‍♂️";
+      try { localStorage.setItem("wizard_chess_player_avatar", currentAvatar); } catch(e) {}
+      applyProfileUI();
+      showToast("✨ Foto de perfil atualizada: " + currentAvatar);
+    });
+  });
+
+  // Salvar Nome
+  function savePlayerName() {
+    if (!nameInput) return;
+    const val = nameInput.value.trim();
+    if (val) {
+      currentName = val;
+      try { localStorage.setItem("wizard_chess_player_name", currentName); } catch(e) {}
+      applyProfileUI();
+      showToast("✨ Nome salvo: " + currentName);
+    }
+  }
+
+  if (btnSaveName) {
+    bindAction(btnSaveName, savePlayerName, "saveProfileName");
+  }
+  if (nameInput) {
+    nameInput.addEventListener("change", savePlayerName);
+  }
+
+  // Botão Conquistas dentro do Perfil
+  if (btnProfileAch) {
+    bindAction(btnProfileAch, () => {
+      if (profileModal) profileModal.classList.add("hidden");
+      const modalAch = document.getElementById("achievements-modal");
+      if (modalAch) {
+        if (typeof renderAchievementsList === "function") renderAchievementsList();
+        modalAch.classList.remove("hidden");
+      }
+    }, "openAchFromProfile");
+  }
+
+  // Fechar Modal de Perfil
+  if (btnCloseProfile && profileModal) {
+    bindAction(btnCloseProfile, () => {
+      savePlayerName();
+      profileModal.classList.add("hidden");
+    }, "closeProfileModal");
+  }
+
+  // Toggles de Configurações Adicionais (Aproveitamento de Tela)
+  const btnToggleParticles = document.getElementById("btn-toggle-particles-setting");
+  if (btnToggleParticles) {
+    let pActive = localStorage.getItem("wizard_chess_particles") !== "false";
+    btnToggleParticles.querySelector("span").textContent = pActive ? "Ativado" : "Reduzido";
+    btnToggleParticles.classList.toggle("active", pActive);
+    bindAction(btnToggleParticles, () => {
+      pActive = !pActive;
+      try { localStorage.setItem("wizard_chess_particles", pActive ? "true" : "false"); } catch(e) {}
+      btnToggleParticles.querySelector("span").textContent = pActive ? "Ativado" : "Reduzido";
+      btnToggleParticles.classList.toggle("active", pActive);
+      showToast(pActive ? "✨ Partículas mágicas ativadas" : "⚡ Partículas reduzidas");
+    }, "toggleParticles");
+  }
+
+  const btnToggleHints = document.getElementById("btn-toggle-hints-setting");
+  if (btnToggleHints) {
+    let hActive = localStorage.getItem("wizard_chess_hints") !== "false";
+    btnToggleHints.querySelector("span").textContent = hActive ? "Ativado" : "Desativado";
+    btnToggleHints.classList.toggle("active", hActive);
+    bindAction(btnToggleHints, () => {
+      hActive = !hActive;
+      try { localStorage.setItem("wizard_chess_hints", hActive ? "true" : "false"); } catch(e) {}
+      btnToggleHints.querySelector("span").textContent = hActive ? "Ativado" : "Desativado";
+      btnToggleHints.classList.toggle("active", hActive);
+      showToast(hActive ? "🎯 Destaque de casas ativado" : "🎯 Destaque desativado");
+    }, "toggleHints");
+  }
+
+  const btnSettingsShare = document.getElementById("btn-settings-share-whatsapp");
+  if (btnSettingsShare) {
+    bindAction(btnSettingsShare, () => {
+      const btnWA = document.getElementById("btn-whatsapp-share");
+      if (btnWA) {
+        btnWA.click();
+      } else {
+        const msg = "⚔️ Venha jogar o Xadrez de Bruxo 3D comigo! Acesse: " + window.location.href;
+        window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg), "_blank");
+      }
+    }, "settingsShareWA");
+  }
+}
