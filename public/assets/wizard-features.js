@@ -3,6 +3,8 @@
 // ========================================================
 
 // Helper unificado para toque imediato no mobile e clique seguro
+let _lastViewTransition = 0;
+
 function bindAction(el, handler, actionKey = "") {
   if (!el) return;
   el._wizardActions = el._wizardActions || new Set();
@@ -14,7 +16,12 @@ function bindAction(el, handler, actionKey = "") {
 
   const trigger = (e) => {
     const now = Date.now();
-    if (now - lastTrigger < 120) return;
+    // Protege contra ghost clicks / toques que vazam após troca de tela (ex: botão Voltar)
+    if (now - _lastViewTransition < 350) {
+      if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+      return;
+    }
+    if (now - lastTrigger < 180) return;
     lastTrigger = now;
     try {
       handler(e);
@@ -25,9 +32,7 @@ function bindAction(el, handler, actionKey = "") {
 
   el.addEventListener("click", trigger);
   el.addEventListener("pointerup", (e) => {
-    if (e.pointerType === "touch" || e.pointerType === "pen") {
-      trigger(e);
-    }
+    trigger(e);
   });
 }
 
@@ -141,18 +146,7 @@ function setupBackButtonIntegration() {
         // Se estiver em uma subview do menu inicial diferente de home, volta para a tela inicial
     const activeSubView = document.querySelector(".menu-subview.active:not(#menu-view-home)");
     if (activeSubView) {
-      const homeView = document.getElementById("menu-view-home");
-      document.querySelectorAll(".menu-subview").forEach(v => {
-        v.classList.remove("active");
-        v.style.setProperty("display", "none", "important");
-      });
-      if (homeView) {
-        homeView.classList.add("active");
-        homeView.style.setProperty("display", "flex", "important");
-      }
-      document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
-      const btnNavHome = document.getElementById("btn-nav-home");
-      if (btnNavHome) btnNavHome.classList.add("active");
+      switchSubView("home");
       try { window.history.pushState({ wizardChess: true }, ""); } catch (err) {}
       return;
     }
@@ -1119,6 +1113,7 @@ function setupStartMenuGrid() {
 
   // Subview Switcher
   function switchSubView(viewName) {
+    _lastViewTransition = Date.now();
     document.querySelectorAll(".menu-subview").forEach(v => {
       v.classList.remove("active");
       v.style.setProperty("display", "none", "important");
@@ -1206,8 +1201,10 @@ function setupStartMenuGrid() {
   }
   if (btnTopProfile) {
     bindAction(btnTopProfile, () => {
-      switchSubView("customize");
-    });
+      applyProfileUI();
+      const profileModal = document.getElementById("profile-modal");
+      if (profileModal) profileModal.classList.remove("hidden");
+    }, "openProfileModalFromTop");
   }
   const homeKnightCol = document.getElementById("home-knight-col");
   const homeKnightShowcase = document.getElementById("home-knight-showcase");
