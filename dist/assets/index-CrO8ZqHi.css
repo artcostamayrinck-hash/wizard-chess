@@ -1072,14 +1072,18 @@
    ========================================================================== */
 
 #start-menu .start-content.menu-photo2-modal {
-  max-width: 440px !important;
-  width: 92% !important;
-  padding: 22px 20px 24px !important;
-  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
-  border: 1px solid rgba(245, 197, 107, 0.28) !important;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.12) !important;
-  border-radius: 28px !important;
-  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
   box-sizing: border-box !important;
 }
 
@@ -1424,21 +1428,19 @@
    ============================================================== */
 .menu-photo2-modal,
 #start-menu .start-content.menu-photo2-modal {
-  max-width: 520px !important;
-  width: 95% !important;
-  max-height: 94vh !important;
-  min-height: 84vh !important;
-  margin: auto !important;
-  padding: 24px 20px 26px !important;
-  border-radius: 28px !important;
-  text-align: center !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
   box-sizing: border-box !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  touch-action: pan-y !important;
 }
 
 .modal-content {
@@ -2681,15 +2683,21 @@
 /* ============================================================== */
 
 #start-menu .modal-content.menu-photo2-modal {
-  width: 96% !important;
-  max-width: 480px !important;
-  height: 94vh !important;
-  max-height: 96vh !important;
-  min-height: 88vh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
-  padding: 16px 14px 14px !important;
   box-sizing: border-box !important;
 }
 
@@ -2937,9 +2945,23 @@
 
 @media (max-width: 380px) {
   #start-menu .modal-content.menu-photo2-modal {
-    padding: 10px 8px 8px !important;
-    height: 98vh !important;
-  }
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
   .home-hero-split {
     flex-direction: column !important;
     gap: 6px !important;
@@ -4291,9 +4313,23 @@ html, body {
 /* 7. Adaptação para Orientação Horizontal (Landscape) em Celulares e Tablets */
 @media (orientation: landscape) and (max-height: 540px) {
   #start-menu .modal-content.menu-photo2-modal {
-    overflow-y: auto !important;
-    padding: 8px 16px !important;
-  }
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
   .home-hero-split {
     flex-direction: row !important;
     align-items: center !important;
@@ -4334,4 +4370,165 @@ html, body {
     bottom: 2px !important;
     transform: translateX(-50%) scale(0.85) !important;
   }
+}
+
+
+/* ==========================================================================
+   APROVEITAMENTO ABSOLUTO DE 100% DA TELA - ZERO BORDAS, ZERO CAIXAS
+   ========================================================================== */
+
+#start-menu,
+#start-menu.modal-overlay,
+div#start-menu {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+#start-menu .modal-content,
+#start-menu .start-content,
+#start-menu .menu-photo2-modal,
+.menu-photo2-modal,
+div.menu-photo2-modal {
+  position: absolute !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: max(10px, env(safe-area-inset-top, 10px)) max(16px, env(safe-area-inset-right, 16px)) max(12px, env(safe-area-inset-bottom, 12px)) max(16px, env(safe-area-inset-left, 16px)) !important;
+  border-radius: 0 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Todas as subviews ocupam o centro da tela expandindo proporcionalmente */
+.menu-subview,
+#menu-view-home,
+#menu-view-battle,
+#menu-view-customize,
+#menu-view-challenges,
+#menu-view-settings,
+#menu-view-tutorial {
+  width: 100% !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+.menu-subview.active,
+#menu-view-home.active,
+#menu-view-battle.active,
+#menu-view-customize.active,
+#menu-view-challenges.active,
+#menu-view-settings.active,
+#menu-view-tutorial.active {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
+}
+
+/* O Cavalo Místico ganha escala ampla para preencher o centro da tela */
+.home-hero-split {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-evenly !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 6px 0 10px !important;
+  box-sizing: border-box !important;
+}
+
+.home-knight-col {
+  width: 100% !important;
+  max-width: 360px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.home-knight-svg-wrap {
+  width: 100% !important;
+  max-width: 320px !important;
+  height: clamp(190px, 32vh, 310px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rpg-knight-svg {
+  height: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+}
+
+/* Cards de ação amplos e confortáveis */
+.home-actions-col {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: clamp(10px, 2vh, 16px) !important;
+  box-sizing: border-box !important;
+}
+
+.orange-action-card,
+.pink-action-card,
+.indigo-action-card {
+  width: 100% !important;
+  min-height: clamp(54px, 7.5vh, 68px) !important;
+  padding: clamp(10px, 1.8vh, 16px) 16px !important;
+  border-radius: 18px !important;
+  box-sizing: border-box !important;
+}
+
+.rpg-bottom-nav {
+  width: 100% !important;
+  margin-top: auto !important;
+  padding: 8px 14px max(8px, env(safe-area-inset-bottom, 8px)) !important;
+  border-radius: 18px !important;
+  box-sizing: border-box !important;
 }
