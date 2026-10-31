@@ -405,7 +405,8 @@ function initWizardFeatures() {
     { name: "CampaignTower", fn: setupCampaignTower },
     { name: "MatchReplay", fn: setupMatchReplay },
     { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations },
-    { name: "WebShortcutsAndAdaptations", fn: setupWebShortcutsAndAdaptations }
+    { name: "WebShortcutsAndAdaptations", fn: setupWebShortcutsAndAdaptations },
+    { name: "AdMobManager", fn: setupAdMobManager }
   ];
 
   for (const task of tasks) {
@@ -2960,4 +2961,107 @@ function setupWebShortcutsAndAdaptations() {
       if (btnNext && btnNext.offsetParent !== null) btnNext.click();
     }
   });
+}
+
+
+// ==========================================================================
+// 17. GOOGLE ADMOB: MONETIZAÇÃO NATIVA NO CELULAR (BANNER, INTERSTICIAL E VÍDEO)
+// ==========================================================================
+const ADMOB_CONFIG = {
+  appId: "ca-app-pub-7015126547268342~9383206931",
+  bannerId: "ca-app-pub-7015126547268342/5547903709",
+  interstitialId: "ca-app-pub-7015126547268342/6459202681",
+  rewardedId: "ca-app-pub-7015126547268342/6628603973"
+};
+
+let _isAdMobReady = false;
+
+async function setupAdMobManager() {
+  const isNative = typeof window.Capacitor !== "undefined" && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  const admob = window.Capacitor && window.Capacitor.Plugins ? window.Capacitor.Plugins.AdMob : null;
+
+  if (isNative && admob) {
+    try {
+      await admob.initialize({
+        requestTrackingAuthorization: true,
+        testingDevices: []
+      });
+      _isAdMobReady = true;
+      console.log("[AdMob] Inicializado com sucesso!");
+
+      // 1. Exibir Banner Principal no Rodapé
+      try {
+        await admob.showBanner({
+          adId: ADMOB_CONFIG.bannerId,
+          adSize: "BANNER",
+          position: "BOTTOM_CENTER",
+          margin: 0
+        });
+        console.log("[AdMob] Banner principal carregado.");
+      } catch (bannerErr) {
+        console.warn("[AdMob] Erro ao exibir banner:", bannerErr);
+      }
+
+      // 2. Pré-carregar Intersticial de Fim de Jogo
+      try {
+        await admob.prepareInterstitial({
+          adId: ADMOB_CONFIG.interstitialId
+        });
+        console.log("[AdMob] Intersticial de fim de jogo pré-carregado.");
+      } catch (intErr) {
+        console.warn("[AdMob] Erro ao preparar intersticial:", intErr);
+      }
+
+      // 3. Pré-carregar Vídeo Recompensado
+      try {
+        await admob.prepareRewardVideoAd({
+          adId: ADMOB_CONFIG.rewardedId
+        });
+        console.log("[AdMob] Vídeo recompensado pré-carregado.");
+      } catch (rewErr) {
+        console.warn("[AdMob] Erro ao preparar vídeo recompensado:", rewErr);
+      }
+    } catch (initErr) {
+      console.warn("[AdMob] Erro ao inicializar AdMob:", initErr);
+    }
+  }
+
+  // Vincular botão de assistir vídeo para ganhar moedas
+  const btnWatchVideo = document.getElementById("btn-watch-ad-for-coins");
+  if (btnWatchVideo) {
+    bindAction(btnWatchVideo, async () => {
+      if (isNative && admob && _isAdMobReady) {
+        try {
+          showToast("📺 Carregando vídeo de recompensa...");
+          await admob.showRewardVideoAd();
+          addPlayerCoins(200);
+          updateCoinsUI();
+          showToast("🎉 Parabéns! Você ganhou +200 Moedas Arcanas!");
+          // Pré-carrega o próximo
+          try { await admob.prepareRewardVideoAd({ adId: ADMOB_CONFIG.rewardedId }); } catch(e){}
+        } catch (err) {
+          showToast("Vídeo em preparação. Tente novamente em alguns segundos!");
+          try { await admob.prepareRewardVideoAd({ adId: ADMOB_CONFIG.rewardedId }); } catch(e){}
+        }
+      } else {
+        // No navegador web ou modo teste
+        addPlayerCoins(100);
+        updateCoinsUI();
+        showToast("🪙 Bônus arcano concedido: +100 Moedas!");
+      }
+    }, "watchVideoAdCoins");
+  }
+
+  // Exibir intersticial ao clicar em Jogar Novamente ou ao concluir partida
+  const btnPlayAgain = document.getElementById("btn-play-again");
+  if (btnPlayAgain && isNative && admob) {
+    btnPlayAgain.addEventListener("click", async () => {
+      try {
+        if (_isAdMobReady) {
+          await admob.showInterstitial();
+          try { await admob.prepareInterstitial({ adId: ADMOB_CONFIG.interstitialId }); } catch(e){}
+        }
+      } catch (e) {}
+    });
+  }
 }
