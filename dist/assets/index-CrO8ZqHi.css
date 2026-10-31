@@ -6,7 +6,6 @@
    ========================================================================== */
 
 .modal-overlay,
-#start-menu,
 #pause-modal,
 #promotion-modal,
 #waiting-modal,
@@ -27,6 +26,26 @@
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   pointer-events: auto !important;
+}
+
+#start-menu {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  width: 100vw !important;
+  height: 100% !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  z-index: 9999 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
 }
 
 .modal-overlay.hidden,

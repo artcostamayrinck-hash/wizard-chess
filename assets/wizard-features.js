@@ -680,9 +680,6 @@ function handleGameOverRewards() {
   if (rewardTotal) rewardTotal.textContent = `${getPlayerCoins()} 🪙`;
   if (rewardCard) rewardCard.style.removeProperty("display");
 }
-    }
-  }
-}
 
 // --------------------------------------------------------
 // 5. Music Ambient Controls
