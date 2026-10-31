@@ -13,11 +13,8 @@ function bindAction(el, handler, actionKey = "") {
   let lastTrigger = 0;
 
   const trigger = (e) => {
-    if (e && typeof e.stopPropagation === "function") {
-      e.stopPropagation();
-    }
     const now = Date.now();
-    if (now - lastTrigger < 250) return;
+    if (now - lastTrigger < 120) return;
     lastTrigger = now;
     try {
       handler(e);
@@ -27,7 +24,11 @@ function bindAction(el, handler, actionKey = "") {
   };
 
   el.addEventListener("click", trigger);
-  el.addEventListener("touchend", trigger, { passive: true });
+  el.addEventListener("pointerup", (e) => {
+    if (e.pointerType === "touch" || e.pointerType === "pen") {
+      trigger(e);
+    }
+  });
 }
 
 function initWizardFeatures() {
@@ -1320,6 +1321,7 @@ function setupStartMenuGrid() {
 
   // Sincroniza estado inicial da dificuldade da IA
   syncAiDifficulty();
+  switchSubView("home"); // Garante subview inicial limpa
 
   const currentSkin = localStorage.getItem("wizard_chess_skin") || "classic";
   updateKnightShowcase(currentSkin);
@@ -1568,7 +1570,10 @@ function updateTutorialStepUI() {
 // ========================================================
 // Inicialização Segura (Após todas as constantes e funções)
 // ========================================================
+let _wizardAppInitialized = false;
 function startWizardApp() {
+  if (_wizardAppInitialized) return;
+  _wizardAppInitialized = true;
   try {
     initWizardFeatures();
   } catch (err) {
@@ -1576,16 +1581,13 @@ function startWizardApp() {
   }
 }
 
-// Execução imediata garantida (script está no final do documento, DOM já está presente)
-startWizardApp();
-
-// Execução complementar para navegadores lentos ou carregamentos assíncronos
+// Execução segura garantida uma única vez
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", startWizardApp);
+} else {
+  startWizardApp();
 }
 window.addEventListener("load", startWizardApp);
-setTimeout(startWizardApp, 150);
-
 
 // --------------------------------------------------------
 // 11. Profile System: Customize Name, Avatar & View Achievements
@@ -1776,55 +1778,40 @@ function setupChessDynamics() {
 // SISTEMA DE TELA CHEIA E ADAPTAÇÃO DINÂMICA PARA TODOS OS DISPOSITIVOS
 // =========================================================================
 function setupAdaptiveFullscreenAndLayout() {
+  let isUpdating = false;
   function updateDeviceAdaptation() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-    document.documentElement.style.setProperty('--app-width', `${window.innerWidth}px`);
+    if (isUpdating) return;
+    isUpdating = true;
+    try {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+      document.documentElement.style.setProperty('--app-width', `${window.innerWidth}px`);
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const aspect = width / height;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const aspect = width / height;
 
-    const b = document.body;
-    b.classList.toggle('is-landscape', aspect >= 1);
-    b.classList.toggle('is-portrait', aspect < 1);
-    b.classList.toggle('is-ultra-tall', aspect < 0.48);
-    b.classList.toggle('is-compact-phone', width <= 360 || height <= 640);
-    b.classList.toggle('is-tablet', width >= 601 && width <= 1024);
-    b.classList.toggle('is-desktop', width > 1024);
-
-    // Notifica subsistemas para reajuste
-    window.dispatchEvent(new Event('resize'));
+      const b = document.body;
+      if (b) {
+        b.classList.toggle('is-landscape', aspect >= 1);
+        b.classList.toggle('is-portrait', aspect < 1);
+        b.classList.toggle('is-ultra-tall', aspect < 0.48);
+        b.classList.toggle('is-compact-phone', width <= 360 || height <= 640);
+        b.classList.toggle('is-tablet', width >= 601 && width <= 1024);
+        b.classList.toggle('is-desktop', width > 1024);
+      }
+    } finally {
+      isUpdating = false;
+    }
   }
 
-  window.addEventListener('resize', updateDeviceAdaptation);
+  window.addEventListener('resize', updateDeviceAdaptation, { passive: true });
   window.addEventListener('orientationchange', () => {
     setTimeout(updateDeviceAdaptation, 80);
     setTimeout(updateDeviceAdaptation, 250);
   });
   updateDeviceAdaptation();
-
-  // Helper para acionar tela cheia no navegador (se disponível)
-  function requestAppFullscreen() {
-    try {
-      if (document.fullscreenElement || document.webkitFullscreenElement) return;
-      const el = document.documentElement;
-      const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-      if (req) {
-        req.call(el).catch(() => {});
-      }
-    } catch(e) {}
-  }
-
-  // Conectar botões de ação do jogo ao fullscreen automático
-  ['btn-start-game', 'btn-hero-battle', 'btn-play-daily-challenge', 'btn-launch-random-puzzle', 'btn-start-tutorial-mode'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener('click', requestAppFullscreen);
-      btn.addEventListener('touchend', requestAppFullscreen, { passive: true });
-    }
-  });
 
   // Sincroniza botão de tela cheia do dock
   const btnFs = document.getElementById('btn-fullscreen');

@@ -4402,6 +4402,17 @@ div#start-menu {
   z-index: 99999 !important;
   overflow: hidden !important;
   box-shadow: none !important;
+  pointer-events: auto !important;
+}
+
+#start-menu.hidden,
+#start-menu.modal-overlay.hidden,
+div#start-menu.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
 }
 
 #start-menu .modal-content,
@@ -4435,20 +4446,29 @@ div.menu-photo2-modal {
   box-sizing: border-box !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  pointer-events: auto !important;
 }
 
-/* Todas as subviews ocupam o centro da tela expandindo proporcionalmente */
-.menu-subview,
-#menu-view-home,
-#menu-view-battle,
-#menu-view-customize,
-#menu-view-challenges,
-#menu-view-settings,
-#menu-view-tutorial {
-  width: 100% !important;
-  max-width: 480px !important;
-  margin: 0 auto !important;
-  box-sizing: border-box !important;
+#start-menu.hidden .modal-content,
+#start-menu.hidden .start-content,
+#start-menu.hidden .menu-photo2-modal {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Subviews: Apenas a ativa é exibida, as inativas ficam 100% ocultas */
+.menu-subview:not(.active),
+#menu-view-home:not(.active),
+#menu-view-battle:not(.active),
+#menu-view-customize:not(.active),
+#menu-view-challenges:not(.active),
+#menu-view-settings:not(.active),
+#menu-view-tutorial:not(.active) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
 
 .menu-subview.active,
@@ -4459,6 +4479,8 @@ div.menu-photo2-modal {
 #menu-view-settings.active,
 #menu-view-tutorial.active {
   display: flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   width: 100% !important;
@@ -4489,6 +4511,8 @@ div.menu-photo2-modal {
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 .home-knight-svg-wrap {
@@ -4498,12 +4522,15 @@ div.menu-photo2-modal {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .rpg-knight-svg {
   height: 100% !important;
   max-height: 100% !important;
   width: auto !important;
+  pointer-events: none !important;
 }
 
 /* Cards de ação amplos e confortáveis */
@@ -4513,6 +4540,9 @@ div.menu-photo2-modal {
   flex-direction: column !important;
   gap: clamp(10px, 2vh, 16px) !important;
   box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
 }
 
 .orange-action-card,
@@ -4523,6 +4553,13 @@ div.menu-photo2-modal {
   padding: clamp(10px, 1.8vh, 16px) 16px !important;
   border-radius: 18px !important;
   box-sizing: border-box !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 5 !important;
+  touch-action: manipulation !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .rpg-bottom-nav {
@@ -4531,4 +4568,49 @@ div.menu-photo2-modal {
   padding: 8px 14px max(8px, env(safe-area-inset-bottom, 8px)) !important;
   border-radius: 18px !important;
   box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 20 !important;
+  pointer-events: auto !important;
+}
+
+/* Todos os botões e áreas clicáveis têm interatividade imediata garantida */
+#start-menu button,
+.rpg-action-card,
+.orange-action-card,
+.pink-action-card,
+.indigo-action-card,
+.rpg-card-battle,
+.rpg-card-challenges,
+.rpg-card-tutorial,
+.rpg-nav-item,
+.rpg-top-icon-btn,
+.rpg-top-profile,
+.knight-model-badge,
+.home-knight-col,
+.btn-subview-back,
+.custom-card,
+.promo-btn,
+.toggle-btn,
+#btn-start-game {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Filhos não interceptam o evento do botão pai */
+.orange-action-card *,
+.pink-action-card *,
+.indigo-action-card *,
+.rpg-action-card *,
+.rpg-card-battle *,
+.rpg-card-challenges *,
+.rpg-card-tutorial *,
+.rpg-nav-item *,
+.rpg-top-icon-btn *,
+.knight-model-badge *,
+.btn-subview-back * {
+  pointer-events: none !important;
 }
