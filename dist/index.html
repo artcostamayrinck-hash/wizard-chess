@@ -2595,6 +2595,10 @@
             <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
           </div>
 
+          <div class="rpg-top-coins" id="btn-top-coins" title="Moedas Arcanas (Toque para ir à Loja)" style="cursor: pointer; pointer-events: auto !important;">
+            <span class="coin-icon">🪙</span>
+            <span id="player-coins-top">100</span>
+          </div>
           <div class="rpg-top-profile" id="btn-top-profile" title="Perfil e Estatísticas" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openProfileModal) window._openProfileModal(event);">
             <div class="rpg-top-avatar" id="top-player-avatar">🧙‍♂️</div>
             <div class="rpg-top-lvl-badge">
@@ -2742,45 +2746,51 @@
 
         <!-- Seção: Modelo das Peças -->
         <div class="customize-section">
-          <label class="customize-section-label">
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 8px;">
+            <label class="customize-section-label">
             <span class="material-symbols-rounded">chess</span>
             <span>MODELO DAS PEÇAS (SKIN)</span>
           </label>
+            <div class="coins-shop-pill">
+              <span>🪙</span>
+              <span id="customize-coins-display">100</span>
+            </div>
+          </div>
           <div class="customize-grid" id="customize-skin-grid">
-            <button type="button" class="custom-card active" data-skin="classic">
+            <button type="button" class="custom-card active equipped unlocked" data-skin="classic">
               <div class="custom-card-color classic-preview"></div>
               <div class="custom-card-info">
                 <span class="custom-card-name">Clássico</span>
                 <span class="custom-card-detail">Mármore & Obsidiana</span>
               </div>
-              <span class="custom-card-check">✓</span>
+              <span class="custom-card-status" id="skin-status-classic">✓ Equipado</span>
             </button>
 
-            <button type="button" class="custom-card" data-skin="gold">
-              <div class="custom-card-color gold-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Ouro Real</span>
-                <span class="custom-card-detail">Ouro Polido & Prata</span>
-              </div>
-              <span class="custom-card-check">✓</span>
-            </button>
-
-            <button type="button" class="custom-card" data-skin="amethyst">
+            <button type="button" class="custom-card locked" data-skin="amethyst">
               <div class="custom-card-color amethyst-preview"></div>
               <div class="custom-card-info">
                 <span class="custom-card-name">Ametista</span>
                 <span class="custom-card-detail">Cristal Cósmico & Ônix</span>
               </div>
-              <span class="custom-card-check">✓</span>
+              <span class="custom-card-status" id="skin-status-amethyst">🔒 300 🪙</span>
             </button>
 
-            <button type="button" class="custom-card" data-skin="emerald">
+            <button type="button" class="custom-card locked" data-skin="emerald">
               <div class="custom-card-color emerald-preview"></div>
               <div class="custom-card-info">
                 <span class="custom-card-name">Esmeralda</span>
                 <span class="custom-card-detail">Esmeralda Viva & Rubi</span>
               </div>
-              <span class="custom-card-check">✓</span>
+              <span class="custom-card-status" id="skin-status-emerald">🔒 600 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-skin="gold">
+              <div class="custom-card-color gold-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Ouro Real</span>
+                <span class="custom-card-detail">Ouro Polido & Prata</span>
+              </div>
+              <span class="custom-card-status" id="skin-status-gold">🔒 1.200 🪙</span>
             </button>
           </div>
         </div>
@@ -3184,7 +3194,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.2.6</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.2.7</span>
           </div>
         </div>
       </div>
@@ -3550,6 +3560,21 @@
       <h3 id="game-over-title">Xeque-Mate!</h3>
       <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
 
+      <!-- Card de Recompensa em Moedas Arcanas -->
+      <div id="game-over-reward-card" class="game-over-reward-card" style="margin-bottom: 14px; padding: 12px 16px; border-radius: 16px; background: radial-gradient(circle at 50% 30%, rgba(245, 197, 107, 0.22) 0%, rgba(20, 16, 32, 0.95) 100%); border: 1.5px solid rgba(245, 197, 107, 0.6); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 2rem; line-height: 1;">🪙</span>
+          <div style="text-align: left;">
+            <div style="font-size: 0.72rem; letter-spacing: 1px; color: #f5c56b; font-weight: 700;">RECOMPENSA DE BATALHA</div>
+            <div id="reward-coins-added" style="font-size: 1.15rem; font-weight: 900; color: #ffd700;">+50 Moedas Arcanas</div>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.7rem; color: #c8b6ff;">Total Atual</div>
+          <div id="reward-coins-total" style="font-size: 1.05rem; font-weight: 800; color: #fff;">150 🪙</div>
+        </div>
+      </div>
+
       <!-- Análise Arcana de Lances -->
       <div id="game-analysis-card" class="analysis-card hidden">
         <div class="analysis-header">
@@ -3677,7 +3702,7 @@
         <div class="profile-hero-info">
           <div class="profile-name-display" id="profile-name-display">Mago</div>
           <div class="profile-title-display">Mestre Arcano do Tabuleiro</div>
-          <div class="profile-stats-tag">⭐ Nível <span id="profile-lvl-number">1</span> • <span id="profile-xp-display">0 XP</span></div>
+          <div class="profile-stats-tag">⭐ Nível <span id="profile-lvl-number">1</span> • <span id="profile-xp-display">0 XP</span> • 🪙 <span id="profile-coins-display">100</span> Moedas</div>
         </div>
       </div>
 

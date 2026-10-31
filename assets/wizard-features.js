@@ -1,4 +1,177 @@
 
+// ========================================================
+// SISTEMA DE RECOMPENSAS: MOEDAS ARCANAS & LOJA DE PEÇAS
+// ========================================================
+const SKIN_PRICES = {
+  classic: 0,
+  amethyst: 300,
+  emerald: 600,
+  gold: 1200
+};
+
+const SKIN_NAMES = {
+  classic: "Clássico",
+  amethyst: "Ametista",
+  emerald: "Esmeralda",
+  gold: "Ouro Real"
+};
+
+function getPlayerCoins() {
+  const val = parseInt(localStorage.getItem("wizard_chess_coins"), 10);
+  return isNaN(val) ? 100 : val;
+}
+
+function setPlayerCoins(val) {
+  const safeVal = Math.max(0, val);
+  try { localStorage.setItem("wizard_chess_coins", safeVal); } catch(e) {}
+  updateCoinsUI();
+}
+
+function addPlayerCoins(amount, reason = "") {
+  const current = getPlayerCoins();
+  const next = current + amount;
+  setPlayerCoins(next);
+  if (reason) {
+    showToast(`🪙 +${amount} Moedas: ${reason}`);
+  }
+  return next;
+}
+
+function spendPlayerCoins(amount) {
+  const current = getPlayerCoins();
+  if (current < amount) return false;
+  setPlayerCoins(current - amount);
+  return true;
+}
+
+function getUnlockedSkins() {
+  try {
+    const raw = localStorage.getItem("wizard_chess_unlocked_skins");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return ["classic"];
+}
+
+function isSkinUnlocked(skin) {
+  if (skin === "classic") return true;
+  return getUnlockedSkins().includes(skin);
+}
+
+function unlockSkin(skin) {
+  const unlocked = getUnlockedSkins();
+  if (!unlocked.includes(skin)) {
+    unlocked.push(skin);
+    try { localStorage.setItem("wizard_chess_unlocked_skins", JSON.stringify(unlocked)); } catch(e) {}
+  }
+  updateSkinsShopUI();
+}
+
+function updateCoinsUI() {
+  const coins = getPlayerCoins();
+  const topCoins = document.getElementById("player-coins-top");
+  const profileCoins = document.getElementById("profile-coins-display");
+  const customizeCoins = document.getElementById("customize-coins-display");
+  const rewardTotal = document.getElementById("reward-coins-total");
+
+  if (topCoins) topCoins.textContent = coins.toLocaleString();
+  if (profileCoins) profileCoins.textContent = coins.toLocaleString();
+  if (customizeCoins) customizeCoins.textContent = coins.toLocaleString();
+  if (rewardTotal) rewardTotal.textContent = `${coins.toLocaleString()} 🪙`;
+}
+
+function updateSkinsShopUI() {
+  const currentSkin = localStorage.getItem("wizard_chess_skin") || "classic";
+  const unlocked = getUnlockedSkins();
+
+  document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {
+    const skin = card.dataset.skin;
+    const isUnlocked = isSkinUnlocked(skin);
+    const isEquipped = skin === currentSkin;
+    const statusEl = card.querySelector(".custom-card-status");
+
+    card.classList.toggle("unlocked", isUnlocked);
+    card.classList.toggle("locked", !isUnlocked);
+    card.classList.toggle("equipped", isEquipped);
+    card.classList.toggle("active", isEquipped);
+
+    if (statusEl) {
+      if (isEquipped) {
+        statusEl.textContent = "✓ Equipado";
+      } else if (isUnlocked) {
+        statusEl.textContent = "Equipar";
+      } else {
+        const price = SKIN_PRICES[skin] || 300;
+        statusEl.textContent = `🔒 ${price.toLocaleString()} 🪙`;
+      }
+    }
+  });
+}
+
+function checkDailyReward() {
+  try {
+    const lastDaily = parseInt(localStorage.getItem("wizard_chess_last_daily"), 10) || 0;
+    const now = Date.now();
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+    if (now - lastDaily >= TWENTY_FOUR_HOURS) {
+      localStorage.setItem("wizard_chess_last_daily", now);
+      addPlayerCoins(50, "Recompensa Diária Coletada!");
+      showAchievementToast("🎁 RECOMPENSA DIÁRIA!", "+50 Moedas Arcanas coletadas hoje", "🪙");
+    }
+  } catch(e) {}
+}
+
+function setupRewardEconomySystem() {
+  updateCoinsUI();
+  updateSkinsShopUI();
+  checkDailyReward();
+
+  // Botão de moedas no topo abre a personalização (loja)
+  const btnTopCoins = document.getElementById("btn-top-coins");
+  if (btnTopCoins) {
+    bindAction(btnTopCoins, () => {
+      const btnNavCustom = document.getElementById("btn-nav-customize");
+      if (btnNavCustom) btnNavCustom.click();
+    }, "openShopFromCoinsTop");
+  }
+
+  // Interação na Loja de Skins
+  document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {
+    bindAction(card, () => {
+      const skin = card.dataset.skin;
+      const skinName = SKIN_NAMES[skin] || skin;
+      const price = SKIN_PRICES[skin] || 0;
+
+      if (isSkinUnlocked(skin)) {
+        // Já tem: apenas equipa
+        const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
+        if (skinBtn) skinBtn.click();
+        try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
+        updateSkinsShopUI();
+        showToast(`🎨 Estilo equipado: ${skinName}`);
+      } else {
+        // Bloqueado: tenta comprar
+        const coins = getPlayerCoins();
+        if (coins >= price) {
+          spendPlayerCoins(price);
+          unlockSkin(skin);
+          const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
+          if (skinBtn) skinBtn.click();
+          try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
+          updateSkinsShopUI();
+          showAchievementToast("🎉 ESTILO DESBLOQUEADO!", `Você comprou ${skinName} por ${price} 🪙`, "✨");
+        } else {
+          showToast(`🔒 Moedas insuficientes! ${skinName} custa ${price} 🪙 (Você tem ${coins} 🪙).`);
+        }
+      }
+    }, `skinShopItem_${card.dataset.skin}`);
+  });
+}
+
+
 // Bloqueio de botões inferiores e controle de navegação dos modais
 window._openAchievementsFromProfile = function(e) {
   if (e) {
@@ -213,6 +386,7 @@ function setupOnlinePlayerNames() {
 
 function initWizardFeatures() {
   const tasks = [
+    { name: "RewardEconomySystem", fn: setupRewardEconomySystem },
     { name: "OnlinePlayerNames", fn: setupOnlinePlayerNames },
     { name: "StartMenuGrid", fn: setupStartMenuGrid },
     { name: "ProfileSystem", fn: setupProfileSystem },
@@ -444,21 +618,68 @@ function generateMatchAnalysis() {
 
 function handleGameOverRewards() {
   const title = document.getElementById("game-over-title")?.textContent || "";
-  if (title.toLowerCase().includes("xeque-mate") || title.toLowerCase().includes("vitória")) {
+  const isWin = title.toLowerCase().includes("xeque-mate") || title.toLowerCase().includes("vitória");
+  const isDraw = title.toLowerCase().includes("empate");
+
+  let coinsEarned = 15; // Mínimo de consolo
+  let xpEarned = 25;
+  let rewardText = "+15 Moedas (Honra em Batalha)";
+
+  if (isWin) {
     unlockAchievement("first_win");
-    addXP(100, "Vitória na Batalha");
+    let mode = "ai";
+    let diff = 2;
 
     if (window._WIZARD_GAME) {
-      const arena = window._WIZARD_GAME.getArena();
+      mode = window._WIZARD_GAME.getMode ? window._WIZARD_GAME.getMode() : "ai";
+      diff = window._WIZARD_GAME.getDiff ? window._WIZARD_GAME.getDiff() : 2;
+
+      const arena = window._WIZARD_GAME.getArena ? window._WIZARD_GAME.getArena() : "";
       if (arena === "inferno") unlockAchievement("crypt_master");
       if (arena === "frost") unlockAchievement("frost_lord");
+    }
 
-      const mode = window._WIZARD_GAME.getMode();
-      const diff = window._WIZARD_GAME.getDiff();
-      if (mode === "ai" && diff === 3) {
+    if (mode === "online") {
+      coinsEarned = 120;
+      xpEarned = 150;
+      rewardText = "+120 Moedas (Vitória Online!)";
+    } else if (mode === "ai") {
+      if (diff === 3) {
+        coinsEarned = 100;
+        xpEarned = 150;
+        rewardText = "+100 Moedas (IA Difícil Vencida!)";
         unlockAchievement("hard_slayer");
-        addXP(150, "Vitória contra IA no Difícil");
+      } else if (diff === 2) {
+        coinsEarned = 50;
+        xpEarned = 100;
+        rewardText = "+50 Moedas (Vitória na Batalha)";
+      } else {
+        coinsEarned = 25;
+        xpEarned = 50;
+        rewardText = "+25 Moedas (Treino Concluído)";
       }
+    } else {
+      coinsEarned = 40;
+      xpEarned = 60;
+      rewardText = "+40 Moedas (Duelo Local)";
+    }
+  } else if (isDraw) {
+    coinsEarned = 20;
+    xpEarned = 40;
+    rewardText = "+20 Moedas (Empate)";
+  }
+
+  addXP(xpEarned, rewardText);
+  addPlayerCoins(coinsEarned);
+
+  const rewardLabel = document.getElementById("reward-coins-added");
+  const rewardTotal = document.getElementById("reward-coins-total");
+  const rewardCard = document.getElementById("game-over-reward-card");
+
+  if (rewardLabel) rewardLabel.textContent = rewardText;
+  if (rewardTotal) rewardTotal.textContent = `${getPlayerCoins()} 🪙`;
+  if (rewardCard) rewardCard.style.removeProperty("display");
+}
     }
   }
 }
@@ -1786,6 +2007,8 @@ function setupProfileSystem() {
   let currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
 
   function applyProfileUI() {
+    updateCoinsUI();
+    updateSkinsShopUI();
     currentName = localStorage.getItem("wizard_chess_player_name") || "Mago";
     currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
 

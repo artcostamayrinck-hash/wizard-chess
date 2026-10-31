@@ -4828,3 +4828,82 @@ body.achievements-modal-open #achievements-modal * {
 #achievements-modal .modal-content {
   position: relative !important;
 }
+
+
+/* ==========================================================================
+   ESTILOS VISUAIS: MOEDAS ARCANAS E LOJA DE SKINS
+   ========================================================================== */
+.rpg-top-coins {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 10px !important;
+  background: rgba(30, 20, 10, 0.85) !important;
+  border: 1.5px solid rgba(245, 197, 107, 0.55) !important;
+  border-radius: 20px !important;
+  color: #ffd700 !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 235, 150, 0.25) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.rpg-top-coins:active {
+  transform: scale(0.93) !important;
+  border-color: #ffd700 !important;
+}
+
+.rpg-top-coins .coin-icon {
+  font-size: 1rem !important;
+  line-height: 1 !important;
+}
+
+.coins-shop-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  background: rgba(245, 197, 107, 0.16) !important;
+  border: 1.5px solid rgba(245, 197, 107, 0.45) !important;
+  color: #ffd700 !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.custom-card-status {
+  font-size: 0.74rem !important;
+  font-weight: 800 !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.custom-card.equipped .custom-card-status {
+  background: rgba(0, 245, 212, 0.18) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.5) !important;
+}
+
+.custom-card.unlocked:not(.equipped) .custom-card-status {
+  background: rgba(245, 197, 107, 0.15) !important;
+  color: #f5c56b !important;
+  border: 1px solid rgba(245, 197, 107, 0.4) !important;
+}
+
+.custom-card.locked .custom-card-status {
+  background: rgba(255, 77, 109, 0.15) !important;
+  color: #ffb4a2 !important;
+  border: 1px solid rgba(255, 77, 109, 0.4) !important;
+}
+
+.custom-card.locked {
+  opacity: 0.9 !important;
+}
