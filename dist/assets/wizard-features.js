@@ -1,3 +1,22 @@
+// Fallback inicial para o modal de perfil
+window._openProfileModal = function() {
+  if (typeof window._applyProfileUI === "function") {
+    try { window._applyProfileUI(); } catch (e) {}
+  }
+  const modal = document.getElementById("profile-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    modal.style.setProperty("display", "flex", "important");
+  }
+};
+window._closeProfileModal = function() {
+  const modal = document.getElementById("profile-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.style.removeProperty("display");
+  }
+};
+
 // ========================================================
 // Wizard's Chess 3D - Advanced Features, Progression & Skins
 // ========================================================
@@ -1201,9 +1220,12 @@ function setupStartMenuGrid() {
   }
   if (btnTopProfile) {
     bindAction(btnTopProfile, () => {
-      applyProfileUI();
-      const profileModal = document.getElementById("profile-modal");
-      if (profileModal) profileModal.classList.remove("hidden");
+      if (typeof window._openProfileModal === "function") {
+        window._openProfileModal();
+      } else {
+        const pm = document.getElementById("profile-modal");
+        if (pm) pm.classList.remove("hidden");
+      }
     }, "openProfileModalFromTop");
   }
   const homeKnightCol = document.getElementById("home-knight-col");
@@ -1606,6 +1628,9 @@ function setupProfileSystem() {
   let currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
 
   function applyProfileUI() {
+    currentName = localStorage.getItem("wizard_chess_player_name") || "Mago";
+    currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
+
     if (nameInput) nameInput.value = currentName;
     if (previewName) previewName.textContent = currentName;
     if (previewAvatar) previewAvatar.textContent = currentAvatar;
@@ -1623,23 +1648,37 @@ function setupProfileSystem() {
     if (setName) setName.textContent = currentName;
   }
 
+  window._applyProfileUI = applyProfileUI;
+
+  function openProfileModal() {
+    applyProfileUI();
+    if (profileModal) {
+      profileModal.classList.remove("hidden");
+      profileModal.style.setProperty("display", "flex", "important");
+    }
+  }
+  window._openProfileModal = openProfileModal;
+
+  function closeProfileModal() {
+    savePlayerName();
+    if (profileModal) {
+      profileModal.classList.add("hidden");
+      profileModal.style.removeProperty("display");
+    }
+  }
+  window._closeProfileModal = closeProfileModal;
+
   applyProfileUI();
 
   // Abrir Modal de Perfil ao clicar no perfil do topo
   if (btnTopProfile && profileModal) {
-    bindAction(btnTopProfile, () => {
-      applyProfileUI();
-      profileModal.classList.remove("hidden");
-    }, "openProfileModalFromTop");
+    bindAction(btnTopProfile, openProfileModal, "openProfileModalFromTop");
   }
 
   // Também permitir abrir pelo resumo nas configurações
   const btnSettingsToProfile = document.getElementById("btn-settings-to-profile");
   if (btnSettingsToProfile && profileModal) {
-    bindAction(btnSettingsToProfile, () => {
-      applyProfileUI();
-      profileModal.classList.remove("hidden");
-    }, "openProfileModalFromSettings");
+    bindAction(btnSettingsToProfile, openProfileModal, "openProfileModalFromSettings");
   }
 
   // Selecionar Avatar
@@ -1674,21 +1713,26 @@ function setupProfileSystem() {
   // Botão Conquistas dentro do Perfil
   if (btnProfileAch) {
     bindAction(btnProfileAch, () => {
-      if (profileModal) profileModal.classList.add("hidden");
+      closeProfileModal();
       const modalAch = document.getElementById("achievements-modal");
       if (modalAch) {
         if (typeof renderAchievementsList === "function") renderAchievementsList();
         modalAch.classList.remove("hidden");
+        modalAch.style.setProperty("display", "flex", "important");
       }
     }, "openAchFromProfile");
   }
 
   // Fechar Modal de Perfil
   if (btnCloseProfile && profileModal) {
-    bindAction(btnCloseProfile, () => {
-      savePlayerName();
-      profileModal.classList.add("hidden");
-    }, "closeProfileModal");
+    bindAction(btnCloseProfile, closeProfileModal, "closeProfileModal");
+  }
+  if (profileModal) {
+    profileModal.addEventListener("click", (e) => {
+      if (e.target === profileModal) {
+        closeProfileModal();
+      }
+    });
   }
 
   // Toggles de Configurações Adicionais (Aproveitamento de Tela)

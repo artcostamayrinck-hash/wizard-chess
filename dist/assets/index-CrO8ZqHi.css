@@ -3851,22 +3851,25 @@
   background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
 }
 
+/* Em qualquer largura, o start-menu permanece 100% fullscreen sem caixa flutuante */
 @media (min-width: 641px) {
   #start-menu {
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(11, 10, 14, 0.94) !important;
-    padding: 16px !important;
+    background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   #start-menu .modal-content.menu-photo2-modal,
+  #start-menu .start-content.menu-photo2-modal,
   .menu-photo2-modal {
-    max-width: 500px !important;
-    height: 96vh !important;
-    min-height: 92vh !important;
-    max-height: 96vh !important;
-    border-radius: 28px !important;
-    border: 1px solid rgba(245, 197, 107, 0.3) !important;
-    margin: auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
   }
 }
 
@@ -4269,44 +4272,47 @@ html, body {
 /* 5. Adaptação para Celulares Ultra-Altos (Aspect Ratio >= 19.5:9 ou height >= 820px) */
 @media (min-height: 820px) and (max-width: 600px) {
   .home-hero-split {
-    gap: 16px !important;
-    margin: 8px 0 14px !important;
+    gap: clamp(10px, 2vh, 18px) !important;
+    margin: 6px 0 10px !important;
+    justify-content: space-evenly !important;
   }
   .home-knight-svg-wrap {
-    height: clamp(180px, 28vh, 250px) !important;
+    height: clamp(220px, 34vh, 340px) !important;
+    max-width: 340px !important;
   }
   .home-actions-col {
-    gap: 12px !important;
+    gap: clamp(10px, 1.8vh, 16px) !important;
   }
   .orange-action-card,
   .pink-action-card,
   .indigo-action-card {
-    padding: 14px 16px !important;
-    min-height: 60px !important;
+    padding: clamp(12px, 1.8vh, 16px) 16px !important;
+    min-height: clamp(60px, 8.5vh, 76px) !important;
   }
   #menu-view-battle .photo2-grid {
     gap: 16px !important;
   }
 }
 
-/* 6. Adaptação para Tablets, Dobráveis e Desktops (width >= 641px) */
+/* 6. Adaptação para Telas Maiores mantendo sempre 100% de tela ocupada */
 @media (min-width: 641px) {
   #start-menu {
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(11, 10, 14, 0.94) !important;
-    padding: 20px !important;
+    background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   #start-menu .modal-content.menu-photo2-modal,
+  #start-menu .start-content.menu-photo2-modal,
   .menu-photo2-modal {
-    max-width: min(520px, 90vw) !important;
-    height: min(94vh, 880px) !important;
-    min-height: min(84vh, 760px) !important;
-    max-height: 94vh !important;
-    border-radius: 28px !important;
-    border: 1px solid rgba(245, 197, 107, 0.3) !important;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.15) !important;
-    margin: auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
   }
 }
 
@@ -4418,6 +4424,9 @@ div#start-menu.hidden {
 #start-menu .modal-content,
 #start-menu .start-content,
 #start-menu .menu-photo2-modal,
+#start-menu .modal-content.menu-photo2-modal,
+#start-menu .start-content.menu-photo2-modal,
+#start-menu .modal-content.start-content.menu-photo2-modal,
 .menu-photo2-modal,
 div.menu-photo2-modal {
   position: absolute !important;
@@ -4517,8 +4526,8 @@ div.menu-photo2-modal {
 
 .home-knight-svg-wrap {
   width: 100% !important;
-  max-width: 320px !important;
-  height: clamp(190px, 32vh, 310px) !important;
+  max-width: 340px !important;
+  height: clamp(210px, 34vh, 350px) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -4549,8 +4558,8 @@ div.menu-photo2-modal {
 .pink-action-card,
 .indigo-action-card {
   width: 100% !important;
-  min-height: clamp(54px, 7.5vh, 68px) !important;
-  padding: clamp(10px, 1.8vh, 16px) 16px !important;
+  min-height: clamp(58px, 8.5vh, 74px) !important;
+  padding: clamp(11px, 1.8vh, 16px) 16px !important;
   border-radius: 18px !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
@@ -4709,4 +4718,40 @@ div.menu-photo2-modal {
 .btn-subview-back *,
 .photo2-back-btn * {
   pointer-events: none !important;
+}
+
+
+/* ==========================================================================
+   CORREÇÃO CRÍTICA DE CAMADAS: MODAIS DE PERFIL E CONQUISTAS SOBRE O MENU
+   ========================================================================== */
+#profile-modal,
+#achievements-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 100050 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(11, 10, 14, 0.9) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  pointer-events: auto !important;
+}
+
+#profile-modal.hidden,
+#achievements-modal.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
+
+#profile-modal .modal-content,
+#achievements-modal .modal-content {
+  position: relative !important;
+  z-index: 100060 !important;
+  pointer-events: auto !important;
 }
