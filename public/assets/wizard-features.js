@@ -43,7 +43,8 @@ function initWizardFeatures() {
     { name: "CustomPGNCopy", fn: setupCustomPGNCopy },
     { name: "WhatsAppShare", fn: setupWhatsAppShare },
     { name: "MoveAnalysis", fn: setupMoveAnalysis },
-    { name: "ChessDynamics", fn: setupChessDynamics }
+    { name: "ChessDynamics", fn: setupChessDynamics },
+    { name: "AdaptiveLayout", fn: setupAdaptiveFullscreenAndLayout }
   ];
 
   for (const task of tasks) {
@@ -1767,5 +1768,76 @@ function setupChessDynamics() {
         showToast("🔮 Oráculo Arcano: Revelando as correntes místicas do tabuleiro!", 2500);
       }
     });
+  }
+}
+
+
+// =========================================================================
+// SISTEMA DE TELA CHEIA E ADAPTAÇÃO DINÂMICA PARA TODOS OS DISPOSITIVOS
+// =========================================================================
+function setupAdaptiveFullscreenAndLayout() {
+  function updateDeviceAdaptation() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    document.documentElement.style.setProperty('--app-width', `${window.innerWidth}px`);
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const aspect = width / height;
+
+    const b = document.body;
+    b.classList.toggle('is-landscape', aspect >= 1);
+    b.classList.toggle('is-portrait', aspect < 1);
+    b.classList.toggle('is-ultra-tall', aspect < 0.48);
+    b.classList.toggle('is-compact-phone', width <= 360 || height <= 640);
+    b.classList.toggle('is-tablet', width >= 601 && width <= 1024);
+    b.classList.toggle('is-desktop', width > 1024);
+
+    // Notifica subsistemas para reajuste
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  window.addEventListener('resize', updateDeviceAdaptation);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(updateDeviceAdaptation, 80);
+    setTimeout(updateDeviceAdaptation, 250);
+  });
+  updateDeviceAdaptation();
+
+  // Helper para acionar tela cheia no navegador (se disponível)
+  function requestAppFullscreen() {
+    try {
+      if (document.fullscreenElement || document.webkitFullscreenElement) return;
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (req) {
+        req.call(el).catch(() => {});
+      }
+    } catch(e) {}
+  }
+
+  // Conectar botões de ação do jogo ao fullscreen automático
+  ['btn-start-game', 'btn-hero-battle', 'btn-play-daily-challenge', 'btn-launch-random-puzzle', 'btn-start-tutorial-mode'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', requestAppFullscreen);
+      btn.addEventListener('touchend', requestAppFullscreen, { passive: true });
+    }
+  });
+
+  // Sincroniza botão de tela cheia do dock
+  const btnFs = document.getElementById('btn-fullscreen');
+  if (btnFs) {
+    const updateFsIcon = () => {
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const icon = btnFs.querySelector('.material-symbols-rounded');
+      const label = btnFs.querySelector('.btn-label');
+      if (icon) icon.textContent = isFs ? 'fullscreen_exit' : 'fullscreen';
+      if (label) label.textContent = isFs ? 'Normal' : 'Tela Cheia';
+    };
+    document.addEventListener('fullscreenchange', updateFsIcon);
+    document.addEventListener('webkitfullscreenchange', updateFsIcon);
+    updateFsIcon();
   }
 }

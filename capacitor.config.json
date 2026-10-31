@@ -1,5 +1,9 @@
 {
   "appId": "com.wizardchess.app",
   "appName": "Wizard Chess",
-  "webDir": "dist"
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#0b0a0e",
+    "allowMixedContent": true
+  }
 }

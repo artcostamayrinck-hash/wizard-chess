@@ -4064,3 +4064,274 @@
   margin: 8px 0 !important;
   overflow-y: auto !important;
 }
+
+
+/* ==========================================================================
+   SISTEMA DE TELA CHEIA E ADAPTAÇÃO DINÂMICA UNIVERSAL (TODOS OS DISPOSITIVOS)
+   ========================================================================== */
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* 1. Base em Tela Cheia Imersiva */
+html, body {
+  width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: #0b0913 !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+#canvas-container,
+#canvas-container canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 1 !important;
+  display: block !important;
+  outline: none !important;
+  touch-action: none !important;
+}
+
+/* 2. HUD Adaptável (Oponente, Turno, Jogador, Dock) */
+.hud-top {
+  position: fixed !important;
+  top: max(10px, var(--safe-top)) !important;
+  left: max(12px, var(--safe-left)) !important;
+  right: max(12px, var(--safe-right)) !important;
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  z-index: 30 !important;
+}
+
+.opponent-bar {
+  max-width: 680px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.player-bar-bottom {
+  position: fixed !important;
+  bottom: calc(max(10px, var(--safe-bottom)) + 52px) !important;
+  left: max(12px, var(--safe-left)) !important;
+  right: max(12px, var(--safe-right)) !important;
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  z-index: 45 !important;
+}
+
+.md3-dock {
+  position: fixed !important;
+  bottom: max(8px, var(--safe-bottom)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  max-width: min(680px, 96vw) !important;
+  z-index: 50 !important;
+}
+
+/* 3. Adaptação do Menu Inicial para Mobile (Edge-to-Edge) */
+#start-menu {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  background: #0b0913 !important;
+  z-index: 99999 !important;
+}
+
+#start-menu .modal-content.menu-photo2-modal,
+.menu-photo2-modal {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  padding-top: max(10px, var(--safe-top)) !important;
+  padding-bottom: max(12px, var(--safe-bottom)) !important;
+  padding-left: max(14px, var(--safe-left)) !important;
+  padding-right: max(14px, var(--safe-right)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  background: radial-gradient(circle at 50% 8%, #161224 0%, #0b0913 100%) !important;
+}
+
+/* Dimensões fluidas e proporcionais para o Cavalo em Destaque */
+.home-knight-svg-wrap {
+  width: 100% !important;
+  max-width: 280px !important;
+  height: clamp(140px, 24vh, 230px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rpg-knight-svg {
+  max-height: 95% !important;
+  max-width: 95% !important;
+}
+
+/* Cards de Ação Fluidos */
+.orange-action-card,
+.pink-action-card,
+.indigo-action-card {
+  width: 100% !important;
+  padding: clamp(8px, 1.8vh, 14px) 14px !important;
+  min-height: clamp(48px, 6.5vh, 60px) !important;
+}
+
+/* 4. Adaptação para Celulares Compactos (width <= 360px ou height <= 640px) */
+@media (max-width: 360px), (max-height: 640px) {
+  .rpg-top-game-title {
+    font-size: 1.15rem !important;
+  }
+  .home-knight-svg-wrap {
+    height: clamp(120px, 18vh, 150px) !important;
+  }
+  .orange-action-card,
+  .pink-action-card,
+  .indigo-action-card {
+    padding: 7px 10px !important;
+    min-height: 46px !important;
+  }
+  .rpg-card-title {
+    font-size: 0.9rem !important;
+  }
+  .rpg-card-subtitle {
+    font-size: 0.68rem !important;
+  }
+  #menu-time-group .toggle-btn {
+    font-size: 0.68rem !important;
+    padding: 5px 1px !important;
+  }
+  #menu-dynamic-group .toggle-btn {
+    font-size: 0.7rem !important;
+    padding: 6px 2px !important;
+  }
+  .md3-dock {
+    padding: 4px 6px !important;
+    gap: 3px !important;
+  }
+  .dock-btn {
+    padding: 4px 6px !important;
+  }
+  .dock-btn .btn-label {
+    font-size: 0.58rem !important;
+  }
+}
+
+/* 5. Adaptação para Celulares Ultra-Altos (Aspect Ratio >= 19.5:9 ou height >= 820px) */
+@media (min-height: 820px) and (max-width: 600px) {
+  .home-hero-split {
+    gap: 16px !important;
+    margin: 8px 0 14px !important;
+  }
+  .home-knight-svg-wrap {
+    height: clamp(180px, 28vh, 250px) !important;
+  }
+  .home-actions-col {
+    gap: 12px !important;
+  }
+  .orange-action-card,
+  .pink-action-card,
+  .indigo-action-card {
+    padding: 14px 16px !important;
+    min-height: 60px !important;
+  }
+  #menu-view-battle .photo2-grid {
+    gap: 16px !important;
+  }
+}
+
+/* 6. Adaptação para Tablets, Dobráveis e Desktops (width >= 641px) */
+@media (min-width: 641px) {
+  #start-menu {
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(11, 10, 14, 0.94) !important;
+    padding: 20px !important;
+  }
+  #start-menu .modal-content.menu-photo2-modal,
+  .menu-photo2-modal {
+    max-width: min(520px, 90vw) !important;
+    height: min(94vh, 880px) !important;
+    min-height: min(84vh, 760px) !important;
+    max-height: 94vh !important;
+    border-radius: 28px !important;
+    border: 1px solid rgba(245, 197, 107, 0.3) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(200, 182, 255, 0.15) !important;
+    margin: auto !important;
+  }
+}
+
+/* 7. Adaptação para Orientação Horizontal (Landscape) em Celulares e Tablets */
+@media (orientation: landscape) and (max-height: 540px) {
+  #start-menu .modal-content.menu-photo2-modal {
+    overflow-y: auto !important;
+    padding: 8px 16px !important;
+  }
+  .home-hero-split {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    margin: 4px 0 !important;
+  }
+  .home-knight-col {
+    max-width: 220px !important;
+  }
+  .home-knight-svg-wrap {
+    height: 130px !important;
+  }
+  .home-actions-col {
+    flex: 1 !important;
+    max-width: 380px !important;
+    gap: 6px !important;
+  }
+  .orange-action-card,
+  .pink-action-card,
+  .indigo-action-card {
+    min-height: 42px !important;
+    padding: 6px 12px !important;
+  }
+  #menu-view-battle .photo2-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .hud-top {
+    top: 4px !important;
+  }
+  .player-bar-bottom {
+    bottom: 42px !important;
+    padding: 4px 8px !important;
+  }
+  .md3-dock {
+    bottom: 2px !important;
+    transform: translateX(-50%) scale(0.85) !important;
+  }
+}
