@@ -4791,3 +4791,40 @@ div.menu-photo2-modal {
 .modal-corner-close-btn * {
   pointer-events: none !important;
 }
+
+
+/* ==========================================================================
+   BLOQUEIO ABSOLUTO DE ELEMENTOS SOBREPOSTOS QUANDO O PERFIL ESTIVER ABERTO
+   ========================================================================== */
+body.profile-modal-open #start-menu,
+body.profile-modal-open .rpg-top-bar,
+body.profile-modal-open .rpg-top-bar *,
+body.profile-modal-open .home-hero-split,
+body.profile-modal-open .home-hero-split *,
+body.profile-modal-open .home-actions-col,
+body.profile-modal-open .home-actions-col *,
+body.profile-modal-open .rpg-bottom-nav,
+body.profile-modal-open .rpg-bottom-nav *,
+body.achievements-modal-open #start-menu,
+body.achievements-modal-open #start-menu *,
+body.modal-open #start-menu,
+body.modal-open #start-menu * {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+body.profile-modal-open #profile-modal,
+body.profile-modal-open #profile-modal *,
+body.achievements-modal-open #achievements-modal,
+body.achievements-modal-open #achievements-modal * {
+  pointer-events: auto !important;
+}
+
+.btn-profile-achievements * {
+  pointer-events: none !important;
+}
+
+#achievements-modal .modal-content {
+  position: relative !important;
+}

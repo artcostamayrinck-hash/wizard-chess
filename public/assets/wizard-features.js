@@ -1,3 +1,75 @@
+
+// Bloqueio de botões inferiores e controle de navegação dos modais
+window._openAchievementsFromProfile = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  if (typeof window._closeProfileModal === "function") {
+    window._closeProfileModal(e);
+  }
+  const modalAch = document.getElementById("achievements-modal");
+  if (modalAch) {
+    if (typeof renderAchievementsList === "function") renderAchievementsList();
+    modalAch.classList.remove("hidden");
+    modalAch.style.setProperty("display", "flex", "important");
+    document.body.classList.add("modal-open");
+    document.body.classList.add("achievements-modal-open");
+  }
+};
+
+window._closeAchievementsModal = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  const modalAch = document.getElementById("achievements-modal");
+  if (modalAch) {
+    modalAch.classList.add("hidden");
+    modalAch.style.removeProperty("display");
+    document.body.classList.remove("achievements-modal-open");
+    if (!document.body.classList.contains("profile-modal-open")) {
+      document.body.classList.remove("modal-open");
+    }
+  }
+};
+
+window._goToMainMenuFromPause = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  // Fecha o menu de pausa
+  const pauseModal = document.getElementById("pause-modal");
+  if (pauseModal) {
+    pauseModal.classList.add("hidden");
+    pauseModal.style.removeProperty("display");
+  }
+  // Abre o menu inicial completo
+  const startMenu = document.getElementById("start-menu");
+  if (startMenu) {
+    startMenu.classList.remove("hidden");
+    startMenu.style.setProperty("display", "flex", "important");
+  }
+  // Ativa a aba HOME (Catedral / Cavalo Místico)
+  document.querySelectorAll(".menu-subview").forEach(v => {
+    v.classList.remove("active");
+    v.style.setProperty("display", "none", "important");
+  });
+  const homeView = document.getElementById("menu-view-home");
+  if (homeView) {
+    homeView.classList.add("active");
+    homeView.style.setProperty("display", "flex", "important");
+  }
+  // Atualiza navbar inferior
+  document.querySelectorAll(".rpg-bottom-nav .rpg-nav-item").forEach(btn => btn.classList.remove("active"));
+  const btnNavHome = document.getElementById("btn-nav-home");
+  if (btnNavHome) btnNavHome.classList.add("active");
+
+  const puzzleHud = document.getElementById("puzzle-hud");
+  if (puzzleHud) puzzleHud.classList.add("hidden");
+};
+
 // Fallback inicial para o modal de perfil com escudo anti-ghost-click
 let _lastProfileOpenTime = 0;
 window._openProfileModal = function(e) {
@@ -65,8 +137,83 @@ function bindAction(el, handler, actionKey = "") {
   });
 }
 
+
+// Suporte ao nome do jogador e do convidado no modo online e HUD
+function setupOnlinePlayerNames() {
+  const inputGuest = document.getElementById("input-guest-name");
+  const currentName = localStorage.getItem("wizard_chess_player_name") || "Mago";
+  if (inputGuest && !inputGuest.value) {
+    inputGuest.value = currentName;
+  }
+
+  const btnJoin = document.getElementById("btn-join-code");
+  const inputJoin = document.getElementById("input-join-code");
+  if (btnJoin) {
+    bindAction(btnJoin, () => {
+      const guestName = (inputGuest && inputGuest.value.trim()) ? inputGuest.value.trim() : (localStorage.getItem("wizard_chess_player_name") || "Convidado");
+      try { localStorage.setItem("wizard_chess_player_name", guestName); } catch (e) {}
+
+      // Atualiza nome na HUD imediatamente
+      const hudName = document.getElementById("player-name-hud");
+      if (hudName) hudName.textContent = guestName;
+
+      const code = inputJoin ? inputJoin.value.trim().toUpperCase() : "";
+      if (code && window.db && window.dbUpdate && window.dbRef) {
+        try {
+          const currentAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
+          window.dbUpdate(window.dbRef(window.db, "rooms/" + code), {
+            player2Name: guestName,
+            player2Avatar: currentAvatar,
+            player2Joined: true
+          });
+        } catch (err) {
+          console.warn("[Online] Erro ao enviar nome do convidado:", err);
+        }
+      }
+    }, "joinOnlineRoomWithGuestName");
+  }
+
+  // Monitorar Firebase para atualizar nomes no HUD da Obsidiana e Mármore
+  function monitorOnlineRoom() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const room = urlParams.get("room") || localStorage.getItem("myRoom");
+    if (!room || !window.db || !window.dbRef || !window.dbOnValue) return;
+
+    window.dbOnValue(window.dbRef(window.db, "rooms/" + room), snapshot => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      const p1Name = data.player1Name || "Mármore";
+      const p1Avatar = data.player1Avatar || "🧙‍♂️";
+      const p2Name = data.player2Name || "Obsidiana";
+      const p2Avatar = data.player2Avatar || "💀";
+
+      const oppNameEl = document.getElementById("opponent-name-hud");
+      const oppAvatarEl = document.getElementById("opponent-avatar-hud");
+      const playerNameEl = document.getElementById("player-name-hud");
+      const playerAvatarEl = document.getElementById("player-avatar-hud");
+
+      const myColor = (typeof window.Qe !== "undefined") ? window.Qe : "w";
+      if (myColor === "w") {
+        if (oppNameEl) oppNameEl.textContent = p2Name;
+        if (oppAvatarEl) oppAvatarEl.textContent = p2Avatar;
+        if (playerNameEl) playerNameEl.textContent = p1Name;
+        if (playerAvatarEl) playerAvatarEl.textContent = p1Avatar;
+      } else {
+        if (oppNameEl) oppNameEl.textContent = p1Name;
+        if (oppAvatarEl) oppAvatarEl.textContent = p1Avatar;
+        if (playerNameEl) playerNameEl.textContent = p2Name;
+        if (playerAvatarEl) playerAvatarEl.textContent = p2Avatar;
+      }
+    });
+  }
+
+  setTimeout(monitorOnlineRoom, 1000);
+}
+
 function initWizardFeatures() {
   const tasks = [
+    { name: "OnlinePlayerNames", fn: setupOnlinePlayerNames },
     { name: "StartMenuGrid", fn: setupStartMenuGrid },
     { name: "ProfileSystem", fn: setupProfileSystem },
     { name: "CenteredModalsClose", fn: setupCenteredModalsClose },
@@ -1646,8 +1793,17 @@ function setupProfileSystem() {
     if (previewName) previewName.textContent = currentName;
     if (previewAvatar) previewAvatar.textContent = currentAvatar;
     if (topAvatar) topAvatar.textContent = currentAvatar;
+
+    // Atualiza HUD da partida (Imagem 4)
+    const hudAvatar = document.getElementById("player-avatar-hud");
+    const hudName = document.getElementById("player-name-hud");
+    const hudLegacy = document.getElementById("hud-player-name-bottom");
     if (hudAvatar) hudAvatar.textContent = currentAvatar;
-    if (hudName) hudName.textContent = currentName + " (Você)";
+    if (hudName) hudName.textContent = currentName;
+    if (hudLegacy) hudLegacy.textContent = currentName;
+
+    const inputGuest = document.getElementById("input-guest-name");
+    if (inputGuest && !inputGuest.value) inputGuest.value = currentName;
 
     document.querySelectorAll(".avatar-option").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.avatar === currentAvatar);
@@ -1671,6 +1827,8 @@ function setupProfileSystem() {
     if (profileModal) {
       profileModal.classList.remove("hidden");
       profileModal.style.setProperty("display", "flex", "important");
+      document.body.classList.add("profile-modal-open");
+      document.body.classList.add("modal-open");
     }
   }
   window._openProfileModal = openProfileModal;
@@ -1684,6 +1842,10 @@ function setupProfileSystem() {
     if (profileModal) {
       profileModal.classList.add("hidden");
       profileModal.style.removeProperty("display");
+      document.body.classList.remove("profile-modal-open");
+      if (!document.body.classList.contains("achievements-modal-open")) {
+        document.body.classList.remove("modal-open");
+      }
     }
   }
   window._closeProfileModal = closeProfileModal;

@@ -3020,7 +3020,7 @@
             <label class="setup-label photo2-label">DINÂMICA DE JOGO</label>
             <div class="toggle-group photo2-toggle-group" id="menu-dynamic-group">
               <button type="button" class="toggle-btn active" data-dynamic="classic" title="Regras Tradicionais de Torneio">♟️ Clássico</button>
-              <button type="button" class="toggle-btn" data-dynamic="arcane" title="Xadrez com Feitiços, Oráculo e Visão Mística">🔮 Arcano (Feitiços)</button>
+              <button type="button" class="toggle-btn" data-dynamic="arcane" title="Xadrez Arcano com Oráculo e Visão Mística">🔮 Arcano</button>
               <button type="button" class="toggle-btn" data-dynamic="sudden" title="Ritmo Rápido e Morte Súbita">⚡ Morte Súbita</button>
             </div>
           </div>
@@ -3184,7 +3184,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.2.5</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.2.6</span>
           </div>
         </div>
       </div>
@@ -3348,12 +3348,12 @@
     <!-- Barra do Oponente no Topo (Baseada na Imagem 2 - Chess.com) -->
     <div id="opponent-bar" class="player-bar opponent-bar">
       <div class="player-profile">
-        <div class="chess-avatar b-avatar">💀</div>
+        <div class="chess-avatar b-avatar" id="opponent-avatar-hud">💀</div>
         <div class="player-details">
           <div class="player-name-row">
-            <span class="player-title-badge">IA</span>
-            <span class="player-name">Obsidiana</span>
-            <span class="player-rating">(1200)</span>
+            <span class="player-title-badge" id="opponent-badge-hud">IA</span>
+            <span class="player-name" id="opponent-name-hud">Obsidiana</span>
+            <span class="player-rating" id="opponent-rating-hud">(1200)</span>
           </div>
           <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
         </div>
@@ -3374,11 +3374,11 @@
   <!-- Barra do Jogador na Base (Vermelho / Baseada na Imagem 2 - Chess.com) -->
   <div id="player-bar" class="player-bar player-bar-bottom">
     <div class="player-profile">
-      <div class="chess-avatar w-avatar">🧙</div>
+      <div class="chess-avatar w-avatar" id="player-avatar-hud">🧙‍♂️</div>
       <div class="player-details">
         <div class="player-name-row">
-          <span class="player-title-badge">MAGO</span>
-          <span class="player-name" id="hud-player-name-bottom">Mármore</span>
+          <span class="player-title-badge" id="player-badge-hud">MAGO</span>
+          <span class="player-name" id="player-name-hud">Mago</span>
           <span id="player-rating-bottom" class="player-rating">(Você)</span>
         </div>
         <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
@@ -3532,6 +3532,9 @@
 
       <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--md-border);">
         <p style="font-size: 0.85rem; color: #d0bcff; margin-bottom: 10px;">Ou entre em uma sala existente:</p>
+        <div style="margin-bottom: 8px;">
+          <input type="text" id="input-guest-name" placeholder="Seu Nome (Convidado na Obsidiana)" maxlength="16" class="modal-input" style="margin: 0; width: 100%; box-sizing: border-box;">
+        </div>
         <div style="display: flex; gap: 8px;">
           <input type="text" id="input-join-code" placeholder="Código (ex: WIZ7)" class="modal-input"
             style="text-transform: uppercase; margin: 0;">
@@ -3625,8 +3628,7 @@
           <span class="material-symbols-rounded"
             style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
         </button>
-        <button id="btn-pause-main-menu" class="promo-btn"
-          style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
+        <button id="btn-pause-main-menu" class="promo-btn" onclick="if(window._goToMainMenuFromPause) window._goToMainMenuFromPause(event);" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
           Inicial (Catedral)
         </button>
@@ -3715,7 +3717,7 @@
 
       <!-- 3. Botão Conquistas (Abre as conquistas) -->
       <div style="margin: 10px 0 6px; width: 100%;">
-        <button type="button" id="btn-profile-open-achievements" class="btn-profile-achievements">
+        <button type="button" id="btn-profile-open-achievements" class="btn-profile-achievements" onclick="if(window._openAchievementsFromProfile) window._openAchievementsFromProfile(event);">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 1.3rem;">military_tech</span>
             <span style="font-weight: 800; font-size: 0.95rem; color: #ffd700;">Conquistas & Títulos</span>
@@ -3738,6 +3740,9 @@
 <!-- Modal de Conquistas Arcanas (Ampliado e Anti-Sobreposição) -->
   <div id="achievements-modal" class="modal-overlay hidden">
     <div class="modal-content" style="max-width: 520px; width: 95%; max-height: 92vh; padding: 24px 20px 24px; border-radius: 28px;">
+      <button type="button" id="btn-x-close-achievements" class="modal-corner-close-btn" onclick="if(window._closeAchievementsModal) window._closeAchievementsModal(event);" title="Fechar">
+        <span class="material-symbols-rounded">close</span>
+      </button>
       <div class="brand-pill" style="margin: 0 auto 10px; padding: 4px 12px; font-size: 0.76rem; width: fit-content;">
         <span class="material-symbols-rounded" style="font-size: 1.1rem;">emoji_events</span>
         <span>GLÓRIA ARCANA</span>
@@ -3755,7 +3760,7 @@
         <!-- Itens injetados via JS -->
       </div>
 
-      <button id="btn-close-achievements" class="promo-btn" style="width: 100%; margin-top: 14px; padding: 13px 20px; font-size: 0.95rem; font-weight: 700; border-radius: 14px;">
+      <button id="btn-close-achievements" class="promo-btn" onclick="if(window._closeAchievementsModal) window._closeAchievementsModal(event);" style="width: 100%; margin-top: 14px; padding: 13px 20px; font-size: 0.95rem; font-weight: 700; border-radius: 14px;">
         Fechar
       </button>
     </div>
