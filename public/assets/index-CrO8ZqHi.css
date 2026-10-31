@@ -5270,3 +5270,199 @@ body.achievements-modal-open #achievements-modal * {
   text-align: center !important;
   white-space: nowrap !important;
 }
+
+/* ==========================================================================
+   ADAPTAÇÃO WEB & DESKTOP (PC, NAVEGADORES, TABLETS & NOTEBOOKS)
+   ========================================================================== */
+.web-platform-banner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin: 0 auto 12px auto !important;
+  flex-wrap: wrap !important;
+}
+
+.web-banner-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #d0bcff !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+}
+
+.web-banner-pill:hover {
+  background: rgba(208, 188, 255, 0.2) !important;
+  color: #fff !important;
+  transform: translateY(-2px) !important;
+}
+
+.web-banner-pill.highlight {
+  background: rgba(0, 245, 212, 0.14) !important;
+  border-color: rgba(0, 245, 212, 0.5) !important;
+  color: #00f5d4 !important;
+}
+
+.web-banner-pill.highlight:hover {
+  background: rgba(0, 245, 212, 0.25) !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.4) !important;
+}
+
+.web-banner-pill .material-symbols-rounded {
+  font-size: 1rem !important;
+}
+
+/* Modal de Atalhos de Teclado */
+.shortcuts-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.shortcut-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  font-size: 0.85rem !important;
+  color: #e0d8f0 !important;
+}
+
+.shortcut-keys {
+  display: flex !important;
+  gap: 4px !important;
+  align-items: center !important;
+}
+
+kbd {
+  display: inline-block !important;
+  padding: 3px 7px !important;
+  font-family: monospace !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #ffd700 !important;
+  background: rgba(18, 14, 28, 0.85) !important;
+  border: 1px solid rgba(245, 197, 107, 0.5) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Adaptação de Layout para Widescreen / Computador (>= 768px) */
+@media (min-width: 768px) {
+  #start-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: radial-gradient(circle at 50% 15%, #181329 0%, #0a0812 100%) !important;
+  }
+
+  #start-menu .modal-content.menu-photo2-modal {
+    max-width: 1040px !important;
+    width: 95% !important;
+    height: 94vh !important;
+    max-height: 94vh !important;
+    margin: auto !important;
+    padding: 24px 32px !important;
+    border-radius: 28px !important;
+    border: 1px solid rgba(208, 188, 255, 0.2) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(208, 188, 255, 0.08) !important;
+    background: rgba(13, 10, 19, 0.94) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+  }
+
+  /* Divisão Lado a Lado (Split Hero) em telas de PC */
+  .home-hero-split {
+    flex-direction: row !important;
+    gap: 36px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    max-width: 940px !important;
+    margin: 8px auto !important;
+  }
+
+  .home-knight-col {
+    flex: 1 !important;
+    max-width: 380px !important;
+  }
+
+  .home-knight-svg-wrap {
+    width: 260px !important;
+    height: 260px !important;
+  }
+
+  .home-actions-col {
+    flex: 1.25 !important;
+    max-width: 480px !important;
+    gap: 14px !important;
+  }
+
+  .menu-subview {
+    max-width: 820px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+  }
+
+  .customize-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .rpg-bottom-nav {
+    max-width: 520px !important;
+    margin: 10px auto 0 auto !important;
+  }
+
+  /* Dock inferior da partida no PC */
+  .md3-dock {
+    bottom: 24px !important;
+    gap: 8px !important;
+    padding: 10px 22px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(208, 188, 255, 0.15) !important;
+  }
+
+  .dock-btn:hover {
+    background: rgba(208, 188, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .rpg-card-battle:hover,
+  .rpg-card-challenges:hover,
+  .rpg-card-tutorial:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    filter: brightness(1.12) !important;
+  }
+
+  .custom-card:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(245, 197, 107, 0.6) !important;
+  }
+
+  /* Scrollbar Fina e Elegante no Navegador */
+  ::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(11, 10, 14, 0.6) !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(208, 188, 255, 0.25) !important;
+    border-radius: 999px !important;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 197, 107, 0.5) !important;
+  }
+}

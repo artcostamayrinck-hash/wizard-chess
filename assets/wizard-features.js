@@ -404,7 +404,8 @@ function initWizardFeatures() {
     { name: "AvatarFramesAndArenas", fn: setupAvatarFramesAndArenas },
     { name: "CampaignTower", fn: setupCampaignTower },
     { name: "MatchReplay", fn: setupMatchReplay },
-    { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations }
+    { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations },
+    { name: "WebShortcutsAndAdaptations", fn: setupWebShortcutsAndAdaptations }
   ];
 
   for (const task of tasks) {
@@ -2815,4 +2816,148 @@ function setupEpicCombatAnimations() {
 
     origHandleRewards(data);
   };
+}
+
+
+// ==========================================================================
+// 16. ADAPTAÇÃO WEB: ATALHOS DE TECLADO & SUPORTE A NAVEGADORES PC
+// ==========================================================================
+function setupWebShortcutsAndAdaptations() {
+  const isNative = typeof window.Capacitor !== "undefined" && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+
+  // Se estiver no aplicativo nativo, oculta o botão de baixar APK
+  if (isNative) {
+    const btnDownload = document.getElementById("btn-web-download-apk");
+    if (btnDownload) btnDownload.style.display = "none";
+  }
+
+  // Modal de Atalhos de Teclado
+  const modalShortcuts = document.getElementById("keyboard-shortcuts-modal");
+  const btnOpenShortcuts = document.getElementById("btn-web-keyboard-help");
+  const btnCloseShortcuts = document.getElementById("btn-close-keyboard-shortcuts");
+  const btnGotShortcuts = document.getElementById("btn-got-shortcuts");
+
+  const openShortcutsModal = () => {
+    if (modalShortcuts) {
+      modalShortcuts.classList.remove("hidden");
+      modalShortcuts.style.setProperty("display", "flex", "important");
+    }
+  };
+
+  const closeShortcutsModal = () => {
+    if (modalShortcuts) {
+      modalShortcuts.classList.add("hidden");
+      modalShortcuts.style.removeProperty("display");
+    }
+  };
+
+  if (btnOpenShortcuts) bindAction(btnOpenShortcuts, openShortcutsModal, "openKeyboardHelp");
+  if (btnCloseShortcuts) bindAction(btnCloseShortcuts, closeShortcutsModal, "closeKeyboardHelp");
+  if (btnGotShortcuts) bindAction(btnGotShortcuts, closeShortcutsModal, "gotKeyboardHelp");
+
+  // Escuta Global de Teclado no Navegador
+  window.addEventListener("keydown", (e) => {
+    // Ignora quando digitando em inputs
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
+      return;
+    }
+
+    const key = e.key;
+    const code = e.code;
+
+    // 1. Espaço ou Esc: Pausar / Fechar Modais
+    if (code === "Space" || key === "Escape") {
+      const activeModal = document.querySelector(".modal-overlay:not(.hidden):not(#start-menu)");
+      if (activeModal) {
+        if (e.preventDefault) e.preventDefault();
+        activeModal.classList.add("hidden");
+        activeModal.style.removeProperty("display");
+        return;
+      }
+
+      // Se em jogo, abre/fecha o menu de pausa
+      const startMenu = document.getElementById("start-menu");
+      if (startMenu && startMenu.classList.contains("hidden")) {
+        if (e.preventDefault) e.preventDefault();
+        const pauseModal = document.getElementById("pause-modal");
+        if (pauseModal) {
+          const isPaused = !pauseModal.classList.contains("hidden");
+          if (isPaused) {
+            pauseModal.classList.add("hidden");
+            pauseModal.style.removeProperty("display");
+          } else {
+            pauseModal.classList.remove("hidden");
+            pauseModal.style.setProperty("display", "flex", "important");
+          }
+        }
+      }
+      return;
+    }
+
+    // 2. F ou F11: Tela Cheia
+    if (key === "f" || key === "F") {
+      if (e.ctrlKey || e.metaKey) return;
+      if (e.preventDefault) e.preventDefault();
+      const btnFs = document.getElementById("btn-fullscreen");
+      if (btnFs) btnFs.click();
+      return;
+    }
+
+    // 3. H ou D: Dica do Oráculo Arcano
+    if (key === "h" || key === "H" || key === "d" || key === "D") {
+      if (e.ctrlKey || e.metaKey) return;
+      const btnHint = document.getElementById("btn-hint");
+      if (btnHint) btnHint.click();
+      return;
+    }
+
+    // 4. C: Trocar Câmera 3D
+    if (key === "c" || key === "C") {
+      if (e.ctrlKey || e.metaKey) return;
+      const btnCam = document.getElementById("btn-cam");
+      if (btnCam) btnCam.click();
+      return;
+    }
+
+    // 5. M: Alternar Música
+    if (key === "m" || key === "M") {
+      if (e.ctrlKey || e.metaKey) return;
+      const btnMusic = document.getElementById("btn-music");
+      const btnMenuAudio = document.getElementById("btn-menu-sound-toggle");
+      if (btnMusic) btnMusic.click();
+      else if (btnMenuAudio) btnMenuAudio.click();
+      return;
+    }
+
+    // 6. Z ou Ctrl+Z: Desfazer Lance
+    if ((key === "z" || key === "Z") && !e.shiftKey) {
+      const btnUndo = document.getElementById("btn-undo");
+      if (btnUndo && !btnUndo.classList.contains("hidden")) {
+        btnUndo.click();
+      } else if (window._WIZARD_GAME && typeof window._WIZARD_GAME.undoMove === "function") {
+        window._WIZARD_GAME.undoMove();
+      }
+      return;
+    }
+
+    // 7. R: Reiniciar Jogo
+    if (key === "r" || key === "R") {
+      if (e.ctrlKey || e.metaKey) return;
+      const startMenu = document.getElementById("start-menu");
+      if (startMenu && startMenu.classList.contains("hidden")) {
+        const btnReset = document.getElementById("btn-reset");
+        if (btnReset) btnReset.click();
+      }
+      return;
+    }
+
+    // 8. Setas no Modo Replay
+    if (key === "ArrowLeft") {
+      const btnPrev = document.getElementById("btn-replay-prev");
+      if (btnPrev && btnPrev.offsetParent !== null) btnPrev.click();
+    } else if (key === "ArrowRight") {
+      const btnNext = document.getElementById("btn-replay-next");
+      if (btnNext && btnNext.offsetParent !== null) btnNext.click();
+    }
+  });
 }

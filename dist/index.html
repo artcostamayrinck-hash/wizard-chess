@@ -2609,6 +2609,18 @@
         </div>
 
         <!-- Banner Discreto de Estatísticas -->
+        <!-- Pílula Web: Atalhos de Teclado & Baixar App Android -->
+        <div class="web-platform-banner" id="web-platform-banner">
+          <button type="button" class="web-banner-pill" id="btn-web-keyboard-help" title="Ver Atalhos de Teclado para PC">
+            <span class="material-symbols-rounded">keyboard</span>
+            <span>Atalhos de Teclado</span>
+          </button>
+          <a href="https://github.com/artcostamayrinck-hash/wizard-chess-main/releases/latest/download/app-debug.apk" target="_blank" rel="noopener" class="web-banner-pill highlight" id="btn-web-download-apk" title="Baixar o aplicativo oficial para celular Android (APK)">
+            <span class="material-symbols-rounded">android</span>
+            <span>Baixar App (APK)</span>
+          </a>
+        </div>
+
         <div class="stats-banner-mini" title="Suas Estatísticas Salvas">
           <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
           <span class="stat-divider">•</span>
@@ -3331,7 +3343,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.2.9</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.3.0</span>
           </div>
         </div>
       </div>
@@ -4037,6 +4049,33 @@
       <button type="button" class="promo-btn" id="btn-close-tower-victory" style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #f5c56b, #e65100); color: #1a1020;">
         Coletar Recompensa & Continuar
       </button>
+    </div>
+  </div>
+  <!-- Modal de Atalhos de Teclado (Para PC / Web) -->
+  <div id="keyboard-shortcuts-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 480px; width: 92%; border-radius: 24px; padding: 24px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(245, 197, 107, 0.3); padding-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-rounded" style="color: #ffd700;">keyboard</span>
+          <h3 style="margin: 0; color: #ffd700; font-size: 1.25rem;">Atalhos de Teclado</h3>
+        </div>
+        <button type="button" id="btn-close-keyboard-shortcuts" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 1.2rem;">✕</button>
+      </div>
+
+      <div class="shortcuts-grid">
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>Espaço</kbd> ou <kbd>Esc</kbd></div> <span>Pausar / Menu / Voltar</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>F</kbd> ou <kbd>F11</kbd></div> <span>Alternar Tela Cheia</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>H</kbd> ou <kbd>D</kbd></div> <span>Dica do Oráculo Arcano</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>C</kbd></div> <span>Trocar Ângulo da Câmera 3D</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>M</kbd></div> <span>Ligar / Silenciar Música</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>Z</kbd> ou <kbd>Ctrl+Z</kbd></div> <span>Desfazer Jogada (Modo Fácil / 2P)</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>R</kbd></div> <span>Reiniciar Partida</span></div>
+        <div class="shortcut-row"><div class="shortcut-keys"><kbd>←</kbd> <kbd>→</kbd></div> <span>Navegar Lances no Replay</span></div>
+      </div>
+
+      <div style="margin-top: 18px; text-align: center;">
+        <button type="button" class="promo-btn" id="btn-got-shortcuts" style="width: 100%; padding: 12px; font-weight: 700;">Entendido!</button>
+      </div>
     </div>
   </div>
 </body>
