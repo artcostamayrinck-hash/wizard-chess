@@ -1,7 +1,13 @@
-// Fallback inicial para o modal de perfil
-window._openProfileModal = function() {
+// Fallback inicial para o modal de perfil com escudo anti-ghost-click
+let _lastProfileOpenTime = 0;
+window._openProfileModal = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  _lastProfileOpenTime = Date.now();
   if (typeof window._applyProfileUI === "function") {
-    try { window._applyProfileUI(); } catch (e) {}
+    try { window._applyProfileUI(); } catch (err) {}
   }
   const modal = document.getElementById("profile-modal");
   if (modal) {
@@ -9,7 +15,11 @@ window._openProfileModal = function() {
     modal.style.setProperty("display", "flex", "important");
   }
 };
-window._closeProfileModal = function() {
+window._closeProfileModal = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
   const modal = document.getElementById("profile-modal");
   if (modal) {
     modal.classList.add("hidden");
@@ -1615,6 +1625,7 @@ function setupProfileSystem() {
   const profileModal = document.getElementById("profile-modal");
   const btnTopProfile = document.getElementById("btn-top-profile");
   const btnCloseProfile = document.getElementById("btn-close-profile-modal");
+  const btnXClose = document.getElementById("btn-x-close-profile");
   const btnProfileAch = document.getElementById("btn-profile-open-achievements");
   const nameInput = document.getElementById("profile-name-input");
   const btnSaveName = document.getElementById("btn-save-profile-name");
@@ -1650,7 +1661,12 @@ function setupProfileSystem() {
 
   window._applyProfileUI = applyProfileUI;
 
-  function openProfileModal() {
+  function openProfileModal(e) {
+    if (e) {
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      if (typeof e.stopPropagation === "function") e.stopPropagation();
+    }
+    _lastProfileOpenTime = Date.now();
     applyProfileUI();
     if (profileModal) {
       profileModal.classList.remove("hidden");
@@ -1659,7 +1675,11 @@ function setupProfileSystem() {
   }
   window._openProfileModal = openProfileModal;
 
-  function closeProfileModal() {
+  function closeProfileModal(e) {
+    if (e) {
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      if (typeof e.stopPropagation === "function") e.stopPropagation();
+    }
     savePlayerName();
     if (profileModal) {
       profileModal.classList.add("hidden");
@@ -1723,14 +1743,34 @@ function setupProfileSystem() {
     }, "openAchFromProfile");
   }
 
-  // Fechar Modal de Perfil
+  // Botões Fechar Modal de Perfil
   if (btnCloseProfile && profileModal) {
     bindAction(btnCloseProfile, closeProfileModal, "closeProfileModal");
   }
+  if (btnXClose && profileModal) {
+    bindAction(btnXClose, closeProfileModal, "closeProfileModalX");
+  }
+
+  // Impedir que cliques dentro do card do modal vazem para o fundo
+  const profileContent = profileModal ? profileModal.querySelector(".profile-modal-content") : null;
+  if (profileContent) {
+    profileContent.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+    profileContent.addEventListener("pointerup", (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  // Escudo anti-ghost-click no backdrop: só fecha se clicou no fundo e já se passaram > 600ms da abertura
   if (profileModal) {
     profileModal.addEventListener("click", (e) => {
+      if (Date.now() - _lastProfileOpenTime < 600) {
+        if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+        return;
+      }
       if (e.target === profileModal) {
-        closeProfileModal();
+        closeProfileModal(e);
       }
     });
   }

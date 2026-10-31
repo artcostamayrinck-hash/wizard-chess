@@ -2595,7 +2595,7 @@
             <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
           </div>
 
-          <div class="rpg-top-profile" id="btn-top-profile" title="Perfil e Estatísticas" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openProfileModal) window._openProfileModal();">
+          <div class="rpg-top-profile" id="btn-top-profile" title="Perfil e Estatísticas" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openProfileModal) window._openProfileModal(event);">
             <div class="rpg-top-avatar" id="top-player-avatar">🧙‍♂️</div>
             <div class="rpg-top-lvl-badge">
               <span class="star-icon">⭐</span>
@@ -3184,7 +3184,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.2.4</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.2.5</span>
           </div>
         </div>
       </div>
@@ -3658,6 +3658,9 @@
     <!-- Modal de Perfil do Jogador (Personalizar Nome, Foto e Ver Conquistas) -->
   <div id="profile-modal" class="modal-overlay hidden">
     <div class="modal-content profile-modal-content" style="max-width: 480px; width: 92%; max-height: 90vh; padding: 22px 18px 20px; border-radius: 28px;">
+      <button type="button" id="btn-x-close-profile" class="modal-corner-close-btn" onclick="if(window._closeProfileModal) window._closeProfileModal(event);" title="Fechar">
+        <span class="material-symbols-rounded">close</span>
+      </button>
       <div class="brand-pill" style="margin: 0 auto 8px; padding: 4px 14px; font-size: 0.76rem; width: fit-content; border-color: rgba(245, 197, 107, 0.45); color: #f5c56b;">
         <span class="material-symbols-rounded" style="font-size: 1.1rem;">person</span>
         <span>PERFIL DO MAGO</span>
@@ -3725,7 +3728,7 @@
       </div>
 
       <!-- Botão Confirmar & Fechar -->
-      <button type="button" id="btn-close-profile-modal" class="btn-primary-action" onclick="if(window._closeProfileModal) window._closeProfileModal();" style="margin-top: 8px; width: 100%;">
+      <button type="button" id="btn-close-profile-modal" class="btn-primary-action" onclick="if(window._closeProfileModal) window._closeProfileModal(event);" style="margin-top: 8px; width: 100%;">
         <span class="material-symbols-rounded">check</span>
         <span>Confirmar & Salvar</span>
       </button>
