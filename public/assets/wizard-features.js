@@ -400,7 +400,11 @@ function initWizardFeatures() {
     { name: "WhatsAppShare", fn: setupWhatsAppShare },
     { name: "MoveAnalysis", fn: setupMoveAnalysis },
     { name: "ChessDynamics", fn: setupChessDynamics },
-    { name: "AdaptiveLayout", fn: setupAdaptiveFullscreenAndLayout }
+    { name: "AdaptiveLayout", fn: setupAdaptiveFullscreenAndLayout },
+    { name: "AvatarFramesAndArenas", fn: setupAvatarFramesAndArenas },
+    { name: "CampaignTower", fn: setupCampaignTower },
+    { name: "MatchReplay", fn: setupMatchReplay },
+    { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations }
   ];
 
   for (const task of tasks) {
@@ -2290,4 +2294,525 @@ function setupAdaptiveFullscreenAndLayout() {
     document.addEventListener('webkitfullscreenchange', updateFsIcon);
     updateFsIcon();
   }
+}
+
+
+// ==========================================================================
+// 12. MOLDURAS MÁGICAS DE AVATAR & NOVAS ARENAS (LOJA ARCANA EXPANDIDA)
+// ==========================================================================
+const FRAME_PRICES = {
+  classic: 0,
+  gold: 350,
+  fire: 700,
+  cosmic: 1200
+};
+
+const FRAME_NAMES = {
+  classic: "Clássica",
+  gold: "Ouro Arcano",
+  fire: "Fogo da Fênix",
+  cosmic: "Cósmica Astral"
+};
+
+const ARENA_PRICES = {
+  cathedral: 0,
+  inferno: 0,
+  frost: 0,
+  cosmos: 400,
+  forest: 500
+};
+
+const ARENA_NAMES = {
+  cathedral: "Catedral Arcana",
+  inferno: "Cripta Infernal",
+  frost: "Templo de Gelo",
+  cosmos: "Observatório Cósmico",
+  forest: "Floresta Proibida"
+};
+
+function getUnlockedFrames() {
+  try {
+    const raw = localStorage.getItem("wizard_chess_unlocked_frames");
+    return raw ? JSON.parse(raw) : ["classic"];
+  } catch (e) {
+    return ["classic"];
+  }
+}
+
+function isFrameUnlocked(id) {
+  if (id === "classic") return true;
+  return getUnlockedFrames().includes(id);
+}
+
+function unlockFrame(id) {
+  const frames = getUnlockedFrames();
+  if (!frames.includes(id)) {
+    frames.push(id);
+    try { localStorage.setItem("wizard_chess_unlocked_frames", JSON.stringify(frames)); } catch (e) {}
+  }
+}
+
+function getEquippedFrame() {
+  return localStorage.getItem("wizard_chess_avatar_frame") || "classic";
+}
+
+function setEquippedFrame(id) {
+  try { localStorage.setItem("wizard_chess_avatar_frame", id); } catch (e) {}
+  applyAvatarFrameUI();
+}
+
+function applyAvatarFrameUI() {
+  const currentFrame = getEquippedFrame();
+  const avatarEls = [
+    document.getElementById("top-player-avatar"),
+    document.getElementById("profile-avatar-preview"),
+    document.getElementById("player-avatar-hud")
+  ];
+
+  avatarEls.forEach(el => {
+    if (!el) return;
+    el.classList.remove("avatar-frame-gold", "avatar-frame-fire", "avatar-frame-cosmic");
+    if (currentFrame && currentFrame !== "classic") {
+      el.classList.add(`avatar-frame-${currentFrame}`);
+    }
+  });
+}
+
+function getUnlockedArenas() {
+  try {
+    const raw = localStorage.getItem("wizard_chess_unlocked_arenas");
+    return raw ? JSON.parse(raw) : ["cathedral", "inferno", "frost"];
+  } catch (e) {
+    return ["cathedral", "inferno", "frost"];
+  }
+}
+
+function isArenaUnlocked(id) {
+  if (id === "cathedral" || id === "inferno" || id === "frost") return true;
+  return getUnlockedArenas().includes(id);
+}
+
+function unlockArena(id) {
+  const arenas = getUnlockedArenas();
+  if (!arenas.includes(id)) {
+    arenas.push(id);
+    try { localStorage.setItem("wizard_chess_unlocked_arenas", JSON.stringify(arenas)); } catch (e) {}
+  }
+}
+
+function updateFramesShopUI() {
+  const equipped = getEquippedFrame();
+  document.querySelectorAll("#customize-frame-grid .custom-card[data-frame]").forEach(card => {
+    const frameId = card.dataset.frame;
+    const isEq = frameId === equipped;
+    const isUnl = isFrameUnlocked(frameId);
+    const statusEl = card.querySelector(".custom-card-status");
+
+    card.classList.toggle("equipped", isEq);
+    card.classList.toggle("active", isEq);
+    card.classList.toggle("unlocked", isUnl);
+    card.classList.toggle("locked", !isUnl);
+
+    if (statusEl) {
+      if (isEq) {
+        statusEl.textContent = "✓ Equipada";
+      } else if (isUnl) {
+        statusEl.textContent = "Equipar";
+      } else {
+        const price = FRAME_PRICES[frameId] || 0;
+        statusEl.textContent = `🔒 ${price} 🪙`;
+      }
+    }
+  });
+}
+
+function updateArenasShopUI() {
+  const currentArena = localStorage.getItem("wizard_arena") || "cathedral";
+  document.querySelectorAll("#customize-arena-grid .custom-card[data-arena]").forEach(card => {
+    const arenaId = card.dataset.arena;
+    const isEq = arenaId === currentArena;
+    const isUnl = isArenaUnlocked(arenaId);
+    const statusEl = card.querySelector(".custom-card-status");
+    const checkEl = card.querySelector(".custom-card-check");
+
+    card.classList.toggle("active", isEq);
+    card.classList.toggle("equipped", isEq);
+    card.classList.toggle("unlocked", isUnl);
+    card.classList.toggle("locked", !isUnl);
+
+    if (checkEl) checkEl.style.display = isEq ? "block" : "none";
+
+    if (statusEl) {
+      if (isEq) {
+        statusEl.textContent = "✓ Selecionada";
+      } else if (isUnl) {
+        statusEl.textContent = "Escolher";
+      } else {
+        const price = ARENA_PRICES[arenaId] || 0;
+        statusEl.textContent = `🔒 ${price} 🪙`;
+      }
+    }
+  });
+}
+
+function setupAvatarFramesAndArenas() {
+  applyAvatarFrameUI();
+  updateFramesShopUI();
+  updateArenasShopUI();
+
+  // Cliques na Loja de Molduras
+  document.querySelectorAll("#customize-frame-grid .custom-card[data-frame]").forEach(card => {
+    bindAction(card, () => {
+      const frameId = card.dataset.frame;
+      const frameName = FRAME_NAMES[frameId] || frameId;
+      const price = FRAME_PRICES[frameId] || 0;
+
+      if (isFrameUnlocked(frameId)) {
+        setEquippedFrame(frameId);
+        updateFramesShopUI();
+        showToast(`✨ Moldura equipada: ${frameName}`);
+      } else {
+        const coins = getPlayerCoins();
+        if (coins >= price) {
+          spendPlayerCoins(price);
+          unlockFrame(frameId);
+          setEquippedFrame(frameId);
+          updateFramesShopUI();
+          updateCoinsUI();
+          showToast(`🎉 Moldura desbloqueada: ${frameName}!`);
+        } else {
+          showToast(`🪙 Moedas insuficientes! Requer ${price} moedas.`);
+        }
+      }
+    }, "selectFrame_" + card.dataset.frame);
+  });
+
+  // Cliques na Loja de Arenas
+  document.querySelectorAll("#customize-arena-grid .custom-card[data-arena]").forEach(card => {
+    bindAction(card, () => {
+      const arenaId = card.dataset.arena;
+      const arenaName = ARENA_NAMES[arenaId] || arenaId;
+      const price = ARENA_PRICES[arenaId] || 0;
+
+      if (isArenaUnlocked(arenaId)) {
+        try {
+          localStorage.setItem("wizard_arena", arenaId);
+          if (window._WIZARD_GAME && typeof window._WIZARD_GAME.setArena === "function") {
+            window._WIZARD_GAME.setArena(arenaId);
+          }
+        } catch (e) {}
+        updateArenasShopUI();
+        showToast(`🏛️ Arena escolhida: ${arenaName}`);
+      } else {
+        const coins = getPlayerCoins();
+        if (coins >= price) {
+          spendPlayerCoins(price);
+          unlockArena(arenaId);
+          try {
+            localStorage.setItem("wizard_arena", arenaId);
+            if (window._WIZARD_GAME && typeof window._WIZARD_GAME.setArena === "function") {
+              window._WIZARD_GAME.setArena(arenaId);
+            }
+          } catch (e) {}
+          updateArenasShopUI();
+          updateCoinsUI();
+          showToast(`🎉 Nova Arena desbloqueada: ${arenaName}!`);
+        } else {
+          showToast(`🪙 Moedas insuficientes! Requer ${price} moedas.`);
+        }
+      }
+    }, "selectArena_" + card.dataset.arena);
+  });
+}
+
+
+// ==========================================================================
+// 13. MODO CAMPANHA: A TORRE DOS MAGOS (PROGRESSÃO DE CHEFES)
+// ==========================================================================
+const TOWER_BOSSES = [
+  { floor: 1, name: "Andar 1: O Aprendiz Rúnico", bossName: "Leo, o Aprendiz", avatar: "🧙‍♂️", diff: "easy", coins: 150, xp: 100 },
+  { floor: 2, name: "Andar 2: O Golem de Obsidiana", bossName: "Golem Ancestral", avatar: "🗿", diff: "easy", coins: 300, xp: 200 },
+  { floor: 3, name: "Andar 3: A Feiticeira das Sombras", bossName: "Morgana das Sombras", avatar: "🧝‍♀️", diff: "medium", coins: 500, xp: 400 },
+  { floor: 4, name: "Andar 4: O Necromante dos Cristais", bossName: "Malakor, o Necromante", avatar: "💀", diff: "hard", coins: 750, xp: 600 },
+  { floor: 5, name: "Andar 5: O Arquimago Cósmico", bossName: "Lorde Vane, o Arquimago", avatar: "👑", diff: "hard", coins: 1500, xp: 1200, title: "Soberano da Torre" }
+];
+
+window._ACTIVE_TOWER_BOSS = null;
+
+function getTowerFloor() {
+  const val = parseInt(localStorage.getItem("wizard_chess_tower_floor") || "1", 10);
+  return isNaN(val) ? 1 : val;
+}
+
+function updateTowerCampaignUI() {
+  const currentFloor = getTowerFloor();
+  const floorCurrentBadge = document.getElementById("tower-floor-current");
+  if (floorCurrentBadge) {
+    floorCurrentBadge.textContent = `Andar ${Math.min(currentFloor, 5)}`;
+  }
+
+  document.querySelectorAll(".tower-floor-card[data-floor]").forEach(card => {
+    const f = parseInt(card.dataset.floor, 10);
+    const btn = card.querySelector(".tower-battle-btn");
+
+    card.classList.remove("current", "completed", "unlocked", "locked");
+
+    if (f < currentFloor) {
+      card.classList.add("completed", "unlocked");
+      if (btn) {
+        btn.textContent = "Jogar Novamente";
+        btn.disabled = false;
+      }
+    } else if (f === currentFloor) {
+      card.classList.add("current", "unlocked");
+      if (btn) {
+        btn.textContent = "Desafiar";
+        btn.disabled = false;
+      }
+    } else {
+      card.classList.add("locked");
+      if (btn) {
+        btn.textContent = "🔒 Bloqueado";
+        btn.disabled = true;
+      }
+    }
+  });
+}
+
+function setupCampaignTower() {
+  updateTowerCampaignUI();
+
+  document.querySelectorAll(".tower-floor-card[data-floor]").forEach(card => {
+    const f = parseInt(card.dataset.floor, 10);
+    const btn = card.querySelector(".tower-battle-btn");
+    const boss = TOWER_BOSSES.find(b => b.floor === f);
+
+    if (btn && boss) {
+      bindAction(btn, () => {
+        const currentFloor = getTowerFloor();
+        if (f > currentFloor) {
+          showToast(`🔒 Derrote o Andar ${currentFloor} para avançar!`);
+          return;
+        }
+
+        window._ACTIVE_TOWER_BOSS = boss;
+
+        // Configura modo IA na dificuldade do chefe
+        const modeAiBtn = document.querySelector('#menu-mode-group .toggle-btn[data-mode="ai"]');
+        if (modeAiBtn) modeAiBtn.click();
+
+        const diffBtn = document.querySelector(`#menu-diff-group .toggle-btn[data-diff="${boss.diff}"]`);
+        if (diffBtn) diffBtn.click();
+
+        // Atualiza HUD com o nome e avatar do Chefe
+        const oppAvatar = document.getElementById("opponent-avatar-hud");
+        const oppName = document.getElementById("opponent-name-hud");
+        if (oppAvatar) oppAvatar.textContent = boss.avatar;
+        if (oppName) oppName.textContent = boss.bossName;
+
+        // Inicia partida
+        const btnStart = document.getElementById("btn-start-game");
+        if (btnStart) btnStart.click();
+
+        showToast(`🏰 Torre dos Magos: Enfrentando ${boss.bossName}!`);
+      }, "towerBattleFloor_" + f);
+    }
+  });
+
+  // Botão fechar modal de vitória da torre
+  const btnCloseTowerVic = document.getElementById("btn-close-tower-victory");
+  const towerVicModal = document.getElementById("tower-victory-modal");
+  if (btnCloseTowerVic && towerVicModal) {
+    bindAction(btnCloseTowerVic, () => {
+      towerVicModal.classList.add("hidden");
+      towerVicModal.style.removeProperty("display");
+      const btnNavHome = document.getElementById("btn-nav-home");
+      if (btnNavHome) btnNavHome.click();
+    }, "closeTowerVicModal");
+  }
+}
+
+
+// ==========================================================================
+// 14. REPLAY DE PARTIDAS (NAVEGAÇÃO LANCE A LANCE)
+// ==========================================================================
+let _replayMoves = [];
+let _replayIndex = 0;
+let _isReplayActive = false;
+
+function setupMatchReplay() {
+  const replayBar = document.getElementById("replay-controller-bar");
+  const btnCloseReplay = document.getElementById("btn-close-replay");
+  const btnReplayStart = document.getElementById("btn-replay-start");
+  const btnReplayPrev = document.getElementById("btn-replay-prev");
+  const btnReplayNext = document.getElementById("btn-replay-next");
+  const btnReplayEnd = document.getElementById("btn-replay-end");
+  const replayStatus = document.getElementById("replay-move-status");
+  const replaySan = document.getElementById("replay-current-san");
+
+  function openReplay() {
+    // Tenta obter histórico atual do chess.js ou salvo
+    let moves = [];
+    if (window._WIZARD_GAME && typeof window._WIZARD_GAME.getChess === "function") {
+      const chess = window._WIZARD_GAME.getChess();
+      if (chess && typeof chess.history === "function") {
+        moves = chess.history({ verbose: true });
+      }
+    }
+    if (!moves || moves.length === 0) {
+      try {
+        const raw = localStorage.getItem("wizard_chess_last_match_history");
+        if (raw) moves = JSON.parse(raw);
+      } catch (e) {}
+    }
+
+    if (!moves || moves.length === 0) {
+      showToast("Nenhum lance registrado para rever nesta partida.");
+      return;
+    }
+
+    _replayMoves = moves;
+    _replayIndex = moves.length;
+    _isReplayActive = true;
+
+    // Fecha modais de fim de jogo ou pausa se abertos
+    const gameOverModal = document.getElementById("game-over-modal");
+    if (gameOverModal) { gameOverModal.classList.add("hidden"); gameOverModal.style.removeProperty("display"); }
+    const pauseModal = document.getElementById("pause-modal");
+    if (pauseModal) { pauseModal.classList.add("hidden"); pauseModal.style.removeProperty("display"); }
+
+    if (replayBar) {
+      replayBar.classList.remove("hidden");
+      replayBar.style.setProperty("display", "flex", "important");
+    }
+
+    updateReplayView();
+    showToast("🎬 Modo Replay ativado! Use as setas para rever cada lance.");
+  }
+
+  function updateReplayView() {
+    const total = _replayMoves.length;
+    if (replayStatus) {
+      replayStatus.textContent = `Lance ${_replayIndex} de ${total}`;
+    }
+    if (replaySan) {
+      if (_replayIndex === 0) {
+        replaySan.textContent = "Posição Inicial";
+      } else {
+        const m = _replayMoves[_replayIndex - 1];
+        const pieceSymbol = m.piece ? m.piece.toUpperCase() : "";
+        replaySan.textContent = `${m.color === 'w' ? '⚪' : '⚫'} ${pieceSymbol}${m.san || (m.from + '-' + m.to)}`;
+      }
+    }
+  }
+
+  function closeReplay() {
+    _isReplayActive = false;
+    if (replayBar) {
+      replayBar.classList.add("hidden");
+      replayBar.style.removeProperty("display");
+    }
+  }
+
+  // Vincular botões
+  const btnGameOverReplay = document.getElementById("btn-game-over-replay");
+  if (btnGameOverReplay) bindAction(btnGameOverReplay, openReplay, "openReplayGameOver");
+
+  const btnPauseReplay = document.getElementById("btn-pause-replay");
+  if (btnPauseReplay) bindAction(btnPauseReplay, openReplay, "openReplayPause");
+
+  const btnDockReplay = document.getElementById("btn-dock-replay");
+  if (btnDockReplay) bindAction(btnDockReplay, openReplay, "openReplayDock");
+
+  if (btnCloseReplay) bindAction(btnCloseReplay, closeReplay, "closeReplayBar");
+
+  if (btnReplayStart) {
+    bindAction(btnReplayStart, () => {
+      _replayIndex = 0;
+      updateReplayView();
+    }, "replayStart");
+  }
+
+  if (btnReplayPrev) {
+    bindAction(btnReplayPrev, () => {
+      if (_replayIndex > 0) {
+        _replayIndex--;
+        updateReplayView();
+      }
+    }, "replayPrev");
+  }
+
+  if (btnReplayNext) {
+    bindAction(btnReplayNext, () => {
+      if (_replayIndex < _replayMoves.length) {
+        _replayIndex++;
+        updateReplayView();
+      }
+    }, "replayNext");
+  }
+
+  if (btnReplayEnd) {
+    bindAction(btnReplayEnd, () => {
+      _replayIndex = _replayMoves.length;
+      updateReplayView();
+    }, "replayEnd");
+  }
+}
+
+
+// ==========================================================================
+// 15. ANIMAÇÕES ÉPICAS DE COMBATE MÁGICO (SEM VIBRAÇÃO)
+// ==========================================================================
+function setupEpicCombatAnimations() {
+  // Salva lances no fim de cada partida para o Replay
+  const origHandleRewards = handleGameOverRewards;
+  handleGameOverRewards = function(data) {
+    try {
+      if (window._WIZARD_GAME && typeof window._WIZARD_GAME.getChess === "function") {
+        const chess = window._WIZARD_GAME.getChess();
+        if (chess && typeof chess.history === "function") {
+          const hist = chess.history({ verbose: true });
+          if (hist && hist.length > 0) {
+            localStorage.setItem("wizard_chess_last_match_history", JSON.stringify(hist));
+          }
+        }
+      }
+    } catch (e) {}
+
+    // Verifica se venceu um Boss da Torre dos Magos
+    if (window._ACTIVE_TOWER_BOSS && data && (data.winner === "Mármore" || data.winner === "w" || data.winner === "white")) {
+      const boss = window._ACTIVE_TOWER_BOSS;
+      const currentFloor = getTowerFloor();
+
+      addPlayerCoins(boss.coins);
+      addXP(boss.xp, `Vitória sobre ${boss.bossName}`);
+
+      if (boss.floor === currentFloor && currentFloor < 5) {
+        localStorage.setItem("wizard_chess_tower_floor", currentFloor + 1);
+      }
+
+      if (boss.floor === 5) {
+        unlockAchievement("tower_master");
+      }
+
+      const towerVicModal = document.getElementById("tower-victory-modal");
+      const bossNameEl = document.getElementById("tower-victory-boss-name");
+      const coinsEl = document.getElementById("tower-victory-reward-coins");
+      const xpEl = document.getElementById("tower-victory-reward-xp");
+
+      if (bossNameEl) bossNameEl.textContent = `Você derrotou ${boss.bossName} no ${boss.name}!`;
+      if (coinsEl) coinsEl.textContent = `+${boss.coins} 🪙 Moedas Arcanas`;
+      if (xpEl) xpEl.textContent = `+${boss.xp} XP Mágico`;
+
+      if (towerVicModal) {
+        towerVicModal.classList.remove("hidden");
+        towerVicModal.style.setProperty("display", "flex", "important");
+      }
+
+      updateTowerCampaignUI();
+      window._ACTIVE_TOWER_BOSS = null;
+    }
+
+    origHandleRewards(data);
+  };
 }

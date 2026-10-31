@@ -2828,6 +2828,69 @@
               </div>
               <span class="custom-card-check">✓</span>
             </button>
+
+            <button type="button" class="custom-card locked" data-arena="cosmos">
+              <div class="custom-card-color cosmos-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Observatório Cósmico</span>
+                <span class="custom-card-detail">Estrelas & Nebulosas</span>
+              </div>
+              <span class="custom-card-status" id="arena-status-cosmos">🔒 400 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-arena="forest">
+              <div class="custom-card-color forest-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Floresta Proibida</span>
+                <span class="custom-card-detail">Madeira Antiga & Vaga-lumes</span>
+              </div>
+              <span class="custom-card-status" id="arena-status-forest">🔒 500 🪙</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seção: Molduras Mágicas de Avatar (Frames) -->
+        <div class="customize-section">
+          <label class="customize-section-label">
+            <span class="material-symbols-rounded">stars</span>
+            <span>MOLDURA MÁGICA DE AVATAR</span>
+          </label>
+          <div class="customize-grid" id="customize-frame-grid">
+            <button type="button" class="custom-card active equipped unlocked" data-frame="classic">
+              <div class="custom-card-color frame-classic-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Clássica</span>
+                <span class="custom-card-detail">Padrão da Catedral</span>
+              </div>
+              <span class="custom-card-status" id="frame-status-classic">✓ Equipada</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-frame="gold">
+              <div class="custom-card-color frame-gold-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Ouro Arcano</span>
+                <span class="custom-card-detail">Borda Rúnica Dourada</span>
+              </div>
+              <span class="custom-card-status" id="frame-status-gold">🔒 350 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-frame="fire">
+              <div class="custom-card-color frame-fire-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Fogo da Fênix</span>
+                <span class="custom-card-detail">Chamas Vivas & Brasas</span>
+              </div>
+              <span class="custom-card-status" id="frame-status-fire">🔒 700 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-frame="cosmic">
+              <div class="custom-card-color frame-cosmic-preview"></div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Cósmica Astral</span>
+                <span class="custom-card-detail">Diamante & Poeira Estelar</span>
+              </div>
+              <span class="custom-card-status" id="frame-status-cosmic">🔒 1.200 🪙</span>
+            </button>
           </div>
         </div>
 
@@ -2900,6 +2963,80 @@
         </button>
 
         <!-- Lista de Desafios -->
+        <!-- MODO CAMPANHA: A TORRE DOS MAGOS -->
+        <div class="tower-campaign-container" id="tower-campaign-container">
+          <div class="tower-header-card">
+            <div class="tower-header-left">
+              <span class="tower-castle-icon">🏰</span>
+              <div>
+                <div class="tower-badge-tag">MODO CAMPANHA</div>
+                <h3 class="tower-main-title">A Torre dos Magos</h3>
+                <p class="tower-subtitle">Derrote os 5 Guardiões Arcanos para conquistar a torre e tesouros lendários!</p>
+              </div>
+            </div>
+            <div class="tower-progress-badge" id="tower-progress-badge">
+              <span id="tower-floor-current">Andar 1</span> / 5
+            </div>
+          </div>
+
+          <div class="tower-floors-list" id="tower-floors-list">
+            <!-- Floor 1 -->
+            <div class="tower-floor-card unlocked current" data-floor="1">
+              <div class="tower-floor-avatar">🧙‍♂️</div>
+              <div class="tower-floor-info">
+                <div class="tower-floor-name">Andar 1: O Aprendiz Rúnico</div>
+                <div class="tower-floor-desc">Leo, o Aprendiz • Dificuldade Inicial</div>
+                <div class="tower-floor-reward">Recompensa: 🪙 150 Moedas • ⭐ +100 XP</div>
+              </div>
+              <button type="button" class="tower-battle-btn" data-floor="1">Desafiar</button>
+            </div>
+
+            <!-- Floor 2 -->
+            <div class="tower-floor-card locked" data-floor="2">
+              <div class="tower-floor-avatar">🗿</div>
+              <div class="tower-floor-info">
+                <div class="tower-floor-name">Andar 2: O Golem de Obsidiana</div>
+                <div class="tower-floor-desc">Golem Ancestral • Defesa Impenetrável</div>
+                <div class="tower-floor-reward">Recompensa: 🪙 300 Moedas • ⭐ +200 XP</div>
+              </div>
+              <button type="button" class="tower-battle-btn" data-floor="2">🔒 Bloqueado</button>
+            </div>
+
+            <!-- Floor 3 -->
+            <div class="tower-floor-card locked" data-floor="3">
+              <div class="tower-floor-avatar">🧝‍♀️</div>
+              <div class="tower-floor-info">
+                <div class="tower-floor-name">Andar 3: A Feiticeira das Sombras</div>
+                <div class="tower-floor-desc">Morgana • Táticas e Ataques Rápidos</div>
+                <div class="tower-floor-reward">Recompensa: 🪙 500 Moedas • ⭐ +400 XP</div>
+              </div>
+              <button type="button" class="tower-battle-btn" data-floor="3">🔒 Bloqueado</button>
+            </div>
+
+            <!-- Floor 4 -->
+            <div class="tower-floor-card locked" data-floor="4">
+              <div class="tower-floor-avatar">💀</div>
+              <div class="tower-floor-info">
+                <div class="tower-floor-name">Andar 4: O Necromante dos Cristais</div>
+                <div class="tower-floor-desc">Malakor • Pressão Implacável de Peças</div>
+                <div class="tower-floor-reward">Recompensa: 🪙 750 Moedas • ⭐ +600 XP</div>
+              </div>
+              <button type="button" class="tower-battle-btn" data-floor="4">🔒 Bloqueado</button>
+            </div>
+
+            <!-- Floor 5 -->
+            <div class="tower-floor-card locked" data-floor="5">
+              <div class="tower-floor-avatar">👑</div>
+              <div class="tower-floor-info">
+                <div class="tower-floor-name">Andar 5: O Arquimago Cósmico</div>
+                <div class="tower-floor-desc">Lorde Vane • O Soberano Supremo da Catedral</div>
+                <div class="tower-floor-reward">Recompensa: 🪙 1.500 Moedas • ⭐ +1.200 XP • Título Lendário</div>
+              </div>
+              <button type="button" class="tower-battle-btn" data-floor="5">🔒 Bloqueado</button>
+            </div>
+          </div>
+        </div>
+
         <div class="challenges-list">
           <div class="challenge-item">
             <div class="challenge-item-icon">🧩</div>
@@ -3194,7 +3331,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.2.8</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.2.9</span>
           </div>
         </div>
       </div>
@@ -3444,6 +3581,10 @@
       <span class="material-symbols-rounded">format_list_numbered</span>
       <span class="btn-label">Registo</span>
     </button>
+    <button id="btn-dock-replay" class="dock-btn" title="Rever Lances (Replay)">
+      <span class="material-symbols-rounded">smart_display</span>
+      <span class="btn-label">Replay</span>
+    </button>
     <button id="btn-reset" class="dock-btn" title="Reiniciar Partida">
       <span class="material-symbols-rounded">restart_alt</span>
       <span class="btn-label">Reiniciar</span>
@@ -3608,6 +3749,9 @@
 
       <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
         Novamente</button>
+      <button id="btn-game-over-replay" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(0, 245, 212, 0.15); border-color: #00f5d4; color: #00f5d4;">
+        <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Partida (Replay Lance a Lance)
+      </button>
     </div>
   </div>
 
@@ -3652,6 +3796,9 @@
         <button id="btn-pause-restart" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem;">
           <span class="material-symbols-rounded"
             style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
+        </button>
+        <button id="btn-pause-replay" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.5); color: #00f5d4;">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Lances da Partida (Replay)
         </button>
         <button id="btn-pause-main-menu" class="promo-btn" onclick="if(window._goToMainMenuFromPause) window._goToMainMenuFromPause(event);" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
@@ -3845,6 +3992,53 @@
 
   <!-- Ligação com a lógica central do jogo -->
   <script type="module" src="./assets/wizard-features.js"></script>
+  <!-- Barra Flutuante de Controle de Replay de Partidas -->
+  <div id="replay-controller-bar" class="replay-controller-bar hidden">
+    <div class="replay-controller-header">
+      <div class="replay-title-wrap">
+        <span class="material-symbols-rounded" style="color: #00f5d4;">smart_display</span>
+        <span class="replay-main-tag">REPLAY DA BATALHA</span>
+      </div>
+      <div id="replay-move-status" class="replay-move-status">Lance 0 de 0</div>
+      <button type="button" id="btn-close-replay" class="replay-close-btn" title="Fechar Replay">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+    <div class="replay-nav-controls">
+      <button type="button" id="btn-replay-start" class="replay-btn" title="Início da Partida">
+        <span class="material-symbols-rounded">first_page</span>
+      </button>
+      <button type="button" id="btn-replay-prev" class="replay-btn" title="Lance Anterior">
+        <span class="material-symbols-rounded">chevron_left</span>
+      </button>
+      <div id="replay-current-san" class="replay-current-san">Posição Inicial</div>
+      <button type="button" id="btn-replay-next" class="replay-btn" title="Próximo Lance">
+        <span class="material-symbols-rounded">chevron_right</span>
+      </button>
+      <button type="button" id="btn-replay-end" class="replay-btn" title="Final da Partida">
+        <span class="material-symbols-rounded">last_page</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Comemorativo de Vitória na Torre dos Magos -->
+  <div id="tower-victory-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 480px; width: 92%; border-radius: 24px; padding: 26px 20px; text-align: center;">
+      <div style="font-size: 3.2rem; margin-bottom: 8px;">🏆</div>
+      <h3 style="color: #ffd700; font-size: 1.6rem; margin-bottom: 4px;">ANDAR CONCLUÍDO!</h3>
+      <p id="tower-victory-boss-name" style="color: #d0bcff; font-size: 1rem; margin-bottom: 16px;">Você derrotou o guardião da torre!</p>
+      
+      <div style="background: rgba(245, 197, 107, 0.16); border: 1.5px solid rgba(245, 197, 107, 0.6); border-radius: 16px; padding: 14px; margin-bottom: 20px;">
+        <div style="color: #f5c56b; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;">RECOMPENSA DE VITÓRIA</div>
+        <div id="tower-victory-reward-coins" style="color: #ffd700; font-size: 1.5rem; font-weight: 900;">+300 🪙 Moedas Arcanas</div>
+        <div id="tower-victory-reward-xp" style="color: #00f5d4; font-size: 0.95rem; font-weight: 700; margin-top: 2px;">+200 XP Mágico</div>
+      </div>
+
+      <button type="button" class="promo-btn" id="btn-close-tower-victory" style="width: 100%; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #f5c56b, #e65100); color: #1a1020;">
+        Coletar Recompensa & Continuar
+      </button>
+    </div>
+  </div>
 </body>
 
 </html>
