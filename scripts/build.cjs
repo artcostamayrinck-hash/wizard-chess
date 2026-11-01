@@ -20,6 +20,13 @@ require('./sync-assets.cjs');
   console.log(`✓ ${f} -> ${dest}`);
 });
 
+// 3.1. Sincroniza app-debug.apk para dist/app-debug.apk e public/app-debug.apk para download direto na web
+if (fs.existsSync('app-debug.apk')) {
+  fs.copyFileSync('app-debug.apk', 'dist/app-debug.apk');
+  fs.copyFileSync('app-debug.apk', 'public/app-debug.apk');
+  console.log('✓ app-debug.apk copiado para dist/ e public/ para download direto');
+}
+
 // 4. Capacitor sync para manter o APK Android 100% atualizado
 try {
   console.log('[Build] Sincronizando com Android via Capacitor...');

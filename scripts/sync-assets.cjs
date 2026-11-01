@@ -21,6 +21,7 @@ const publicFiles = [
   'icon-512.png',
   'manifest.json',
   'ads.txt',
+  'app-debug.apk',
   'assets/index-CrO8ZqHi.css',
   'assets/index-Dmtay6rb.js',
   'assets/wizard-features.js'

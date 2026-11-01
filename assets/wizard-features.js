@@ -1692,6 +1692,7 @@ function setupStartMenuGrid() {
     const modalContent = document.querySelector("#start-menu .modal-content");
     if (modalContent) modalContent.scrollTop = 0;
   }
+  window._switchSubView = switchSubView;
 
   // 1. Card Laranja: Comece a Batalha -> Abre Preparação da Batalha
   if (btnHeroBattle) {
@@ -1759,6 +1760,18 @@ function setupStartMenuGrid() {
         if (pm) pm.classList.remove("hidden");
       }
     }, "openProfileModalFromTop");
+  }
+
+  const btnTopQuestsPill = document.getElementById("btn-web-daily-quests");
+  if (btnTopQuestsPill) {
+    bindAction(btnTopQuestsPill, () => {
+      switchSubView("challenges");
+      setTimeout(() => {
+        const qEl = document.getElementById("daily-quests-container");
+        if (qEl) qEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+      showToast("📜 Missões Diárias do Grimório");
+    }, "openTopDailyQuestsNav");
   }
   const homeKnightCol = document.getElementById("home-knight-col");
   const homeKnightShowcase = document.getElementById("home-knight-showcase");
@@ -3601,13 +3614,16 @@ function setupDailyQuests() {
   const btnTopQuests = document.getElementById("btn-web-daily-quests");
   if (btnTopQuests) {
     bindAction(btnTopQuests, () => {
-      if (typeof switchSubView === "function") {
-        switchSubView("challenges");
+      const btnNav = document.getElementById("btn-nav-challenges");
+      if (btnNav) {
+        btnNav.click();
+      } else if (typeof window._switchSubView === "function") {
+        window._switchSubView("challenges");
       }
       setTimeout(() => {
         const qEl = document.getElementById("daily-quests-container");
         if (qEl) qEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 50);
+      }, 80);
       showToast("📜 Missões Diárias do Grimório");
     }, "openTopDailyQuests");
   }
