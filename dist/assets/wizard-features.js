@@ -417,7 +417,12 @@ function initWizardFeatures() {
     { name: "AdMobManager", fn: setupAdMobManager },
     { name: "ArcaneAudio", fn: setupArcaneAudio },
     { name: "DailyQuests", fn: setupDailyQuests },
-    { name: "TacticalPuzzles", fn: setupTacticalPuzzles }
+    { name: "TacticalPuzzles", fn: setupTacticalPuzzles },
+    { name: "WizardCampaign", fn: setupWizardCampaign },
+    { name: "DynamicWeather", fn: setupDynamicWeather },
+    { name: "DailyChest", fn: setupDailyChest },
+    { name: "FortuneWheel", fn: setupFortuneWheel },
+    { name: "VictoryShareModal", fn: setupVictoryShareModal }
   ];
 
   for (const task of tasks) {
@@ -1713,6 +1718,54 @@ function setupStartMenuGrid() {
     bindAction(btnCardTutorial, () => {
       switchSubView("tutorial");
     });
+  }
+
+  // 3.1. Card Roxo: Campanha Arcana -> Abre View da Campanha
+  const btnCardCampaign = document.getElementById("btn-card-campaign");
+  if (btnCardCampaign) {
+    bindAction(btnCardCampaign, () => {
+      switchSubView("campaign");
+      if (typeof window._updateCampaignUI === "function") window._updateCampaignUI();
+    }, "openCampaignCard");
+  }
+
+  const btnCampaignBack = document.getElementById("btn-campaign-back");
+  if (btnCampaignBack) {
+    bindAction(btnCampaignBack, () => {
+      switchSubView("home");
+    }, "closeCampaignBack");
+  }
+
+  // 3.2. Pílula Roda da Fortuna no Topo
+  const btnWebFortune = document.getElementById("btn-web-fortune-wheel");
+  const modalFortune = document.getElementById("fortune-wheel-modal");
+  const btnCloseFortune = document.getElementById("btn-close-fortune-wheel");
+  if (btnWebFortune && modalFortune) {
+    bindAction(btnWebFortune, () => {
+      modalFortune.classList.remove("hidden");
+      if (typeof window._renderFortuneWheel === "function") window._renderFortuneWheel();
+    }, "openFortunePill");
+  }
+  if (btnCloseFortune && modalFortune) {
+    bindAction(btnCloseFortune, () => {
+      modalFortune.classList.add("hidden");
+    }, "closeFortuneModal");
+  }
+
+  // 3.3. Botão Compartilhar Vitória no Fim de Jogo
+  const btnGameOverShare = document.getElementById("btn-game-over-share");
+  const modalShare = document.getElementById("share-victory-modal");
+  const btnCloseShare = document.getElementById("btn-close-share-modal");
+  if (btnGameOverShare && modalShare) {
+    bindAction(btnGameOverShare, () => {
+      modalShare.classList.remove("hidden");
+      if (typeof window._populateVictoryShareModal === "function") window._populateVictoryShareModal();
+    }, "openShareModal");
+  }
+  if (btnCloseShare && modalShare) {
+    bindAction(btnCloseShare, () => {
+      modalShare.classList.add("hidden");
+    }, "closeShareModal");
   }
 
   // 4. Barra de Navegação Inferior
@@ -3381,6 +3434,23 @@ const ArcaneAudio = {
     });
   },
 
+  playTensionTick() {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(140, t);
+    osc.frequency.exponentialRampToValueAtTime(60, t + 0.08);
+    gain.gain.setValueAtTime(0.12, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    osc.connect(gain).connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.09);
+  },
+
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
     try { localStorage.setItem("wizard_chess_sfx_enabled", this.soundEnabled); } catch(e){}
@@ -3805,3 +3875,657 @@ function setupTacticalPuzzles() {
     }, "fastPuzzleBtn");
   }
 }
+
+
+// ==============================================================
+// V1.5.0: CAMPANHA DOS ARQUIMAGOS (CHEFES COM DIÁLOGOS EM TEMPO REAL)
+// ==============================================================
+const CAMPAIGN_BOSSES = [
+  {
+    id: 1,
+    name: "Ignis, o Piromante",
+    title: "Capítulo I • Fácil",
+    arena: "inferno",
+    diff: 1,
+    avatar: "🔥",
+    rewardCoins: 150,
+    rewardXp: 100,
+    rewardTitle: "Domador de Chamas",
+    skin: "ruby",
+    lines: {
+      start: "Que o fogo dos deuses consuma o seu rei!",
+      capture: "Queimado até as cinzas!",
+      lossPiece: "Uma faísca se foi, mas o fogo ainda queima!",
+      check: "Seu rei está cercado pelas chamas do inferno!",
+      win: "Minhas chamas foram apagadas... você lutou com honra!",
+      defeat: "Cinzas às cinzas. O fogo é impiedoso!"
+    }
+  },
+  {
+    id: 2,
+    name: "Morgana, a Ilusionista",
+    title: "Capítulo II • Médio",
+    arena: "abyss",
+    diff: 2,
+    avatar: "👁️",
+    rewardCoins: 250,
+    rewardXp: 150,
+    rewardTitle: "Vidente Arcano",
+    skin: "spectral",
+    lines: {
+      start: "Nem tudo o que você vê no tabuleiro é real...",
+      capture: "Uma mera ilusão se desfazendo diante dos seus olhos.",
+      lossPiece: "Você enxergou através da minha miragem?!",
+      check: "As sombras fecham o cerco. Não há como escapar!",
+      win: "Sua mente é mais afiada que meus labirintos...",
+      defeat: "Você perdeu-se para sempre no meu reflexo sombrio."
+    }
+  },
+  {
+    id: 3,
+    name: "Chronos, o Guardião do Tempo",
+    title: "Capítulo III • Difícil",
+    arena: "desert",
+    diff: 3,
+    avatar: "⏳",
+    rewardCoins: 400,
+    rewardXp: 250,
+    rewardTitle: "Mestre do Tempo",
+    skin: "celestial",
+    lines: {
+      start: "O tempo é um rio, e o seu desfecho já foi traçado.",
+      capture: "O tempo cobra o seu preço inexorável.",
+      lossPiece: "Um desvio inesperado na linha temporal... fascinante!",
+      check: "Os ponteiros pararam. O fim se aproxima!",
+      win: "Você derrotou o fluxo do próprio destino. Extraordinário!",
+      defeat: "Mais uma alma esquecida nas areias da eternidade."
+    }
+  },
+  {
+    id: 4,
+    name: "Malakor, o Rei Lich",
+    title: "Chefe Final • Arquimago",
+    arena: "cathedral",
+    diff: 3,
+    avatar: "💀",
+    rewardCoins: 700,
+    rewardXp: 500,
+    rewardTitle: "Conquistador do Trono",
+    skin: "cyber",
+    lines: {
+      start: "O Trono Arcano nunca pertencerá a um mero mortal!",
+      capture: "Mais uma peça sacrificada ao vazio eterno!",
+      lossPiece: "Impossível! Ninguém desafia o soberano das trevas!",
+      check: "Curvar-se é a sua única salvação!",
+      win: "Não... o Trono Arcano é seu! Você é o verdadeiro Grande Mestre!",
+      defeat: "A escuridão eterna prevaleceu. Seu reinado acabou."
+    }
+  }
+];
+
+let _activeCampaignBoss = null;
+let _bossSpeechTimeout = null;
+
+function showBossSpeech(text, avatar = "🧙‍♂️", name = "Chefe") {
+  const hud = document.getElementById("boss-campaign-hud");
+  const tEl = document.getElementById("boss-speech-text");
+  const aEl = document.getElementById("boss-speech-avatar");
+  const nEl = document.getElementById("boss-speech-name");
+  if (!hud || !tEl) return;
+  tEl.textContent = text;
+  if (aEl) aEl.textContent = avatar;
+  if (nEl) nEl.textContent = name;
+  hud.classList.remove("hidden");
+  clearTimeout(_bossSpeechTimeout);
+  _bossSpeechTimeout = setTimeout(() => {
+    hud.classList.add("hidden");
+  }, 4800);
+}
+
+function getCampaignProgress() {
+  try {
+    const raw = localStorage.getItem("wizard_chess_campaign_progress");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { 1: false, 2: false, 3: false, 4: false };
+}
+
+function saveCampaignProgress(p) {
+  try {
+    localStorage.setItem("wizard_chess_campaign_progress", JSON.stringify(p));
+  } catch(e) {}
+}
+
+function updateCampaignUI() {
+  const progress = getCampaignProgress();
+  CAMPAIGN_BOSSES.forEach(boss => {
+    const card = document.getElementById("boss-card-" + boss.id);
+    const btn = document.getElementById("btn-boss-challenge-" + boss.id);
+    if (!card || !btn) return;
+
+    const isUnlocked = boss.id === 1 || progress[boss.id - 1] === true;
+    const isCompleted = progress[boss.id] === true;
+
+    card.classList.toggle("boss-completed", isCompleted);
+    card.classList.toggle("boss-locked", !isUnlocked);
+
+    if (isCompleted) {
+      btn.innerHTML = "👑 Vitória Conquistada (Repetir)";
+      btn.style.background = "linear-gradient(135deg, #00b4d8, #0077b6)";
+      btn.disabled = false;
+    } else if (!isUnlocked) {
+      btn.innerHTML = "🔒 Bloqueado";
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = boss.id === 4 ? "👑 Duelo Final" : "⚔️ Desafiar Mago";
+      btn.style.background = "";
+      btn.disabled = false;
+    }
+  });
+}
+window._updateCampaignUI = updateCampaignUI;
+
+function launchBossBattle(stageId) {
+  const boss = CAMPAIGN_BOSSES.find(b => b.id === stageId);
+  if (!boss) return;
+
+  _activeCampaignBoss = boss;
+  window._ACTIVE_CAMPAIGN_BOSS = boss;
+
+  // 1. Configura Arena
+  if (window._WIZARD_GAME && window._WIZARD_GAME.setArena) {
+    window._WIZARD_GAME.setArena(boss.arena);
+  }
+  const arenaBtn = document.querySelector(`#menu-arena-group .toggle-btn[data-arena="${boss.arena}"]`);
+  if (arenaBtn) {
+    document.querySelectorAll("#menu-arena-group .toggle-btn").forEach(b => b.classList.remove("active"));
+    arenaBtn.classList.add("active");
+  }
+
+  // 2. Configura Dificuldade IA
+  const diffBtn = document.querySelector(`#menu-diff-group .toggle-btn[data-diff="${boss.diff}"]`);
+  if (diffBtn) {
+    document.querySelectorAll("#menu-diff-group .toggle-btn").forEach(b => b.classList.remove("active"));
+    diffBtn.classList.add("active");
+  }
+
+  // 3. Atualiza HUD do Oponente
+  const oppName = document.getElementById("opponent-name-hud");
+  const oppAvatar = document.getElementById("opponent-avatar-hud");
+  const oppBadge = document.getElementById("opponent-badge-hud");
+  if (oppName) oppName.textContent = boss.name;
+  if (oppAvatar) oppAvatar.textContent = boss.avatar;
+  if (oppBadge) oppBadge.textContent = "CHEFE";
+
+  // 4. Inicia Batalha
+  const btnStart = document.getElementById("btn-start-game");
+  if (btnStart) btnStart.click();
+
+  // 5. Fala de abertura
+  setTimeout(() => {
+    showBossSpeech(boss.lines.start, boss.avatar, boss.name);
+  }, 900);
+}
+
+function setupWizardCampaign() {
+  updateCampaignUI();
+
+  CAMPAIGN_BOSSES.forEach(boss => {
+    const btn = document.getElementById("btn-boss-challenge-" + boss.id);
+    if (btn) {
+      bindAction(btn, () => launchBossBattle(boss.id), "launchBoss_" + boss.id);
+    }
+  });
+
+  // Monitor de eventos em jogo para o Chefe falar
+  const graveB = document.getElementById("grave-b");
+  const graveW = document.getElementById("grave-w");
+  let lastCountB = 0;
+  let lastCountW = 0;
+
+  const monitorCampaignEvents = () => {
+    if (!_activeCampaignBoss) return;
+
+    if (graveB) {
+      const curB = graveB.children.length;
+      if (curB > lastCountB) {
+        lastCountB = curB;
+        setTimeout(() => {
+          if (_activeCampaignBoss) {
+            showBossSpeech(_activeCampaignBoss.lines.lossPiece, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
+          }
+        }, 500);
+      }
+    }
+
+    if (graveW) {
+      const curW = graveW.children.length;
+      if (curW > lastCountW) {
+        lastCountW = curW;
+        setTimeout(() => {
+          if (_activeCampaignBoss) {
+            showBossSpeech(_activeCampaignBoss.lines.capture, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
+          }
+        }, 500);
+      }
+    }
+  };
+
+  if (graveB) new MutationObserver(monitorCampaignEvents).observe(graveB, { childList: true });
+  if (graveW) new MutationObserver(monitorCampaignEvents).observe(graveW, { childList: true });
+
+  // Monitor de fim de jogo para vitória na campanha
+  const gameOverModal = document.getElementById("game-over-modal");
+  const gameOverTitle = document.getElementById("game-over-title");
+  if (gameOverModal) {
+    new MutationObserver(() => {
+      if (!gameOverModal.classList.contains("hidden") && _activeCampaignBoss) {
+        const titleText = (gameOverTitle ? gameOverTitle.textContent : "").toLowerCase();
+        const isWin = titleText.includes("vitória") || titleText.includes("venceu") || titleText.includes("mate");
+        if (isWin) {
+          const boss = _activeCampaignBoss;
+          showBossSpeech(boss.lines.win, boss.avatar, boss.name);
+          addPlayerCoins(boss.rewardCoins, `Vitória sobre ${boss.name}`);
+          addXP(boss.rewardXp, `Campanha: ${boss.name}`);
+          if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+            ArcaneAudio.playVictoryChime();
+          }
+
+          const prog = getCampaignProgress();
+          prog[boss.id] = true;
+          saveCampaignProgress(prog);
+          updateCampaignUI();
+          showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+        } else {
+          showBossSpeech(_activeCampaignBoss.lines.defeat, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
+        }
+      }
+    }).observe(gameOverModal, { attributes: true, attributeFilter: ["class"] });
+  }
+}
+
+// ==============================================================
+// V1.5.0: CLIMA DINÂMICO NAS ARENAS (THREE.JS ATMOSPHERIC PARTICLES)
+// ==============================================================
+class ArenaWeatherSystem {
+  constructor() {
+    this.particles = [];
+    this.activeArena = "";
+  }
+
+  init() {
+    this.animate = this.animate.bind(this);
+    requestAnimationFrame(this.animate);
+    setInterval(() => this.checkArenaChange(), 1500);
+  }
+
+  checkArenaChange() {
+    if (!window._WIZARD_GAME || !window._WIZARD_GAME.scene) return;
+    const currentArena = window._WIZARD_GAME.getArena ? window._WIZARD_GAME.getArena() : "cathedral";
+    if (currentArena !== this.activeArena) {
+      this.switchWeather(currentArena);
+    }
+  }
+
+  switchWeather(arena) {
+    this.clear();
+    this.activeArena = arena;
+    const game = window._WIZARD_GAME;
+    if (!game || !game.scene || !game.Se || !game.hs || !game.Kt) return;
+
+    const { Se, hs, Kt, scene } = game;
+    const geom = new hs(0.045, 4, 4);
+
+    let colors = [0xffd700, 0xc084fc, 0xffffff];
+    let count = 45;
+
+    if (arena === "inferno") {
+      colors = [0xff4500, 0xff8c00, 0xff2200, 0xffd700];
+      count = 60;
+    } else if (arena === "abyss") {
+      colors = [0x00f5d4, 0x7b2cbf, 0x3a0ca3];
+      count = 50;
+    } else if (arena === "atlantis") {
+      colors = [0x00b4d8, 0x90e0ef, 0x48cae4];
+      count = 55;
+    } else if (arena === "desert") {
+      colors = [0xe0a96d, 0xd4a373, 0xffd54f];
+      count = 55;
+    } else if (arena === "cyber") {
+      colors = [0x00ff88, 0x00e5ff, 0x00ffff];
+      count = 50;
+    }
+
+    for (let i = 0; i < count; i++) {
+      const col = colors[Math.floor(Math.random() * colors.length)];
+      const mat = new Kt({ color: col, transparent: true, opacity: 0.75 });
+      const mesh = new Se(geom, mat);
+
+      mesh.position.set(
+        (Math.random() - 0.5) * 16,
+        Math.random() * 8 + 0.2,
+        (Math.random() - 0.5) * 16
+      );
+
+      scene.add(mesh);
+
+      this.particles.push({
+        mesh,
+        arena,
+        vx: (Math.random() - 0.5) * 0.015 + (arena === "desert" ? 0.035 : 0),
+        vy: arena === "inferno" ? (0.015 + Math.random() * 0.02) :
+            arena === "atlantis" ? (0.012 + Math.random() * 0.018) :
+            arena === "cathedral" ? (-0.008 - Math.random() * 0.01) :
+            (Math.random() - 0.5) * 0.012,
+        vz: (Math.random() - 0.5) * 0.015
+      });
+    }
+  }
+
+  clear() {
+    if (window._WIZARD_GAME && window._WIZARD_GAME.scene) {
+      const scene = window._WIZARD_GAME.scene;
+      this.particles.forEach(p => {
+        if (p.mesh) {
+          scene.remove(p.mesh);
+          if (p.mesh.geometry) p.mesh.geometry.dispose();
+          if (p.mesh.material) p.mesh.material.dispose();
+        }
+      });
+    }
+    this.particles = [];
+  }
+
+  animate() {
+    requestAnimationFrame(this.animate);
+    const arena = this.activeArena;
+    this.particles.forEach(p => {
+      p.mesh.position.x += p.vx;
+      p.mesh.position.y += p.vy;
+      p.mesh.position.z += p.vz;
+
+      if (arena === "inferno" || arena === "atlantis") {
+        if (p.mesh.position.y > 9) p.mesh.position.y = 0.2;
+      } else if (arena === "cathedral") {
+        if (p.mesh.position.y < 0.2) p.mesh.position.y = 8.5;
+      } else {
+        if (p.mesh.position.y < 0.2) p.mesh.position.y = 7.5;
+        if (p.mesh.position.y > 8) p.mesh.position.y = 0.3;
+      }
+
+      if (Math.abs(p.mesh.position.x) > 10) p.mesh.position.x = -p.mesh.position.x * 0.9;
+      if (Math.abs(p.mesh.position.z) > 10) p.mesh.position.z = -p.mesh.position.z * 0.9;
+    });
+  }
+}
+
+const WeatherManager = new ArenaWeatherSystem();
+function setupDynamicWeather() {
+  WeatherManager.init();
+}
+
+// ==============================================================
+// V1.5.0: BAÚ ARCANO DIÁRIO
+// ==============================================================
+const DailyChest = {
+  COOLDOWN_MS: 24 * 60 * 60 * 1000,
+
+  getLastClaim() {
+    return parseInt(localStorage.getItem("wizard_chess_daily_chest_last") || "0", 10);
+  },
+
+  updateUI() {
+    const btn = document.getElementById("btn-claim-daily-chest");
+    const desc = document.getElementById("chest-desc-text");
+    if (!btn) return;
+
+    const last = this.getLastClaim();
+    const now = Date.now();
+    const elapsed = now - last;
+
+    if (elapsed >= this.COOLDOWN_MS || last === 0) {
+      btn.disabled = false;
+      btn.textContent = "🎁 Abrir Baú";
+      if (desc) desc.textContent = "Baú Arcano Pronto! Toque para resgatar.";
+    } else {
+      btn.disabled = true;
+      const remain = this.COOLDOWN_MS - elapsed;
+      const hours = Math.floor(remain / (1000 * 60 * 60));
+      const mins = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
+      btn.textContent = `Próximo em ${hours}h ${mins}m`;
+      if (desc) desc.textContent = `Recompensa renova em ${hours} horas e ${mins} minutos.`;
+    }
+  },
+
+  claim() {
+    const last = this.getLastClaim();
+    const now = Date.now();
+    if (now - last < this.COOLDOWN_MS && last !== 0) return;
+
+    localStorage.setItem("wizard_chess_daily_chest_last", now);
+    addPlayerCoins(200, "Baú Arcano Diário");
+    addXP(100, "Baú Arcano Diário");
+
+    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
+      ArcaneAudio.playQuestRewardChime();
+    }
+
+    showToast("🎉 Baú Aberto! Você recebeu +200 Moedas e +100 XP!");
+    this.updateUI();
+  }
+};
+
+function setupDailyChest() {
+  DailyChest.updateUI();
+  const btn = document.getElementById("btn-claim-daily-chest");
+  if (btn) {
+    bindAction(btn, () => DailyChest.claim(), "claimDailyChest");
+  }
+  setInterval(() => DailyChest.updateUI(), 60000);
+}
+
+// ==============================================================
+// V1.5.0: RODA DA FORTUNA ARCANA (ROLETA MÍSTICA)
+// ==============================================================
+const FortuneWheel = {
+  slices: [
+    { label: "+100 🪙", coins: 100, xp: 0, col: "#7b1fa2", textCol: "#fff" },
+    { label: "+75 ⭐", coins: 0, xp: 75, col: "#3f51b5", textCol: "#fff" },
+    { label: "+250 🪙", coins: 250, xp: 0, col: "#00897b", textCol: "#fff" },
+    { label: "💎 500", coins: 500, xp: 200, col: "#ffd700", textCol: "#000" },
+    { label: "+150 ⭐", coins: 0, xp: 150, col: "#e91e63", textCol: "#fff" },
+    { label: "+150 🪙", coins: 150, xp: 0, col: "#fb8c00", textCol: "#000" },
+    { label: "👑 350", coins: 350, xp: 100, col: "#5e35b1", textCol: "#fff" },
+    { label: "+200 🪙", coins: 200, xp: 50, col: "#1e88e5", textCol: "#fff" }
+  ],
+  currentAngle: 0,
+  isSpinning: false,
+
+  draw() {
+    const canvas = document.getElementById("fortune-wheel-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const num = this.slices.length;
+    const arc = (2 * Math.PI) / num;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const r = cx - 10;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < num; i++) {
+      const angle = this.currentAngle + i * arc;
+      ctx.beginPath();
+      ctx.fillStyle = this.slices[i].col;
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, angle, angle + arc);
+      ctx.lineTo(cx, cy);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Label
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = this.slices[i].textCol;
+      ctx.font = "bold 13px 'Cinzel', sans-serif";
+      ctx.fillText(this.slices[i].label, r - 22, 5);
+      ctx.restore();
+    }
+  },
+
+  spin() {
+    if (this.isSpinning) return;
+    this.isSpinning = true;
+
+    const btn = document.getElementById("btn-spin-wheel");
+    if (btn) btn.disabled = true;
+
+    const resultBanner = document.getElementById("wheel-result-banner");
+    if (resultBanner) resultBanner.classList.add("hidden");
+
+    // Sorteia um índice aleatório
+    const targetIndex = Math.floor(Math.random() * this.slices.length);
+    const num = this.slices.length;
+    const arc = (2 * Math.PI) / num;
+
+    // Queremos que a fatia pare no ponteiro do topo (ângulo 3 * Math.PI / 2)
+    const extraRotations = 5 + Math.floor(Math.random() * 3);
+    const targetAngle = (extraRotations * 2 * Math.PI) + (3 * Math.PI / 2) - (targetIndex * arc) - (arc / 2);
+
+    const startAngle = this.currentAngle;
+    const change = targetAngle - startAngle;
+    const duration = 4200;
+    const startTime = performance.now();
+
+    const animateSpin = (now) => {
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / duration);
+      // Easing cúbico desacelerado suave
+      const ease = 1 - Math.pow(1 - t, 4);
+
+      this.currentAngle = startAngle + change * ease;
+      this.draw();
+
+      if (t < 1) {
+        requestAnimationFrame(animateSpin);
+      } else {
+        this.isSpinning = false;
+        if (btn) btn.disabled = false;
+        this.onFinish(this.slices[targetIndex]);
+      }
+    };
+
+    requestAnimationFrame(animateSpin);
+  },
+
+  onFinish(prize) {
+    if (prize.coins > 0) addPlayerCoins(prize.coins, "Roda da Fortuna Arcana");
+    if (prize.xp > 0) addXP(prize.xp, "Roda da Fortuna Arcana");
+
+    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
+      ArcaneAudio.playQuestRewardChime();
+    }
+
+    const banner = document.getElementById("wheel-result-banner");
+    const desc = document.getElementById("wheel-result-desc");
+    if (banner && desc) {
+      desc.textContent = `Você conquistou ${prize.label}!`;
+      banner.classList.remove("hidden");
+    }
+
+    showToast(`🎡 Parabéns! Você ganhou ${prize.label}!`);
+  }
+};
+
+window._renderFortuneWheel = function() {
+  FortuneWheel.draw();
+};
+
+function setupFortuneWheel() {
+  const btnSpin = document.getElementById("btn-spin-wheel");
+  if (btnSpin) {
+    bindAction(btnSpin, () => FortuneWheel.spin(), "spinFortuneWheel");
+  }
+}
+
+// ==============================================================
+// V1.5.0: COMPARTILHAR VITÓRIA (SHARE CERTIFICATE)
+// ==============================================================
+function populateVictoryShareModal() {
+  const playerName = localStorage.getItem("wizard_chess_player_name") || "Arquimago do Tabuleiro";
+  const nameEl = document.getElementById("cert-player-name");
+  const movesEl = document.getElementById("cert-moves-count");
+  const arenaEl = document.getElementById("cert-arena-name");
+  const outcomeEl = document.getElementById("cert-outcome");
+
+  if (nameEl) nameEl.textContent = playerName;
+
+  const historyList = document.querySelectorAll("#history-list li");
+  const moves = historyList.length || 24;
+  if (movesEl) movesEl.textContent = moves;
+
+  let arenaName = "Catedral Arcana";
+  if (window._WIZARD_GAME && window._WIZARD_GAME.getArena) {
+    const a = window._WIZARD_GAME.getArena();
+    const map = {
+      cathedral: "Catedral Arcana",
+      inferno: "Cripta Infernal",
+      frost: "Templo de Gelo",
+      abyss: "Abismo do Vazio",
+      desert: "Pirâmide das Areias",
+      atlantis: "Santuário de Atlântida"
+    };
+    arenaName = map[a] || "Catedral Arcana";
+  }
+  if (arenaEl) arenaEl.textContent = arenaName;
+  if (outcomeEl) outcomeEl.textContent = "Xeque-Mate!";
+
+  // Prepara compartilhamento WhatsApp
+  const shareText = `♟️ Acabei de triunfar no Wizard's Chess 3D!\n👑 Vencedor: ${playerName}\n⚔️ ${moves} lances de pura tática na ${arenaName}.\nJogue grátis ou baixe o app no link:\nhttps://artcostamayrinck-hash.github.io/wizard-chess/`;
+
+  const btnWa = document.getElementById("btn-share-whatsapp");
+  if (btnWa) {
+    btnWa.onclick = () => {
+      const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(shareText);
+      window.open(waUrl, "_blank");
+    };
+  }
+
+  const btnCopy = document.getElementById("btn-share-copy-text");
+  if (btnCopy) {
+    btnCopy.onclick = () => {
+      navigator.clipboard.writeText(shareText);
+      showToast("📋 Mensagem copiada com sucesso!");
+    };
+  }
+}
+window._populateVictoryShareModal = populateVictoryShareModal;
+
+function setupVictoryShareModal() {
+  const btnShare = document.getElementById("btn-game-over-share");
+  if (btnShare) {
+    bindAction(btnShare, () => {
+      const modal = document.getElementById("share-victory-modal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        populateVictoryShareModal();
+      }
+    }, "openShareCertModal");
+  }
+}
+
+// Monitor de áudio para o Relógio em estado crítico (Heartbeat SFX)
+setInterval(() => {
+  const timerW = document.getElementById("timer-w");
+  const timerB = document.getElementById("timer-b");
+  const isCritical = (timerW && timerW.classList.contains("timer-critical") && timerW.classList.contains("active")) ||
+                     (timerB && timerB.classList.contains("timer-critical") && timerB.classList.contains("active"));
+
+  if (isCritical && typeof ArcaneAudio !== "undefined" && ArcaneAudio.playTensionTick) {
+    ArcaneAudio.playTensionTick();
+  }
+}, 1000);

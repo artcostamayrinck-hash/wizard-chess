@@ -2611,11 +2611,15 @@
         </div>
 
         <!-- Banner Discreto de Estatísticas -->
-        <!-- Pílula Web: Atalhos de Teclado & Baixar App Android -->
+        <!-- Pílula Web: Atalhos de Teclado, Missões, Roleta & Baixar App Android -->
         <div class="web-platform-banner" id="web-platform-banner">
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-daily-quests" title="Ver Missões Diárias do Grimório">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 16px;">task_alt</span>
             <span>Missões Diárias</span>
+          </button>
+          <button type="button" class="web-banner-pill highlight-purple" id="btn-web-fortune-wheel" title="Girar a Roda da Fortuna Arcana">
+            <span class="material-symbols-rounded" style="color: #c084fc; font-size: 16px;">casino</span>
+            <span>Roda da Fortuna</span>
           </button>
           <a href="./app-debug.apk" download="wizard-chess-3d.apk" class="web-banner-pill highlight" id="btn-web-download-apk" title="Baixar o aplicativo oficial para celular Android (APK)">
             <span class="material-symbols-rounded">android</span>
@@ -2678,6 +2682,24 @@
                   </div>
                 </div>
                 <div class="rpg-card-arrow pink-arrow">
+                  <span class="material-symbols-rounded">arrow_forward</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- Card Roxo: Campanha Arcana (Duelo contra Chefes) -->
+            <button type="button" class="rpg-card-campaign purple-action-card" id="btn-card-campaign">
+              <div class="rpg-card-inner">
+                <div class="rpg-card-left">
+                  <div class="rpg-card-icon-box purple-glow">
+                    <span class="material-symbols-rounded">swords</span>
+                  </div>
+                  <div class="rpg-card-text">
+                    <span class="rpg-card-title">Campanha Arcana</span>
+                    <span class="rpg-card-subtitle">Duelo contra os 4 Arquimagos</span>
+                  </div>
+                </div>
+                <div class="rpg-card-arrow purple-arrow">
                   <span class="material-symbols-rounded">arrow_forward</span>
                 </div>
               </div>
@@ -3020,6 +3042,21 @@
               <span>MISSÕES DIÁRIAS DO GRIMÓRIO</span>
             </div>
             <span class="quests-timer" id="quests-reset-timer">Renova em 24h</span>
+          </div>
+
+          <!-- Baú Arcano Diário (Daily Arcane Chest) -->
+          <div class="daily-chest-box" id="daily-chest-card">
+            <div class="chest-icon-wrapper">
+              <span class="chest-emoji" id="chest-emoji-icon">🎁</span>
+            </div>
+            <div class="chest-info">
+              <div class="chest-header-row">
+                <span class="chest-title">Baú Arcano Diário</span>
+                <span class="chest-badge-reward">+200 🪙 • +100 XP</span>
+              </div>
+              <span class="chest-desc" id="chest-desc-text">Disponível para abertura a cada 24 horas</span>
+            </div>
+            <button type="button" class="btn-claim-chest" id="btn-claim-daily-chest">Abrir Baú</button>
           </div>
 
           <div id="quests-list">
@@ -3577,7 +3614,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.4.2</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.5.0</span>
           </div>
         </div>
       </div>
@@ -3707,6 +3744,128 @@
         </div>
       </div>
 
+      <!-- ============================================================== -->
+      <!-- VIEW 5: CAMPANHA DOS ARQUIMAGOS (CHEFES ELEMENTAIS)           -->
+      <!-- ============================================================== -->
+      <div id="menu-view-campaign" class="menu-subview">
+        <div class="photo2-subview-header">
+          <button type="button" class="photo2-back-btn" id="btn-campaign-back">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Voltar</span>
+          </button>
+          <div class="brand-pill" style="margin: 0; width: fit-content; border-color: rgba(192, 132, 252, 0.6); background: rgba(192, 132, 252, 0.12); color: #c084fc;">
+            <span class="material-symbols-rounded">shield_person</span>
+            <span>CAMPANHA DOS ARQUIMAGOS</span>
+          </div>
+        </div>
+
+        <h2 class="game-title photo2-title" style="font-size: 1.6rem; margin: 4px 0 6px 0; color: #c084fc;">CAMPANHA ARCANA</h2>
+        <p class="photo2-subtitle" style="margin-bottom: 16px;">Derrote os 4 Grandes Mestres Elementais em suas arenas sagradas e conquiste o Trono do Xadrez Ancestral.</p>
+
+        <!-- Trilha de Chefes da Campanha -->
+        <div class="campaign-roadmap" id="campaign-roadmap-list">
+          <!-- Chefe 1: Ignis -->
+          <div class="boss-card" id="boss-card-1" data-stage="1">
+            <div class="boss-card-header">
+              <div class="boss-avatar-box ember-avatar">
+                <span class="boss-avatar-emoji">🔥</span>
+              </div>
+              <div class="boss-meta-text">
+                <div class="boss-tag-row">
+                  <span class="boss-difficulty-tag diff-easy">Capítulo I • Fácil</span>
+                  <span class="boss-arena-tag">Cripta Infernal</span>
+                </div>
+                <h3 class="boss-title">Ignis, o Piromante</h3>
+                <p class="boss-desc">Domina o fogo ancestral. Joga de forma impetuosa e agressiva com suas peças carmesins.</p>
+              </div>
+            </div>
+            <div class="boss-card-footer">
+              <div class="boss-rewards-row">
+                <span class="reward-pill">🪙 +150 Moedas</span>
+                <span class="reward-pill">⭐ +100 XP</span>
+                <span class="reward-pill title-reward">🏷️ "Domador de Chamas"</span>
+              </div>
+              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-1">⚔️ Desafiar Mago</button>
+            </div>
+          </div>
+
+          <!-- Chefe 2: Morgana -->
+          <div class="boss-card" id="boss-card-2" data-stage="2">
+            <div class="boss-card-header">
+              <div class="boss-avatar-box mist-avatar">
+                <span class="boss-avatar-emoji">👁️</span>
+              </div>
+              <div class="boss-meta-text">
+                <div class="boss-tag-row">
+                  <span class="boss-difficulty-tag diff-med">Capítulo II • Médio</span>
+                  <span class="boss-arena-tag">Abismo do Vazio</span>
+                </div>
+                <h3 class="boss-title">Morgana, a Ilusionista</h3>
+                <p class="boss-desc">Mestre dos espelhos e sombras. Prepara emboscadas táticas e garfos traiçoeiros com seus cavalos.</p>
+              </div>
+            </div>
+            <div class="boss-card-footer">
+              <div class="boss-rewards-row">
+                <span class="reward-pill">🪙 +250 Moedas</span>
+                <span class="reward-pill">⭐ +150 XP</span>
+                <span class="reward-pill title-reward">🏷️ "Vidente Arcano"</span>
+              </div>
+              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-2">⚔️ Desafiar Mago</button>
+            </div>
+          </div>
+
+          <!-- Chefe 3: Chronos -->
+          <div class="boss-card" id="boss-card-3" data-stage="3">
+            <div class="boss-card-header">
+              <div class="boss-avatar-box time-avatar">
+                <span class="boss-avatar-emoji">⏳</span>
+              </div>
+              <div class="boss-meta-text">
+                <div class="boss-tag-row">
+                  <span class="boss-difficulty-tag diff-hard">Capítulo III • Difícil</span>
+                  <span class="boss-arena-tag">Pirâmide das Areias</span>
+                </div>
+                <h3 class="boss-title">Chronos, o Guardião do Tempo</h3>
+                <p class="boss-desc">Enxerga cada desfecho mil lances à frente. Defesa cirúrgica e finais de jogo implacáveis.</p>
+              </div>
+            </div>
+            <div class="boss-card-footer">
+              <div class="boss-rewards-row">
+                <span class="reward-pill">🪙 +400 Moedas</span>
+                <span class="reward-pill">⭐ +250 XP</span>
+                <span class="reward-pill title-reward">🏷️ "Mestre do Tempo"</span>
+              </div>
+              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-3">⚔️ Desafiar Mago</button>
+            </div>
+          </div>
+
+          <!-- Chefe 4: Malakor -->
+          <div class="boss-card boss-final" id="boss-card-4" data-stage="4">
+            <div class="boss-card-header">
+              <div class="boss-avatar-box lich-avatar">
+                <span class="boss-avatar-emoji">💀</span>
+              </div>
+              <div class="boss-meta-text">
+                <div class="boss-tag-row">
+                  <span class="boss-difficulty-tag diff-boss">Chefe Final • Arquimago</span>
+                  <span class="boss-arena-tag">Catedral Cósmica</span>
+                </div>
+                <h3 class="boss-title">Malakor, o Rei Lich</h3>
+                <p class="boss-desc">O soberano imortal do tabuleiro. Precisão de grande mestre e frieza milenar na Catedral.</p>
+              </div>
+            </div>
+            <div class="boss-card-footer">
+              <div class="boss-rewards-row">
+                <span class="reward-pill">🪙 +700 Moedas</span>
+                <span class="reward-pill">⭐ +500 XP</span>
+                <span class="reward-pill title-reward">👑 "Conquistador do Trono"</span>
+              </div>
+              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-4">👑 Duelo Final</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Container Oculto para suporte a modo puzzle no motor sem alterar funções -->
       <div id="menu-mode-group-hidden" style="display: none !important;">
         <button class="toggle-btn" data-mode="puzzle"></button>
@@ -3769,6 +3928,17 @@
 
     <div class="turn-container">
       <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
+    </div>
+
+    <!-- Diálogo e Falas do Chefe de Campanha (Boss Campaign Speech) -->
+    <div id="boss-campaign-hud" class="boss-campaign-hud hidden">
+      <div class="boss-speech-bubble" id="boss-speech-bubble">
+        <span class="boss-speech-icon" id="boss-speech-avatar">🔥</span>
+        <div class="boss-speech-body">
+          <span class="boss-speech-name" id="boss-speech-name">Ignis, o Piromante</span>
+          <span class="boss-speech-text" id="boss-speech-text">Prepare-se para ser consumido pelas chamas!</span>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -4005,6 +4175,9 @@
         Novamente</button>
       <button id="btn-game-over-replay" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(0, 245, 212, 0.15); border-color: #00f5d4; color: #00f5d4;">
         <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Partida (Replay Lance a Lance)
+      </button>
+      <button id="btn-game-over-share" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(192, 132, 252, 0.18); border-color: #c084fc; color: #c084fc;">
+        <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">share</span>Compartilhar Vitória
       </button>
     </div>
   </div>
@@ -4317,6 +4490,89 @@
 
       <div style="margin-top: 18px; text-align: center;">
         <button type="button" class="promo-btn" id="btn-got-shortcuts" style="width: 100%; padding: 12px; font-weight: 700;">Entendido!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RODA DA FORTUNA ARCANA (ROLETA MÍSTICA)                  -->
+  <!-- ============================================================== -->
+  <div id="fortune-wheel-modal" class="modal-overlay hidden">
+    <div class="modal-content fortune-modal-content">
+      <div class="fortune-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-rounded" style="color: #ffd700; font-size: 24px;">casino</span>
+          <h3 style="margin: 0; color: #ffd700; font-size: 1.3rem;">Roda da Fortuna Arcana</h3>
+        </div>
+        <button type="button" id="btn-close-fortune-wheel" class="modal-close-btn">✕</button>
+      </div>
+
+      <p class="fortune-subtitle">Gire a roleta mística e teste a sorte dos astros para ganhar tesouros arcanos!</p>
+
+      <div class="wheel-stage-container">
+        <div class="wheel-pointer-arrow">▼</div>
+        <canvas id="fortune-wheel-canvas" width="300" height="300" class="fortune-wheel-canvas"></canvas>
+        <div class="wheel-center-orb">🔮</div>
+      </div>
+
+      <div class="wheel-result-banner hidden" id="wheel-result-banner">
+        <span class="wheel-result-title" id="wheel-result-title">Parabéns!</span>
+        <span class="wheel-result-desc" id="wheel-result-desc">+250 Moedas Arcanas</span>
+      </div>
+
+      <div class="wheel-actions-row">
+        <button type="button" class="promo-btn wheel-spin-btn" id="btn-spin-wheel">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">cached</span>
+          <span id="spin-btn-label">GIRAR ROLETA (GRÁTIS)</span>
+        </button>
+      </div>
+      <div class="wheel-info-subtext" id="wheel-status-text">1 Giro Grátis Disponível Hoje!</div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: COMPARTILHAR VITÓRIA (SHARE CERTIFICATE)                -->
+  <!-- ============================================================== -->
+  <div id="share-victory-modal" class="modal-overlay hidden">
+    <div class="modal-content share-modal-content">
+      <div class="share-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 24px;">🏆</span>
+          <h3 style="margin: 0; color: #ffd700; font-size: 1.3rem;">Certificado de Vitória</h3>
+        </div>
+        <button type="button" id="btn-close-share-modal" class="modal-close-btn">✕</button>
+      </div>
+
+      <div class="share-cert-card" id="share-cert-card">
+        <div class="cert-crown">👑</div>
+        <h4 class="cert-title">VITÓRIA ARCANA</h4>
+        <div class="cert-player" id="cert-player-name">Arquimago do Tabuleiro</div>
+        <div class="cert-summary" id="cert-summary-text">Triunfou soberano sobre a Obsidiana após um embate glorioso.</div>
+        <div class="cert-stats-grid">
+          <div class="cert-stat-item">
+            <span class="cert-stat-lbl">Lances</span>
+            <span class="cert-stat-val" id="cert-moves-count">32</span>
+          </div>
+          <div class="cert-stat-item">
+            <span class="cert-stat-lbl">Arena</span>
+            <span class="cert-stat-val" id="cert-arena-name">Catedral Arcana</span>
+          </div>
+          <div class="cert-stat-item">
+            <span class="cert-stat-lbl">Desfecho</span>
+            <span class="cert-stat-val" id="cert-outcome">Xeque-Mate</span>
+          </div>
+        </div>
+        <div class="cert-brand">WIZARD'S CHESS 3D</div>
+      </div>
+
+      <div class="share-buttons-grid">
+        <button type="button" class="btn-share-channel btn-share-whatsapp" id="btn-share-whatsapp">
+          <span>📱 Enviar no WhatsApp</span>
+        </button>
+        <button type="button" class="btn-share-channel btn-share-copy" id="btn-share-copy-text">
+          <span class="material-symbols-rounded">content_copy</span>
+          <span>Copiar Mensagem</span>
+        </button>
       </div>
     </div>
   </div>
