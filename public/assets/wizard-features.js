@@ -3597,6 +3597,21 @@ window._WIZARD_QUESTS = WizardQuests;
 function setupDailyQuests() {
   WizardQuests.updateUI();
 
+  // Botão "Missões Diárias" no cabeçalho inicial
+  const btnTopQuests = document.getElementById("btn-web-daily-quests");
+  if (btnTopQuests) {
+    bindAction(btnTopQuests, () => {
+      if (typeof switchSubView === "function") {
+        switchSubView("challenges");
+      }
+      setTimeout(() => {
+        const qEl = document.getElementById("daily-quests-container");
+        if (qEl) qEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+      showToast("📜 Missões Diárias do Grimório");
+    }, "openTopDailyQuests");
+  }
+
   const btnCap = document.getElementById("btn-collect-quest-captures");
   if (btnCap) bindAction(btnCap, () => WizardQuests.collectReward("captures"), "collectQuestCaptures");
 
