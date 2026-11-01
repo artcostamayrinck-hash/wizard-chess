@@ -19,9 +19,15 @@ try {
   console.log('\n🚀 [3/3] Executando git push origin main ...');
   execSync('git push origin main', { stdio: 'inherit' });
 
+  console.log('\n🌐 Sincronizando com repositório público (GitHub Pages e Vercel)...');
+  try {
+    execSync('git push --force https://github.com/artcostamayrinck-hash/wizard-chess.git main:main', { stdio: 'inherit' });
+  } catch (err) {
+    console.warn('Aviso ao sincronizar main com wizard-chess:', err.message);
+  }
+
   console.log('\n✅ Sucesso! Todas as alterações foram enviadas para o GitHub.\n');
 } catch (error) {
   console.error('\n❌ Erro durante o processo de sincronização:', error.message);
   process.exit(1);
 }
-

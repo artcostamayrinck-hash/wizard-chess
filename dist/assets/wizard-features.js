@@ -3188,20 +3188,18 @@ async function setupAdMobManager() {
         try {
           showToast("📺 Carregando vídeo de recompensa...");
           await admob.showRewardVideoAd();
-          addPlayerCoins(200);
+          addPlayerCoins(200, "Vídeo Recompensado");
           updateCoinsUI();
           showToast("🎉 Parabéns! Você ganhou +200 Moedas Arcanas!");
           // Pré-carrega o próximo
           try { await admob.prepareRewardVideoAd({ adId: ADMOB_CONFIG.rewardedId }); } catch(e){}
         } catch (err) {
-          showToast("Vídeo em preparação. Tente novamente em alguns segundos!");
+          showToast("📺 Anúncio não disponível no momento. Tente novamente mais tarde!");
           try { await admob.prepareRewardVideoAd({ adId: ADMOB_CONFIG.rewardedId }); } catch(e){}
         }
       } else {
-        // No navegador web ou modo teste
-        addPlayerCoins(100);
-        updateCoinsUI();
-        showToast("🪙 Bônus arcano concedido: +100 Moedas!");
+        // No navegador web ou enquanto o anúncio não for liberado
+        showToast("📺 Anúncio não disponível no momento. Tente novamente mais tarde!");
       }
     }, "watchVideoAdCoins");
   }
