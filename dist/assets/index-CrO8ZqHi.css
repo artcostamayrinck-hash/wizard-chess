@@ -5466,3 +5466,40 @@ kbd {
     background: rgba(245, 197, 107, 0.5) !important;
   }
 }
+
+
+/* Novas Skins e Arenas Arcanas */
+.ruby-preview {
+  background: radial-gradient(circle at 30% 30%, #ff4d6d 0%, #a4133c 60%, #470617 100%) !important;
+  box-shadow: inset 0 0 12px rgba(255, 77, 109, 0.6) !important;
+}
+
+.spectral-preview {
+  background: radial-gradient(circle at 30% 30%, #80ffdb 0%, #2a9d8f 60%, #0d2818 100%) !important;
+  box-shadow: inset 0 0 12px rgba(128, 255, 219, 0.6) !important;
+}
+
+.celestial-preview {
+  background: radial-gradient(circle at 30% 30%, #70d6ff 0%, #1e3a8a 60%, #03071e 100%) !important;
+  box-shadow: inset 0 0 12px rgba(112, 214, 255, 0.6) !important;
+}
+
+.cyber-preview {
+  background: radial-gradient(circle at 30% 30%, #00f5d4 0%, #1e293b 60%, #ff007f 100%) !important;
+  box-shadow: inset 0 0 12px rgba(0, 245, 212, 0.6) !important;
+}
+
+.abyss-preview {
+  background: radial-gradient(circle at 30% 30%, #a855f7 0%, #3b0764 60%, #030014 100%) !important;
+  box-shadow: inset 0 0 12px rgba(168, 85, 247, 0.5) !important;
+}
+
+.desert-preview {
+  background: radial-gradient(circle at 30% 30%, #fde047 0%, #ca8a04 60%, #451a03 100%) !important;
+  box-shadow: inset 0 0 12px rgba(253, 224, 71, 0.5) !important;
+}
+
+.atlantis-preview {
+  background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0284c7 60%, #082f49 100%) !important;
+  box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
+}

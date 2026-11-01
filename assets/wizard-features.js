@@ -5,15 +5,23 @@
 const SKIN_PRICES = {
   classic: 0,
   amethyst: 300,
+  ruby: 500,
   emerald: 600,
-  gold: 1200
+  spectral: 800,
+  celestial: 900,
+  gold: 1200,
+  cyber: 1500
 };
 
 const SKIN_NAMES = {
   classic: "Clássico",
   amethyst: "Ametista",
+  ruby: "Rubi de Fogo",
   emerald: "Esmeralda",
-  gold: "Ouro Real"
+  spectral: "Espectral",
+  celestial: "Celestial Astral",
+  gold: "Ouro Real",
+  cyber: "Runa Cibernética"
 };
 
 function getPlayerCoins() {
@@ -1053,6 +1061,82 @@ function getKnightSvg(skinName) {
       pedestalGlow: "rgba(0, 245, 212, 0.45)",
       name: "Cavalo de Esmeralda",
       desc: "Esmeralda mística pura com runas de marfim encantado e olhos de rubi."
+    },
+    ruby: {
+      bodyGradStart: "#ff4d6d",
+      bodyGradMid: "#c9184a",
+      bodyGradEnd: "#590d22",
+      rimLight: "#ff758f",
+      accent: "#ffb703",
+      runeColor: "#ffd166",
+      runeGlow: "#ff5400",
+      eyeGlow: "#ffe600",
+      bridleColor: "#ff758f",
+      bridleTrim: "#ffd166",
+      gemColor: "#ff0054",
+      baseGrad1: "#800f2f",
+      baseGrad2: "#2b0914",
+      baseRing: "#ffb703",
+      pedestalGlow: "rgba(255, 77, 109, 0.45)",
+      name: "Cavalo de Rubi de Fogo",
+      desc: "Rubi escarlate lapidado com runas incandescentes de fogo primordial."
+    },
+    celestial: {
+      bodyGradStart: "#e0f2fe",
+      bodyGradMid: "#38bdf8",
+      bodyGradEnd: "#0c4a6e",
+      rimLight: "#7dd3fc",
+      accent: "#c084fc",
+      runeColor: "#70d6ff",
+      runeGlow: "#38bdf8",
+      eyeGlow: "#a855f7",
+      bridleColor: "#818cf8",
+      bridleTrim: "#c084fc",
+      gemColor: "#38bdf8",
+      baseGrad1: "#0369a1",
+      baseGrad2: "#082f49",
+      baseRing: "#70d6ff",
+      pedestalGlow: "rgba(112, 214, 255, 0.45)",
+      name: "Cavalo Celestial Astral",
+      desc: "Forjado da poeira estelar pura com essência de supernovas arcanas."
+    },
+    cyber: {
+      bodyGradStart: "#f8fafc",
+      bodyGradMid: "#475569",
+      bodyGradEnd: "#0f172a",
+      rimLight: "#00f5d4",
+      accent: "#ff007f",
+      runeColor: "#00f5d4",
+      runeGlow: "#00b4d8",
+      eyeGlow: "#ff007f",
+      bridleColor: "#334155",
+      bridleTrim: "#00f5d4",
+      gemColor: "#ff007f",
+      baseGrad1: "#1e293b",
+      baseGrad2: "#020617",
+      baseRing: "#00f5d4",
+      pedestalGlow: "rgba(0, 245, 212, 0.45)",
+      name: "Cavalo Cibernético Neon",
+      desc: "Titânio cromado futurista pulsando circuitos de néon cibernético."
+    },
+    spectral: {
+      bodyGradStart: "#80ffdb",
+      bodyGradMid: "#48cae4",
+      bodyGradEnd: "#023e8a",
+      rimLight: "#a78bfa",
+      accent: "#c77dff",
+      runeColor: "#64dfdf",
+      runeGlow: "#48cae4",
+      eyeGlow: "#e0aaff",
+      bridleColor: "#2a0845",
+      bridleTrim: "#c77dff",
+      gemColor: "#a78bfa",
+      baseGrad1: "#10002b",
+      baseGrad2: "#03045e",
+      baseRing: "#80ffdb",
+      pedestalGlow: "rgba(128, 255, 219, 0.45)",
+      name: "Cavalo Espectral",
+      desc: "Manifestação ectoplásmica que flutua entre o plano terreno e espiritual."
     }
   };
 
@@ -1274,6 +1358,70 @@ function setupSkinsSystem() {
       Ft.runeWhite.emissive.setHex(0x52b788);
       Ft.runeBlack.color.setHex(0xff4d6d);
       Ft.runeBlack.emissive.setHex(0xff4d6d);
+    } else if (skinName === "ruby") {
+      // Rubi de Fogo & Obsidiana Vulcânica
+      Ft.marble.color.setHex(0xff3366);
+      Ft.marble.roughness = 0.12;
+      Ft.marble.metalness = 0.65;
+      Ft.marble.emissive.setHex(0x4a0e17);
+
+      Ft.obsidian.color.setHex(0x1a0f0f);
+      Ft.obsidian.roughness = 0.3;
+      Ft.obsidian.metalness = 0.85;
+      Ft.obsidian.emissive.setHex(0x330000);
+
+      Ft.runeWhite.color.setHex(0xffaa00);
+      Ft.runeWhite.emissive.setHex(0xffaa00);
+      Ft.runeBlack.color.setHex(0xff3b30);
+      Ft.runeBlack.emissive.setHex(0xff3b30);
+    } else if (skinName === "celestial") {
+      // Celestial Astral & Vazio Profundo
+      Ft.marble.color.setHex(0xf0f8ff);
+      Ft.marble.roughness = 0.05;
+      Ft.marble.metalness = 0.9;
+      Ft.marble.emissive.setHex(0x1a2e40);
+
+      Ft.obsidian.color.setHex(0x050a14);
+      Ft.obsidian.roughness = 0.1;
+      Ft.obsidian.metalness = 0.95;
+      Ft.obsidian.emissive.setHex(0x08152e);
+
+      Ft.runeWhite.color.setHex(0x70d6ff);
+      Ft.runeWhite.emissive.setHex(0x70d6ff);
+      Ft.runeBlack.color.setHex(0x9d4edd);
+      Ft.runeBlack.emissive.setHex(0x9d4edd);
+    } else if (skinName === "cyber") {
+      // Runa Cibernética & Cromo Escuro
+      Ft.marble.color.setHex(0xffffff);
+      Ft.marble.roughness = 0.2;
+      Ft.marble.metalness = 0.9;
+      Ft.marble.emissive.setHex(0x003344);
+
+      Ft.obsidian.color.setHex(0x0d0d12);
+      Ft.obsidian.roughness = 0.15;
+      Ft.obsidian.metalness = 0.95;
+      Ft.obsidian.emissive.setHex(0x220033);
+
+      Ft.runeWhite.color.setHex(0x00f5d4);
+      Ft.runeWhite.emissive.setHex(0x00f5d4);
+      Ft.runeBlack.color.setHex(0xff007f);
+      Ft.runeBlack.emissive.setHex(0xff007f);
+    } else if (skinName === "spectral") {
+      // Espectral Ectoplasma & Sombra Astral
+      Ft.marble.color.setHex(0x80ffdb);
+      Ft.marble.roughness = 0.05;
+      Ft.marble.metalness = 0.2;
+      Ft.marble.emissive.setHex(0x1b4332);
+
+      Ft.obsidian.color.setHex(0x1f1429);
+      Ft.obsidian.roughness = 0.1;
+      Ft.obsidian.metalness = 0.5;
+      Ft.obsidian.emissive.setHex(0x3d0c5a);
+
+      Ft.runeWhite.color.setHex(0x52b788);
+      Ft.runeWhite.emissive.setHex(0x52b788);
+      Ft.runeBlack.color.setHex(0xc77dff);
+      Ft.runeBlack.emissive.setHex(0xc77dff);
     } else {
       // Clássico
       Ft.marble.color.setHex(0xffffff);
@@ -2321,7 +2469,10 @@ const ARENA_PRICES = {
   inferno: 0,
   frost: 0,
   cosmos: 400,
-  forest: 500
+  forest: 500,
+  abyss: 600,
+  desert: 750,
+  atlantis: 900
 };
 
 const ARENA_NAMES = {
@@ -2329,7 +2480,10 @@ const ARENA_NAMES = {
   inferno: "Cripta Infernal",
   frost: "Templo de Gelo",
   cosmos: "Observatório Cósmico",
-  forest: "Floresta Proibida"
+  forest: "Floresta Proibida",
+  abyss: "Abismo do Vazio",
+  desert: "Pirâmide das Areias",
+  atlantis: "Santuário de Atlântida"
 };
 
 function getUnlockedFrames() {
