@@ -4445,11 +4445,46 @@ window._renderFortuneWheel = function() {
   FortuneWheel.draw();
 };
 
+window._openFortuneWheel = function() {
+  const m = document.getElementById("fortune-wheel-modal");
+  if (m) {
+    m.classList.remove("hidden");
+    m.style.setProperty("display", "flex", "important");
+    FortuneWheel.draw();
+    setTimeout(() => FortuneWheel.draw(), 50);
+  }
+};
+
+window._closeFortuneWheel = function() {
+  const m = document.getElementById("fortune-wheel-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
+
+window._closeShareModal = function() {
+  const m = document.getElementById("share-victory-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
+
 function setupFortuneWheel() {
   const btnSpin = document.getElementById("btn-spin-wheel");
   if (btnSpin) {
     bindAction(btnSpin, () => FortuneWheel.spin(), "spinFortuneWheel");
   }
+  const btnWebFortune = document.getElementById("btn-web-fortune-wheel");
+  if (btnWebFortune) {
+    bindAction(btnWebFortune, () => window._openFortuneWheel(), "openFortuneWheelPill");
+  }
+  const btnCloseFortune = document.getElementById("btn-close-fortune-wheel");
+  if (btnCloseFortune) {
+    bindAction(btnCloseFortune, () => window._closeFortuneWheel(), "closeFortuneWheelBtn");
+  }
+  setTimeout(() => FortuneWheel.draw(), 300);
 }
 
 // ==============================================================

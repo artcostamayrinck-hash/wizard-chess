@@ -6424,3 +6424,42 @@ kbd {
     box-shadow: 0 0 20px rgba(255, 23, 68, 0.85);
   }
 }
+
+
+/* Z-INDEX SUPREMO PARA O MODAL DA RODA DA FORTUNA E COMPARTILHAR VITÓRIA */
+#fortune-wheel-modal,
+#share-victory-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 100050 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(11, 10, 14, 0.92) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  pointer-events: auto !important;
+}
+
+#fortune-wheel-modal.hidden,
+#share-victory-modal.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
+
+#fortune-wheel-modal .modal-content,
+#share-victory-modal .modal-content {
+  position: relative !important;
+  z-index: 100060 !important;
+  pointer-events: auto !important;
+}
+
+.web-banner-pill * {
+  pointer-events: none !important;
+}
