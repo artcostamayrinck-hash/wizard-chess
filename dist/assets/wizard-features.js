@@ -414,7 +414,10 @@ function initWizardFeatures() {
     { name: "MatchReplay", fn: setupMatchReplay },
     { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations },
     { name: "WebShortcutsAndAdaptations", fn: setupWebShortcutsAndAdaptations },
-    { name: "AdMobManager", fn: setupAdMobManager }
+    { name: "AdMobManager", fn: setupAdMobManager },
+    { name: "ArcaneAudio", fn: setupArcaneAudio },
+    { name: "DailyQuests", fn: setupDailyQuests },
+    { name: "TacticalPuzzles", fn: setupTacticalPuzzles }
   ];
 
   for (const task of tasks) {
@@ -3215,5 +3218,559 @@ async function setupAdMobManager() {
         }
       } catch (e) {}
     });
+  }
+}
+
+
+// ============================================================================
+// RECURSO 4: SISTEMA DE ÁUDIO & EFEITOS SONOROS ARCANOS (WEB AUDIO API)
+// ============================================================================
+const ArcaneAudio = {
+  ctx: null,
+  soundEnabled: true,
+  musicEnabled: false,
+
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === "suspended") {
+      this.ctx.resume();
+    }
+    try {
+      const savedSound = localStorage.getItem("wizard_chess_sfx_enabled");
+      if (savedSound !== null) this.soundEnabled = savedSound === "true";
+      const savedMusic = localStorage.getItem("wizard_chess_music_enabled");
+      if (savedMusic !== null) this.musicEnabled = savedMusic === "true";
+    } catch(e) {}
+    this.updateUI();
+  },
+
+  playMoveSound(pieceType) {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    switch(pieceType ? pieceType.toLowerCase() : 'p') {
+      case 'n': // Cavalo: Galope rúnico duplo
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(320, t);
+        osc.frequency.exponentialRampToValueAtTime(480, t + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(240, t + 0.18);
+        gain.gain.setValueAtTime(0.22, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+        break;
+      case 'b': // Bispo: Rajada ascendente harmônica
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(392, t);
+        osc.frequency.linearRampToValueAtTime(587, t + 0.14);
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.24);
+        break;
+      case 'r': // Torre: Sino de pedra místico
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(164.8, t);
+        osc.frequency.exponentialRampToValueAtTime(82.4, t + 0.35);
+        gain.gain.setValueAtTime(0.35, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+        break;
+      case 'q': // Rainha: Acorde brilhante de cristal
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(523.25, t);
+        osc.frequency.linearRampToValueAtTime(1046.5, t + 0.18);
+        gain.gain.setValueAtTime(0.25, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        break;
+      case 'k': // Rei: Tom solene ancestral
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(130.8, t);
+        osc.frequency.exponentialRampToValueAtTime(65.4, t + 0.4);
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+        break;
+      default: // Peão: Toque de pedra rúnico
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(261.6, t);
+        osc.frequency.exponentialRampToValueAtTime(130.8, t + 0.1);
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+        break;
+    }
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1200, t);
+    osc.connect(filter).connect(gain).connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.5);
+  },
+
+  playCheckAlarm() {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    [220, 293.66, 440].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(freq, t + idx * 0.05);
+      gain.gain.setValueAtTime(0.18, t + idx * 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.05 + 0.45);
+      osc.connect(gain).connect(this.ctx.destination);
+      osc.start(t + idx * 0.05);
+      osc.stop(t + idx * 0.05 + 0.5);
+    });
+  },
+
+  playVictoryChimes() {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      const start = t + idx * 0.09;
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.exponentialRampToValueAtTime(0.25, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 1.2);
+      osc.connect(gain).connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 1.3);
+    });
+  },
+
+  playQuestRewardChime() {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "triangle";
+      const start = t + idx * 0.06;
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.25, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.6);
+      osc.connect(gain).connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.7);
+    });
+  },
+
+  toggleSound() {
+    this.soundEnabled = !this.soundEnabled;
+    try { localStorage.setItem("wizard_chess_sfx_enabled", this.soundEnabled); } catch(e){}
+    this.updateUI();
+    showToast(this.soundEnabled ? "🔊 Efeitos sonoros ativados" : "🔇 Efeitos sonoros silenciados");
+  },
+
+  toggleMusic() {
+    this.init();
+    if (window._WIZARD_GAME && window._WIZARD_GAME.toggleMusic) {
+      this.musicEnabled = window._WIZARD_GAME.toggleMusic();
+    } else {
+      this.musicEnabled = !this.musicEnabled;
+    }
+    try { localStorage.setItem("wizard_chess_music_enabled", this.musicEnabled); } catch(e){}
+    this.updateUI();
+    showToast(this.musicEnabled ? "🎶 Música Arcana iniciada" : "🔇 Música pausada");
+  },
+
+  updateUI() {
+    const hudSoundBtn = document.getElementById("btn-hud-sound-toggle");
+    const hudSoundIcon = document.getElementById("icon-hud-sound");
+    if (hudSoundBtn) {
+      hudSoundBtn.classList.toggle("active", this.soundEnabled);
+      if (hudSoundIcon) hudSoundIcon.textContent = this.soundEnabled ? "volume_up" : "volume_off";
+    }
+
+    const hudMusicBtn = document.getElementById("btn-hud-music-toggle");
+    const hudMusicIcon = document.getElementById("icon-hud-music");
+    if (hudMusicBtn) {
+      hudMusicBtn.classList.toggle("active", this.musicEnabled);
+      if (hudMusicIcon) hudMusicIcon.textContent = this.musicEnabled ? "music_note" : "music_off";
+    }
+
+    const btnSoundSet = document.getElementById("btn-toggle-sound-setting");
+    const iconSoundSet = document.getElementById("icon-sound-status");
+    if (btnSoundSet) {
+      btnSoundSet.classList.toggle("active", this.soundEnabled);
+      const span = btnSoundSet.querySelector("span");
+      if (span) span.textContent = this.soundEnabled ? "Ativado" : "Desativado";
+      if (iconSoundSet) iconSoundSet.textContent = this.soundEnabled ? "volume_up" : "volume_off";
+    }
+
+    const btnMusicSet = document.getElementById("btn-toggle-music-setting");
+    const iconMusicSet = document.getElementById("icon-music-status");
+    if (btnMusicSet) {
+      btnMusicSet.classList.toggle("active", this.musicEnabled);
+      const span = btnMusicSet.querySelector("span");
+      if (span) span.textContent = this.musicEnabled ? "Tocando" : "Pausada";
+      if (iconMusicSet) iconMusicSet.textContent = this.musicEnabled ? "music_note" : "music_off";
+    }
+  }
+};
+window._WIZARD_AUDIO = ArcaneAudio;
+
+function setupArcaneAudio() {
+  ArcaneAudio.init();
+
+  const hudSoundBtn = document.getElementById("btn-hud-sound-toggle");
+  if (hudSoundBtn) {
+    bindAction(hudSoundBtn, () => ArcaneAudio.toggleSound(), "hudSoundToggle");
+  }
+
+  const hudMusicBtn = document.getElementById("btn-hud-music-toggle");
+  if (hudMusicBtn) {
+    bindAction(hudMusicBtn, () => ArcaneAudio.toggleMusic(), "hudMusicToggle");
+  }
+
+  const btnSoundSet = document.getElementById("btn-toggle-sound-setting");
+  if (btnSoundSet) {
+    bindAction(btnSoundSet, () => ArcaneAudio.toggleSound(), "settingSoundToggle");
+  }
+
+  const btnMusicSet = document.getElementById("btn-toggle-music-setting");
+  if (btnMusicSet) {
+    bindAction(btnMusicSet, () => ArcaneAudio.toggleMusic(), "settingMusicToggle");
+  }
+}
+
+// ============================================================================
+// RECURSO 5: MISSÕES DIÁRIAS DO GRIMÓRIO & PASSE DO MAGO (DAILY QUESTS)
+// ============================================================================
+const WizardQuests = {
+  getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  },
+
+  getData() {
+    const today = this.getTodayKey();
+    const key = `wizard_quests_${today}`;
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return {
+      date: today,
+      captures: { current: 0, target: 8, rewardCoins: 120, rewardXP: 80, collected: false },
+      win: { current: 0, target: 1, rewardCoins: 100, rewardXP: 70, collected: false },
+      puzzle: { current: 0, target: 1, rewardCoins: 80, rewardXP: 60, collected: false }
+    };
+  },
+
+  saveData(data) {
+    const today = this.getTodayKey();
+    try { localStorage.setItem(`wizard_quests_${today}`, JSON.stringify(data)); } catch(e) {}
+    this.updateUI();
+  },
+
+  onPieceCaptured() {
+    const data = this.getData();
+    if (data.captures.current < data.captures.target) {
+      data.captures.current++;
+      this.saveData(data);
+    }
+  },
+
+  onMatchWon() {
+    const data = this.getData();
+    if (data.win.current < data.win.target) {
+      data.win.current++;
+      this.saveData(data);
+    }
+  },
+
+  onPuzzleSolved() {
+    const data = this.getData();
+    if (data.puzzle.current < data.puzzle.target) {
+      data.puzzle.current++;
+      this.saveData(data);
+    }
+  },
+
+  collectReward(questKey) {
+    const data = this.getData();
+    const q = data[questKey];
+    if (!q || q.collected || q.current < q.target) return;
+
+    q.collected = true;
+    this.saveData(data);
+
+    addPlayerCoins(q.rewardCoins, "Missão Diária Concluída");
+    addXP(q.rewardXP, "Missão Diária Concluída");
+    ArcaneAudio.playQuestRewardChime();
+    showAchievementToast("📜 MISSÃO CONCLUÍDA!", `+${q.rewardCoins} 🪙 e +${q.rewardXP} ⭐ recebidos!`, "✨");
+    this.updateUI();
+  },
+
+  updateUI() {
+    const data = this.getData();
+
+    // 1. Captures
+    const pCap = Math.min(100, Math.round((data.captures.current / data.captures.target) * 100));
+    const fillCap = document.getElementById("quest-progress-captures");
+    const lblCap = document.getElementById("quest-label-captures");
+    const btnCap = document.getElementById("btn-collect-quest-captures");
+    const itemCap = document.getElementById("quest-item-captures");
+    if (fillCap) fillCap.style.width = `${pCap}%`;
+    if (lblCap) lblCap.textContent = `Capture 8 peças em batalha (${data.captures.current}/${data.captures.target})`;
+    if (btnCap) {
+      if (data.captures.collected) {
+        btnCap.textContent = "✓ Coletado";
+        btnCap.disabled = true;
+        if (itemCap) itemCap.classList.add("completed");
+      } else if (data.captures.current >= data.captures.target) {
+        btnCap.textContent = "Coletar!";
+        btnCap.disabled = false;
+        if (itemCap) itemCap.classList.add("completed");
+      } else {
+        btnCap.textContent = "Em andamento";
+        btnCap.disabled = true;
+        if (itemCap) itemCap.classList.remove("completed");
+      }
+    }
+
+    // 2. Win
+    const pWin = Math.min(100, Math.round((data.win.current / data.win.target) * 100));
+    const fillWin = document.getElementById("quest-progress-win");
+    const lblWin = document.getElementById("quest-label-win");
+    const btnWin = document.getElementById("btn-collect-quest-win");
+    const itemWin = document.getElementById("quest-item-win");
+    if (fillWin) fillWin.style.width = `${pWin}%`;
+    if (lblWin) lblWin.textContent = `Vença 1 partida no modo IA ou Torre (${data.win.current}/${data.win.target})`;
+    if (btnWin) {
+      if (data.win.collected) {
+        btnWin.textContent = "✓ Coletado";
+        btnWin.disabled = true;
+        if (itemWin) itemWin.classList.add("completed");
+      } else if (data.win.current >= data.win.target) {
+        btnWin.textContent = "Coletar!";
+        btnWin.disabled = false;
+        if (itemWin) itemWin.classList.add("completed");
+      } else {
+        btnWin.textContent = "Em andamento";
+        btnWin.disabled = true;
+        if (itemWin) itemWin.classList.remove("completed");
+      }
+    }
+
+    // 3. Puzzle
+    const pPuz = Math.min(100, Math.round((data.puzzle.current / data.puzzle.target) * 100));
+    const fillPuz = document.getElementById("quest-progress-puzzle");
+    const lblPuz = document.getElementById("quest-label-puzzle");
+    const btnPuz = document.getElementById("btn-collect-quest-puzzle");
+    const itemPuz = document.getElementById("quest-item-puzzle");
+    if (fillPuz) fillPuz.style.width = `${pPuz}%`;
+    if (lblPuz) lblPuz.textContent = `Resolva 1 Enigma Tático (${data.puzzle.current}/${data.puzzle.target})`;
+    if (btnPuz) {
+      if (data.puzzle.collected) {
+        btnPuz.textContent = "✓ Coletado";
+        btnPuz.disabled = true;
+        if (itemPuz) itemPuz.classList.add("completed");
+      } else if (data.puzzle.current >= data.puzzle.target) {
+        btnPuz.textContent = "Coletar!";
+        btnPuz.disabled = false;
+        if (itemPuz) itemPuz.classList.add("completed");
+      } else {
+        btnPuz.textContent = "Em andamento";
+        btnPuz.disabled = true;
+        if (itemPuz) itemPuz.classList.remove("completed");
+      }
+    }
+  }
+};
+window._WIZARD_QUESTS = WizardQuests;
+
+function setupDailyQuests() {
+  WizardQuests.updateUI();
+
+  const btnCap = document.getElementById("btn-collect-quest-captures");
+  if (btnCap) bindAction(btnCap, () => WizardQuests.collectReward("captures"), "collectQuestCaptures");
+
+  const btnWin = document.getElementById("btn-collect-quest-win");
+  if (btnWin) bindAction(btnWin, () => WizardQuests.collectReward("win"), "collectQuestWin");
+
+  const btnPuz = document.getElementById("btn-collect-quest-puzzle");
+  if (btnPuz) bindAction(btnPuz, () => WizardQuests.collectReward("puzzle"), "collectQuestPuzzle");
+}
+
+// ============================================================================
+// RECURSO 3: GRIMÓRIO DE ENIGMAS TÁTICOS & PUZZLES DIÁRIOS
+// ============================================================================
+const TACTICAL_PUZZLES_DATA = [
+  {
+    id: "puzzle_1",
+    title: "1. O Pastor Sagrado",
+    difficulty: "Iniciante",
+    desc: "A Rainha e o Bispo avançam em harmonia para aplicar o clássico xeque-mate em 1 lance em f7.",
+    fen: "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 1",
+    arena: "cathedral",
+    level: 0,
+    rewardCoins: 80,
+    rewardXP: 50
+  },
+  {
+    id: "puzzle_2",
+    title: "2. O Corredor de Pedra",
+    difficulty: "Fácil",
+    desc: "Os próprios peões negros trancam a fuga do Rei. A Torre de Mármore sela a passagem.",
+    fen: "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+    arena: "cathedral",
+    level: 1,
+    rewardCoins: 100,
+    rewardXP: 60
+  },
+  {
+    id: "puzzle_3",
+    title: "3. O Salto Noturno",
+    difficulty: "Médio",
+    desc: "O Cavalo Arcano executa um salto decisivo desestabilizando o centro adversário.",
+    fen: "r1b1kb1r/pppp1ppp/5n2/4q3/4N3/8/PPPPPPPP/R1BQKB1R w KQkq - 0 1",
+    arena: "forest",
+    level: 0,
+    rewardCoins: 120,
+    rewardXP: 80
+  },
+  {
+    id: "puzzle_4",
+    title: "4. A Emboscada dos Bispos",
+    difficulty: "Médio",
+    desc: "Dois bispos cortam as diagonais reais para encurralar o monarca de obsidiana.",
+    fen: "r1b2rk1/ppp2ppp/8/4B3/8/8/PPP2PPP/R2R2K1 w - - 0 1",
+    arena: "frost",
+    level: 0,
+    rewardCoins: 130,
+    rewardXP: 90
+  },
+  {
+    id: "puzzle_5",
+    title: "5. O Sacrifício Real",
+    difficulty: "Difícil",
+    desc: "Entregue sua peça mais poderosa para quebrar as defesas e forçar o xeque-mate imparável.",
+    fen: "r1b2r1k/pp3ppp/2n1p3/3q4/3P4/3B1N2/PP1Q1PPP/R3K2R w KQ - 0 1",
+    arena: "abyss",
+    level: 0,
+    rewardCoins: 150,
+    rewardXP: 100
+  },
+  {
+    id: "puzzle_6",
+    title: "6. O Vórtice Cósmico",
+    difficulty: "Mestre",
+    desc: "Uma combinação magistral de arremate cósmico inspirada nos maiores mestres mundiais.",
+    fen: "2r3k1/5ppp/8/8/8/5Q2/5PPP/6K1 w - - 0 1",
+    arena: "cosmos",
+    level: 0,
+    rewardCoins: 180,
+    rewardXP: 120
+  }
+];
+
+function isPuzzleSolved(id) {
+  try {
+    return localStorage.getItem("wizard_puzzle_solved_" + id) === "true";
+  } catch(e) {
+    return false;
+  }
+}
+
+function setPuzzleSolved(id) {
+  try {
+    localStorage.setItem("wizard_puzzle_solved_" + id, "true");
+  } catch(e) {}
+}
+
+function updateTacticalPuzzlesUI() {
+  document.querySelectorAll("#tactical-puzzles-grid .puzzle-item-card[data-puzzle-id]").forEach(card => {
+    const id = card.dataset.puzzleId;
+    const isSolved = isPuzzleSolved(id);
+    const btn = card.querySelector(".btn-solve-puzzle");
+    card.classList.toggle("solved", isSolved);
+    if (btn) {
+      if (isSolved) {
+        btn.textContent = "✓ Resolvido";
+        btn.style.color = "#00f5d4";
+      } else {
+        btn.textContent = "Resolver";
+        btn.style.color = "#ffffff";
+      }
+    }
+  });
+
+  // Atualiza Desafio Diário
+  const todayKey = WizardQuests.getTodayKey();
+  const dailyCompleted = localStorage.getItem(`wizard_daily_challenge_completed_${todayKey}`) === "true";
+  const dailyBtn = document.getElementById("btn-play-daily-challenge");
+  const dailyStatus = document.getElementById("daily-status-text");
+  if (dailyStatus) {
+    dailyStatus.textContent = dailyCompleted ? "Concluído Hoje ✓ (+100 XP obtido)" : "Disponível para jogar hoje";
+    dailyStatus.style.color = dailyCompleted ? "#ffd700" : "#00f5d4";
+  }
+  if (dailyBtn) {
+    const lbl = dailyBtn.querySelector("span:first-child");
+    if (lbl) lbl.textContent = dailyCompleted ? "Jogar Novamente" : "Jogar Desafio Diário";
+  }
+}
+
+function launchSpecificPuzzle(puzzleId) {
+  const p = TACTICAL_PUZZLES_DATA.find(x => x.id === puzzleId) || TACTICAL_PUZZLES_DATA[0];
+  showToast(`🧩 Carregando Enigma: ${p.title}`);
+
+  // Fecha menus
+  const overlay = document.getElementById("main-menu-overlay");
+  if (overlay) overlay.classList.add("hidden");
+
+  // Muda de arena e carrega o puzzle
+  try {
+    if (window._WIZARD_GAME) {
+      if (window._WIZARD_GAME.setArena) window._WIZARD_GAME.setArena(p.arena);
+      if (window._WIZARD_GAME.loadPuzzle) {
+        window._WIZARD_GAME.loadPuzzle(p.arena, p.level || 0);
+      }
+    }
+  } catch(e) {}
+}
+
+function setupTacticalPuzzles() {
+  updateTacticalPuzzlesUI();
+
+  // Binds nos botões "Resolver" dos puzzles
+  document.querySelectorAll("#tactical-puzzles-grid .btn-solve-puzzle[data-puzzle-id]").forEach(btn => {
+    bindAction(btn, () => {
+      launchSpecificPuzzle(btn.dataset.puzzleId);
+    }, "solvePuzzle_" + btn.dataset.puzzleId);
+  });
+
+  // Botão Desafio Diário
+  const dailyBtn = document.getElementById("btn-play-daily-challenge");
+  if (dailyBtn) {
+    bindAction(dailyBtn, () => {
+      // Escolhe um puzzle baseado no dia
+      const d = new Date();
+      const idx = (d.getFullYear() * 365 + d.getMonth() * 31 + d.getDate()) % TACTICAL_PUZZLES_DATA.length;
+      launchSpecificPuzzle(TACTICAL_PUZZLES_DATA[idx].id);
+    }, "playDailyChallengeBtn");
+  }
+
+  // Desafio Rápido
+  const btnFastPuzzle = document.getElementById("btn-launch-random-puzzle");
+  if (btnFastPuzzle) {
+    bindAction(btnFastPuzzle, () => {
+      const idx = Math.floor(Math.random() * TACTICAL_PUZZLES_DATA.length);
+      launchSpecificPuzzle(TACTICAL_PUZZLES_DATA[idx].id);
+    }, "fastPuzzleBtn");
   }
 }

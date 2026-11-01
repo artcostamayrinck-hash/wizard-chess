@@ -3010,6 +3010,64 @@
         <h2 class="subview-title" style="color: #f06292;">Desafios & Enigmas Arcanos</h2>
         <p class="subview-desc">Encontre o lance vencedor e decifre as posições mágicas no tabuleiro.</p>
 
+        <!-- PAINEL DE MISSÕES DIÁRIAS (DAILY QUESTS) -->
+        <div class="quests-panel-container" id="daily-quests-container">
+          <div class="quests-header">
+            <div class="quests-title">
+              <span class="material-symbols-rounded" style="color: #ffd700;">task_alt</span>
+              <span>MISSÕES DIÁRIAS DO GRIMÓRIO</span>
+            </div>
+            <span class="quests-timer" id="quests-reset-timer">Renova em 24h</span>
+          </div>
+
+          <div id="quests-list">
+            <!-- Quest 1: Caçador de Peças -->
+            <div class="quest-item" id="quest-item-captures">
+              <div class="quest-top">
+                <span class="quest-info-title">⚔️ Caçador de Peças</span>
+                <span class="quest-reward-tag">+120 🪙 • +80 XP</span>
+              </div>
+              <div class="quest-progress-bar-container">
+                <div class="quest-progress-fill" id="quest-progress-captures" style="width: 0%;"></div>
+              </div>
+              <div class="quest-bottom">
+                <span id="quest-label-captures">Capture 8 peças em batalha (0/8)</span>
+                <button type="button" class="btn-collect-quest" id="btn-collect-quest-captures" disabled>Coletar</button>
+              </div>
+            </div>
+
+            <!-- Quest 2: Vitória Estratégica -->
+            <div class="quest-item" id="quest-item-win">
+              <div class="quest-top">
+                <span class="quest-info-title">🏆 Vitória Estratégica</span>
+                <span class="quest-reward-tag">+100 🪙 • +70 XP</span>
+              </div>
+              <div class="quest-progress-bar-container">
+                <div class="quest-progress-fill" id="quest-progress-win" style="width: 0%;"></div>
+              </div>
+              <div class="quest-bottom">
+                <span id="quest-label-win">Vença 1 partida no modo IA ou Torre (0/1)</span>
+                <button type="button" class="btn-collect-quest" id="btn-collect-quest-win" disabled>Coletar</button>
+              </div>
+            </div>
+
+            <!-- Quest 3: Decifrador de Enigmas -->
+            <div class="quest-item" id="quest-item-puzzle">
+              <div class="quest-top">
+                <span class="quest-info-title">🧩 Decifrador de Enigmas</span>
+                <span class="quest-reward-tag">+80 🪙 • +60 XP</span>
+              </div>
+              <div class="quest-progress-bar-container">
+                <div class="quest-progress-fill" id="quest-progress-puzzle" style="width: 0%;"></div>
+              </div>
+              <div class="quest-bottom">
+                <span id="quest-label-puzzle">Resolva 1 Enigma Tático (0/1)</span>
+                <button type="button" class="btn-collect-quest" id="btn-collect-quest-puzzle" disabled>Coletar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
 <!-- CARD DO DESAFIO DIÁRIO (MODO DE DESAFIOS DIÁRIOS) -->
         <div class="daily-challenge-card" id="daily-challenge-card">
           <div class="daily-card-badge">
@@ -3052,6 +3110,103 @@
         </button>
 
         <!-- Lista de Desafios -->
+        <!-- SEÇÃO: GRIMÓRIO DE ENIGMAS TÁTICOS -->
+        <div class="puzzles-section-container">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-rounded" style="color: #f06292;">auto_stories</span>
+              <span style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">GRIMÓRIO DE ENIGMAS TÁTICOS</span>
+            </div>
+            <span style="font-size: 0.75rem; color: #b3a7cb;">Posições de Mestre</span>
+          </div>
+
+          <div class="puzzles-grid" id="tactical-puzzles-grid">
+            <!-- Puzzle 1 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_1">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-easy">Iniciante</span>
+                <span class="puzzle-reward">🪙 80 • ⭐ +50 XP</span>
+              </div>
+              <div class="puzzle-card-name">1. O Pastor Sagrado</div>
+              <div class="puzzle-card-desc">A Rainha e o Bispo avançam em harmonia para aplicar o clássico xeque-mate em 1 lance.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e dão mate</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_1">Resolver</button>
+              </div>
+            </div>
+
+            <!-- Puzzle 2 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_2">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-easy">Fácil</span>
+                <span class="puzzle-reward">🪙 100 • ⭐ +60 XP</span>
+              </div>
+              <div class="puzzle-card-name">2. O Corredor de Pedra</div>
+              <div class="puzzle-card-desc">Os próprios peões negros trancam a fuga do Rei. A Torre de Mármore sela o destino em 1 lance.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e dão mate</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_2">Resolver</button>
+              </div>
+            </div>
+
+            <!-- Puzzle 3 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_3">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-medium">Médio</span>
+                <span class="puzzle-reward">🪙 120 • ⭐ +80 XP</span>
+              </div>
+              <div class="puzzle-card-name">3. O Salto Noturno</div>
+              <div class="puzzle-card-desc">O Cavalo Arcano executa um garfo fulminante atacando o Rei e a Dama simultaneamente.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e vencem</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_3">Resolver</button>
+              </div>
+            </div>
+
+            <!-- Puzzle 4 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_4">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-medium">Médio</span>
+                <span class="puzzle-reward">🪙 130 • ⭐ +90 XP</span>
+              </div>
+              <div class="puzzle-card-name">4. A Emboscada dos Bispos</div>
+              <div class="puzzle-card-desc">Dois bispos cortam as diagonais reais para encurralar o monarca de obsidiana em 2 lances.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_4">Resolver</button>
+              </div>
+            </div>
+
+            <!-- Puzzle 5 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_5">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-hard">Difícil</span>
+                <span class="puzzle-reward">🪙 150 • ⭐ +100 XP</span>
+              </div>
+              <div class="puzzle-card-name">5. O Sacrifício Real</div>
+              <div class="puzzle-card-desc">Entregue sua peça mais poderosa para quebrar as defesas e forçar o xeque-mate imparável.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_5">Resolver</button>
+              </div>
+            </div>
+
+            <!-- Puzzle 6 -->
+            <div class="puzzle-item-card" data-puzzle-id="puzzle_6">
+              <div class="puzzle-card-top">
+                <span class="puzzle-card-badge badge-hard">Mestre</span>
+                <span class="puzzle-reward">🪙 180 • ⭐ +120 XP</span>
+              </div>
+              <div class="puzzle-card-name">6. O Vórtice Cósmico</div>
+              <div class="puzzle-card-desc">Uma combinação magistral de arremate cósmico inspirada nos maiores mestres da história.</div>
+              <div class="puzzle-card-footer">
+                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
+                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_6">Resolver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- MODO CAMPANHA: A TORRE DOS MAGOS -->
         <div class="tower-campaign-container" id="tower-campaign-container">
           <div class="tower-header-card">
@@ -3420,7 +3575,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.3.2</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.4.0</span>
           </div>
         </div>
       </div>
@@ -3575,10 +3730,18 @@
         </div>
       </div>
 
-      <!-- Botão de Pausa no Canto Superior Direito (Roxo) -->
-      <button id="btn-pause" class="hud-pause-btn" title="Pausar / Menu da Batalha">
-        <span class="material-symbols-rounded">pause</span>
-      </button>
+      <!-- Controles Rápidos de Áudio & Botão de Pausa -->
+      <div class="hud-audio-controls">
+        <button type="button" id="btn-hud-sound-toggle" class="hud-sound-btn active" title="Efeitos Sonoros (Ligar/Desligar)">
+          <span class="material-symbols-rounded" style="font-size: 18px;" id="icon-hud-sound">volume_up</span>
+        </button>
+        <button type="button" id="btn-hud-music-toggle" class="hud-sound-btn" title="Música Arcana (Ligar/Desligar)">
+          <span class="material-symbols-rounded" style="font-size: 18px;" id="icon-hud-music">music_note</span>
+        </button>
+        <button id="btn-pause" class="hud-pause-btn" title="Pausar / Menu da Batalha">
+          <span class="material-symbols-rounded">pause</span>
+        </button>
+      </div>
     </div>
 
     <!-- Barra do Oponente no Topo (Baseada na Imagem 2 - Chess.com) -->
