@@ -2806,78 +2806,196 @@
               <span id="customize-coins-display">100</span>
             </div>
           </div>
+          <!-- Banner Roda da Fortuna na Loja de Peças -->
+          <div class="fortune-wheel-shop-banner" onclick="if(window._openFortuneWheel) window._openFortuneWheel();" style="cursor: pointer; margin-bottom: 14px; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(20, 10, 35, 0.95) 100%); border: 1.5px solid rgba(192, 132, 252, 0.6); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 18px rgba(0,0,0,0.5);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.8rem; line-height: 1;">🎡</span>
+              <div style="text-align: left;">
+                <div style="font-size: 0.88rem; font-weight: 800; color: #ffd700;">Roda da Fortuna Arcana</div>
+                <div style="font-size: 0.74rem; color: #d0bcff;">Ganhe Moedas e Fragmentos de % para desbloquear peças grátis!</div>
+              </div>
+            </div>
+            <button type="button" class="promo-btn" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 800; background: #c084fc; color: #161224; border: none; border-radius: 10px; pointer-events: none;">
+              Girar
+            </button>
+          </div>
+
           <div class="customize-grid" id="customize-skin-grid">
-            <button type="button" class="custom-card active equipped unlocked" data-skin="classic">
-              <div class="custom-card-color classic-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Clássico</span>
-                <span class="custom-card-detail">Mármore & Obsidiana</span>
+            <div class="custom-card active equipped unlocked" data-skin="classic">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Clássico</span>
+                <span class="card-piece-rarity">Padrão</span>
               </div>
-              <span class="custom-card-status" id="skin-status-classic">✓ Equipado</span>
-            </button>
+              <div class="card-piece-preview-box classic-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Mármore & Obsidiana</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 100%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">10/10</span>
+                  <span class="card-frag-pct">100%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn equipped-btn" id="skin-status-classic">✓ EM USO</button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="amethyst">
-              <div class="custom-card-color amethyst-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Ametista</span>
-                <span class="custom-card-detail">Cristal Cósmico & Ônix</span>
+            <div class="custom-card locked" data-skin="amethyst">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Ametista Real</span>
+                <span class="card-piece-rarity">Místico</span>
               </div>
-              <span class="custom-card-status" id="skin-status-amethyst">🔒 300 🪙</span>
-            </button>
+              <div class="card-piece-preview-box amethyst-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Cristal Cósmico & Ônix</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-amethyst">DESBLOQUEAR <span class="coin-tag">300 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="emerald">
-              <div class="custom-card-color emerald-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Esmeralda</span>
-                <span class="custom-card-detail">Esmeralda Viva & Rubi</span>
+            <div class="custom-card locked" data-skin="ruby">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Rubi de Fogo</span>
+                <span class="card-piece-rarity">Épico</span>
               </div>
-              <span class="custom-card-status" id="skin-status-emerald">🔒 600 🪙</span>
-            </button>
+              <div class="card-piece-preview-box ruby-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Gema Escarlate & Chamas</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-ruby">DESBLOQUEAR <span class="coin-tag">500 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="gold">
-              <div class="custom-card-color gold-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Ouro Real</span>
-                <span class="custom-card-detail">Ouro Polido & Prata</span>
+            <div class="custom-card locked" data-skin="emerald">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Esmeralda Arcana</span>
+                <span class="card-piece-rarity">Raro</span>
               </div>
-              <span class="custom-card-status" id="skin-status-gold">🔒 1.200 🪙</span>
-            </button>
+              <div class="card-piece-preview-box emerald-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Esmeralda Viva & Jade</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-emerald">DESBLOQUEAR <span class="coin-tag">600 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="ruby">
-              <div class="custom-card-color ruby-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Rubi de Fogo</span>
-                <span class="custom-card-detail">Gema Escarlate & Chamas</span>
+            <div class="custom-card locked" data-skin="spectral">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Espectral</span>
+                <span class="card-piece-rarity">Épico</span>
               </div>
-              <span class="custom-card-status" id="skin-status-ruby">🔒 500 🪙</span>
-            </button>
+              <div class="card-piece-preview-box spectral-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Ectoplasma & Almas</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-spectral">DESBLOQUEAR <span class="coin-tag">800 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="spectral">
-              <div class="custom-card-color spectral-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Espectral</span>
-                <span class="custom-card-detail">Ectoplasma & Almas</span>
+            <div class="custom-card locked" data-skin="celestial">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Celestial Astral</span>
+                <span class="card-piece-rarity">Lendário</span>
               </div>
-              <span class="custom-card-status" id="skin-status-spectral">🔒 800 🪙</span>
-            </button>
+              <div class="card-piece-preview-box celestial-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Poeira Estelar & Galáxias</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-celestial">DESBLOQUEAR <span class="coin-tag">900 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="celestial">
-              <div class="custom-card-color celestial-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Celestial Astral</span>
-                <span class="custom-card-detail">Poeira Estelar & Galáxias</span>
+            <div class="custom-card locked" data-skin="gold">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Ouro Imperial</span>
+                <span class="card-piece-rarity">Lendário</span>
               </div>
-              <span class="custom-card-status" id="skin-status-celestial">🔒 900 🪙</span>
-            </button>
+              <div class="card-piece-preview-box gold-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Ouro Nobre & Prata</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-gold">DESBLOQUEAR <span class="coin-tag">1.200 🪙</span></button>
+            </div>
 
-            <button type="button" class="custom-card locked" data-skin="cyber">
-              <div class="custom-card-color cyber-preview"></div>
-              <div class="custom-card-info">
-                <span class="custom-card-name">Runa Cibernética</span>
-                <span class="custom-card-detail">Titânio Cromo & Neon Ciano</span>
+            <div class="custom-card locked" data-skin="cyber">
+              <div class="card-em-uso-badge">EM USO</div>
+              <div class="card-piece-header">
+                <span class="card-piece-name">Runa Cibernética</span>
+                <span class="card-piece-rarity">Mítico Supremo</span>
               </div>
-              <span class="custom-card-status" id="skin-status-cyber">🔒 1.500 🪙</span>
-            </button>
+              <div class="card-piece-preview-box cyber-preview">
+                <span class="card-piece-glyph">♞</span>
+              </div>
+              <div class="card-piece-desc-text">Titânio Cromo & Neon Ciano</div>
+              <div class="card-frag-progress-box">
+                <div class="card-frag-track">
+                  <div class="card-frag-fill" style="width: 0%;"></div>
+                </div>
+                <div class="card-frag-meta">
+                  <span class="card-frag-count">0/10</span>
+                  <span class="card-frag-pct">0%</span>
+                </div>
+              </div>
+              <button type="button" class="card-action-btn unlock-btn" id="skin-status-cyber">DESBLOQUEAR <span class="coin-tag">1.500 🪙</span></button>
+            </div>
           </div>
         </div>
 
@@ -3614,7 +3732,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.5.1</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.5.2</span>
           </div>
         </div>
       </div>
@@ -4507,7 +4625,7 @@
         </div>
       </div>
 
-      <p class="fortune-subtitle">Gire a roleta mística e teste a sorte dos astros para ganhar tesouros arcanos!</p>
+      <p class="fortune-subtitle">Gire a roleta mística para ganhar Moedas Arcanas e Fragmentos de % para desbloquear peças grátis!</p>
 
       <div class="wheel-stage-container">
         <div class="wheel-pointer-arrow">▼</div>

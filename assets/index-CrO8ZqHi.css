@@ -6463,3 +6463,220 @@ kbd {
 .web-banner-pill * {
   pointer-events: none !important;
 }
+
+/* ==========================================================================
+   V1.5.2: DINÂMICA DE CARDS DE COLEÇÃO DE PEÇAS & FRAGMENTOS (IMAGEM 1)
+   ========================================================================== */
+#customize-skin-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin-top: 6px !important;
+}
+
+@media (min-width: 600px) {
+  #customize-skin-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+#customize-skin-grid .custom-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  background: linear-gradient(180deg, #182033 0%, #0d121f 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  padding: 12px 10px 10px 10px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden !important;
+}
+
+#customize-skin-grid .custom-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(255, 215, 0, 0.5) !important;
+}
+
+#customize-skin-grid .custom-card.equipped {
+  border: 2px solid #ffd700 !important;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.4) !important;
+  background: linear-gradient(180deg, #242c44 0%, #0f1524 100%) !important;
+}
+
+/* Badge EM USO no topo esquerdo do card (Estilo Golf Rival da Imagem 1) */
+.card-em-uso-badge {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%) !important;
+  color: #0b0c10 !important;
+  font-size: 0.65rem !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.6px !important;
+  padding: 3px 8px !important;
+  border-bottom-right-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+  z-index: 4 !important;
+  display: none;
+}
+
+#customize-skin-grid .custom-card.equipped .card-em-uso-badge {
+  display: block !important;
+}
+
+/* Cabeçalho da Peça */
+.card-piece-header {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 4px !important;
+}
+
+.card-piece-name {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.3px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+
+.card-piece-rarity {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  color: #90caf9 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-bottom: 4px !important;
+}
+
+/* Caixa de Prévia com Cavalo */
+.card-piece-preview-box {
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 14px !important;
+  margin: 6px auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+  position: relative !important;
+}
+
+.card-piece-glyph {
+  font-size: 30px !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8)) !important;
+}
+
+.card-piece-desc-text {
+  font-size: 0.72rem !important;
+  color: #b3a7cb !important;
+  margin-bottom: 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+
+/* Barra de Progresso de Fragmentos (Dinâmica da Imagem 1) */
+.card-frag-progress-box {
+  width: 100% !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  border-radius: 10px !important;
+  padding: 4px 6px !important;
+  margin-bottom: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.card-frag-track {
+  width: 100% !important;
+  height: 8px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.card-frag-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, #ff9800 0%, #ffd700 100%) !important;
+  border-radius: 999px !important;
+  transition: width 0.3s ease !important;
+}
+
+.card-frag-meta {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  margin-top: 3px !important;
+}
+
+.card-frag-count {
+  color: #ffd700 !important;
+}
+
+.card-frag-pct {
+  color: #d0bcff !important;
+}
+
+/* Botão de Ação no Rodapé do Card */
+.card-action-btn {
+  width: 100% !important;
+  padding: 7px 4px !important;
+  border-radius: 9px !important;
+  font-weight: 800 !important;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.3px !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  text-transform: uppercase !important;
+}
+
+.card-action-btn.equipped-btn {
+  background: rgba(255, 215, 0, 0.15) !important;
+  color: #ffd700 !important;
+  border: 1.5px solid #ffd700 !important;
+}
+
+.card-action-btn.equip-btn {
+  background: linear-gradient(135deg, #00c853 0%, #64dd17 100%) !important;
+  color: #031403 !important;
+  box-shadow: 0 2px 10px rgba(0, 200, 83, 0.4) !important;
+}
+
+.card-action-btn.unlock-btn {
+  background: linear-gradient(135deg, #ff6d00 0%, #ffab00 100%) !important;
+  color: #1a0a00 !important;
+  box-shadow: 0 2px 10px rgba(255, 109, 0, 0.35) !important;
+}
+
+.coin-tag {
+  background: rgba(0, 0, 0, 0.3) !important;
+  padding: 2px 5px !important;
+  border-radius: 6px !important;
+  font-weight: 900 !important;
+  color: #ffd700 !important;
+}
+
+.fortune-wheel-shop-banner:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 22px rgba(147, 51, 234, 0.4) !important;
+}

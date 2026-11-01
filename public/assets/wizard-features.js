@@ -74,7 +74,62 @@ function unlockSkin(skin) {
     unlocked.push(skin);
     try { localStorage.setItem("wizard_chess_unlocked_skins", JSON.stringify(unlocked)); } catch(e) {}
   }
+  setSkinProgress(skin, 100);
   updateSkinsShopUI();
+}
+
+function getSkinProgress(skin) {
+  if (skin === "classic" || isSkinUnlocked(skin)) return 100;
+  try {
+    const raw = localStorage.getItem("wizard_skin_progress");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed[skin] === "number") return Math.min(100, Math.max(0, parsed[skin]));
+    }
+  } catch(e) {}
+  return 0;
+}
+
+function setSkinProgress(skin, val) {
+  try {
+    const raw = localStorage.getItem("wizard_skin_progress");
+    const progress = raw ? JSON.parse(raw) : {};
+    progress[skin] = Math.min(100, Math.max(0, val));
+    localStorage.setItem("wizard_skin_progress", JSON.stringify(progress));
+  } catch(e) {}
+}
+
+function addSkinProgress(skin, amount) {
+  const skinsList = ["amethyst", "ruby", "emerald", "spectral", "celestial", "gold", "cyber"];
+  let targetSkin = skin;
+
+  // Se for "any" ou a skin já estiver desbloqueada, redireciona para outra que ainda falte
+  if (targetSkin === "any" || isSkinUnlocked(targetSkin)) {
+    const lockedSkins = skinsList.filter(s => !isSkinUnlocked(s));
+    if (lockedSkins.length > 0) {
+      targetSkin = lockedSkins[Math.floor(Math.random() * lockedSkins.length)];
+    } else {
+      addPlayerCoins(800, "Coleção Completa! Bônus Místico");
+      return { skin: null, fullBonus: true };
+    }
+  }
+
+  const current = getSkinProgress(targetSkin);
+  const next = Math.min(100, current + amount);
+  setSkinProgress(targetSkin, next);
+  const targetName = SKIN_NAMES[targetSkin] || targetSkin;
+
+  let unlockedNow = false;
+  if (next >= 100) {
+    unlockSkin(targetSkin);
+    unlockedNow = true;
+    showAchievementToast("🎉 PEÇA DESBLOQUEADA!", `100% atingido! Estilo ${targetName} liberado!`, "✨");
+  } else {
+    showToast(`🧩 Fragmentos: +${amount}% para ${targetName} (${next}% / 100%)`);
+  }
+
+  updateSkinsShopUI();
+  return { skin: targetSkin, progress: next, unlockedNow };
 }
 
 function updateCoinsUI() {
@@ -98,24 +153,89 @@ function updateSkinsShopUI() {
     const skin = card.dataset.skin;
     const isUnlocked = isSkinUnlocked(skin);
     const isEquipped = skin === currentSkin;
-    const statusEl = card.querySelector(".custom-card-status");
+    const progress = isUnlocked ? 100 : getSkinProgress(skin);
+    const fullPrice = SKIN_PRICES[skin] || 300;
+    const remainingPrice = isUnlocked ? 0 : Math.max(30, Math.round(fullPrice * (1 - progress / 100)));
 
     card.classList.toggle("unlocked", isUnlocked);
     card.classList.toggle("locked", !isUnlocked);
     card.classList.toggle("equipped", isEquipped);
     card.classList.toggle("active", isEquipped);
 
-    if (statusEl) {
+    // Tag "EM USO" estilo Imagem 1 (Golf Rival)
+    let emUsoBadge = card.querySelector(".card-em-uso-badge");
+    if (!emUsoBadge) {
+      emUsoBadge = document.createElement("div");
+      emUsoBadge.className = "card-em-uso-badge";
+      emUsoBadge.textContent = "EM USO";
+      card.prepend(emUsoBadge);
+    }
+    emUsoBadge.style.display = isEquipped ? "block" : "none";
+
+    // Barra de progresso de fragmentos (Estilo Imagem 1: 7/10 e 70%)
+    const fillEl = card.querySelector(".card-frag-fill");
+    const countEl = card.querySelector(".card-frag-count");
+    const pctEl = card.querySelector(".card-frag-pct");
+    const frags = Math.min(10, Math.floor(progress / 10));
+
+    if (fillEl) fillEl.style.width = `${progress}%`;
+    if (countEl) countEl.textContent = isUnlocked ? "10/10" : `${frags}/10`;
+    if (pctEl) pctEl.textContent = isUnlocked ? "100%" : `${progress}%`;
+
+    // Botão de ação (✓ EM USO / EQUIPAR / DESBLOQUEAR X 🪙)
+    const statusBtn = card.querySelector(".card-action-btn") || card.querySelector(".custom-card-status");
+    if (statusBtn) {
       if (isEquipped) {
-        statusEl.textContent = "✓ Equipado";
+        statusBtn.textContent = "✓ EM USO";
+        statusBtn.className = "card-action-btn equipped-btn";
       } else if (isUnlocked) {
-        statusEl.textContent = "Equipar";
+        statusBtn.textContent = "EQUIPAR";
+        statusBtn.className = "card-action-btn equip-btn";
       } else {
-        const price = SKIN_PRICES[skin] || 300;
-        statusEl.textContent = `🔒 ${price.toLocaleString()} 🪙`;
+        statusBtn.innerHTML = `DESBLOQUEAR <span class="coin-tag">${remainingPrice.toLocaleString()} 🪙</span>`;
+        statusBtn.className = "card-action-btn unlock-btn";
       }
     }
   });
+}
+
+function onSkinCardClick(skin) {
+  const skinName = SKIN_NAMES[skin] || skin;
+  const isUnlocked = isSkinUnlocked(skin);
+
+  if (isUnlocked) {
+    try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
+    if (typeof updateKnightShowcase === "function") updateKnightShowcase(skin);
+    const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
+    if (skinBtn) skinBtn.click();
+    updateSkinsShopUI();
+    showToast(`🎨 Peça em uso: ${skinName}`);
+    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playPiecePlaced) {
+      ArcaneAudio.playPiecePlaced();
+    }
+  } else {
+    const progress = getSkinProgress(skin);
+    const fullPrice = SKIN_PRICES[skin] || 300;
+    const remainingPrice = Math.max(30, Math.round(fullPrice * (1 - progress / 100)));
+    const coins = getPlayerCoins();
+
+    if (coins >= remainingPrice) {
+      spendPlayerCoins(remainingPrice);
+      setSkinProgress(skin, 100);
+      unlockSkin(skin);
+      try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
+      if (typeof updateKnightShowcase === "function") updateKnightShowcase(skin);
+      const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
+      if (skinBtn) skinBtn.click();
+      updateSkinsShopUI();
+      showAchievementToast("🎉 PEÇA DESBLOQUEADA!", `Você completou ${skinName} por ${remainingPrice} 🪙!`, "✨");
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
+        ArcaneAudio.playQuestRewardChime();
+      }
+    } else {
+      showToast(`🔒 Moedas insuficientes! Você precisa de ${remainingPrice} 🪙 para completar ${skinName} (${progress}% obtido). Gire a Roda da Fortuna para fragmentos!`);
+    }
+  }
 }
 
 function checkDailyReward() {
@@ -146,35 +266,10 @@ function setupRewardEconomySystem() {
     }, "openShopFromCoinsTop");
   }
 
-  // Interação na Loja de Skins
+  // Interação na Loja de Skins (Estilo Imagem 1)
   document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {
     bindAction(card, () => {
-      const skin = card.dataset.skin;
-      const skinName = SKIN_NAMES[skin] || skin;
-      const price = SKIN_PRICES[skin] || 0;
-
-      if (isSkinUnlocked(skin)) {
-        // Já tem: apenas equipa
-        const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
-        if (skinBtn) skinBtn.click();
-        try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
-        updateSkinsShopUI();
-        showToast(`🎨 Estilo equipado: ${skinName}`);
-      } else {
-        // Bloqueado: tenta comprar
-        const coins = getPlayerCoins();
-        if (coins >= price) {
-          spendPlayerCoins(price);
-          unlockSkin(skin);
-          const skinBtn = document.querySelector(`#menu-skin-group .toggle-btn[data-skin="${skin}"]`);
-          if (skinBtn) skinBtn.click();
-          try { localStorage.setItem("wizard_chess_skin", skin); } catch(e) {}
-          updateSkinsShopUI();
-          showAchievementToast("🎉 ESTILO DESBLOQUEADO!", `Você comprou ${skinName} por ${price} 🪙`, "✨");
-        } else {
-          showToast(`🔒 Moedas insuficientes! ${skinName} custa ${price} 🪙 (Você tem ${coins} 🪙).`);
-        }
-      }
+      onSkinCardClick(card.dataset.skin);
     }, `skinShopItem_${card.dataset.skin}`);
   });
 }
@@ -1845,20 +1940,11 @@ function setupStartMenuGrid() {
   if (btnSettingsClose) bindAction(btnSettingsClose, () => switchSubView("home"));
   if (btnTutorialBack) bindAction(btnTutorialBack, () => switchSubView("home"));
 
-  // 7. Seleção de Peças na Aba Personalizar
+  // 7. Seleção de Peças na Aba Personalizar (Delegado para onSkinCardClick)
   document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {
     bindAction(card, () => {
-      const skin = card.dataset.skin;
-      // Aplica via sistema de skins
-      const skinBtn = document.querySelector('#menu-skin-group .toggle-btn[data-skin="' + skin + '"]');
-      if (skinBtn) {
-        skinBtn.click();
-      } else {
-        const savedSkin = localStorage.getItem("wizard_chess_skin") || "classic";
-        updateKnightShowcase(skin);
-      }
-      showToast("🎨 Modelo do Cavalo: " + (card.querySelector(".custom-card-name")?.textContent || skin));
-    });
+      onSkinCardClick(card.dataset.skin);
+    }, `customizeSkinCard_${card.dataset.skin}`);
   });
 
   // 8. Seleção de Tabuleiro na Aba Personalizar
@@ -4329,17 +4415,45 @@ function setupDailyChest() {
 // ==============================================================
 const FortuneWheel = {
   slices: [
-    { label: "+100 🪙", coins: 100, xp: 0, col: "#7b1fa2", textCol: "#fff" },
-    { label: "+75 ⭐", coins: 0, xp: 75, col: "#3f51b5", textCol: "#fff" },
-    { label: "+250 🪙", coins: 250, xp: 0, col: "#00897b", textCol: "#fff" },
-    { label: "💎 500", coins: 500, xp: 200, col: "#ffd700", textCol: "#000" },
-    { label: "+150 ⭐", coins: 0, xp: 150, col: "#e91e63", textCol: "#fff" },
-    { label: "+150 🪙", coins: 150, xp: 0, col: "#fb8c00", textCol: "#000" },
-    { label: "👑 350", coins: 350, xp: 100, col: "#5e35b1", textCol: "#fff" },
-    { label: "+200 🪙", coins: 200, xp: 50, col: "#1e88e5", textCol: "#fff" }
+    { label: "+150 🪙", coins: 150, skin: null, pct: 0, col: "#6a1b9a", textCol: "#ffffff" },
+    { label: "+20% Ametista", coins: 0, skin: "amethyst", pct: 20, col: "#4a148c", textCol: "#ffd54f" },
+    { label: "+300 🪙", coins: 300, skin: null, pct: 0, col: "#00695c", textCol: "#ffffff" },
+    { label: "+25% Rubi", coins: 0, skin: "ruby", pct: 25, col: "#b71c1c", textCol: "#ffffff" },
+    { label: "+500 🪙", coins: 500, skin: null, pct: 0, col: "#e65100", textCol: "#ffffff" },
+    { label: "+20% Esmeralda", coins: 0, skin: "emerald", pct: 20, col: "#1b5e20", textCol: "#ffffff" },
+    { label: "+20% Espectral", coins: 0, skin: "spectral", pct: 20, col: "#00838f", textCol: "#ffffff" },
+    { label: "👑 +30% Místico", coins: 0, skin: "any", pct: 30, col: "#ffd700", textCol: "#111111" }
   ],
   currentAngle: 0,
   isSpinning: false,
+
+  canFreeSpin() {
+    try {
+      const last = parseInt(localStorage.getItem("wizard_fortune_last_spin") || "0", 10);
+      return (Date.now() - last >= 20 * 60 * 60 * 1000);
+    } catch(e) {
+      return true;
+    }
+  },
+
+  getSpinCost() {
+    return this.canFreeSpin() ? 0 : 50;
+  },
+
+  updateUI() {
+    const btn = document.getElementById("btn-spin-wheel");
+    const label = document.getElementById("spin-btn-label");
+    const subtext = document.getElementById("wheel-status-text");
+    const cost = this.getSpinCost();
+
+    if (cost === 0) {
+      if (label) label.textContent = "GIRAR ROLETA (GRÁTIS)";
+      if (subtext) subtext.textContent = "✨ 1 Giro Grátis Diário Disponível!";
+    } else {
+      if (label) label.textContent = "GIRAR ROLETA (50 🪙)";
+      if (subtext) subtext.textContent = "Giro extra: 50 Moedas Arcanas";
+    }
+  },
 
   draw() {
     const canvas = document.getElementById("fortune-wheel-canvas");
@@ -4371,15 +4485,36 @@ const FortuneWheel = {
       ctx.rotate(angle + arc / 2);
       ctx.textAlign = "right";
       ctx.fillStyle = this.slices[i].textCol;
-      ctx.font = "bold 13px 'Cinzel', sans-serif";
-      ctx.fillText(this.slices[i].label, r - 22, 5);
+      ctx.font = "bold 11px 'Cinzel', sans-serif";
+      ctx.fillText(this.slices[i].label, r - 15, 4);
       ctx.restore();
     }
+
+    // Glowing border ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = "rgba(255, 215, 0, 0.75)";
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
   },
 
   spin() {
     if (this.isSpinning) return;
+    const cost = this.getSpinCost();
+    const coins = getPlayerCoins();
+
+    if (cost > 0) {
+      if (coins < cost) {
+        showToast(`🪙 Moedas insuficientes! Giro extra custa ${cost} 🪙 (Você tem ${coins} 🪙).`);
+        return;
+      }
+      spendPlayerCoins(cost);
+    } else {
+      try { localStorage.setItem("wizard_fortune_last_spin", Date.now()); } catch(e) {}
+    }
+
     this.isSpinning = true;
+    this.updateUI();
 
     const btn = document.getElementById("btn-spin-wheel");
     if (btn) btn.disabled = true;
@@ -4398,7 +4533,7 @@ const FortuneWheel = {
 
     const startAngle = this.currentAngle;
     const change = targetAngle - startAngle;
-    const duration = 4200;
+    const duration = 4000;
     const startTime = performance.now();
 
     const animateSpin = (now) => {
@@ -4415,6 +4550,7 @@ const FortuneWheel = {
       } else {
         this.isSpinning = false;
         if (btn) btn.disabled = false;
+        this.updateUI();
         this.onFinish(this.slices[targetIndex]);
       }
     };
@@ -4423,21 +4559,39 @@ const FortuneWheel = {
   },
 
   onFinish(prize) {
-    if (prize.coins > 0) addPlayerCoins(prize.coins, "Roda da Fortuna Arcana");
-    if (prize.xp > 0) addXP(prize.xp, "Roda da Fortuna Arcana");
+    const banner = document.getElementById("wheel-result-banner");
+    const desc = document.getElementById("wheel-result-desc");
+    const title = document.getElementById("wheel-result-title");
+
+    if (prize.coins > 0) {
+      addPlayerCoins(prize.coins, "Roda da Fortuna Arcana");
+      if (desc) desc.textContent = `Você ganhou +${prize.coins} Moedas Arcanas! 🪙`;
+      if (title) title.textContent = "🎉 Tesouro Conquistado!";
+      showToast(`🎡 Parabéns! +${prize.coins} Moedas Arcanas!`);
+    } else if (prize.pct > 0) {
+      const res = addSkinProgress(prize.skin, prize.pct);
+      if (res.fullBonus) {
+        if (desc) desc.textContent = `👑 Todas as peças já desbloqueadas! Você ganhou +800 Moedas de bônus!`;
+        if (title) title.textContent = "👑 Coleção Completa!";
+      } else if (res.unlockedNow) {
+        const name = SKIN_NAMES[res.skin] || res.skin;
+        if (desc) desc.textContent = `🎉 100% ATINGIDO! Você desbloqueou o estilo ${name}!`;
+        if (title) title.textContent = "✨ Peça Desbloqueada!";
+      } else {
+        const name = SKIN_NAMES[res.skin] || res.skin;
+        const frags = Math.floor(res.progress / 10);
+        if (desc) desc.textContent = `🧩 +${prize.pct}% para ${name}! Total: ${frags}/10 fragmentos (${res.progress}%)`;
+        if (title) title.textContent = "🧩 Fragmento Arcano!";
+      }
+    }
 
     if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
       ArcaneAudio.playQuestRewardChime();
     }
 
-    const banner = document.getElementById("wheel-result-banner");
-    const desc = document.getElementById("wheel-result-desc");
-    if (banner && desc) {
-      desc.textContent = `Você conquistou ${prize.label}!`;
-      banner.classList.remove("hidden");
-    }
-
-    showToast(`🎡 Parabéns! Você ganhou ${prize.label}!`);
+    if (banner) banner.classList.remove("hidden");
+    this.updateUI();
+    updateSkinsShopUI();
   }
 };
 
@@ -4450,6 +4604,7 @@ window._openFortuneWheel = function() {
   if (m) {
     m.classList.remove("hidden");
     m.style.setProperty("display", "flex", "important");
+    FortuneWheel.updateUI();
     FortuneWheel.draw();
     setTimeout(() => FortuneWheel.draw(), 50);
   }
@@ -4484,6 +4639,7 @@ function setupFortuneWheel() {
   if (btnCloseFortune) {
     bindAction(btnCloseFortune, () => window._closeFortuneWheel(), "closeFortuneWheelBtn");
   }
+  FortuneWheel.updateUI();
   setTimeout(() => FortuneWheel.draw(), 300);
 }
 
