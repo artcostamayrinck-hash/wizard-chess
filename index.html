@@ -2613,6 +2613,10 @@
         <!-- Banner Discreto de Estatísticas -->
         <!-- Pílula Web: Atalhos de Teclado, Missões, Roleta & Baixar App Android -->
         <div class="web-platform-banner" id="web-platform-banner">
+          <button type="button" class="web-banner-pill highlight-gold" id="btn-web-arcane-pass" title="Ver Trilha de Recompensas e Passe Arcano" onclick="if(window._openArcanePass) window._openArcanePass();">
+            <span style="font-size: 16px;">👑</span>
+            <span>Trilha Arcana</span>
+          </button>
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-daily-quests" title="Ver Missões Diárias do Grimório">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 16px;">task_alt</span>
             <span>Missões Diárias</span>
@@ -3125,6 +3129,51 @@
           </div>
         </div>
 
+        <!-- Seção: Rastros Mágicos das Peças (Spell Trails) -->
+        <div class="customize-section">
+          <label class="customize-section-label">
+            <span class="material-symbols-rounded">magic_button</span>
+            <span>RASTROS MÁGICOS DAS PEÇAS (SPELL TRAILS)</span>
+          </label>
+          <div class="customize-grid" id="customize-trail-grid">
+            <button type="button" class="custom-card active equipped unlocked" data-trail="stardust">
+              <div class="custom-card-color trail-stardust-preview">✨</div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Poeira Estelar</span>
+                <span class="custom-card-detail">Fagulhas Douradas</span>
+              </div>
+              <span class="custom-card-status" id="trail-status-stardust">✓ Em Uso</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-trail="flame">
+              <div class="custom-card-color trail-flame-preview">🔥</div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Chamas Vulcânicas</span>
+                <span class="custom-card-detail">Labaredas de Fogo</span>
+              </div>
+              <span class="custom-card-status" id="trail-status-flame">🔒 600 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-trail="ectoplasm">
+              <div class="custom-card-color trail-ectoplasm-preview">👻</div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Névoa Ectoplasmática</span>
+                <span class="custom-card-detail">Ectoplasma Ciano</span>
+              </div>
+              <span class="custom-card-status" id="trail-status-ectoplasm">🔒 800 🪙</span>
+            </button>
+
+            <button type="button" class="custom-card locked" data-trail="lightning">
+              <div class="custom-card-color trail-lightning-preview">⚡</div>
+              <div class="custom-card-info">
+                <span class="custom-card-name">Raio Arcano</span>
+                <span class="custom-card-detail">Fagulhas Violeta</span>
+              </div>
+              <span class="custom-card-status" id="trail-status-lightning">🔒 1.000 🪙</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Botão Confirmar -->
         <div style="margin-top: 14px;">
           <button type="button" class="btn-primary-action" id="btn-customize-apply">
@@ -3245,6 +3294,21 @@
           <button type="button" class="btn-play-daily" id="btn-play-daily-challenge">
             <span>Jogar Desafio Diário</span>
             <span class="material-symbols-rounded">swords</span>
+          </button>
+        </div>
+
+        <!-- CARD CORRIDA DOS ENIGMAS (PUZZLE RUSH) -->
+        <div class="puzzle-rush-entry-card" id="btn-open-puzzle-rush" onclick="if(window._openPuzzleRush) window._openPuzzleRush();" style="cursor: pointer; margin-bottom: 14px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(255, 61, 0, 0.25) 0%, rgba(35, 10, 10, 0.95) 100%); border: 1.5px solid rgba(255, 109, 0, 0.7); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(255, 61, 0, 0.25);">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 2.2rem; line-height: 1;">⏱️</span>
+            <div style="text-align: left;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: #ffab00;">CORRIDA DOS ENIGMAS (PUZZLE RUSH)</div>
+              <div style="font-size: 0.75rem; color: #ffccbc;">3 Minutos • 3 Vidas • Resolva quebra-cabeças em sequência!</div>
+              <div style="font-size: 0.72rem; color: #ffd700; margin-top: 3px;">Recorde Atual: <span id="puzzle-rush-high-score-display">0</span> acertos</div>
+            </div>
+          </div>
+          <button type="button" class="promo-btn" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 900; background: linear-gradient(135deg, #ff3d00, #ff9100); color: #fff; border: none; border-radius: 12px; pointer-events: none; box-shadow: 0 2px 10px rgba(255,61,0,0.5);">
+            INICIAR
           </button>
         </div>
 
@@ -3732,7 +3796,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.5.2</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.5.3</span>
           </div>
         </div>
       </div>
@@ -3878,109 +3942,226 @@
         </div>
 
         <h2 class="game-title photo2-title" style="font-size: 1.6rem; margin: 4px 0 6px 0; color: #c084fc;">CAMPANHA ARCANA</h2>
-        <p class="photo2-subtitle" style="margin-bottom: 16px;">Derrote os 4 Grandes Mestres Elementais em suas arenas sagradas e conquiste o Trono do Xadrez Ancestral.</p>
+        <p class="photo2-subtitle" style="margin-bottom: 12px;">Derrote os Grandes Mestres em suas arenas sagradas e conquiste o Trono do Xadrez Ancestral.</p>
+
+        <!-- Seletor de Mundos da Campanha -->
+        <div class="campaign-world-selector">
+          <button type="button" class="campaign-world-tab active" id="btn-world-1" onclick="if(window._switchCampaignWorld) window._switchCampaignWorld(1);">
+            🌍 Mundo 1: Elementais
+          </button>
+          <button type="button" class="campaign-world-tab" id="btn-world-2" onclick="if(window._switchCampaignWorld) window._switchCampaignWorld(2);">
+            ⚡ Mundo 2: Domínio dos Titãs
+          </button>
+        </div>
 
         <!-- Trilha de Chefes da Campanha -->
         <div class="campaign-roadmap" id="campaign-roadmap-list">
-          <!-- Chefe 1: Ignis -->
-          <div class="boss-card" id="boss-card-1" data-stage="1">
-            <div class="boss-card-header">
-              <div class="boss-avatar-box ember-avatar">
-                <span class="boss-avatar-emoji">🔥</span>
-              </div>
-              <div class="boss-meta-text">
-                <div class="boss-tag-row">
-                  <span class="boss-difficulty-tag diff-easy">Capítulo I • Fácil</span>
-                  <span class="boss-arena-tag">Cripta Infernal</span>
+          <!-- MUNDO 1: ELEMENTAIS (Chefes 1 a 4) -->
+          <div id="campaign-world-1-container" class="campaign-world-pane">
+            <!-- Chefe 1: Ignis -->
+            <div class="boss-card" id="boss-card-1" data-stage="1">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box ember-avatar">
+                  <span class="boss-avatar-emoji">🔥</span>
                 </div>
-                <h3 class="boss-title">Ignis, o Piromante</h3>
-                <p class="boss-desc">Domina o fogo ancestral. Joga de forma impetuosa e agressiva com suas peças carmesins.</p>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-easy">Capítulo I • Fácil</span>
+                    <span class="boss-arena-tag">Cripta Infernal</span>
+                  </div>
+                  <h3 class="boss-title">Ignis, o Piromante</h3>
+                  <p class="boss-desc">Domina o fogo ancestral. Joga de forma impetuosa e agressiva com suas peças carmesins.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +150 Moedas</span>
+                  <span class="reward-pill">⭐ +100 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Domador de Chamas"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-1">⚔️ Desafiar Mago</button>
               </div>
             </div>
-            <div class="boss-card-footer">
-              <div class="boss-rewards-row">
-                <span class="reward-pill">🪙 +150 Moedas</span>
-                <span class="reward-pill">⭐ +100 XP</span>
-                <span class="reward-pill title-reward">🏷️ "Domador de Chamas"</span>
+
+            <!-- Chefe 2: Morgana -->
+            <div class="boss-card" id="boss-card-2" data-stage="2">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box mist-avatar">
+                  <span class="boss-avatar-emoji">👁️</span>
+                </div>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-med">Capítulo II • Médio</span>
+                    <span class="boss-arena-tag">Abismo do Vazio</span>
+                  </div>
+                  <h3 class="boss-title">Morgana, a Ilusionista</h3>
+                  <p class="boss-desc">Mestre dos espelhos e sombras. Prepara emboscadas táticas e garfos traiçoeiros com seus cavalos.</p>
+                </div>
               </div>
-              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-1">⚔️ Desafiar Mago</button>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +250 Moedas</span>
+                  <span class="reward-pill">⭐ +150 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Vidente Arcano"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-2">⚔️ Desafiar Mago</button>
+              </div>
+            </div>
+
+            <!-- Chefe 3: Chronos -->
+            <div class="boss-card" id="boss-card-3" data-stage="3">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box time-avatar">
+                  <span class="boss-avatar-emoji">⏳</span>
+                </div>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-hard">Capítulo III • Difícil</span>
+                    <span class="boss-arena-tag">Pirâmide das Areias</span>
+                  </div>
+                  <h3 class="boss-title">Chronos, o Guardião do Tempo</h3>
+                  <p class="boss-desc">Enxerga cada desfecho mil lances à frente. Defesa cirúrgica e finais de jogo implacáveis.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +400 Moedas</span>
+                  <span class="reward-pill">⭐ +250 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Mestre do Tempo"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-3">⚔️ Desafiar Mago</button>
+              </div>
+            </div>
+
+            <!-- Chefe 4: Malakor -->
+            <div class="boss-card boss-final" id="boss-card-4" data-stage="4">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box lich-avatar">
+                  <span class="boss-avatar-emoji">💀</span>
+                </div>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-boss">Chefe Final • Arquimago</span>
+                    <span class="boss-arena-tag">Catedral Cósmica</span>
+                  </div>
+                  <h3 class="boss-title">Malakor, o Rei Lich</h3>
+                  <p class="boss-desc">O soberano imortal do tabuleiro. Precisão de grande mestre e frieza milenar na Catedral.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +700 Moedas</span>
+                  <span class="reward-pill">⭐ +500 XP</span>
+                  <span class="reward-pill title-reward">👑 "Conquistador do Trono"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-4">👑 Duelo Final</button>
+              </div>
             </div>
           </div>
 
-          <!-- Chefe 2: Morgana -->
-          <div class="boss-card" id="boss-card-2" data-stage="2">
-            <div class="boss-card-header">
-              <div class="boss-avatar-box mist-avatar">
-                <span class="boss-avatar-emoji">👁️</span>
-              </div>
-              <div class="boss-meta-text">
-                <div class="boss-tag-row">
-                  <span class="boss-difficulty-tag diff-med">Capítulo II • Médio</span>
-                  <span class="boss-arena-tag">Abismo do Vazio</span>
+          <!-- MUNDO 2: DOMÍNIO DOS TITÃS (Chefes 5 a 8) -->
+          <div id="campaign-world-2-container" class="campaign-world-pane hidden">
+            <!-- Chefe 5: Zephyr -->
+            <div class="boss-card" id="boss-card-5" data-stage="5">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box frost-avatar" style="background: radial-gradient(circle, #80deea, #006064);">
+                  <span class="boss-avatar-emoji">🌪️</span>
                 </div>
-                <h3 class="boss-title">Morgana, a Ilusionista</h3>
-                <p class="boss-desc">Mestre dos espelhos e sombras. Prepara emboscadas táticas e garfos traiçoeiros com seus cavalos.</p>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-med">Capítulo V • Ágil</span>
+                    <span class="boss-arena-tag">Templo de Gelo</span>
+                  </div>
+                  <h3 class="boss-title">Zephyr, o Tecedor dos Ventos</h3>
+                  <p class="boss-desc">Sopra vendavais gélidos que desconcertam o adversário com aberturas rápidas e lances táticos fulminantes.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +450 Moedas</span>
+                  <span class="reward-pill">⭐ +300 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Lorde dos Ventos"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-5">⚔️ Desafiar Titã</button>
               </div>
             </div>
-            <div class="boss-card-footer">
-              <div class="boss-rewards-row">
-                <span class="reward-pill">🪙 +250 Moedas</span>
-                <span class="reward-pill">⭐ +150 XP</span>
-                <span class="reward-pill title-reward">🏷️ "Vidente Arcano"</span>
-              </div>
-              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-2">⚔️ Desafiar Mago</button>
-            </div>
-          </div>
 
-          <!-- Chefe 3: Chronos -->
-          <div class="boss-card" id="boss-card-3" data-stage="3">
-            <div class="boss-card-header">
-              <div class="boss-avatar-box time-avatar">
-                <span class="boss-avatar-emoji">⏳</span>
-              </div>
-              <div class="boss-meta-text">
-                <div class="boss-tag-row">
-                  <span class="boss-difficulty-tag diff-hard">Capítulo III • Difícil</span>
-                  <span class="boss-arena-tag">Pirâmide das Areias</span>
+            <!-- Chefe 6: Gólem de Granito -->
+            <div class="boss-card" id="boss-card-6" data-stage="6">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box forest-avatar" style="background: radial-gradient(circle, #a5d6a7, #1b5e20);">
+                  <span class="boss-avatar-emoji">🗿</span>
                 </div>
-                <h3 class="boss-title">Chronos, o Guardião do Tempo</h3>
-                <p class="boss-desc">Enxerga cada desfecho mil lances à frente. Defesa cirúrgica e finais de jogo implacáveis.</p>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-hard">Capítulo VI • Rocha Impenetrável</span>
+                    <span class="boss-arena-tag">Floresta Proibida</span>
+                  </div>
+                  <h3 class="boss-title">Gólem de Granito Ancestral</h3>
+                  <p class="boss-desc">Esculpido no granito mais antigo. Estrutura de peões inquebrável e defesa impenetrável contra qualquer assalto.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +600 Moedas</span>
+                  <span class="reward-pill">⭐ +400 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Titã Inabalável"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-6">⚔️ Desafiar Titã</button>
               </div>
             </div>
-            <div class="boss-card-footer">
-              <div class="boss-rewards-row">
-                <span class="reward-pill">🪙 +400 Moedas</span>
-                <span class="reward-pill">⭐ +250 XP</span>
-                <span class="reward-pill title-reward">🏷️ "Mestre do Tempo"</span>
-              </div>
-              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-3">⚔️ Desafiar Mago</button>
-            </div>
-          </div>
 
-          <!-- Chefe 4: Malakor -->
-          <div class="boss-card boss-final" id="boss-card-4" data-stage="4">
-            <div class="boss-card-header">
-              <div class="boss-avatar-box lich-avatar">
-                <span class="boss-avatar-emoji">💀</span>
-              </div>
-              <div class="boss-meta-text">
-                <div class="boss-tag-row">
-                  <span class="boss-difficulty-tag diff-boss">Chefe Final • Arquimago</span>
-                  <span class="boss-arena-tag">Catedral Cósmica</span>
+            <!-- Chefe 7: Sombra do Rei -->
+            <div class="boss-card" id="boss-card-7" data-stage="7">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box abyss-avatar" style="background: radial-gradient(circle, #ce93d8, #4a148c);">
+                  <span class="boss-avatar-emoji">👤</span>
                 </div>
-                <h3 class="boss-title">Malakor, o Rei Lich</h3>
-                <p class="boss-desc">O soberano imortal do tabuleiro. Precisão de grande mestre e frieza milenar na Catedral.</p>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-hard">Capítulo VII • Espectro Caído</span>
+                    <span class="boss-arena-tag">Abismo do Vazio</span>
+                  </div>
+                  <h3 class="boss-title">Sombra do Rei Esquecido</h3>
+                  <p class="boss-desc">O antigo soberano banido. Sacrifica peças sem hesitar para sufocar seu rei nas trevas infinitas.</p>
+                </div>
+              </div>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +750 Moedas</span>
+                  <span class="reward-pill">⭐ +500 XP</span>
+                  <span class="reward-pill title-reward">🏷️ "Lâmina Sombria"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-7">⚔️ Desafiar Titã</button>
               </div>
             </div>
-            <div class="boss-card-footer">
-              <div class="boss-rewards-row">
-                <span class="reward-pill">🪙 +700 Moedas</span>
-                <span class="reward-pill">⭐ +500 XP</span>
-                <span class="reward-pill title-reward">👑 "Conquistador do Trono"</span>
+
+            <!-- Chefe 8: Aethelgard -->
+            <div class="boss-card boss-final" id="boss-card-8" data-stage="8">
+              <div class="boss-card-header">
+                <div class="boss-avatar-box cosmos-avatar" style="background: radial-gradient(circle, #ffd54f, #311b92);">
+                  <span class="boss-avatar-emoji">🪞</span>
+                </div>
+                <div class="boss-meta-text">
+                  <div class="boss-tag-row">
+                    <span class="boss-difficulty-tag diff-boss">Chefe Supremo • Reino dos Espelhos</span>
+                    <span class="boss-arena-tag">Observatório Cósmico</span>
+                  </div>
+                  <h3 class="boss-title">Aethelgard, Arquimago do Espelho</h3>
+                  <p class="boss-desc">O reflexo perfeito de todo o conhecimento do tabuleiro. Pune qualquer imperfeição com precisão absoluta.</p>
+                </div>
               </div>
-              <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-4">👑 Duelo Final</button>
+              <div class="boss-card-footer">
+                <div class="boss-rewards-row">
+                  <span class="reward-pill">🪙 +1.200 Moedas</span>
+                  <span class="reward-pill">⭐ +800 XP</span>
+                  <span class="reward-pill title-reward">👑 "Soberano dos Titãs"</span>
+                </div>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-8">👑 Duelo Supremo</button>
+              </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
 
@@ -4291,6 +4472,9 @@
 
       <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
         Novamente</button>
+      <button id="btn-open-magus-review" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: linear-gradient(135deg, rgba(0, 245, 212, 0.25), rgba(10, 30, 40, 0.95)); border-color: #00f5d4; color: #00f5d4;">
+        <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">psychology</span>🧠 Análise Mágica do Grimório
+      </button>
       <button id="btn-game-over-replay" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(0, 245, 212, 0.15); border-color: #00f5d4; color: #00f5d4;">
         <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Partida (Replay Lance a Lance)
       </button>
@@ -4692,6 +4876,126 @@
           <span>Copiar Mensagem</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: TRILHA DE RECOMPENSAS / PASSE ARCANO (TROPHY ROAD)       -->
+  <!-- ============================================================== -->
+  <div id="arcane-pass-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 540px; width: 95%; border-radius: 28px; padding: 22px 18px;">
+      <button type="button" class="modal-corner-close-btn" onclick="if(window._closeArcanePass) window._closeArcanePass();">✕</button>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="font-size: 26px;">👑</span>
+        <h3 style="margin: 0; color: #ffd700; font-size: 1.35rem;">Trilha de Recompensas Arcanas</h3>
+      </div>
+      <p style="font-size: 0.8rem; color: #d0bcff; margin: 0 0 14px 0;">Vença batalhas, chefes e enigmas para acumular Coroas Arcanas e desbloquear 20 Níveis de tesouros!</p>
+
+      <div class="pass-progress-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 0.92rem; font-weight: 800; color: #ffd700;">👑 Suas Coroas Arcanas</span>
+          <span id="pass-crowns-display" style="font-size: 1.25rem; font-weight: 900; color: #fff;">0 👑</span>
+        </div>
+        <div style="width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,215,0,0.3);">
+          <div id="pass-progress-fill" style="width: 5%; height: 100%; background: linear-gradient(90deg, #ff9800, #ffd700); border-radius: 999px; transition: width 0.3s ease;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #b3a7cb; margin-top: 4px;">
+          <span id="pass-level-tag">Nível Atual: 1</span>
+          <span id="pass-next-tier-label">Próxima meta: 5 👑</span>
+        </div>
+      </div>
+
+      <div class="pass-road-list" id="pass-road-list-container">
+        <!-- Tiers gerados dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CORRIDA DOS ENIGMAS (PUZZLE RUSH 3 MINUTOS)              -->
+  <!-- ============================================================== -->
+  <div id="puzzle-rush-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px; width: 95%; border-radius: 28px; padding: 22px 18px;">
+      <button type="button" class="modal-corner-close-btn" onclick="if(window._closePuzzleRush) window._closePuzzleRush();">✕</button>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="font-size: 26px;">⏱️</span>
+        <h3 style="margin: 0; color: #ffab00; font-size: 1.35rem;">Corrida dos Enigmas (3 Minutos)</h3>
+      </div>
+      <p style="font-size: 0.8rem; color: #ffccbc; margin: 0 0 12px 0;">Resolva o maior número de quebra-cabeças antes do tempo zerar! Cuidado: você tem apenas 3 vidas!</p>
+
+      <div class="rush-hud-bar">
+        <div class="rush-timer-pill" id="rush-timer-display">⏱️ 03:00</div>
+        <div class="rush-score-pill" id="rush-score-display">🏆 0 Acertos</div>
+        <div class="rush-lives-pill" id="rush-lives-display">❤️❤️❤️</div>
+      </div>
+
+      <div id="rush-active-stage" style="background: rgba(18, 12, 28, 0.9); border-radius: 16px; padding: 14px; border: 1.5px solid rgba(255, 109, 0, 0.4); text-align: center; margin-bottom: 12px;">
+        <div id="rush-puzzle-title" style="font-size: 0.95rem; font-weight: 800; color: #ffd700; margin-bottom: 4px;">1. O Mate Relâmpago</div>
+        <div id="rush-puzzle-task" style="font-size: 0.82rem; color: #d0bcff; margin-bottom: 12px;">Aplique Xeque-Mate no Rei de Obsidiana em 1 lance!</div>
+        
+        <div id="rush-options-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+          <!-- Opções geradas via JS -->
+        </div>
+      </div>
+
+      <!-- Resumo pós-corrida (oculto durante o jogo) -->
+      <div id="rush-summary-box" class="hidden" style="background: rgba(0,0,0,0.7); border-radius: 16px; padding: 16px; border: 1.5px solid #ffd700; text-align: center; margin-bottom: 12px;">
+        <h4 style="color: #ffd700; font-size: 1.2rem; margin: 0 0 8px 0;">🏁 Fim da Corrida dos Enigmas!</h4>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 6px;"><span id="rush-final-score">0</span> Quebra-cabeças</div>
+        <div style="font-size: 0.85rem; color: #80cbc4; margin-bottom: 8px;">Recorde: <span id="rush-record-score">0</span> acertos</div>
+        <div id="rush-rewards-earned" style="font-size: 0.95rem; font-weight: 800; color: #ffd700; margin-bottom: 14px;">+120 🪙 Moedas • +3 👑 Coroas</div>
+        <button type="button" class="promo-btn" id="btn-rush-play-again" style="width: 100%;">Jogar Novamente</button>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="promo-btn" id="btn-start-rush" style="flex: 1; background: linear-gradient(135deg, #ff3d00, #ff9100);">COMEÇAR CORRIDA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ANÁLISE MÁGICA DO GRIMÓRIO (MATCH REVIEW)               -->
+  <!-- ============================================================== -->
+  <div id="game-review-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px; width: 95%; border-radius: 28px; padding: 22px 18px; text-align: center;">
+      <button type="button" class="modal-corner-close-btn" onclick="if(window._closeMagusReview) window._closeMagusReview();">✕</button>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
+        <span style="font-size: 26px;">🧠</span>
+        <h3 style="margin: 0; color: #00f5d4; font-size: 1.35rem;">Análise Mágica do Grimório</h3>
+      </div>
+      <p style="font-size: 0.8rem; color: #b2dfdb; margin: 0 0 12px 0;">Avaliação magistral de precisão e lances do duelo cósmico.</p>
+
+      <div class="accuracy-circle-box">
+        <span class="accuracy-pct-big" id="review-acc-display">89.4%</span>
+        <span class="accuracy-sub-label">Precisão</span>
+      </div>
+
+      <div class="analysis-magus-speech" id="review-magus-speech">
+        "Visão magistral digna dos grandes sábios da torre! Suas peças dominaram as linhas cósmicas com bravura."
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px;">
+        <div style="background: rgba(0, 245, 212, 0.12); border: 1px solid rgba(0, 245, 212, 0.4); border-radius: 12px; padding: 8px;">
+          <div style="font-size: 1.2rem; font-weight: 900; color: #00f5d4;" id="review-brilliant-count">2</div>
+          <div style="font-size: 0.7rem; font-weight: 800; color: #fff;">💎 Lances Brilhantes (!!)</div>
+        </div>
+        <div style="background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 12px; padding: 8px;">
+          <div style="font-size: 1.2rem; font-weight: 900; color: #ffd700;" id="review-great-count">14</div>
+          <div style="font-size: 0.7rem; font-weight: 800; color: #fff;">⚔️ Melhores Lances (!)</div>
+        </div>
+        <div style="background: rgba(144, 202, 249, 0.12); border: 1px solid rgba(144, 202, 249, 0.4); border-radius: 12px; padding: 8px;">
+          <div style="font-size: 1.2rem; font-weight: 900; color: #90caf9;" id="review-solid-count">10</div>
+          <div style="font-size: 0.7rem; font-weight: 800; color: #fff;">⚖️ Lances Sólidos</div>
+        </div>
+        <div style="background: rgba(255, 82, 82, 0.12); border: 1px solid rgba(255, 82, 82, 0.4); border-radius: 12px; padding: 8px;">
+          <div style="font-size: 1.2rem; font-weight: 900; color: #ff5252;" id="review-blunder-count">0</div>
+          <div style="font-size: 0.7rem; font-weight: 800; color: #fff;">💀 Gafes Graves (??)</div>
+        </div>
+      </div>
+
+      <button type="button" class="promo-btn" id="btn-share-review-whatsapp" style="width: 100%; background: #25d366; color: #000; font-weight: 900;">
+        📱 Compartilhar Precisão no WhatsApp
+      </button>
     </div>
   </div>
 </body>

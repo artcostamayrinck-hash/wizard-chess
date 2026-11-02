@@ -517,7 +517,13 @@ function initWizardFeatures() {
     { name: "DynamicWeather", fn: setupDynamicWeather },
     { name: "DailyChest", fn: setupDailyChest },
     { name: "FortuneWheel", fn: setupFortuneWheel },
-    { name: "VictoryShareModal", fn: setupVictoryShareModal }
+    { name: "VictoryShareModal", fn: setupVictoryShareModal },
+    { name: "SpellCaptureVFX", fn: setupSpellCaptureVFX },
+    { name: "SpellTrails", fn: setupSpellTrails },
+    { name: "ArcanePass", fn: setupArcanePass },
+    { name: "PuzzleRush", fn: setupPuzzleRush },
+    { name: "EnhancedGameReview", fn: setupEnhancedGameReview },
+    { name: "CampaignWorld2", fn: setupCampaignWorld2 }
   ];
 
   for (const task of tasks) {
@@ -788,6 +794,11 @@ function handleGameOverRewards() {
 
   addXP(xpEarned, rewardText);
   addPlayerCoins(coinsEarned);
+  if (isWin) {
+    if (typeof addArcaneCrowns === "function") addArcaneCrowns(3);
+  } else if (isDraw) {
+    if (typeof addArcaneCrowns === "function") addArcaneCrowns(1);
+  }
 
   const rewardLabel = document.getElementById("reward-coins-added");
   const rewardTotal = document.getElementById("reward-coins-total");
@@ -3556,6 +3567,61 @@ const ArcaneAudio = {
     showToast(this.musicEnabled ? "🎶 Música Arcana iniciada" : "🔇 Música pausada");
   },
 
+  playSpellCaptureBoom(arena) {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    try {
+      // Subwoofer boom
+      const subOsc = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      subOsc.type = "sine";
+      subOsc.frequency.setValueAtTime(140, t);
+      subOsc.frequency.exponentialRampToValueAtTime(30, t + 0.45);
+      subGain.gain.setValueAtTime(0.5, t);
+      subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      subOsc.connect(subGain);
+      subGain.connect(this.ctx.destination);
+      subOsc.start(t);
+      subOsc.stop(t + 0.5);
+
+      // High magic crackle
+      const crackOsc = this.ctx.createOscillator();
+      const crackGain = this.ctx.createGain();
+      crackOsc.type = (arena === 'inferno' || arena === 'abyss') ? "sawtooth" : "triangle";
+      crackOsc.frequency.setValueAtTime(540, t);
+      crackOsc.frequency.exponentialRampToValueAtTime(160, t + 0.25);
+      crackGain.gain.setValueAtTime(0.35, t);
+      crackGain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      crackOsc.connect(crackGain);
+      crackGain.connect(this.ctx.destination);
+      crackOsc.start(t);
+      crackOsc.stop(t + 0.3);
+    } catch(e) {}
+  },
+
+  playPuzzleSuccessChime() {
+    if (!this.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    try {
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t + idx * 0.07);
+        gain.gain.setValueAtTime(0.18, t + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.07 + 0.3);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t + idx * 0.07);
+        osc.stop(t + idx * 0.07 + 0.3);
+      });
+    } catch(e) {}
+  },
+
   updateUI() {
     const hudSoundBtn = document.getElementById("btn-hud-sound-toggle");
     const hudSoundIcon = document.getElementById("icon-hud-sound");
@@ -4046,6 +4112,86 @@ const CAMPAIGN_BOSSES = [
       win: "Não... o Trono Arcano é seu! Você é o verdadeiro Grande Mestre!",
       defeat: "A escuridão eterna prevaleceu. Seu reinado acabou."
     }
+  },
+  {
+    id: 5,
+    name: "Zephyr, o Tecedor dos Ventos",
+    title: "Capítulo V • Ágil",
+    arena: "frost",
+    diff: 2,
+    avatar: "🌪️",
+    rewardCoins: 450,
+    rewardXp: 300,
+    rewardTitle: "Lorde dos Ventos",
+    skin: "amethyst",
+    lines: {
+      start: "Os ventos gélidos congelarão seus passos!",
+      capture: "Levado pela tempestade sem deixar vestígios!",
+      lossPiece: "Uma brisa cortada... mas o vendaval ainda ruge!",
+      check: "O vórtice fecha ao redor do seu rei!",
+      win: "Você quebrou o olho da tempestade com maestria...",
+      defeat: "Congelado nas neves eternas do esquecimento."
+    }
+  },
+  {
+    id: 6,
+    name: "Gólem de Granito Ancestral",
+    title: "Capítulo VI • Rocha Impenetrável",
+    arena: "forest",
+    diff: 3,
+    avatar: "🗿",
+    rewardCoins: 600,
+    rewardXp: 400,
+    rewardTitle: "Titã Inabalável",
+    skin: "emerald",
+    lines: {
+      start: "Pedra e raiz não quebram perante meros truques.",
+      capture: "Esmagado pelo peso do granito milenar!",
+      lossPiece: "Uma lasca de rocha que se desprende... inútil!",
+      check: "As muralhas de pedra cercam seu monarca!",
+      win: "A rocha mais resistente cedeu à sua precisão...",
+      defeat: "Sepultado sob a montanha ancestral."
+    }
+  },
+  {
+    id: 7,
+    name: "Sombra do Rei Esquecido",
+    title: "Capítulo VII • Espectro Caído",
+    arena: "abyss",
+    diff: 3,
+    avatar: "👤",
+    rewardCoins: 750,
+    rewardXp: 500,
+    rewardTitle: "Lâmina Sombria",
+    skin: "spectral",
+    lines: {
+      start: "Eu fui o primeiro a governar este tabuleiro...",
+      capture: "Sua alma alimenta a eternidade do abismo!",
+      lossPiece: "A escuridão absorve o golpe e retorna em dobro!",
+      check: "O espectro da foice repousa sobre seu pescoço!",
+      win: "Finalmente... minha alma descansa em paz...",
+      defeat: "Seu nome será esquecido, assim como o meu foi."
+    }
+  },
+  {
+    id: 8,
+    name: "Aethelgard, Arquimago do Espelho",
+    title: "Chefe Supremo • Reino dos Espelhos",
+    arena: "cosmos",
+    diff: 3,
+    avatar: "🪞",
+    rewardCoins: 1200,
+    rewardXp: 800,
+    rewardTitle: "Soberano dos Titãs",
+    skin: "gold",
+    lines: {
+      start: "Eu sou o espelho da sua alma e de cada lance que você ousar imaginar.",
+      capture: "Seu próprio reflexo destruiu sua peça!",
+      lossPiece: "Você quebrou um reflexo... mas os estilhaços ainda cortam!",
+      check: "Xeque cósmico em todas as dimensões paralelas!",
+      win: "Você transcendeu o infinito! O Trono Supremo dos Titãs é legitimamente seu!",
+      defeat: "Aprisionado para sempre no labirinto dos espelhos."
+    }
   }
 ];
 
@@ -4073,7 +4219,7 @@ function getCampaignProgress() {
     const raw = localStorage.getItem("wizard_chess_campaign_progress");
     if (raw) return JSON.parse(raw);
   } catch(e) {}
-  return { 1: false, 2: false, 3: false, 4: false };
+  return { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false };
 }
 
 function saveCampaignProgress(p) {
@@ -4082,6 +4228,25 @@ function saveCampaignProgress(p) {
   } catch(e) {}
 }
 
+window._switchCampaignWorld = function(w) {
+  const w1 = document.getElementById("campaign-world-1-container");
+  const w2 = document.getElementById("campaign-world-2-container");
+  const b1 = document.getElementById("btn-world-1");
+  const b2 = document.getElementById("btn-world-2");
+
+  if (w === 1) {
+    if (w1) w1.classList.remove("hidden");
+    if (w2) w2.classList.add("hidden");
+    if (b1) b1.classList.add("active");
+    if (b2) b2.classList.remove("active");
+  } else {
+    if (w1) w1.classList.add("hidden");
+    if (w2) w2.classList.remove("hidden");
+    if (b1) b1.classList.remove("active");
+    if (b2) b2.classList.add("active");
+  }
+};
+
 function updateCampaignUI() {
   const progress = getCampaignProgress();
   CAMPAIGN_BOSSES.forEach(boss => {
@@ -4089,7 +4254,8 @@ function updateCampaignUI() {
     const btn = document.getElementById("btn-boss-challenge-" + boss.id);
     if (!card || !btn) return;
 
-    const isUnlocked = boss.id === 1 || progress[boss.id - 1] === true;
+    // Boss 1 e Boss 5 são desbloqueados por padrão como início de seus mundos
+    const isUnlocked = boss.id === 1 || boss.id === 5 || progress[boss.id - 1] === true;
     const isCompleted = progress[boss.id] === true;
 
     card.classList.toggle("boss-completed", isCompleted);
@@ -4720,3 +4886,702 @@ setInterval(() => {
     ArcaneAudio.playTensionTick();
   }
 }, 1000);
+
+// ==============================================================
+// V1.5.3: 1. EFEITOS DE FEITIÇO NA CAPTURA (VFX DE COMBATE HARRY POTTER)
+// ==============================================================
+function setupSpellCaptureVFX() {
+  const checkGameInit = setInterval(() => {
+    if (window._WIZARD_GAME && window._WIZARD_GAME.spawnArenaBurst) {
+      clearInterval(checkGameInit);
+      const originalBurst = window._WIZARD_GAME.spawnArenaBurst;
+
+      window._WIZARD_GAME.spawnArenaBurst = function(pos) {
+        try { originalBurst(pos); } catch(e) {}
+
+        const arena = window._WIZARD_GAME.getArena ? window._WIZARD_GAME.getArena() : "cathedral";
+        const scene = window._WIZARD_GAME.scene;
+        const ts = window._WIZARD_GAME.ts;
+        const hs = window._WIZARD_GAME.hs;
+        const Kt = window._WIZARD_GAME.Kt;
+        const Se = window._WIZARD_GAME.Se;
+        const C = window._WIZARD_GAME.C;
+        const xt = window._WIZARD_GAME.xt;
+        const Ls = window._WIZARD_GAME.Ls;
+
+        // Som de impacto com subwoofer e crackle elétrico
+        if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playSpellCaptureBoom) {
+          ArcaneAudio.playSpellCaptureBoom(arena);
+        }
+
+        // Tremor dinâmico de câmera
+        if (typeof window._WIZARD_GAME !== "undefined") {
+          window._WIZARD_GAME.ui = 0.45;
+        }
+
+        if (!scene || !ts || !hs || !Kt || !Se || !C) return;
+
+        // 1. Feixe de Raio Vertical Descendente
+        try {
+          let beamCol = 0xffd700;
+          if (arena === 'inferno') beamCol = 0xff3d00;
+          else if (arena === 'frost') beamCol = 0x80deea;
+          else if (arena === 'abyss') beamCol = 0xc084fc;
+          else if (arena === 'cosmos') beamCol = 0x00f5d4;
+
+          const beamHeight = 9;
+          const beamGeom = xt ? new xt(0.1, 0.4, beamHeight, 16) : new hs(0.5, 0);
+          const beamMat = new Kt({
+            color: beamCol,
+            emissive: beamCol,
+            emissiveIntensity: 2.5,
+            transparent: true,
+            opacity: 0.95
+          });
+          const beamMesh = new Se(beamGeom, beamMat);
+          beamMesh.position.set(pos.x, pos.y + beamHeight / 2, pos.z);
+          scene.add(beamMesh);
+
+          const startTime = performance.now();
+          const animateBeam = () => {
+            const elapsed = (performance.now() - startTime) / 1000;
+            if (elapsed < 0.28) {
+              const s = Math.max(0.01, 1 - (elapsed / 0.28));
+              beamMesh.scale.set(s, 1, s);
+              beamMat.opacity = s * 0.95;
+              requestAnimationFrame(animateBeam);
+            } else {
+              scene.remove(beamMesh);
+              beamGeom.dispose();
+              beamMat.dispose();
+            }
+          };
+          requestAnimationFrame(animateBeam);
+        } catch(e) {}
+
+        // 2. Anel de Choque Mágico no Chão
+        try {
+          if (Ls) {
+            const ringGeom = new Ls(0.1, 0.35, 32);
+            ringGeom.rotateX(-Math.PI / 2);
+            const ringMat = new Kt({
+              color: 0xffffff,
+              emissive: 0xffd700,
+              emissiveIntensity: 1.8,
+              transparent: true,
+              opacity: 0.85
+            });
+            const ringMesh = new Se(ringGeom, ringMat);
+            ringMesh.position.set(pos.x, pos.y + 0.04, pos.z);
+            scene.add(ringMesh);
+
+            const startRing = performance.now();
+            const animateRing = () => {
+              const elapsed = (performance.now() - startRing) / 1000;
+              if (elapsed < 0.45) {
+                const t = elapsed / 0.45;
+                const scale = 1 + t * 4.5;
+                ringMesh.scale.set(scale, scale, scale);
+                ringMat.opacity = Math.max(0, 0.85 * (1 - t));
+                requestAnimationFrame(animateRing);
+              } else {
+                scene.remove(ringMesh);
+                ringGeom.dispose();
+                ringMat.dispose();
+              }
+            };
+            requestAnimationFrame(animateRing);
+          }
+        } catch(e) {}
+      };
+    }
+  }, 400);
+}
+
+// ==============================================================
+// V1.5.3: 5. RASTROS MÁGICOS DAS PEÇAS (SPELL TRAILS)
+// ==============================================================
+const SPELL_TRAILS_DATA = {
+  stardust: { id: "stardust", name: "Poeira Estelar", rarity: "Padrão", col: "#ffd700", colors: [0xffd700, 0xfff9c4, 0xffb300], price: 0 },
+  flame: { id: "flame", name: "Chamas Vulcânicas", rarity: "Épico", col: "#ff3d00", colors: [0xff3d00, 0xff9100, 0xff6d00], price: 600 },
+  ectoplasm: { id: "ectoplasm", name: "Névoa Ectoplasmática", rarity: "Místico", col: "#00f5d4", colors: [0x00f5d4, 0x80ffdb, 0x00b4d8], price: 800 },
+  lightning: { id: "lightning", name: "Raio Arcano", rarity: "Lendário", col: "#c084fc", colors: [0xc084fc, 0x7c3aed, 0x67e8f9], price: 1000 }
+};
+
+function getEquippedTrail() {
+  return localStorage.getItem("wizard_equipped_trail") || "stardust";
+}
+
+function setEquippedTrail(id) {
+  try { localStorage.setItem("wizard_equipped_trail", id); } catch(e) {}
+  updateTrailsUI();
+}
+
+function getUnlockedTrails() {
+  try {
+    const raw = localStorage.getItem("wizard_unlocked_trails");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return ["stardust"];
+}
+
+function unlockTrail(id) {
+  const unlocked = getUnlockedTrails();
+  if (!unlocked.includes(id)) {
+    unlocked.push(id);
+    try { localStorage.setItem("wizard_unlocked_trails", JSON.stringify(unlocked)); } catch(e) {}
+  }
+  updateTrailsUI();
+}
+
+function isTrailUnlocked(id) {
+  if (id === "stardust") return true;
+  return getUnlockedTrails().includes(id);
+}
+
+function updateTrailsUI() {
+  const equipped = getEquippedTrail();
+  document.querySelectorAll("#customize-trail-grid .custom-card[data-trail]").forEach(card => {
+    const id = card.dataset.trail;
+    const isUnlocked = isTrailUnlocked(id);
+    const isEq = id === equipped;
+    const statusEl = card.querySelector(".custom-card-status");
+
+    card.classList.toggle("unlocked", isUnlocked);
+    card.classList.toggle("locked", !isUnlocked);
+    card.classList.toggle("equipped", isEq);
+    card.classList.toggle("active", isEq);
+
+    if (statusEl) {
+      if (isEq) {
+        statusEl.textContent = "✓ Em Uso";
+      } else if (isUnlocked) {
+        statusEl.textContent = "Equipar";
+      } else {
+        const p = SPELL_TRAILS_DATA[id]?.price || 500;
+        statusEl.textContent = `🔒 ${p.toLocaleString()} 🪙`;
+      }
+    }
+  });
+}
+
+function setupSpellTrails() {
+  updateTrailsUI();
+
+  // Binds na aba de personalização
+  document.querySelectorAll("#customize-trail-grid .custom-card[data-trail]").forEach(card => {
+    bindAction(card, () => {
+      const id = card.dataset.trail;
+      const trail = SPELL_TRAILS_DATA[id];
+      if (!trail) return;
+
+      if (isTrailUnlocked(id)) {
+        setEquippedTrail(id);
+        showToast(`✨ Rastro mágico equipado: ${trail.name}`);
+        if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playPiecePlaced) ArcaneAudio.playPiecePlaced();
+      } else {
+        const coins = getPlayerCoins();
+        if (coins >= trail.price) {
+          spendPlayerCoins(trail.price);
+          unlockTrail(id);
+          setEquippedTrail(id);
+          showAchievementToast("🎉 RASTRO DESBLOQUEADO!", `Você desbloqueou ${trail.name}!`, "✨");
+          if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) ArcaneAudio.playQuestRewardChime();
+        } else {
+          showToast(`🔒 Moedas insuficientes! ${trail.name} custa ${trail.price} 🪙 (Você tem ${coins} 🪙).`);
+        }
+      }
+    }, "trailCard_" + card.dataset.trail);
+  });
+
+  // Emissor de partículas de rastro 3D em tempo real
+  const lastPositions = new Map();
+  function emitTrailsLoop() {
+    requestAnimationFrame(emitTrailsLoop);
+    const game = window._WIZARD_GAME;
+    if (!game || !game.scene || !game.ts || !game.ut) return;
+
+    const trailId = getEquippedTrail();
+    const trailData = SPELL_TRAILS_DATA[trailId] || SPELL_TRAILS_DATA.stardust;
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = game.ut[r] && game.ut[r][c];
+        if (!piece || !piece.position) continue;
+
+        const id = `${r}_${c}_${piece.id || ''}`;
+        const prev = lastPositions.get(id);
+        if (prev) {
+          const dx = piece.position.x - prev.x;
+          const dy = piece.position.y - prev.y;
+          const dz = piece.position.z - prev.z;
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+          // Se a peça estiver se movendo pelo ar
+          if (dist > 0.035) {
+            const count = 2;
+            for (let k = 0; k < count; k++) {
+              const col = trailData.colors[Math.floor(Math.random() * trailData.colors.length)];
+              const geom = new game.hs(0.03 + Math.random() * 0.03, 0);
+              const mat = new game.Kt({
+                color: col,
+                emissive: col,
+                emissiveIntensity: 1.2,
+                transparent: true,
+                opacity: 0.9
+              });
+              const mesh = new game.Se(geom, mat);
+              mesh.position.copy(piece.position);
+              mesh.position.x += (Math.random() - 0.5) * 0.2;
+              mesh.position.y += (Math.random() - 0.5) * 0.2;
+              mesh.position.z += (Math.random() - 0.5) * 0.2;
+              game.scene.add(mesh);
+
+              game.ts.push({
+                mesh,
+                life: 0.5 + Math.random() * 0.3,
+                maxLife: 0.8,
+                vel: new game.C((Math.random() - 0.5) * 0.6, 0.4 + Math.random() * 0.8, (Math.random() - 0.5) * 0.6),
+                rot: new game.C(Math.random() * 8, Math.random() * 8, Math.random() * 8)
+              });
+            }
+          }
+        }
+        lastPositions.set(id, { x: piece.position.x, y: piece.position.y, z: piece.position.z });
+      }
+    }
+  }
+  emitTrailsLoop();
+}
+
+// ==============================================================
+// V1.5.3: 2. TRILHA DE RECOMPENSAS / PASSE ARCANO (TROPHY ROAD)
+// ==============================================================
+const ARCANE_PASS_TIERS = [
+  { level: 1, crowns: 5, reward: "🪙 +100 Moedas", type: "coins", val: 100 },
+  { level: 2, crowns: 12, reward: "🧩 +20% Fragmento Ametista", type: "skin_pct", skin: "amethyst", val: 20 },
+  { level: 3, crowns: 20, reward: "🪙 +200 Moedas", type: "coins", val: 200 },
+  { level: 4, crowns: 30, reward: "⚡ Rastro 'Raio Arcano'", type: "trail", trail: "lightning" },
+  { level: 5, crowns: 42, reward: "🧩 +25% Rubi + 150 🪙", type: "combo", skin: "ruby", val: 25, coins: 150 },
+  { level: 6, crowns: 55, reward: "🪙 +250 Moedas", type: "coins", val: 250 },
+  { level: 7, crowns: 70, reward: "🧩 +20% Fragmento Esmeralda", type: "skin_pct", skin: "emerald", val: 20 },
+  { level: 8, crowns: 88, reward: "🔥 Rastro 'Chamas Vulcânicas'", type: "trail", trail: "flame" },
+  { level: 9, crowns: 108, reward: "🪙 +350 Moedas", type: "coins", val: 350 },
+  { level: 10, crowns: 130, reward: "🧩 +25% Espectral + 300 🪙", type: "combo", skin: "spectral", val: 25, coins: 300 },
+  { level: 11, crowns: 155, reward: "🪙 +400 Moedas", type: "coins", val: 400 },
+  { level: 12, crowns: 182, reward: "👻 Rastro 'Névoa Ectoplasmática'", type: "trail", trail: "ectoplasm" },
+  { level: 13, crowns: 212, reward: "🧩 +20% Fragmento Celestial", type: "skin_pct", skin: "celestial", val: 20 },
+  { level: 14, crowns: 245, reward: "🪙 +500 Moedas", type: "coins", val: 500 },
+  { level: 15, crowns: 280, reward: "🧩 +25% Fragmento Ouro Imperial", type: "skin_pct", skin: "gold", val: 25 },
+  { level: 16, crowns: 320, reward: "🪙 +600 Moedas", type: "coins", val: 600 },
+  { level: 17, crowns: 365, reward: "🧩 +20% Fragmento Cyber", type: "skin_pct", skin: "cyber", val: 20 },
+  { level: 18, crowns: 415, reward: "🪙 +800 Moedas", type: "coins", val: 800 },
+  { level: 19, crowns: 470, reward: "👑 +30% Fragmento Místico Coringa", type: "skin_pct", skin: "any", val: 30 },
+  { level: 20, crowns: 530, reward: "👑 +1.500 🪙 + Título 'Soberano do Tabuleiro'", type: "combo", coins: 1500, title: "Soberano do Tabuleiro" }
+];
+
+function getArcaneCrowns() {
+  const val = parseInt(localStorage.getItem("wizard_arcane_crowns"), 10);
+  return isNaN(val) ? 0 : val;
+}
+
+function addArcaneCrowns(amount) {
+  const current = getArcaneCrowns();
+  const next = current + amount;
+  try { localStorage.setItem("wizard_arcane_crowns", next); } catch(e) {}
+  showToast(`👑 +${amount} Coroas Arcanas! Total: ${next} 👑`);
+  updateArcanePassUI();
+}
+
+function getClaimedPassTiers() {
+  try {
+    const raw = localStorage.getItem("wizard_pass_claimed");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return [];
+}
+
+function claimPassTier(level) {
+  const tier = ARCANE_PASS_TIERS.find(t => t.level === level);
+  if (!tier) return;
+  const crowns = getArcaneCrowns();
+  if (crowns < tier.crowns) return;
+
+  const claimed = getClaimedPassTiers();
+  if (claimed.includes(level)) return;
+
+  claimed.push(level);
+  try { localStorage.setItem("wizard_pass_claimed", JSON.stringify(claimed)); } catch(e) {}
+
+  if (tier.type === "coins") {
+    addPlayerCoins(tier.val, `Passe Arcano Nível ${tier.level}`);
+  } else if (tier.type === "skin_pct") {
+    addSkinProgress(tier.skin, tier.val);
+  } else if (tier.type === "trail") {
+    unlockTrail(tier.trail);
+    setEquippedTrail(tier.trail);
+    showAchievementToast("🎉 NOVO RASTRO DESBLOQUEADO!", tier.reward, "✨");
+  } else if (tier.type === "combo") {
+    if (tier.coins) addPlayerCoins(tier.coins, `Passe Arcano Nível ${tier.level}`);
+    if (tier.skin && tier.val) addSkinProgress(tier.skin, tier.val);
+    if (tier.title) showAchievementToast("👑 TÍTULO LENDÁRIO!", `Você conquistou: ${tier.title}`, "👑");
+  }
+
+  if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
+    ArcaneAudio.playQuestRewardChime();
+  }
+
+  showToast(`🎁 Recompensa Nível ${level} resgatada!`);
+  updateArcanePassUI();
+}
+
+function updateArcanePassUI() {
+  const crowns = getArcaneCrowns();
+  const claimed = getClaimedPassTiers();
+
+  const crownsDisplay = document.getElementById("pass-crowns-display");
+  if (crownsDisplay) crownsDisplay.textContent = `${crowns.toLocaleString()} 👑`;
+
+  const nextTier = ARCANE_PASS_TIERS.find(t => t.crowns > crowns) || ARCANE_PASS_TIERS[ARCANE_PASS_TIERS.length - 1];
+  const currentTier = ARCANE_PASS_TIERS.slice().reverse().find(t => t.crowns <= crowns) || { level: 0, crowns: 0 };
+
+  const lvlTag = document.getElementById("pass-level-tag");
+  if (lvlTag) lvlTag.textContent = `Nível Atual: ${currentTier.level} / 20`;
+
+  const nextLbl = document.getElementById("pass-next-tier-label");
+  if (nextLbl) nextLbl.textContent = crowns >= 530 ? "Passo Máximo Conquistado!" : `Próximo Nível: ${nextTier.crowns} 👑`;
+
+  const fill = document.getElementById("pass-progress-fill");
+  if (fill) {
+    const pct = Math.min(100, Math.round((crowns / 530) * 100));
+    fill.style.width = `${pct}%`;
+  }
+
+  const container = document.getElementById("pass-road-list-container");
+  if (container) {
+    container.innerHTML = ARCANE_PASS_TIERS.map(t => {
+      const isClaimed = claimed.includes(t.level);
+      const canClaim = crowns >= t.crowns && !isClaimed;
+      const isLocked = crowns < t.crowns;
+
+      let cardClass = "pass-tier-card";
+      let btnLabel = "Coletar";
+      let btnClass = "pass-claim-btn can-claim";
+
+      if (isClaimed) {
+        cardClass += " claimed";
+        btnLabel = "✓ Resgatado";
+        btnClass = "pass-claim-btn already-claimed";
+      } else if (isLocked) {
+        cardClass += " locked";
+        btnLabel = `${t.crowns} 👑`;
+        btnClass = "pass-claim-btn locked";
+      } else {
+        cardClass += " unlocked-claimable";
+      }
+
+      return `
+        <div class="${cardClass}">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="pass-tier-badge">NV ${t.level}</span>
+            <div style="text-align: left;">
+              <div style="font-size: 0.86rem; font-weight: 800; color: #fff;">${t.reward}</div>
+              <div style="font-size: 0.72rem; color: #b3a7cb;">Requer ${t.crowns} Coroas Arcanas</div>
+            </div>
+          </div>
+          <button type="button" class="${btnClass}" onclick="claimPassTier(${t.level})" ${isLocked || isClaimed ? "disabled" : ""}>
+            ${btnLabel}
+          </button>
+        </div>
+      `;
+    }).join("");
+  }
+}
+window.claimPassTier = claimPassTier;
+
+window._openArcanePass = function() {
+  const m = document.getElementById("arcane-pass-modal");
+  if (m) {
+    m.classList.remove("hidden");
+    m.style.setProperty("display", "flex", "important");
+    updateArcanePassUI();
+  }
+};
+
+window._closeArcanePass = function() {
+  const m = document.getElementById("arcane-pass-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
+
+function setupArcanePass() {
+  const btnWebPass = document.getElementById("btn-web-arcane-pass");
+  if (btnWebPass) {
+    bindAction(btnWebPass, () => window._openArcanePass(), "openArcanePassBtn");
+  }
+  updateArcanePassUI();
+}
+
+// ==============================================================
+// V1.5.3: 3. ANÁLISE MÁGICA DO GRIMÓRIO (MATCH REVIEW)
+// ==============================================================
+function setupEnhancedGameReview() {
+  const btnOpen = document.getElementById("btn-open-magus-review");
+  if (btnOpen) {
+    bindAction(btnOpen, () => window._openMagusReview(), "openMagusReviewBtn");
+  }
+}
+
+window._openMagusReview = function() {
+  const m = document.getElementById("game-review-modal");
+  if (!m) return;
+
+  const accW = document.getElementById("analysis-acc-w")?.textContent || "88%";
+  const accNum = parseInt(accW, 10) || 88;
+  const brilliant = document.getElementById("analysis-brilliant-count")?.textContent || "2";
+  const great = document.getElementById("analysis-great-count")?.textContent || "12";
+  const blunders = document.getElementById("analysis-blunder-count")?.textContent || "0";
+  const solid = Math.max(4, 20 - parseInt(great, 10));
+
+  const elAcc = document.getElementById("review-acc-display");
+  const elBri = document.getElementById("review-brilliant-count");
+  const elGr = document.getElementById("review-great-count");
+  const elSol = document.getElementById("review-solid-count");
+  const elBlu = document.getElementById("review-blunder-count");
+  const elSpeech = document.getElementById("review-magus-speech");
+
+  if (elAcc) elAcc.textContent = `${accNum}%`;
+  if (elBri) elBri.textContent = brilliant;
+  if (elGr) elGr.textContent = great;
+  if (elSol) elSol.textContent = solid;
+  if (elBlu) elBlu.textContent = blunders;
+
+  if (elSpeech) {
+    if (accNum >= 90) {
+      elSpeech.textContent = `"Visão magistral digna dos grandes sábios da torre! Você executou ${brilliant} lances brilhantes e dominou o adversário sem misericórdia."`;
+    } else if (accNum >= 75) {
+      elSpeech.textContent = `"Combate equilibrado e tenso! O domínio do centro garantiu o triunfo, com jogadas táticas inspiradas nos pergaminhos antigos."`;
+    } else {
+      elSpeech.textContent = `"Uma batalha caótica e feroz! Cada lance foi disputado palmo a palmo sobre o tabuleiro arcano."`;
+    }
+  }
+
+  const btnWa = document.getElementById("btn-share-review-whatsapp");
+  if (btnWa) {
+    btnWa.onclick = () => {
+      const shareText = `🧠 Análise Mágica no Wizard's Chess 3D:\n⭐ Precisão Arcana: ${accNum}%\n💎 Lances Brilhantes: ${brilliant}\n⚔️ Melhores Lances: ${great}\nJogue agora: https://artcostamayrinck-hash.github.io/wizard-chess/`;
+      window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(shareText), "_blank");
+    };
+  }
+
+  m.classList.remove("hidden");
+  m.style.setProperty("display", "flex", "important");
+};
+
+window._closeMagusReview = function() {
+  const m = document.getElementById("game-review-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
+
+// ==============================================================
+// V1.5.3: 4. CORRIDA DOS ENIGMAS / PUZZLE RUSH (3 MINUTOS)
+// ==============================================================
+const PUZZLE_RUSH_DATA = [
+  { id: 1, title: "1. O Pastor Relâmpago", task: "Mate em 1 com a Rainha!", options: ["Dxf7#", "Dxe5+", "Bc4", "Cf3"], correct: 0 },
+  { id: 2, title: "2. O Corredor Trancado", task: "A Torre sela o Rei de Obsidiana!", options: ["Te1", "Td8#", "g3", "h4"], correct: 1 },
+  { id: 3, title: "3. O Salto Duplo do Cavalo", task: "Garfo Real de Cavalo no Rei e Rainha!", options: ["Cxf7+", "Cc7+", "Cg5", "Cd6"], correct: 1 },
+  { id: 4, title: "4. A Cravada Fatal do Bispo", task: "Bispo crava a Rainha na diagonal!", options: ["Bg5", "Bxf7+", "Bb5", "Bc4"], correct: 0 },
+  { id: 5, title: "5. A Foice das Sombras", task: "Mate em 1 na oitava fileira!", options: ["Ta8#", "Te8+", "Dxf6", "De7"], correct: 0 },
+  { id: 6, title: "6. O Sacrifício do Bispo em h7", task: "Quebre o roque com o clássico sacrifício!", options: ["Bxh7+", "Cg5", "Dh5", "h4"], correct: 0 },
+  { id: 7, title: "7. O Garfo Triplo Rúnico", task: "Cavalo ataca Rei, Torre e Bispo simultaneamente!", options: ["Cc7+", "Ce7+", "Cf6+", "Cd6+"], correct: 1 },
+  { id: 8, title: "8. A Bateria de Damas Cósmica", task: "Dama e Torre invadem h7 com mate imparável!", options: ["Dxh7#", "Th1", "Dg4", "f4"], correct: 0 },
+  { id: 9, title: "9. O Desvio do Defensor", task: "Desvie a Torre para dar xeque-mate!", options: ["Dxd8+", "Te8#", "Cg5", "b3"], correct: 1 },
+  { id: 10, title: "10. O Mate Anastásia", task: "Cavalo e Torre confinam o Rei na coluna 'h'!", options: ["Th5#", "Ce7#", "Dxh7+", "Txh7#"], correct: 0 }
+];
+
+const PuzzleRushManager = {
+  active: false,
+  timer: 180,
+  lives: 3,
+  score: 0,
+  currentIndex: 0,
+  intervalId: null,
+
+  start() {
+    this.active = true;
+    this.timer = 180;
+    this.lives = 3;
+    this.score = 0;
+    this.currentIndex = 0;
+
+    const summaryBox = document.getElementById("rush-summary-box");
+    const activeStage = document.getElementById("rush-active-stage");
+    const btnStart = document.getElementById("btn-start-rush");
+
+    if (summaryBox) summaryBox.classList.add("hidden");
+    if (activeStage) activeStage.classList.remove("hidden");
+    if (btnStart) btnStart.classList.add("hidden");
+
+    clearInterval(this.intervalId);
+    this.intervalId = setInterval(() => this.tick(), 1000);
+    this.updateHUD();
+    this.loadPuzzle(0);
+  },
+
+  tick() {
+    this.timer--;
+    this.updateHUD();
+    if (this.timer <= 0) {
+      this.endGame("⏱️ O tempo esgotou!");
+    }
+  },
+
+  updateHUD() {
+    const tEl = document.getElementById("rush-timer-display");
+    const sEl = document.getElementById("rush-score-display");
+    const lEl = document.getElementById("rush-lives-display");
+
+    if (tEl) {
+      const min = String(Math.floor(this.timer / 60)).padStart(2, '0');
+      const sec = String(this.timer % 60).padStart(2, '0');
+      tEl.textContent = `⏱️ ${min}:${sec}`;
+    }
+    if (sEl) sEl.textContent = `🏆 ${this.score} Acertos`;
+    if (lEl) {
+      let hearts = "";
+      for (let i = 0; i < 3; i++) hearts += i < this.lives ? "❤️" : "🖤";
+      lEl.textContent = hearts;
+    }
+  },
+
+  loadPuzzle(idx) {
+    const p = PUZZLE_RUSH_DATA[idx % PUZZLE_RUSH_DATA.length];
+    const titleEl = document.getElementById("rush-puzzle-title");
+    const taskEl = document.getElementById("rush-puzzle-task");
+    const grid = document.getElementById("rush-options-grid");
+
+    if (titleEl) titleEl.textContent = `${this.score + 1}. ${p.title}`;
+    if (taskEl) taskEl.textContent = p.task;
+
+    if (grid) {
+      grid.innerHTML = p.options.map((opt, i) => `
+        <button type="button" class="promo-btn" style="padding: 12px; font-size: 0.95rem; font-weight: 800; background: rgba(255, 109, 0, 0.18); border-color: rgba(255, 109, 0, 0.6); color: #ffd700;" onclick="PuzzleRushManager.selectAnswer(${i})">
+          ${opt}
+        </button>
+      `).join("");
+    }
+  },
+
+  selectAnswer(choice) {
+    if (!this.active) return;
+    const p = PUZZLE_RUSH_DATA[this.currentIndex % PUZZLE_RUSH_DATA.length];
+
+    if (choice === p.correct) {
+      this.score++;
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playPuzzleSuccessChime) {
+        ArcaneAudio.playPuzzleSuccessChime();
+      }
+      showToast(`✨ Acerto tático! Streak: ${this.score}`);
+      this.currentIndex++;
+      this.updateHUD();
+      this.loadPuzzle(this.currentIndex);
+    } else {
+      this.lives--;
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playPieceLoss) {
+        ArcaneAudio.playPieceLoss();
+      }
+      showToast("❌ Erro no lance! Você perdeu 1 vida.");
+      this.updateHUD();
+      if (this.lives <= 0) {
+        this.endGame("💀 Suas 3 vidas se esgotaram!");
+      }
+    }
+  },
+
+  endGame(reason) {
+    this.active = false;
+    clearInterval(this.intervalId);
+
+    const activeStage = document.getElementById("rush-active-stage");
+    const summaryBox = document.getElementById("rush-summary-box");
+    const finalScore = document.getElementById("rush-final-score");
+    const recordScore = document.getElementById("rush-record-score");
+    const rewardsEarned = document.getElementById("rush-rewards-earned");
+
+    const high = parseInt(localStorage.getItem("wizard_rush_record") || "0", 10);
+    const isNewRecord = this.score > high;
+    const best = Math.max(high, this.score);
+    try { localStorage.setItem("wizard_rush_record", best); } catch(e) {}
+
+    const highDisplay = document.getElementById("puzzle-rush-high-score-display");
+    if (highDisplay) highDisplay.textContent = best;
+
+    const coinsEarned = this.score * 15;
+    const crownsEarned = Math.floor(this.score / 2);
+    if (coinsEarned > 0) addPlayerCoins(coinsEarned, "Corrida dos Enigmas");
+    if (crownsEarned > 0) addArcaneCrowns(crownsEarned);
+
+    if (activeStage) activeStage.classList.add("hidden");
+    if (summaryBox) {
+      summaryBox.classList.remove("hidden");
+      if (finalScore) finalScore.textContent = this.score;
+      if (recordScore) recordScore.textContent = isNewRecord ? `${best} (NOVO RECORDE!)` : best;
+      if (rewardsEarned) rewardsEarned.textContent = `+${coinsEarned} 🪙 Moedas • +${crownsEarned} 👑 Coroas Arcanas`;
+    }
+
+    showAchievementToast("🏁 CORRIDA FINALIZADA!", `Você acertou ${this.score} enigmas! (+${coinsEarned} 🪙)`, "⏱️");
+  }
+};
+window.PuzzleRushManager = PuzzleRushManager;
+
+window._openPuzzleRush = function() {
+  const m = document.getElementById("puzzle-rush-modal");
+  if (m) {
+    m.classList.remove("hidden");
+    m.style.setProperty("display", "flex", "important");
+    const best = localStorage.getItem("wizard_rush_record") || "0";
+    const highDisplay = document.getElementById("puzzle-rush-high-score-display");
+    if (highDisplay) highDisplay.textContent = best;
+  }
+};
+
+window._closePuzzleRush = function() {
+  const m = document.getElementById("puzzle-rush-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+    if (PuzzleRushManager.active) {
+      clearInterval(PuzzleRushManager.intervalId);
+      PuzzleRushManager.active = false;
+    }
+  }
+};
+
+function setupPuzzleRush() {
+  const btnStart = document.getElementById("btn-start-rush");
+  if (btnStart) {
+    bindAction(btnStart, () => PuzzleRushManager.start(), "startPuzzleRushBtn");
+  }
+  const btnPlayAgain = document.getElementById("btn-rush-play-again");
+  if (btnPlayAgain) {
+    bindAction(btnPlayAgain, () => PuzzleRushManager.start(), "playAgainPuzzleRushBtn");
+  }
+}
+
+// ==============================================================
+// V1.5.3: 7. EXPANSÃO DA CAMPANHA (MUNDO 2: O DOMÍNIO DOS TITÃS)
+// ==============================================================
+function setupCampaignWorld2() {
+  [5, 6, 7, 8].forEach(id => {
+    const btn = document.getElementById("btn-boss-challenge-" + id);
+    if (btn) {
+      bindAction(btn, () => launchBossBattle(id), "launchBoss_" + id);
+    }
+  });
+  updateCampaignUI();
+}

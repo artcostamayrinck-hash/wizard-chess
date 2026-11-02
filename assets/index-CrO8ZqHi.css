@@ -6680,3 +6680,270 @@ kbd {
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 22px rgba(147, 51, 234, 0.4) !important;
 }
+
+/* ==========================================================================
+   V1.5.3: MODAIS COM Z-INDEX SUPREMO (PASSE ARCANO, PUZZLE RUSH, REVIEW)
+   ========================================================================== */
+#arcane-pass-modal,
+#puzzle-rush-modal,
+#game-review-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 100050 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(10, 8, 16, 0.94) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  pointer-events: auto !important;
+}
+
+#arcane-pass-modal.hidden,
+#puzzle-rush-modal.hidden,
+#game-review-modal.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
+
+#arcane-pass-modal .modal-content,
+#puzzle-rush-modal .modal-content,
+#game-review-modal .modal-content {
+  position: relative !important;
+  z-index: 100060 !important;
+  pointer-events: auto !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+/* ==========================================================================
+   V1.5.3: RASTROS MÁGICOS DAS PEÇAS (SPELL TRAILS)
+   ========================================================================== */
+.trail-stardust-preview {
+  background: radial-gradient(circle at 30% 30%, #ffd700 0%, #ff8c00 60%, #3a2500 100%) !important;
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+}
+
+.trail-flame-preview {
+  background: radial-gradient(circle at 30% 30%, #ff3d00 0%, #d50000 60%, #370000 100%) !important;
+  box-shadow: 0 0 14px rgba(255, 61, 0, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+}
+
+.trail-ectoplasm-preview {
+  background: radial-gradient(circle at 30% 30%, #00f5d4 0%, #00b4d8 60%, #002830 100%) !important;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+}
+
+.trail-lightning-preview {
+  background: radial-gradient(circle at 30% 30%, #c084fc 0%, #7c3aed 60%, #200045 100%) !important;
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+}
+
+/* ==========================================================================
+   V1.5.3: TRILHA ARCANA (ARCANE PASS ROAD)
+   ========================================================================== */
+.pass-progress-header {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(20, 15, 30, 0.95)) !important;
+  border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+  border-radius: 16px !important;
+  padding: 12px 16px !important;
+  margin-bottom: 14px !important;
+}
+
+.pass-road-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  max-height: 52vh !important;
+  overflow-y: auto !important;
+  padding-right: 4px !important;
+}
+
+.pass-tier-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(22, 18, 36, 0.85) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px !important;
+  padding: 10px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.pass-tier-card.unlocked-claimable {
+  border-color: #ffd700 !important;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(30, 22, 50, 0.95)) !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.25) !important;
+}
+
+.pass-tier-card.claimed {
+  opacity: 0.65 !important;
+  border-color: rgba(0, 245, 212, 0.4) !important;
+}
+
+.pass-tier-badge {
+  font-size: 0.75rem !important;
+  font-weight: 900 !important;
+  color: #ffd700 !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  padding: 3px 8px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.pass-claim-btn {
+  padding: 6px 14px !important;
+  border-radius: 10px !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.pass-claim-btn.can-claim {
+  background: linear-gradient(135deg, #ffd700, #ff9100) !important;
+  color: #111 !important;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4) !important;
+  animation: pulseGold 2s infinite ease-in-out !important;
+}
+
+.pass-claim-btn.already-claimed {
+  background: rgba(0, 245, 212, 0.15) !important;
+  color: #00f5d4 !important;
+  border: 1px solid rgba(0, 245, 212, 0.5) !important;
+  cursor: default !important;
+}
+
+.pass-claim-btn.locked {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #888 !important;
+  cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   V1.5.3: CORRIDA DOS ENIGMAS (PUZZLE RUSH)
+   ========================================================================== */
+.rush-hud-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  padding: 10px 14px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  margin-bottom: 12px !important;
+}
+
+.rush-timer-pill {
+  font-size: 1.1rem !important;
+  font-weight: 900 !important;
+  color: #ff3d00 !important;
+  font-family: monospace, sans-serif !important;
+}
+
+.rush-score-pill {
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  color: #ffd700 !important;
+}
+
+.rush-lives-pill {
+  font-size: 1.1rem !important;
+  letter-spacing: 2px !important;
+}
+
+/* ==========================================================================
+   V1.5.3: ANÁLISE DO GRIMÓRIO (REVIEW PÓS-PARTIDA)
+   ========================================================================== */
+.accuracy-circle-box {
+  width: 90px !important;
+  height: 90px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(0, 245, 212, 0.2) 0%, rgba(10, 20, 30, 0.9) 100%) !important;
+  border: 3px solid #00f5d4 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 10px auto !important;
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.35) !important;
+}
+
+.accuracy-pct-big {
+  font-size: 1.4rem !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+}
+
+.accuracy-sub-label {
+  font-size: 0.62rem !important;
+  color: #00f5d4 !important;
+  text-transform: uppercase !important;
+  font-weight: 800 !important;
+}
+
+.analysis-magus-speech {
+  font-style: italic !important;
+  font-size: 0.85rem !important;
+  color: #e1bee7 !important;
+  background: rgba(147, 51, 234, 0.15) !important;
+  border-left: 3px solid #c084fc !important;
+  padding: 8px 12px !important;
+  border-radius: 0 10px 10px 0 !important;
+  margin: 12px 0 !important;
+}
+
+/* ==========================================================================
+   V1.5.3: SELETOR DE MUNDOS DA CAMPANHA (MUNDO 1 & MUNDO 2)
+   ========================================================================== */
+.campaign-world-selector {
+  display: flex !important;
+  gap: 8px !important;
+  margin-bottom: 14px !important;
+}
+
+.campaign-world-tab {
+  flex: 1 !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-align: center !important;
+}
+
+.campaign-world-tab.active {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(20, 10, 35, 0.9)) !important;
+  border: 1.5px solid #c084fc !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.3) !important;
+}
+
+.campaign-world-tab:not(.active) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #b3a7cb !important;
+}
