@@ -84,7 +84,16 @@ async function run() {
         const artifact = artData.artifacts && artData.artifacts[0];
         if (artifact) {
           console.log(`Downloading artifact: ${artifact.name} (${artifact.size_in_bytes} bytes)...`);
-          await downloadFile(artifact.archive_download_url, 'artifact.zip');
+          for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+              await downloadFile(artifact.archive_download_url, 'artifact.zip');
+              break;
+            } catch (err) {
+              console.warn(`Download attempt ${attempt} failed (${err.message}). Retrying...`);
+              if (attempt === 3) throw err;
+              await new Promise(r => setTimeout(r, 3000));
+            }
+          }
           console.log('Downloaded artifact.zip! Extracting...');
           
           execSync('powershell -Command "Expand-Archive -Path artifact.zip -DestinationPath temp_apk -Force; Copy-Item temp_apk/app-debug.apk ./app-debug.apk -Force; Copy-Item temp_apk/app-debug.apk C:\\Users\\mayri\\Downloads\\app-debug.apk -Force; Remove-Item -Recurse -Force temp_apk; Remove-Item artifact.zip"');
