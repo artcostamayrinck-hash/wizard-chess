@@ -4300,13 +4300,15 @@ html, body {
     max-width: 340px !important;
   }
   .home-actions-col {
-    gap: clamp(10px, 1.8vh, 16px) !important;
+    gap: 7px !important;
   }
   .orange-action-card,
   .pink-action-card,
-  .indigo-action-card {
-    padding: clamp(12px, 1.8vh, 16px) 16px !important;
-    min-height: clamp(60px, 8.5vh, 76px) !important;
+  .indigo-action-card,
+  .blue-action-card,
+  .purple-action-card {
+    padding: 8px 12px !important;
+    min-height: 44px !important;
   }
   #menu-view-battle .photo2-grid {
     gap: 16px !important;
@@ -4561,12 +4563,12 @@ div.menu-photo2-modal {
   pointer-events: none !important;
 }
 
-/* Cards de ação amplos e confortáveis */
+/* Cards de ação compactos e elegantes */
 .home-actions-col {
   width: 100% !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: clamp(10px, 2vh, 16px) !important;
+  gap: 7px !important;
   box-sizing: border-box !important;
   position: relative !important;
   z-index: 10 !important;
@@ -4575,11 +4577,13 @@ div.menu-photo2-modal {
 
 .orange-action-card,
 .pink-action-card,
-.indigo-action-card {
+.indigo-action-card,
+.blue-action-card,
+.purple-action-card {
   width: 100% !important;
-  min-height: clamp(58px, 8.5vh, 74px) !important;
-  padding: clamp(11px, 1.8vh, 16px) 16px !important;
-  border-radius: 18px !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  border-radius: 14px !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
   pointer-events: auto !important;
@@ -5405,9 +5409,9 @@ kbd {
   }
 
   .home-actions-col {
-    flex: 1.25 !important;
-    max-width: 480px !important;
-    gap: 14px !important;
+    flex: 1.1 !important;
+    max-width: 380px !important;
+    gap: 8px !important;
   }
 
   .menu-subview {
@@ -7447,4 +7451,122 @@ kbd {
   font-size: 10px !important;
   font-weight: 900 !important;
   color: #ffffff !important;
+}
+
+
+/* ==========================================================================
+   CARDS DE AÇÃO COMPACTOS DA TELA INICIAL (REDUÇÃO DE TAMANHO / "DIMINUA")
+   ========================================================================== */
+.home-actions-col {
+  width: 100% !important;
+  max-width: 380px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+}
+
+.blue-action-card,
+.orange-action-card,
+.purple-action-card,
+.rpg-card-battle,
+.rpg-card-challenges,
+.rpg-card-campaign {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  min-height: 44px !important;
+  max-height: 52px !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.blue-action-card:hover,
+.orange-action-card:hover,
+.purple-action-card:hover,
+.rpg-card-battle:hover,
+.rpg-card-challenges:hover,
+.rpg-card-campaign:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
+.rpg-card-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 8px !important;
+}
+
+.rpg-card-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.rpg-card-icon-box {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.rpg-card-icon-box .material-symbols-rounded {
+  font-size: 17px !important;
+}
+
+.rpg-card-text {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  justify-content: center !important;
+}
+
+.rpg-card-title {
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.rpg-card-subtitle {
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  opacity: 0.88 !important;
+  margin-top: 1px !important;
+  line-height: 1.1 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.rpg-card-arrow,
+.rpg-card-arrow .material-symbols-rounded {
+  font-size: 18px !important;
+  color: #ffffff !important;
+}
+
+.rpg-card-badge-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  flex-shrink: 0 !important;
 }
