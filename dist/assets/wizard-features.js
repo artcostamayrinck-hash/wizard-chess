@@ -135,11 +135,13 @@ function addSkinProgress(skin, amount) {
 function updateCoinsUI() {
   const coins = getPlayerCoins();
   const topCoins = document.getElementById("player-coins-top");
+  const topCrowns = document.getElementById("player-crowns-top");
   const profileCoins = document.getElementById("profile-coins-display");
   const customizeCoins = document.getElementById("customize-coins-display");
   const rewardTotal = document.getElementById("reward-coins-total");
 
   if (topCoins) topCoins.textContent = coins.toLocaleString();
+  if (topCrowns && typeof getArcaneCrowns === "function") topCrowns.textContent = getArcaneCrowns().toLocaleString();
   if (profileCoins) profileCoins.textContent = coins.toLocaleString();
   if (customizeCoins) customizeCoins.textContent = coins.toLocaleString();
   if (rewardTotal) rewardTotal.textContent = `${coins.toLocaleString()} 🪙`;
@@ -1798,7 +1800,15 @@ function setupStartMenuGrid() {
   const btnNavHome = document.getElementById("btn-nav-home");
   const btnNavChallenges = document.getElementById("btn-nav-challenges");
   const btnNavAch = document.getElementById("btn-nav-achievements");
+  const btnNavProfile = document.getElementById("btn-nav-profile");
   const btnNavSettings = document.getElementById("btn-nav-settings");
+  const btnTopCrowns = document.getElementById("btn-top-crowns");
+
+  // Chest / Reward Slots
+  const homeSlotChest = document.getElementById("home-slot-chest");
+  const homeSlotWheel = document.getElementById("home-slot-wheel");
+  const homeSlotPass = document.getElementById("home-slot-pass");
+  const homeSlotTourney = document.getElementById("home-slot-tourney");
 
   // Top Buttons
   const btnTopSettings = document.getElementById("btn-top-settings");
@@ -1840,6 +1850,7 @@ function setupStartMenuGrid() {
     if (viewName === "home" && btnNavHome) btnNavHome.classList.add("active");
     if (viewName === "customize" && btnNavCustomize) btnNavCustomize.classList.add("active");
     if (viewName === "challenges" && btnNavChallenges) btnNavChallenges.classList.add("active");
+    if (viewName === "settings" && btnNavSettings) btnNavSettings.classList.add("active");
 
     const modalContent = document.querySelector("#start-menu .modal-content");
     if (modalContent) modalContent.scrollTop = 0;
@@ -1942,6 +1953,62 @@ function setupStartMenuGrid() {
       switchSubView("settings");
       updateSettingsUI();
     });
+  }
+  if (btnNavProfile) {
+    bindAction(btnNavProfile, () => {
+      if (typeof window._openProfileModal === "function") {
+        window._openProfileModal();
+      } else {
+        const pm = document.getElementById("profile-modal");
+        if (pm) pm.classList.remove("hidden");
+      }
+    });
+  }
+
+  // 4.1. Coroas Arcanas no Topo
+  if (btnTopCrowns) {
+    bindAction(btnTopCrowns, () => {
+      if (typeof window._openArcanePass === "function") window._openArcanePass();
+    });
+  }
+
+  // 4.2. Fileira de 4 Slots de Baús e Recompensas (Golf Clash Style)
+  function claimDailyChest() {
+    const lastClaim = parseInt(localStorage.getItem("wizard_last_daily_chest") || "0", 10);
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    if (now - lastClaim > ONE_DAY) {
+      localStorage.setItem("wizard_last_daily_chest", now.toString());
+      addPlayerCoins(150, "Baú Diário Grátis");
+      if (typeof addArcaneCrowns === "function") addArcaneCrowns(2);
+      updateCoinsUI();
+      showAchievementToast("🎁 BAÚ DIÁRIO ABERTO!", "+150 Moedas e +2 Coroas Arcanas coletadas!", "🎁");
+    } else {
+      const remainingMs = ONE_DAY - (now - lastClaim);
+      const hours = Math.floor(remainingMs / (60 * 60 * 1000));
+      const mins = Math.floor((remainingMs % (60 * 60 * 1000)) / (60 * 1000));
+      showToast(`⏳ Próximo Baú Diário em ${hours}h ${mins}min! (Ou ganhe moedas na Loja)`);
+    }
+  }
+  window._claimDailyChest = claimDailyChest;
+
+  if (homeSlotChest) {
+    bindAction(homeSlotChest, claimDailyChest, "claimDailyChestFromSlot");
+  }
+  if (homeSlotWheel) {
+    bindAction(homeSlotWheel, () => {
+      if (typeof window._openFortuneWheel === "function") window._openFortuneWheel();
+    }, "openWheelFromSlot");
+  }
+  if (homeSlotPass) {
+    bindAction(homeSlotPass, () => {
+      if (typeof window._openArcanePass === "function") window._openArcanePass();
+    }, "openPassFromSlot");
+  }
+  if (homeSlotTourney) {
+    bindAction(homeSlotTourney, () => {
+      if (typeof window._openTournamentModal === "function") window._openTournamentModal();
+    }, "openTourneyFromSlot");
   }
 
   // 5. Botões do Topo e do Cavalo
@@ -5322,6 +5389,8 @@ function addArcaneCrowns(amount) {
   const current = getArcaneCrowns();
   const next = current + amount;
   try { localStorage.setItem("wizard_arcane_crowns", next); } catch(e) {}
+  const topCrowns = document.getElementById("player-crowns-top");
+  if (topCrowns) topCrowns.textContent = next.toLocaleString();
   showToast(`👑 +${amount} Coroas Arcanas! Total: ${next} 👑`);
   updateArcanePassUI();
 }

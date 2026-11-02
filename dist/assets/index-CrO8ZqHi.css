@@ -7160,3 +7160,291 @@ kbd {
   color: #f48fb1 !important;
   border-color: rgba(233, 30, 99, 0.3) !important;
 }
+
+
+/* ==========================================================================
+   ATUALIZAÇÃO DE INTERFACE V1.5.6 (INSPIRADA NO GOLF CLASH / FOTO DE REFERÊNCIA)
+   ========================================================================== */
+
+/* 1. Card 1 da Tela Inicial: Azul / Ciano "Jogar" (Comece a Batalha) */
+.blue-action-card {
+  background: linear-gradient(135deg, #0288d1 0%, #01579b 60%, #002f6c 100%) !important;
+  border: 1.5px solid rgba(129, 212, 250, 0.7) !important;
+  box-shadow: 0 8px 24px rgba(2, 136, 209, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border-radius: 18px !important;
+  padding: 12px 14px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+.blue-action-card:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 28px rgba(2, 136, 209, 0.65) !important;
+}
+
+.blue-glow {
+  background: rgba(3, 169, 244, 0.28) !important;
+  border: 1px solid rgba(129, 212, 250, 0.5) !important;
+  box-shadow: 0 0 10px rgba(3, 169, 244, 0.5) !important;
+}
+
+.blue-arrow {
+  color: #81d4fa !important;
+}
+
+.blue-action-card *,
+.orange-action-card *,
+.purple-action-card * {
+  pointer-events: none !important;
+}
+
+/* 2. Top Bar: Pílula de Coroas Arcanas e Plus Badge */
+.rpg-top-crowns {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 10px 4px 8px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.25) 0%, rgba(136, 14, 79, 0.4) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.6) !important;
+  color: #f8bbd0 !important;
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 2px 10px rgba(233, 30, 99, 0.3) !important;
+  transition: transform 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.rpg-top-crowns:hover {
+  transform: scale(1.05) !important;
+}
+
+.top-pill-plus {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: #4caf50 !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  margin-left: 2px !important;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.8) !important;
+}
+
+/* 3. Fileira com 4 Slots de Baús e Recompensas */
+.home-chest-slots {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  margin: 8px auto 10px !important;
+  padding: 0 2px !important;
+  box-sizing: border-box !important;
+  z-index: 20 !important;
+}
+
+.home-chest-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: linear-gradient(180deg, rgba(30, 24, 46, 0.95) 0%, rgba(15, 10, 25, 0.98) 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 14px !important;
+  padding: 6px 4px 8px !important;
+  min-height: 94px !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.home-chest-card:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.7) !important;
+}
+
+.chest-card-tag {
+  font-size: 8.5px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.chest-card-tag.blue-tag {
+  background: rgba(3, 169, 244, 0.25) !important;
+  color: #81d4fa !important;
+  border: 1px solid rgba(129, 212, 250, 0.45) !important;
+}
+
+.chest-card-tag.purple-tag {
+  background: rgba(171, 71, 188, 0.25) !important;
+  color: #e1bee7 !important;
+  border: 1px solid rgba(225, 190, 231, 0.45) !important;
+}
+
+.chest-card-tag.gold-tag {
+  background: rgba(255, 215, 0, 0.25) !important;
+  color: #ffe082 !important;
+  border: 1px solid rgba(255, 215, 0, 0.45) !important;
+}
+
+.chest-card-tag.orange-tag {
+  background: rgba(255, 112, 67, 0.25) !important;
+  color: #ffccbc !important;
+  border: 1px solid rgba(255, 112, 67, 0.45) !important;
+}
+
+.chest-card-icon-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 3px 0 !important;
+}
+
+.chest-emoji {
+  font-size: 26px !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)) !important;
+}
+
+.chest-card-title {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #f3e5f5 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  margin-bottom: 5px !important;
+}
+
+.chest-card-action {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  width: 90% !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+}
+
+.chest-card-action.blue-btn {
+  background: linear-gradient(135deg, #0288d1, #01579b) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(2, 136, 209, 0.5) !important;
+}
+
+.chest-card-action.purple-btn {
+  background: linear-gradient(135deg, #ab47bc, #6a1b9a) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(171, 71, 188, 0.5) !important;
+}
+
+.chest-card-action.gold-btn {
+  background: linear-gradient(135deg, #ffd700, #ff8f00) !important;
+  color: #1a1202 !important;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5) !important;
+}
+
+.chest-card-action.orange-btn {
+  background: linear-gradient(135deg, #ff7043, #d84315) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(255, 112, 67, 0.5) !important;
+}
+
+/* 4. Barra Inferior de Navegação (5 Itens com Aba Central Destacada e Elevada) */
+.rpg-bottom-nav {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(14, 10, 22, 0.98) !important;
+  border: 1px solid rgba(245, 197, 107, 0.3) !important;
+  border-radius: 22px !important;
+  padding: 4px 6px !important;
+  margin-top: auto !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85) !important;
+  position: relative !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #a79cb8 !important;
+  cursor: pointer !important;
+  padding: 6px 2px !important;
+  border-radius: 12px !important;
+  transition: all 0.18s ease !important;
+  min-width: 0 !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item .rpg-nav-icon .material-symbols-rounded {
+  font-size: 21px !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item .rpg-nav-label {
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px !important;
+  white-space: nowrap !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.active {
+  color: #ffd700 !important;
+  background: rgba(245, 197, 107, 0.12) !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.active .material-symbols-rounded {
+  color: #ffd700 !important;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.75) !important;
+}
+
+/* Aba Central Elevada "Principal" estilo Golf Clash */
+.rpg-bottom-nav .rpg-nav-item.nav-item-center {
+  position: relative !important;
+  top: -8px !important;
+  background: radial-gradient(circle at 50% 30%, rgba(34, 197, 94, 0.4), rgba(15, 25, 18, 0.98)) !important;
+  border: 2px solid #ffd700 !important;
+  border-radius: 18px !important;
+  padding: 8px 6px 6px !important;
+  box-shadow: 0 4px 18px rgba(255, 215, 0, 0.4), 0 0 12px rgba(34, 197, 94, 0.5) !important;
+  transform: scale(1.06) !important;
+  color: #ffd700 !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.nav-item-center .rpg-nav-icon .material-symbols-rounded {
+  font-size: 24px !important;
+  color: #ffd700 !important;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) !important;
+}
+
+.rpg-bottom-nav .rpg-nav-item.nav-item-center .rpg-nav-label {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+}

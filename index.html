@@ -2596,9 +2596,15 @@
           </div>
 
           <div class="rpg-top-right-group">
+            <div class="rpg-top-crowns" id="btn-top-crowns" title="Coroas Arcanas (Toque para ver a Trilha de Recompensas)" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openArcanePass) window._openArcanePass();">
+              <span class="crown-icon">👑</span>
+              <span id="player-crowns-top">0</span>
+              <span class="top-pill-plus">+</span>
+            </div>
             <div class="rpg-top-coins" id="btn-top-coins" title="Moedas Arcanas (Toque para ir à Loja)" style="cursor: pointer; pointer-events: auto !important;">
               <span class="coin-icon">🪙</span>
               <span id="player-coins-top">100</span>
+              <span class="top-pill-plus">+</span>
             </div>
             <div class="rpg-top-profile" id="btn-top-profile" title="Perfil e Estatísticas" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openProfileModal) window._openProfileModal(event);">
               <div class="rpg-top-avatar" id="top-player-avatar">🧙‍♂️</div>
@@ -2610,8 +2616,7 @@
           </div>
         </div>
 
-        <!-- Banner Discreto de Estatísticas -->
-        <!-- Pílula Web: Atalhos de Teclado, Missões, Roleta & Baixar App Android -->
+        <!-- Banner Discreto de Eventos (Trilha, Torneios, Missões e Roda da Fortuna) -->
         <div class="web-platform-banner" id="web-platform-banner">
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-arcane-pass" title="Ver Trilha de Recompensas e Passe Arcano" onclick="if(window._openArcanePass) window._openArcanePass();">
             <span style="font-size: 16px;">👑</span>
@@ -2621,10 +2626,6 @@
             <span style="font-size: 16px;">🏆</span>
             <span>Torneios</span>
           </button>
-          <button type="button" class="web-banner-pill highlight-purple" id="btn-web-trophies" title="Sala de Troféus & Conquistas" onclick="if(window._openAchievementsModal) window._openAchievementsModal();">
-            <span style="font-size: 16px;">🏛️</span>
-            <span>Conquistas</span>
-          </button>
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-daily-quests" title="Ver Missões Diárias do Grimório">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 16px;">task_alt</span>
             <span>Missões Diárias</span>
@@ -2633,10 +2634,6 @@
             <span class="material-symbols-rounded" style="color: #c084fc; font-size: 16px;">casino</span>
             <span>Roda da Fortuna</span>
           </button>
-          <a href="./app-debug.apk" download="wizard-chess-3d.apk" class="web-banner-pill highlight" id="btn-web-download-apk" title="Baixar o aplicativo oficial para celular Android (APK)">
-            <span class="material-symbols-rounded">android</span>
-            <span>Baixar App (APK)</span>
-          </a>
         </div>
 
         <div class="stats-banner-mini" title="Suas Estatísticas Salvas">
@@ -2661,18 +2658,38 @@
             </button>
           </div>
 
-          <!-- Lado Direito: Cards de Ação Verticais -->
+          <!-- Lado Direito: Cards de Ação Verticais (Estilo Imagem de Referência - 3 Cards Principais) -->
           <div class="home-actions-col">
-            <!-- Card Laranja: Comece a Batalha -->
-            <button type="button" class="rpg-card-battle orange-action-card" id="btn-hero-battle">
+            <!-- Card 1 (Azul/Ciano): Jogar / Comece a Batalha -->
+            <button type="button" class="rpg-card-battle blue-action-card" id="btn-hero-battle">
               <div class="rpg-card-inner">
                 <div class="rpg-card-left">
-                  <div class="rpg-card-icon-box orange-glow">
+                  <div class="rpg-card-icon-box blue-glow">
                     <span class="material-symbols-rounded">swords</span>
                   </div>
                   <div class="rpg-card-text">
                     <span class="rpg-card-title">Comece a Batalha</span>
                     <span class="rpg-card-subtitle">vs IA • 2 Jogadores • Online</span>
+                  </div>
+                </div>
+                <div class="rpg-card-badge-right">
+                  <div class="rpg-card-arrow blue-arrow">
+                    <span class="material-symbols-rounded">arrow_forward</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <!-- Card 2 (Laranja): Desafios Arcanos -->
+            <button type="button" class="rpg-card-challenges orange-action-card" id="btn-card-challenges">
+              <div class="rpg-card-inner">
+                <div class="rpg-card-left">
+                  <div class="rpg-card-icon-box orange-glow">
+                    <span class="material-symbols-rounded">extension</span>
+                  </div>
+                  <div class="rpg-card-text">
+                    <span class="rpg-card-title">Desafios Arcanos</span>
+                    <span class="rpg-card-subtitle">Quebra-cabeças • Puzzle Rush</span>
                   </div>
                 </div>
                 <div class="rpg-card-arrow orange-arrow">
@@ -2681,34 +2698,16 @@
               </div>
             </button>
 
-            <!-- Card Rosa: Aba dos Desafios (Quebra-cabeças) -->
-            <button type="button" class="rpg-card-challenges pink-action-card" id="btn-card-challenges">
-              <div class="rpg-card-inner">
-                <div class="rpg-card-left">
-                  <div class="rpg-card-icon-box pink-glow">
-                    <span class="material-symbols-rounded">extension</span>
-                  </div>
-                  <div class="rpg-card-text">
-                    <span class="rpg-card-title">Desafios Arcanos</span>
-                    <span class="rpg-card-subtitle">Quebra-cabeças táticos</span>
-                  </div>
-                </div>
-                <div class="rpg-card-arrow pink-arrow">
-                  <span class="material-symbols-rounded">arrow_forward</span>
-                </div>
-              </div>
-            </button>
-
-            <!-- Card Roxo: Campanha Arcana (Duelo contra Chefes) -->
+            <!-- Card 3 (Roxo/Esmeralda): Campanha Arcana -->
             <button type="button" class="rpg-card-campaign purple-action-card" id="btn-card-campaign">
               <div class="rpg-card-inner">
                 <div class="rpg-card-left">
                   <div class="rpg-card-icon-box purple-glow">
-                    <span class="material-symbols-rounded">swords</span>
+                    <span class="material-symbols-rounded">fort</span>
                   </div>
                   <div class="rpg-card-text">
                     <span class="rpg-card-title">Campanha Arcana</span>
-                    <span class="rpg-card-subtitle">Duelo contra os 4 Arquimagos</span>
+                    <span class="rpg-card-subtitle">Duelo contra os 8 Arquimagos</span>
                   </div>
                 </div>
                 <div class="rpg-card-arrow purple-arrow">
@@ -2716,28 +2715,53 @@
                 </div>
               </div>
             </button>
-
-            <!-- Card Tutorial: Academia Arcana -->
-            <button type="button" class="rpg-card-tutorial indigo-action-card" id="btn-card-tutorial">
-              <div class="rpg-card-inner">
-                <div class="rpg-card-left">
-                  <div class="rpg-card-icon-box indigo-glow">
-                    <span class="material-symbols-rounded">school</span>
-                  </div>
-                  <div class="rpg-card-text">
-                    <span class="rpg-card-title">Modo Tutorial</span>
-                    <span class="rpg-card-subtitle">Academia Arcana de Xadrez</span>
-                  </div>
-                </div>
-                <div class="rpg-card-arrow indigo-arrow">
-                  <span class="material-symbols-rounded">arrow_forward</span>
-                </div>
-              </div>
-            </button>
           </div>
         </div>
 
-        <!-- Barra Inferior: Personalizar (Azul) • Principal • Desafios • Conquistas • Ajustes -->
+        <!-- 4 Slots de Recompensas e Baús (Estilo Referência Golf Clash) -->
+        <div class="home-chest-slots" id="home-chest-slots">
+          <!-- Slot 1: Baú Diário -->
+          <button type="button" class="home-chest-card chest-slot-daily" id="home-slot-chest" title="Toque para abrir o Baú Diário Grátis">
+            <div class="chest-card-tag blue-tag">DIÁRIO</div>
+            <div class="chest-card-icon-wrap">
+              <span class="chest-emoji">🎁</span>
+            </div>
+            <div class="chest-card-title">Baú Grátis</div>
+            <div class="chest-card-action blue-btn">ABRIR</div>
+          </button>
+
+          <!-- Slot 2: Roda da Fortuna -->
+          <button type="button" class="home-chest-card chest-slot-wheel" id="home-slot-wheel" title="Toque para girar a Roda da Fortuna Arcana" onclick="if(window._openFortuneWheel) window._openFortuneWheel();">
+            <div class="chest-card-tag purple-tag">GRÁTIS</div>
+            <div class="chest-card-icon-wrap">
+              <span class="chest-emoji">🎡</span>
+            </div>
+            <div class="chest-card-title">Roda Fortuna</div>
+            <div class="chest-card-action purple-btn">GIRAR</div>
+          </button>
+
+          <!-- Slot 3: Trilha de Coroas -->
+          <button type="button" class="home-chest-card chest-slot-pass" id="home-slot-pass" title="Toque para abrir a Trilha de Recompensas Arcana" onclick="if(window._openArcanePass) window._openArcanePass();">
+            <div class="chest-card-tag gold-tag">TEMPORADA</div>
+            <div class="chest-card-icon-wrap">
+              <span class="chest-emoji">👑</span>
+            </div>
+            <div class="chest-card-title">Passe Arcano</div>
+            <div class="chest-card-action gold-btn">VER TRILHA</div>
+          </button>
+
+          <!-- Slot 4: Torneio dos Magos -->
+          <button type="button" class="home-chest-card chest-slot-tourney" id="home-slot-tourney" title="Toque para disputar Torneios Mata-Mata" onclick="if(window._openTournamentModal) window._openTournamentModal();">
+            <div class="chest-card-tag orange-tag">COPAS</div>
+            <div class="chest-card-icon-wrap">
+              <span class="chest-emoji">🏆</span>
+            </div>
+            <div class="chest-card-title">Torneios</div>
+            <div class="chest-card-action orange-btn">DISPUTAR</div>
+          </button>
+        </div>
+
+        <!-- Barra Inferior de Navegação (5 Itens: Personalizar • Desafios • Principal • Perfil • Ajustes) -->
         <nav class="rpg-bottom-nav">
           <button type="button" class="rpg-nav-item nav-highlight-blue" id="btn-nav-customize" title="Personalizar o Tabuleiro e as Peças">
             <div class="rpg-nav-icon">
@@ -2746,18 +2770,33 @@
             <span class="rpg-nav-label">Personalizar</span>
           </button>
 
-          <button type="button" class="rpg-nav-item active nav-item-center" id="btn-nav-home" title="Início">
+          <button type="button" class="rpg-nav-item" id="btn-nav-challenges" title="Desafios Arcanos">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">extension</span>
+            </div>
+            <span class="rpg-nav-label">Desafios</span>
+          </button>
+
+          <button type="button" class="rpg-nav-item active nav-item-center" id="btn-nav-home" title="Página Principal">
+            <div class="rpg-nav-center-glow"></div>
             <div class="rpg-nav-icon">
               <span class="material-symbols-rounded">castle</span>
             </div>
             <span class="rpg-nav-label">Principal</span>
           </button>
 
-          <button type="button" class="rpg-nav-item" id="btn-nav-challenges" title="Desafios Arcanos">
+          <button type="button" class="rpg-nav-item" id="btn-nav-profile" title="Perfil e Conquistas do Jogador" onclick="if(window._openProfileModal) window._openProfileModal(event);">
             <div class="rpg-nav-icon">
-              <span class="material-symbols-rounded">extension</span>
+              <span class="material-symbols-rounded">person</span>
             </div>
-            <span class="rpg-nav-label">Desafios</span>
+            <span class="rpg-nav-label">Perfil</span>
+          </button>
+
+          <button type="button" class="rpg-nav-item" id="btn-nav-settings" title="Configurações e Baixar App">
+            <div class="rpg-nav-icon">
+              <span class="material-symbols-rounded">settings</span>
+            </div>
+            <span class="rpg-nav-label">Ajustes</span>
           </button>
         </nav>
       </div>
@@ -3812,6 +3851,23 @@
               <span class="material-symbols-rounded" style="font-size: 1rem;">send</span>
             </button>
           </div>
+
+          <!-- 8. Baixar App Oficial Android (APK) -->
+          <div class="photo2-setting-card" style="border: 1.5px solid rgba(74, 222, 128, 0.45); background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(15, 30, 20, 0.85) 100%); box-shadow: 0 4px 18px rgba(34, 197, 94, 0.15);">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #4ade80; background: rgba(74, 222, 128, 0.18);">
+                <span class="material-symbols-rounded">android</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title" style="color: #4ade80;">Baixar App Oficial (APK)</span>
+                <span class="settings-desc">Instale o jogo nativo diretamente no seu celular Android</span>
+              </div>
+            </div>
+            <a href="./app-debug.apk" download="wizard-chess-3d.apk" id="btn-settings-download-apk" class="photo2-action-btn" style="background: #22c55e; color: #0f172a; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 12px;">
+              <span>Baixar APK</span>
+              <span class="material-symbols-rounded" style="font-size: 1.05rem;">download</span>
+            </a>
+          </div>
         </div>
 
         <div class="settings-footer-wrap" style="margin-top: 14px; width: 100%;">
@@ -3820,7 +3876,7 @@
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.5.3</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.5.6</span>
           </div>
         </div>
       </div>
