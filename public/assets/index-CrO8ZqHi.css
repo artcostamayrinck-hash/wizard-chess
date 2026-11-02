@@ -4522,36 +4522,41 @@ div.menu-photo2-modal {
   box-sizing: border-box !important;
 }
 
-/* O Cavalo Místico ganha escala ampla para preencher o centro da tela */
+/* O Cavalo Místico centralizado e enquadrado com os cards */
 .home-hero-split {
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: space-evenly !important;
+  justify-content: center !important;
   align-items: center !important;
   width: 100% !important;
-  margin: 6px 0 10px !important;
+  max-width: 380px !important;
+  margin: 4px auto !important;
+  gap: 8px !important;
   box-sizing: border-box !important;
 }
 
 .home-knight-col {
   width: 100% !important;
-  max-width: 360px !important;
+  max-width: 380px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  margin: 0 auto !important;
   cursor: pointer !important;
   pointer-events: auto !important;
 }
 
 .home-knight-svg-wrap {
-  width: 100% !important;
-  max-width: 340px !important;
-  height: clamp(210px, 34vh, 350px) !important;
+  width: 120px !important;
+  height: 120px !important;
+  max-width: 130px !important;
+  max-height: 130px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  margin: 0 auto !important;
   pointer-events: auto !important;
   cursor: pointer !important;
 }
@@ -5374,44 +5379,58 @@ kbd {
   }
 
   #start-menu .modal-content.menu-photo2-modal {
-    max-width: 1040px !important;
-    width: 95% !important;
+    max-width: 430px !important;
+    width: 100% !important;
     height: 94vh !important;
     max-height: 94vh !important;
     margin: auto !important;
-    padding: 24px 32px !important;
+    padding: 12px 16px !important;
     border-radius: 28px !important;
-    border: 1px solid rgba(208, 188, 255, 0.2) !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(208, 188, 255, 0.08) !important;
-    background: rgba(13, 10, 19, 0.94) !important;
+    border: 1.5px solid rgba(245, 197, 107, 0.35) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(147, 51, 234, 0.2) !important;
+    background: rgba(13, 10, 19, 0.96) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
 
-  /* Divisão Lado a Lado (Split Hero) em telas de PC */
+  /* Layout Centralizado e Enquadrado */
   .home-hero-split {
-    flex-direction: row !important;
-    gap: 36px !important;
+    flex-direction: column !important;
+    gap: 8px !important;
     align-items: center !important;
     justify-content: center !important;
-    max-width: 940px !important;
-    margin: 8px auto !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: auto auto !important;
   }
 
   .home-knight-col {
-    flex: 1 !important;
+    width: 100% !important;
     max-width: 380px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
   }
 
   .home-knight-svg-wrap {
-    width: 260px !important;
-    height: 260px !important;
+    width: 120px !important;
+    height: 120px !important;
+    max-width: 130px !important;
+    max-height: 130px !important;
+    margin: 0 auto !important;
   }
 
   .home-actions-col {
-    flex: 1.1 !important;
+    width: 100% !important;
     max-width: 380px !important;
-    gap: 8px !important;
+    gap: 6px !important;
+    margin: 0 auto !important;
   }
 
   .menu-subview {
@@ -7569,4 +7588,161 @@ kbd {
   align-items: center !important;
   gap: 4px !important;
   flex-shrink: 0 !important;
+}
+
+
+/* ==========================================================================
+   ENQUADRAMENTO E CENTRALIZAÇÃO TOTAL DA TELA INICIAL
+   ========================================================================== */
+#start-menu {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: radial-gradient(circle at 50% 25%, #161126 0%, #08060f 100%) !important;
+  overflow: hidden !important;
+}
+
+#start-menu .modal-content.menu-photo2-modal,
+#start-menu .modal-content,
+.menu-photo2-modal {
+  width: 100% !important;
+  max-width: 420px !important;
+  height: 100% !important;
+  max-height: 100dvh !important;
+  margin: 0 auto !important;
+  padding: 8px 12px 10px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+@media (min-width: 520px) and (min-height: 650px) {
+  #start-menu .modal-content.menu-photo2-modal {
+    max-height: 94vh !important;
+    border-radius: 26px !important;
+    border: 1.5px solid rgba(245, 197, 107, 0.35) !important;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(147, 51, 234, 0.25) !important;
+    background: rgba(14, 10, 22, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    padding: 14px 16px 14px !important;
+  }
+}
+
+#menu-view-home.active {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 380px !important;
+  height: 100% !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  gap: 4px !important;
+}
+
+.rpg-top-bar {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 0 auto 4px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.web-platform-banner {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 2px auto 4px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.stats-banner-mini {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 0 auto 4px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: 11px !important;
+}
+
+.home-hero-split {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: auto auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.home-knight-col {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.home-knight-svg-wrap {
+  width: 120px !important;
+  height: 120px !important;
+  max-width: 125px !important;
+  max-height: 125px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.knight-model-badge {
+  margin: 4px auto 0 !important;
+}
+
+.home-actions-col {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.home-chest-slots {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 6px auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.rpg-bottom-nav {
+  width: 100% !important;
+  max-width: 370px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
