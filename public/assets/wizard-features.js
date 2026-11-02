@@ -2685,12 +2685,18 @@ function setupAdaptiveFullscreenAndLayout() {
 
       const b = document.body;
       if (b) {
-        b.classList.toggle('is-landscape', aspect >= 1);
-        b.classList.toggle('is-portrait', aspect < 1);
-        b.classList.toggle('is-ultra-tall', aspect < 0.48);
-        b.classList.toggle('is-compact-phone', width <= 360 || height <= 640);
-        b.classList.toggle('is-tablet', width >= 601 && width <= 1024);
-        b.classList.toggle('is-desktop', width > 1024);
+        const isDesktop = width > 1024;
+        const isTablet = width >= 600 && width <= 1024 && height >= 580;
+        const isLandscapeMobile = (aspect >= 1.15 || (window.screen && window.screen.orientation && window.screen.orientation.type && window.screen.orientation.type.includes('landscape'))) && height <= 580;
+        const isCompact = (width <= 380 || height <= 680) && !isLandscapeMobile;
+        const isUltraTall = aspect < 0.49 && height >= 840;
+
+        b.classList.toggle('is-landscape', isLandscapeMobile);
+        b.classList.toggle('is-portrait', !isLandscapeMobile && aspect < 1);
+        b.classList.toggle('is-ultra-tall', isUltraTall);
+        b.classList.toggle('is-compact-phone', isCompact);
+        b.classList.toggle('is-tablet', isTablet);
+        b.classList.toggle('is-desktop', isDesktop);
       }
     } finally {
       isUpdating = false;
