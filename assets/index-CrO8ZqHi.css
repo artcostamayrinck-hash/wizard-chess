@@ -7742,9 +7742,69 @@ kbd {
   max-width: 400px !important;
   margin: 0 auto clamp(2px, 0.6vh, 5px) !important;
   display: flex !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
   align-items: center !important;
+  position: relative !important;
+  min-height: clamp(34px, 4.6vh, 40px) !important;
   flex-shrink: 0 !important;
+}
+
+.rpg-top-bar .rpg-top-icon-btn {
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+}
+
+.rpg-top-resources-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(6px, 1.8vw, 10px) !important;
+}
+
+/* Nome do Jogo Descido para Destaque Central */
+.home-game-title-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin: clamp(2px, 0.4vh, 5px) auto clamp(2px, 0.4vh, 4px) !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  flex-shrink: 0 !important;
+}
+
+.home-game-title-wrap .rpg-mini-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: clamp(8px, 1.1vh, 9.5px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  color: #f5c56b !important;
+  opacity: 0.9 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 1px !important;
+}
+
+.home-game-title-wrap .rpg-mini-brand .material-symbols-rounded {
+  font-size: clamp(11px, 1.3vh, 13px) !important;
+}
+
+.home-game-title-wrap .rpg-top-game-title {
+  font-family: 'Cinzel', serif, Georgia !important;
+  font-size: clamp(1.15rem, 2.3vh, 1.45rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: clamp(1px, 0.4vw, 2px) !important;
+  margin: 0 !important;
+  background: linear-gradient(180deg, #ffffff 25%, #f5c56b 75%, #d4a03e 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 12px rgba(245, 197, 107, 0.45)) !important;
+  line-height: 1.15 !important;
 }
 
 .web-platform-banner {
@@ -8114,6 +8174,16 @@ kbd {
     margin-bottom: 1px !important;
   }
 
+  .home-game-title-wrap {
+    margin: 1px auto !important;
+  }
+  .home-game-title-wrap .rpg-top-game-title {
+    font-size: 0.95rem !important;
+  }
+  .home-game-title-wrap .rpg-mini-brand {
+    font-size: 7.5px !important;
+  }
+
   .rpg-currency-pill {
     padding: 1px 6px !important;
     font-size: 0.74rem !important;
@@ -8348,6 +8418,7 @@ body.device-mobile-compact .home-chest-card {
 
   #menu-view-home.active,
   .rpg-top-bar,
+  .home-game-title-wrap,
   .web-platform-banner,
   .stats-banner-mini,
   .home-hero-split,
@@ -8434,6 +8505,7 @@ body.device-mobile-compact .home-chest-card {
   }
 
   .rpg-top-bar,
+  .home-game-title-wrap,
   .home-hero-split,
   .home-chest-slots,
   .rpg-bottom-nav {
@@ -8516,7 +8588,8 @@ body.device-mobile-compact .home-chest-card {
   }
 
   .stats-banner-mini,
-  .web-platform-banner {
+  .web-platform-banner,
+  .home-game-title-wrap {
     display: none !important;
   }
 
@@ -8663,6 +8736,7 @@ body.device-mobile-landscape .web-platform-banner {
 
   #menu-view-home.active,
   .rpg-top-bar,
+  .home-game-title-wrap,
   .stats-banner-mini,
   .home-hero-split,
   .home-chest-slots,

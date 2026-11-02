@@ -2581,21 +2581,13 @@
       <!-- VIEW 1: PÁGINA INICIAL (Layout Inspirado na Referência)         -->
       <!-- ============================================================== -->
       <div id="menu-view-home" class="menu-subview active">
-        <!-- Topo: Configurações (Esq) + Título (Centro) + Perfil/Nível (Dir) -->
+        <!-- Topo: Configurações (Esq) + Coroas, Moedas e Perfil Centralizados Acima -->
         <div class="rpg-top-bar">
           <button type="button" class="rpg-top-icon-btn" id="btn-top-settings" title="Configurações">
             <span class="material-symbols-rounded">settings</span>
           </button>
-          
-          <div class="rpg-top-title-wrap">
-            <div class="rpg-mini-brand">
-              <span class="material-symbols-rounded">castle</span>
-              <span>CATEDRAL ARCANA</span>
-            </div>
-            <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
-          </div>
 
-          <div class="rpg-top-right-group">
+          <div class="rpg-top-resources-center" id="rpg-top-resources-center">
             <div class="rpg-top-crowns" id="btn-top-crowns" title="Coroas Arcanas (Toque para ver a Trilha de Recompensas)" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openArcanePass) window._openArcanePass();">
               <span class="crown-icon">👑</span>
               <span id="player-crowns-top">0</span>
@@ -2614,6 +2606,15 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Nome do Jogo Descido para Destaque Central -->
+        <div class="home-game-title-wrap" id="home-game-title-wrap">
+          <div class="rpg-mini-brand">
+            <span class="material-symbols-rounded">castle</span>
+            <span>CATEDRAL ARCANA</span>
+          </div>
+          <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
         </div>
 
         <!-- Banner de Eventos: Missões Diárias e Roda da Fortuna -->
