@@ -2617,6 +2617,14 @@
             <span style="font-size: 16px;">👑</span>
             <span>Trilha Arcana</span>
           </button>
+          <button type="button" class="web-banner-pill highlight-gold" id="btn-web-tournaments" title="Disputar o Torneio dos Arquimagos" onclick="if(window._openTournamentModal) window._openTournamentModal();">
+            <span style="font-size: 16px;">🏆</span>
+            <span>Torneios</span>
+          </button>
+          <button type="button" class="web-banner-pill highlight-purple" id="btn-web-trophies" title="Sala de Troféus & Conquistas" onclick="if(window._openAchievementsModal) window._openAchievementsModal();">
+            <span style="font-size: 16px;">🏛️</span>
+            <span>Conquistas</span>
+          </button>
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-daily-quests" title="Ver Missões Diárias do Grimório">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 16px;">task_alt</span>
             <span>Missões Diárias</span>
@@ -3037,13 +3045,13 @@
               <span class="custom-card-check">✓</span>
             </button>
 
-            <button type="button" class="custom-card locked" data-arena="cosmos">
+            <button type="button" class="custom-card" data-arena="cosmos">
               <div class="custom-card-color cosmos-preview"></div>
               <div class="custom-card-info">
-                <span class="custom-card-name">Observatório Cósmico</span>
+                <span class="custom-card-name">Observatório Cósmico 🌌</span>
                 <span class="custom-card-detail">Estrelas & Nebulosas</span>
               </div>
-              <span class="custom-card-status" id="arena-status-cosmos">🔒 400 🪙</span>
+              <span class="custom-card-check">✓</span>
             </button>
 
             <button type="button" class="custom-card locked" data-arena="forest">
@@ -3309,6 +3317,21 @@
           </div>
           <button type="button" class="promo-btn" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 900; background: linear-gradient(135deg, #ff3d00, #ff9100); color: #fff; border: none; border-radius: 12px; pointer-events: none; box-shadow: 0 2px 10px rgba(255,61,0,0.5);">
             INICIAR
+          </button>
+        </div>
+
+        <!-- CARD TORNEIO DOS ARQUIMAGOS (COPA MATA-MATA) -->
+        <div class="tournament-entry-card" id="btn-open-tournament-card" onclick="if(window._openTournamentModal) window._openTournamentModal();" style="cursor: pointer; margin-bottom: 14px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.22) 0%, rgba(30, 20, 5, 0.95) 100%); border: 1.5px solid rgba(255, 215, 0, 0.7); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.25);">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 2.2rem; line-height: 1;">🏆</span>
+            <div style="text-align: left;">
+              <div style="font-size: 0.92rem; font-weight: 800; color: #ffd700;">TORNEIO DOS ARQUIMAGOS</div>
+              <div style="font-size: 0.75rem; color: #ffe082;">Copa Eliminatória Mata-Mata • Conquiste a Grande Taça!</div>
+              <div style="font-size: 0.72rem; color: #81c784; margin-top: 3px;">Taças Conquistadas: <span id="tournament-trophies-count">0</span> 🏆</div>
+            </div>
+          </div>
+          <button type="button" class="promo-btn" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; border: none; border-radius: 12px; pointer-events: none; box-shadow: 0 2px 10px rgba(255,215,0,0.5);">
+            DISPUTAR
           </button>
         </div>
 
@@ -3595,6 +3618,7 @@
               <button class="toggle-btn active" data-arena="cathedral">Catedral</button>
               <button class="toggle-btn" data-arena="inferno">Cripta Infernal</button>
               <button class="toggle-btn" data-arena="frost">Templo de Gelo</button>
+              <button class="toggle-btn" data-arena="cosmos">Observatório Cósmico 🌌</button>
             </div>
           </div>
 
@@ -4547,6 +4571,7 @@
           <button class="toggle-btn active" data-arena="cathedral"></button>
           <button class="toggle-btn" data-arena="inferno"></button>
           <button class="toggle-btn" data-arena="frost"></button>
+          <button class="toggle-btn" data-arena="cosmos"></button>
         </div>
         <div id="pause-skin-group">
           <button class="toggle-btn active" data-skin="classic"></button>
@@ -4648,16 +4673,23 @@
         <span class="material-symbols-rounded" style="font-size: 1.1rem;">emoji_events</span>
         <span>GLÓRIA ARCANA</span>
       </div>
-      <h3 style="font-size: 1.35rem; margin: 0 0 6px; letter-spacing: 1px; color: #f5c56b; font-family: 'Cinzel', serif;">CONQUISTAS DO MAGO</h3>
+      <h3 style="font-size: 1.35rem; margin: 0 0 6px; letter-spacing: 1px; color: #f5c56b; font-family: 'Cinzel', serif;">SALA DE TROFÉUS & CONQUISTAS</h3>
       <p style="color: #d0bcff; font-size: 0.82rem; margin: 0 0 10px; line-height: 1.35;">
-        Desbloqueie feitos heroicos para ascender na hierarquia dos magos.
+        Complete feitos épicos para colecionar taças, moedas e coroas arcanas.
       </p>
 
-      <button id="btn-unlock-all-achievements" class="promo-btn" style="width: 100%; margin-bottom: 12px; padding: 10px 14px; font-size: 0.84rem; font-weight: 700; border-radius: 12px; background: linear-gradient(135deg, rgba(245, 197, 107, 0.22), rgba(0, 245, 212, 0.22)); border: 1px solid rgba(245, 197, 107, 0.55); color: #f5c56b; cursor: pointer; transition: all 0.2s ease;">
-        ⚡ Desbloquear Todos os Feitos (+425 XP)
-      </button>
+      <div class="achievements-stats-bar" id="achievements-stats-bar">
+        <div class="ach-stat-pill">
+          <span>🏆</span>
+          <span><span id="ach-unlocked-count">0</span> / <span id="ach-total-count">16</span> Conquistas</span>
+        </div>
+        <div class="ach-stat-pill" style="color: #f48fb1;">
+          <span>👑</span>
+          <span id="ach-crowns-count">0 Coroas</span>
+        </div>
+      </div>
 
-      <div class="achievements-list" id="achievements-container">
+      <div class="achievements-list" id="achievements-container" style="max-height: 50vh; overflow-y: auto;">
         <!-- Itens injetados via JS -->
       </div>
 
@@ -4996,6 +5028,47 @@
       <button type="button" class="promo-btn" id="btn-share-review-whatsapp" style="width: 100%; background: #25d366; color: #000; font-weight: 900;">
         📱 Compartilhar Precisão no WhatsApp
       </button>
+    </div>
+  </div>
+
+  <!-- MODAL: TORNEIO DOS ARQUIMAGOS (COPA MATA-MATA) -->
+  <div id="tournament-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 540px; width: 95%; max-height: 92vh; overflow-y: auto; border-radius: 28px; padding: 22px 18px;">
+      <button type="button" class="modal-corner-close-btn" onclick="if(window._closeTournamentModal) window._closeTournamentModal();">✕</button>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="font-size: 26px;">🏆</span>
+        <h3 style="margin: 0; color: #ffd700; font-size: 1.35rem; font-family: 'Cinzel', serif;">TORNEIO DOS ARQUIMAGOS</h3>
+      </div>
+      <p style="font-size: 0.8rem; color: #ffe082; margin: 0 0 12px 0;">Dispute a copa eliminatória em mata-mata de 3 fases e conquiste a Grande Taça!</p>
+
+      <!-- Seletor de Copas do Torneio -->
+      <div class="tournament-cups-row">
+        <button type="button" class="tournament-cup-btn active" id="btn-cup-apprentice" onclick="window._switchTournamentCup('apprentice')">
+          <div class="cup-icon">🥉</div>
+          <div class="cup-name">Copa Aprendiz</div>
+          <div class="cup-reward">🪙 400 • 👑 2</div>
+        </button>
+        <button type="button" class="tournament-cup-btn" id="btn-cup-elemental" onclick="window._switchTournamentCup('elemental')">
+          <div class="cup-icon">🥈</div>
+          <div class="cup-name">Copa Elemental</div>
+          <div class="cup-reward">🪙 800 • 👑 4</div>
+        </button>
+        <button type="button" class="tournament-cup-btn" id="btn-cup-titans" onclick="window._switchTournamentCup('titans')">
+          <div class="cup-icon">🥇</div>
+          <div class="cup-name">Copa dos Titãs</div>
+          <div class="cup-reward">🪙 1.500 • 👑 8</div>
+        </button>
+      </div>
+
+      <!-- Chaveamento Visual (Bracket) -->
+      <div class="tournament-bracket-box" id="tournament-bracket-display">
+        <!-- Injetado via JS -->
+      </div>
+
+      <!-- Card do Confronto Atual -->
+      <div class="tournament-active-match-card" id="tournament-active-match-card">
+        <!-- Injetado via JS -->
+      </div>
     </div>
   </div>
 </body>

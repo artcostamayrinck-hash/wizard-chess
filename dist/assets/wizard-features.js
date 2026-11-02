@@ -523,7 +523,8 @@ function initWizardFeatures() {
     { name: "ArcanePass", fn: setupArcanePass },
     { name: "PuzzleRush", fn: setupPuzzleRush },
     { name: "EnhancedGameReview", fn: setupEnhancedGameReview },
-    { name: "CampaignWorld2", fn: setupCampaignWorld2 }
+    { name: "CampaignWorld2", fn: setupCampaignWorld2 },
+    { name: "Tournament", fn: setupTournament }
   ];
 
   for (const task of tasks) {
@@ -847,17 +848,22 @@ const RANKS = [
 ];
 
 const ACHIEVEMENTS_DATA = [
-  { id: "first_blood", icon: "⚔️", title: "Primeiro Sangue", desc: "Capture sua primeira peça no jogo.", xp: 25 },
-  { id: "first_win", icon: "👑", title: "Primeira Vitória", desc: "Vença sua primeira batalha de xadrez.", xp: 50 },
-  { id: "crypt_master", icon: "💀", title: "Mestre da Cripta", desc: "Vença uma partida na Cripta Infernal.", xp: 50 },
-  { id: "frost_lord", icon: "❄️", title: "Senhor do Gelo", desc: "Vença uma partida no Templo de Gelo.", xp: 50 },
-  { id: "hard_slayer", icon: "🧙", title: "Imbatível", desc: "Derrote a inteligência artificial no modo Difícil.", xp: 100 },
-  { id: "undo_apprentice", icon: "↩️", title: "Segunda Chance", desc: "Use a magia de Desfazer Lance contra a IA no Fácil.", xp: 20 },
-  { id: "music_lover", icon: "🎶", title: "Sinfonia Arcana", desc: "Ative a música ambiente da Catedral.", xp: 20 },
-  { id: "whatsapp_challenger", icon: "📲", title: "Convocação Mágica", desc: "Convide um amigo para o jogo pelo WhatsApp.", xp: 25 },
-  { id: "skin_collector", icon: "🎨", title: "Guarda-Roupa Mágico", desc: "Experimente uma nova Skin de peças 3D.", xp: 25 },
-  { id: "puzzle_wizard", icon: "🧩", title: "Mente Iluminada", desc: "Jogue no modo de Desafios da Catedral.", xp: 35 },
-  { id: "tutorial_master", icon: "📜", title: "Academia Arcana", desc: "Complete ou pratique no Modo de Tutorial.", xp: 50 }
+  { id: "first_blood", icon: "⚔️", title: "Primeiro Sangue", desc: "Capture sua primeira peça no jogo.", xp: 25, coins: 50 },
+  { id: "first_spell", icon: "⚡", title: "Feitiço de Guerra", desc: "Desfira uma captura mágica com impacto de feitiço 3D.", xp: 50, coins: 100 },
+  { id: "first_win", icon: "👑", title: "Primeira Vitória", desc: "Vença sua primeira batalha de xadrez.", xp: 50, coins: 100, crowns: 1 },
+  { id: "crypt_master", icon: "💀", title: "Mestre da Cripta", desc: "Vença uma partida na Cripta Infernal.", xp: 50, coins: 100 },
+  { id: "frost_lord", icon: "❄️", title: "Senhor do Gelo", desc: "Vença uma partida no Templo de Gelo.", xp: 50, coins: 100 },
+  { id: "cosmic_voyager", icon: "🌌", title: "Viajante Estelar", desc: "Dispute uma partida no Observatório Cósmico.", xp: 75, coins: 150, crowns: 1 },
+  { id: "hard_slayer", icon: "🧙", title: "Imbatível", desc: "Derrote a inteligência artificial no modo Difícil.", xp: 100, coins: 200, crowns: 1 },
+  { id: "world_1_champ", icon: "🏰", title: "Libertador dos Reinos", desc: "Complete o Mundo 1 derrotando Malakor.", xp: 250, coins: 300, crowns: 2 },
+  { id: "world_2_champ", icon: "👑", title: "Destruidor de Titãs", desc: "Complete o Mundo 2 derrotando Aethelgard.", xp: 500, coins: 600, crowns: 4 },
+  { id: "tournament_champ", icon: "🏆", title: "Campeão dos Arquimagos", desc: "Conquiste o troféu em qualquer Torneio Mata-Mata.", xp: 350, coins: 400, crowns: 3 },
+  { id: "puzzle_rush_5", icon: "⏱️", title: "Velocista dos Enigmas", desc: "Acerte 5 quebra-cabeças no Puzzle Rush.", xp: 100, coins: 150, crowns: 1 },
+  { id: "puzzle_rush_10", icon: "🎯", title: "Oráculo Tático", desc: "Acerte 10 enigmas no Puzzle Rush.", xp: 250, coins: 350, crowns: 2 },
+  { id: "brilliant_move", icon: "🧠", title: "Mente Brilhante", desc: "Faça um Lance Brilhante (!!) na Análise Mágica.", xp: 150, coins: 200, crowns: 1 },
+  { id: "wheel_fortune", icon: "🍀", title: "Abençoado pelo Destino", desc: "Gire a Roda da Fortuna Arcana.", xp: 50, coins: 50 },
+  { id: "spell_trail", icon: "✨", title: "Rastro Radiante", desc: "Equipe um rastro mágico de peças.", xp: 75, coins: 100 },
+  { id: "tutorial_master", icon: "📜", title: "Academia Arcana", desc: "Complete ou pratique no Modo de Tutorial.", xp: 50, coins: 50 }
 ];
 
 function getPlayerXP() {
@@ -924,13 +930,21 @@ function unlockAchievement(id) {
   if (!data) return;
 
   unlocked[id] = Date.now();
-  localStorage.setItem("wizard_chess_achievements", JSON.stringify(unlocked));
+  try {
+    localStorage.setItem("wizard_chess_achievements", JSON.stringify(unlocked));
+  } catch(e) {}
 
-  // Apenas notifica toast se não estiver jogando partida
+  if (data.coins) addPlayerCoins(data.coins, `Conquista: ${data.title}`);
+  if (data.crowns && typeof addArcaneCrowns === "function") addArcaneCrowns(data.crowns);
+  addXP(data.xp, `Conquista: ${data.title}`);
+
+  // Notifica com toast e som
   if (!isMatchInProgress()) {
     showAchievementToast(data.title, data.desc, data.icon);
   }
-  addXP(data.xp, `Conquista: ${data.title}`);
+  if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+    try { ArcaneAudio.playVictoryChime(); } catch(e) {}
+  }
   renderAchievementsList();
 }
 
@@ -1009,17 +1023,29 @@ function renderAchievementsList() {
   const unlocked = getUnlockedAchievements();
   container.innerHTML = "";
 
+  const countUnlocked = Object.keys(unlocked).length;
+  const countUnlockedEl = document.getElementById("ach-unlocked-count");
+  const countTotalEl = document.getElementById("ach-total-count");
+  const crownsEl = document.getElementById("ach-crowns-count");
+  if (countUnlockedEl) countUnlockedEl.textContent = countUnlocked;
+  if (countTotalEl) countTotalEl.textContent = ACHIEVEMENTS_DATA.length;
+  if (crownsEl && typeof getArcaneCrowns === "function") crownsEl.textContent = `${getArcaneCrowns()} Coroas`;
+
   ACHIEVEMENTS_DATA.forEach(ach => {
     const isUnlocked = !!unlocked[ach.id];
     const item = document.createElement("div");
     item.className = `achievement-item ${isUnlocked ? "unlocked" : "locked"}`;
+
+    let rewardsHtml = `<span class="ach-xp-tag">+${ach.xp} XP</span>`;
+    if (ach.coins) rewardsHtml += `<span class="ach-reward-badge">+${ach.coins} 🪙</span>`;
+    if (ach.crowns) rewardsHtml += `<span class="ach-reward-badge crown">+${ach.crowns} 👑</span>`;
 
     item.innerHTML = `
       <div class="ach-icon-box">${ach.icon}</div>
       <div class="ach-info">
         <div class="ach-title-row">
           <span class="ach-title">${ach.title}</span>
-          <span class="ach-xp-tag">+${ach.xp} XP</span>
+          <div class="ach-rewards-row">${rewardsHtml}</div>
         </div>
         <div class="ach-desc">${ach.desc}</div>
         <div class="ach-status-tag ${isUnlocked ? "unlocked" : "locked"}">
@@ -1030,6 +1056,24 @@ function renderAchievementsList() {
     container.appendChild(item);
   });
 }
+
+window._openAchievementsModal = function() {
+  renderAchievementsList();
+  const m = document.getElementById("achievements-modal");
+  if (m) {
+    m.classList.remove("hidden");
+    m.style.setProperty("display", "flex", "important");
+  }
+};
+
+window._closeAchievementsModal = function(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const m = document.getElementById("achievements-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
 
 function setupProgressionAndAchievements() {
   const xp = getPlayerXP();
@@ -1042,14 +1086,11 @@ function setupProgressionAndAchievements() {
   const modalAch = document.getElementById("achievements-modal");
   const btnCloseAch = document.getElementById("btn-close-achievements");
 
-  const openAch = () => {
-    renderAchievementsList();
-    if (modalAch) modalAch.classList.remove("hidden");
-  };
+  const openAch = () => window._openAchievementsModal();
 
   if (btnAchDock) bindAction(btnAchDock, openAch);
   if (btnAchHud) bindAction(btnAchHud, openAch);
-  if (btnCloseAch && modalAch) bindAction(btnCloseAch, () => modalAch.classList.add("hidden"));
+  if (btnCloseAch) bindAction(btnCloseAch, () => window._closeAchievementsModal());
 
   // Botão para Desbloqueio Geral de Feitos
   const btnUnlockAll = document.getElementById("btn-unlock-all-achievements");
@@ -4411,35 +4452,63 @@ function setupWizardCampaign() {
   if (graveB) new MutationObserver(monitorCampaignEvents).observe(graveB, { childList: true });
   if (graveW) new MutationObserver(monitorCampaignEvents).observe(graveW, { childList: true });
 
-  // Monitor de fim de jogo para vitória na campanha
+  // Monitor de fim de jogo para vitória na campanha, torneio e conquistas
   const gameOverModal = document.getElementById("game-over-modal");
   const gameOverTitle = document.getElementById("game-over-title");
   if (gameOverModal) {
     new MutationObserver(() => {
-      if (!gameOverModal.classList.contains("hidden") && _activeCampaignBoss) {
+      if (!gameOverModal.classList.contains("hidden")) {
         const titleText = (gameOverTitle ? gameOverTitle.textContent : "").toLowerCase();
         const isWin = titleText.includes("vitória") || titleText.includes("venceu") || titleText.includes("mate");
-        if (isWin) {
-          const boss = _activeCampaignBoss;
-          showBossSpeech(boss.lines.win, boss.avatar, boss.name);
-          addPlayerCoins(boss.rewardCoins, `Vitória sobre ${boss.name}`);
-          addXP(boss.rewardXp, `Campanha: ${boss.name}`);
-          if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
-            ArcaneAudio.playVictoryChime();
-          }
 
-          const prog = getCampaignProgress();
-          const wasWorld1Done = prog[4] === true;
-          prog[boss.id] = true;
-          saveCampaignProgress(prog);
-          updateCampaignUI();
-          if (boss.id === 4 && !wasWorld1Done) {
-            showToast(`🌟 VITÓRIA ÉPICA! Você derrotou Malakor e desbloqueou o Mundo 2: Domínio dos Titãs!`);
-          } else {
-            showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+        if (isWin) {
+          unlockAchievement("first_win");
+          const arena = window._WIZARD_GAME ? window._WIZARD_GAME.getArena() : "cathedral";
+          if (arena === "inferno") unlockAchievement("crypt_master");
+          if (arena === "frost") unlockAchievement("frost_lord");
+          if (arena === "cosmos") unlockAchievement("cosmic_voyager");
+          if (window._WIZARD_GAME && window._WIZARD_GAME.getDiff && window._WIZARD_GAME.getDiff() >= 3) {
+            unlockAchievement("hard_slayer");
           }
-        } else {
-          showBossSpeech(_activeCampaignBoss.lines.defeat, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
+        }
+
+        if (_activeTournamentMatch) {
+          TournamentManager.onMatchFinished(isWin);
+        }
+
+        if (_activeCampaignBoss) {
+          if (isWin) {
+            const boss = _activeCampaignBoss;
+            showBossSpeech(boss.lines.win, boss.avatar, boss.name);
+            addPlayerCoins(boss.rewardCoins, `Vitória sobre ${boss.name}`);
+            addXP(boss.rewardXp, `Campanha: ${boss.name}`);
+            if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+              ArcaneAudio.playVictoryChime();
+            }
+
+            const prog = getCampaignProgress();
+            const wasWorld1Done = prog[4] === true;
+            prog[boss.id] = true;
+            saveCampaignProgress(prog);
+            updateCampaignUI();
+
+            if (boss.id === 1) unlockAchievement("first_blood");
+            if (boss.id === 4) {
+              unlockAchievement("world_1_champ");
+              if (!wasWorld1Done) {
+                showToast(`🌟 VITÓRIA ÉPICA! Você derrotou Malakor e desbloqueou o Mundo 2: Domínio dos Titãs!`);
+              } else {
+                showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+              }
+            } else if (boss.id === 8) {
+              unlockAchievement("world_2_champ");
+              showToast(`👑 SOBERANO DOS TITÃS! Você derrotou Aethelgard e dominou todo o Reino Arcano!`);
+            } else {
+              showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+            }
+          } else {
+            showBossSpeech(_activeCampaignBoss.lines.defeat, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
+          }
         }
       }
     }).observe(gameOverModal, { attributes: true, attributeFilter: ["class"] });
@@ -4496,6 +4565,9 @@ class ArenaWeatherSystem {
     } else if (arena === "cyber") {
       colors = [0x00ff88, 0x00e5ff, 0x00ffff];
       count = 50;
+    } else if (arena === "cosmos") {
+      colors = [0x8072ff, 0x00f5d4, 0xffffff, 0xc084fc, 0xffd700, 0x38bdf8];
+      count = 70;
     }
 
     for (let i = 0; i < count; i++) {
@@ -4514,12 +4586,13 @@ class ArenaWeatherSystem {
       this.particles.push({
         mesh,
         arena,
-        vx: (Math.random() - 0.5) * 0.015 + (arena === "desert" ? 0.035 : 0),
+        vx: arena === "cosmos" ? (Math.random() - 0.5) * 0.009 : (Math.random() - 0.5) * 0.015 + (arena === "desert" ? 0.035 : 0),
         vy: arena === "inferno" ? (0.015 + Math.random() * 0.02) :
             arena === "atlantis" ? (0.012 + Math.random() * 0.018) :
             arena === "cathedral" ? (-0.008 - Math.random() * 0.01) :
+            arena === "cosmos" ? (0.006 + Math.random() * 0.012) :
             (Math.random() - 0.5) * 0.012,
-        vz: (Math.random() - 0.5) * 0.015
+        vz: arena === "cosmos" ? (Math.random() - 0.5) * 0.009 : (Math.random() - 0.5) * 0.015
       });
     }
   }
@@ -4728,6 +4801,7 @@ const FortuneWheel = {
     } else {
       try { localStorage.setItem("wizard_fortune_last_spin", Date.now()); } catch(e) {}
     }
+    unlockAchievement("wheel_fortune");
 
     this.isSpinning = true;
     this.updateUI();
@@ -4964,6 +5038,13 @@ function setupSpellCaptureVFX() {
           ArcaneAudio.playSpellCaptureBoom(arena);
         }
 
+        try {
+          if (typeof unlockAchievement === "function") {
+            unlockAchievement("first_blood");
+            unlockAchievement("first_spell");
+          }
+        } catch(e) {}
+
         // Tremor dinâmico de câmera
         if (typeof window._WIZARD_GAME !== "undefined") {
           window._WIZARD_GAME.ui = 0.45;
@@ -5127,6 +5208,7 @@ function setupSpellTrails() {
 
       if (isTrailUnlocked(id)) {
         setEquippedTrail(id);
+        unlockAchievement("spell_trail");
         showToast(`✨ Rastro mágico equipado: ${trail.name}`);
         if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playPiecePlaced) ArcaneAudio.playPiecePlaced();
       } else {
@@ -5135,6 +5217,7 @@ function setupSpellTrails() {
           spendPlayerCoins(trail.price);
           unlockTrail(id);
           setEquippedTrail(id);
+          unlockAchievement("spell_trail");
           showAchievementToast("🎉 RASTRO DESBLOQUEADO!", `Você desbloqueou ${trail.name}!`, "✨");
           if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) ArcaneAudio.playQuestRewardChime();
         } else {
@@ -5407,6 +5490,7 @@ window._openMagusReview = function() {
   if (elGr) elGr.textContent = great;
   if (elSol) elSol.textContent = solid;
   if (elBlu) elBlu.textContent = blunders;
+  if (parseInt(brilliant, 10) > 0) unlockAchievement("brilliant_move");
 
   if (elSpeech) {
     if (accNum >= 90) {
@@ -5584,6 +5668,9 @@ const PuzzleRushManager = {
       if (rewardsEarned) rewardsEarned.textContent = `+${coinsEarned} 🪙 Moedas • +${crownsEarned} 👑 Coroas Arcanas`;
     }
 
+    if (this.score >= 5) unlockAchievement("puzzle_rush_5");
+    if (this.score >= 10) unlockAchievement("puzzle_rush_10");
+
     showAchievementToast("🏁 CORRIDA FINALIZADA!", `Você acertou ${this.score} enigmas! (+${coinsEarned} 🪙)`, "⏱️");
   }
 };
@@ -5634,4 +5721,348 @@ function setupCampaignWorld2() {
     }
   });
   updateCampaignUI();
+}
+
+// ==============================================================
+// V1.5.5: 1. MODO TORNEIO DOS ARQUIMAGOS (COPA MATA-MATA)
+// ==============================================================
+const TOURNAMENT_CUPS = {
+  apprentice: {
+    id: "apprentice",
+    name: "Copa dos Aprendizes",
+    icon: "🥉",
+    diff: 1,
+    arena: "cathedral",
+    rewardCoins: 400,
+    rewardCrowns: 2,
+    rewardXp: 150,
+    participants: [
+      { name: "Você", avatar: "🧙‍♂️", isPlayer: true },
+      { name: "Kaelen, o Noviço", avatar: "🔮" },
+      { name: "Althea da Lua", avatar: "🌙" },
+      { name: "Balthazar o Sábio", avatar: "📜" },
+      { name: "Gideon das Pedras", avatar: "🪨" },
+      { name: "Elowen da Floresta", avatar: "🌿" },
+      { name: "Darian o Ágil", avatar: "⚡" },
+      { name: "Thorne o Cinzento", avatar: "🌪️" }
+    ]
+  },
+  elemental: {
+    id: "elemental",
+    name: "Copa Elemental",
+    icon: "🥈",
+    diff: 2,
+    arena: "inferno",
+    rewardCoins: 800,
+    rewardCrowns: 4,
+    rewardXp: 300,
+    participants: [
+      { name: "Você", avatar: "🧙‍♂️", isPlayer: true },
+      { name: "Pyra Chama Viva", avatar: "🔥" },
+      { name: "Glacius do Vento Frio", avatar: "❄️" },
+      { name: "Vortex dos Raios", avatar: "⚡" },
+      { name: "Gaia Protetora", avatar: "🌱" },
+      { name: "Corvus das Sombras", avatar: "🦅" },
+      { name: "Hydros do Abismo", avatar: "🌊" },
+      { name: "Solas o Radiante", avatar: "☀️" }
+    ]
+  },
+  titans: {
+    id: "titans",
+    name: "Copa dos Titãs",
+    icon: "🥇",
+    diff: 4,
+    arena: "cosmos",
+    rewardCoins: 1500,
+    rewardCrowns: 8,
+    rewardXp: 600,
+    titleReward: "Campeão dos Arquimagos",
+    participants: [
+      { name: "Você", avatar: "🧙‍♂️", isPlayer: true },
+      { name: "Arquimago Azrael", avatar: "👁️" },
+      { name: "Grã-Sacerdotisa Selene", avatar: "✨" },
+      { name: "Lorde Valerius", avatar: "👑" },
+      { name: "Dama Morgause", avatar: "🐍" },
+      { name: "Oráculo Ouroboros", avatar: "🪐" },
+      { name: "Mestre Ignatus", avatar: "☄️" },
+      { name: "Arcanista Xylar", avatar: "🌌" }
+    ]
+  }
+};
+
+let _activeTournamentMatch = null;
+
+const TournamentManager = {
+  activeCupId: "apprentice",
+
+  getState() {
+    try {
+      const raw = localStorage.getItem("wizard_chess_tournament_state");
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return {
+      trophiesWon: 0,
+      cups: {
+        apprentice: { round: 1, completed: false },
+        elemental: { round: 1, completed: false },
+        titans: { round: 1, completed: false }
+      }
+    };
+  },
+
+  saveState(st) {
+    try {
+      localStorage.setItem("wizard_chess_tournament_state", JSON.stringify(st));
+    } catch(e) {}
+    this.updateHUDTrophies();
+  },
+
+  updateHUDTrophies() {
+    const st = this.getState();
+    const countEl = document.getElementById("tournament-trophies-count");
+    if (countEl) countEl.textContent = st.trophiesWon || 0;
+  },
+
+  getRoundName(round) {
+    if (round === 1) return "Quartas de Final";
+    if (round === 2) return "Semifinal";
+    if (round === 3) return "Grande Final";
+    return "Campeão";
+  },
+
+  getCurrentOpponent(cupId, round) {
+    const cup = TOURNAMENT_CUPS[cupId];
+    if (!cup) return null;
+    if (round === 1) return cup.participants[1];
+    if (round === 2) return cup.participants[3];
+    if (round === 3) return cup.participants[5];
+    return null;
+  },
+
+  renderUI() {
+    const st = this.getState();
+    const cup = TOURNAMENT_CUPS[this.activeCupId];
+    if (!cup) return;
+
+    this.updateHUDTrophies();
+
+    ["apprentice", "elemental", "titans"].forEach(id => {
+      const btn = document.getElementById(`btn-cup-${id}`);
+      if (btn) btn.classList.toggle("active", id === this.activeCupId);
+    });
+
+    const cupState = (st.cups && st.cups[this.activeCupId]) || { round: 1, completed: false };
+    const round = cupState.round;
+    const isCompleted = cupState.completed;
+
+    const bracketBox = document.getElementById("tournament-bracket-display");
+    if (bracketBox) {
+      const opp1 = cup.participants[1];
+      const opp2 = cup.participants[3];
+      const opp3 = cup.participants[5];
+
+      bracketBox.innerHTML = `
+        <div class="bracket-round-title">
+          <span>⚔️ CHAVEAMENTO • ${cup.name.toUpperCase()}</span>
+          <span style="color: #ffd700;">${isCompleted ? "🏆 COPA CONCLUÍDA!" : this.getRoundName(round)}</span>
+        </div>
+        <div class="bracket-matches-grid">
+          <div class="bracket-match-row ${round === 1 && !isCompleted ? 'player-active' : ''}">
+            <div class="bracket-player is-player">🧙‍♂️ Você</div>
+            <div class="bracket-vs">VS</div>
+            <div class="bracket-player">${opp1.avatar} ${opp1.name}</div>
+            <span class="bracket-badge ${round > 1 || isCompleted ? 'won' : 'pending'}">
+              ${round > 1 || isCompleted ? '✓ Venceu' : 'Quartas'}
+            </span>
+          </div>
+
+          <div class="bracket-match-row ${round === 2 && !isCompleted ? 'player-active' : ''}">
+            <div class="bracket-player ${round >= 2 ? 'is-player' : ''}">${round >= 2 ? '🧙‍♂️ Você' : 'Vencedor Q1'}</div>
+            <div class="bracket-vs">VS</div>
+            <div class="bracket-player">${opp2.avatar} ${opp2.name}</div>
+            <span class="bracket-badge ${round > 2 || isCompleted ? 'won' : 'pending'}">
+              ${round > 2 || isCompleted ? '✓ Venceu' : 'Semifinal'}
+            </span>
+          </div>
+
+          <div class="bracket-match-row ${round === 3 && !isCompleted ? 'player-active' : ''}">
+            <div class="bracket-player ${round >= 3 ? 'is-player' : ''}">${round >= 3 ? '🧙‍♂️ Você' : 'Finalista 1'}</div>
+            <div class="bracket-vs">VS</div>
+            <div class="bracket-player">${opp3.avatar} ${opp3.name}</div>
+            <span class="bracket-badge ${isCompleted ? 'champion' : 'pending'}">
+              ${isCompleted ? '🏆 Campeão' : 'Grande Final'}
+            </span>
+          </div>
+        </div>
+      `;
+    }
+
+    const matchCard = document.getElementById("tournament-active-match-card");
+    if (matchCard) {
+      if (isCompleted) {
+        matchCard.innerHTML = `
+          <div style="font-size: 2.2rem; margin-bottom: 6px;">🏆</div>
+          <div style="font-size: 1.1rem; font-weight: 900; color: #ffd700;">PARABÉNS, CAMPEÃO DA COPA!</div>
+          <p style="font-size: 0.8rem; color: #ffe082; margin: 4px 0 12px 0;">Você conquistou esta Taça eliminatória com glória absoluta!</p>
+          <button type="button" class="promo-btn" style="width: 100%; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000;" onclick="TournamentManager.resetCup('${this.activeCupId}')">
+            🔄 Disputar Torneio Novamente
+          </button>
+        `;
+      } else {
+        const opp = this.getCurrentOpponent(this.activeCupId, round);
+        matchCard.innerHTML = `
+          <div style="font-size: 0.72rem; letter-spacing: 1px; color: #f5c56b; font-weight: 800; text-transform: uppercase;">
+            PRÓXIMO CONFRONTO • ${this.getRoundName(round).toUpperCase()}
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin: 10px 0;">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem;">🧙‍♂️</div>
+              <div style="font-size: 0.8rem; font-weight: 800; color: #ffd700;">Você</div>
+            </div>
+            <div style="font-size: 1.2rem; font-weight: 900; color: #ff5252;">VS</div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem;">${opp ? opp.avatar : "⚔️"}</div>
+              <div style="font-size: 0.8rem; font-weight: 800; color: #fff;">${opp ? opp.name : "Oponente"}</div>
+            </div>
+          </div>
+          <div style="font-size: 0.74rem; color: #81c784; margin-bottom: 12px;">
+            Premiação ao vencer a Copa: +${cup.rewardCoins} 🪙 • +${cup.rewardCrowns} 👑
+          </div>
+          <button type="button" class="promo-btn" style="width: 100%; padding: 13px; font-size: 0.95rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);" onclick="TournamentManager.startMatch()">
+            ⚔️ DISPUTAR ${this.getRoundName(round).toUpperCase()}
+          </button>
+        `;
+      }
+    }
+  },
+
+  resetCup(cupId) {
+    const st = this.getState();
+    if (!st.cups) st.cups = {};
+    st.cups[cupId] = { round: 1, completed: false };
+    this.saveState(st);
+    this.renderUI();
+  },
+
+  startMatch() {
+    const st = this.getState();
+    const cup = TOURNAMENT_CUPS[this.activeCupId];
+    if (!cup) return;
+
+    const cupState = (st.cups && st.cups[this.activeCupId]) || { round: 1, completed: false };
+    const round = cupState.round;
+    const opp = this.getCurrentOpponent(this.activeCupId, round);
+    if (!opp) return;
+
+    _activeTournamentMatch = {
+      cupId: this.activeCupId,
+      round: round,
+      oppName: opp.name,
+      oppAvatar: opp.avatar
+    };
+
+    window._closeTournamentModal();
+
+    if (window._WIZARD_GAME && window._WIZARD_GAME.setArena) {
+      window._WIZARD_GAME.setArena(cup.arena);
+    }
+    const arenaBtn = document.querySelector(`#menu-arena-group .toggle-btn[data-arena="${cup.arena}"]`);
+    if (arenaBtn) {
+      document.querySelectorAll("#menu-arena-group .toggle-btn").forEach(b => b.classList.remove("active"));
+      arenaBtn.classList.add("active");
+    }
+
+    const diffBtn = document.querySelector(`#menu-diff-group .toggle-btn[data-diff="${cup.diff}"]`);
+    if (diffBtn) {
+      document.querySelectorAll("#menu-diff-group .toggle-btn").forEach(b => b.classList.remove("active"));
+      diffBtn.classList.add("active");
+    }
+
+    const oppName = document.getElementById("opponent-name-hud");
+    const oppAvatar = document.getElementById("opponent-avatar-hud");
+    const oppBadge = document.getElementById("opponent-badge-hud");
+    if (oppName) oppName.textContent = opp.name;
+    if (oppAvatar) oppAvatar.textContent = opp.avatar;
+    if (oppBadge) oppBadge.textContent = `TORNEIO (${this.getRoundName(round)})`;
+
+    const btnStart = document.getElementById("btn-start-game");
+    if (btnStart) btnStart.click();
+
+    showToast(`🏆 Duelo de Torneio: ${this.getRoundName(round)} contra ${opp.name}!`);
+  },
+
+  onMatchFinished(isWin) {
+    if (!_activeTournamentMatch) return;
+    const { cupId, round, oppName } = _activeTournamentMatch;
+    const cup = TOURNAMENT_CUPS[cupId];
+    const st = this.getState();
+    _activeTournamentMatch = null;
+
+    if (!st.cups) st.cups = {};
+    if (!st.cups[cupId]) st.cups[cupId] = { round: 1, completed: false };
+
+    if (isWin) {
+      if (round < 3) {
+        st.cups[cupId].round = round + 1;
+        this.saveState(st);
+        showToast(`✨ Vitória magistral! Você avançou para a ${this.getRoundName(round + 1)}!`);
+        if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+          try { ArcaneAudio.playVictoryChime(); } catch(e) {}
+        }
+      } else {
+        st.cups[cupId].completed = true;
+        st.trophiesWon = (st.trophiesWon || 0) + 1;
+        this.saveState(st);
+
+        addPlayerCoins(cup.rewardCoins, `Campeão da ${cup.name}`);
+        if (typeof addArcaneCrowns === "function") addArcaneCrowns(cup.rewardCrowns);
+        addXP(cup.rewardXp, `Torneio: ${cup.name}`);
+        unlockAchievement("tournament_champ");
+
+        if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+          try { ArcaneAudio.playVictoryChime(); } catch(e) {}
+        }
+
+        showToast(`🏆 GLÓRIA ETERNA! Você venceu a ${cup.name} e ergueu a Grande Taça!`);
+        showAchievementToast("👑 CAMPEÃO DA COPA!", `Taça Conquistada! (+${cup.rewardCoins} 🪙, +${cup.rewardCrowns} 👑)`, "🏆");
+      }
+    } else {
+      st.cups[cupId].round = 1;
+      this.saveState(st);
+      showToast(`💀 Você foi eliminado na ${this.getRoundName(round)}. Tente novamente!`);
+    }
+
+    this.renderUI();
+  }
+};
+window.TournamentManager = TournamentManager;
+
+window._openTournamentModal = function() {
+  TournamentManager.renderUI();
+  const m = document.getElementById("tournament-modal");
+  if (m) {
+    m.classList.remove("hidden");
+    m.style.setProperty("display", "flex", "important");
+  }
+};
+
+window._closeTournamentModal = function() {
+  const m = document.getElementById("tournament-modal");
+  if (m) {
+    m.classList.add("hidden");
+    m.style.setProperty("display", "none", "important");
+  }
+};
+
+window._switchTournamentCup = function(cupId) {
+  TournamentManager.activeCupId = cupId;
+  TournamentManager.renderUI();
+};
+
+function setupTournament() {
+  TournamentManager.renderUI();
+  const btnOpenCard = document.getElementById("btn-open-tournament-card");
+  if (btnOpenCard) {
+    bindAction(btnOpenCard, () => window._openTournamentModal(), "openTournamentCard");
+  }
 }
