@@ -7495,12 +7495,68 @@ kbd {
   padding: 8px 12px !important;
   min-height: 44px !important;
   max-height: 52px !important;
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   box-sizing: border-box !important;
   display: flex !important;
   align-items: center !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
-  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease, filter 0.16s ease !important;
+}
+
+.blue-action-card {
+  background: linear-gradient(135deg, #0288d1 0%, #0277bd 40%, #01579b 75%, #002f6c 100%) !important;
+  border: 1.5px solid rgba(179, 229, 252, 0.8) !important;
+  box-shadow: 0 8px 22px rgba(2, 136, 209, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+}
+
+.orange-action-card {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 75%, #78350f 100%) !important;
+  border: 1.5px solid rgba(254, 215, 170, 0.85) !important;
+  box-shadow: 0 8px 22px rgba(217, 119, 6, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+}
+
+.purple-action-card {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 75%, #3b0764 100%) !important;
+  border: 1.5px solid rgba(233, 213, 255, 0.8) !important;
+  box-shadow: 0 8px 22px rgba(124, 58, 237, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Feixe Prismático de Brilho que Passa Pelos Cards (Sweep Light) */
+.blue-action-card::after,
+.orange-action-card::after,
+.purple-action-card::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -60% !important;
+  left: -130% !important;
+  width: 75% !important;
+  height: 220% !important;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.12) 42%,
+    rgba(255, 255, 255, 0.42) 50%,
+    rgba(255, 255, 255, 0.12) 58%,
+    transparent 80%
+  ) !important;
+  transform: rotate(25deg) !important;
+  pointer-events: none !important;
+  animation: cardSweepGleam 5.2s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.orange-action-card::after {
+  animation-delay: 1.7s !important;
+}
+
+.purple-action-card::after {
+  animation-delay: 3.4s !important;
+}
+
+@keyframes cardSweepGleam {
+  0% { left: -130%; }
+  25% { left: 160%; }
+  100% { left: 160%; }
 }
 
 .blue-action-card:hover,
@@ -7509,7 +7565,18 @@ kbd {
 .rpg-card-battle:hover,
 .rpg-card-challenges:hover,
 .rpg-card-campaign:hover {
-  transform: translateY(-1px) scale(1.01) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  filter: brightness(1.08) !important;
+}
+
+.blue-action-card:active,
+.orange-action-card:active,
+.purple-action-card:active,
+.rpg-card-battle:active,
+.rpg-card-challenges:active,
+.rpg-card-campaign:active {
+  transform: translateY(1px) scale(0.97) !important;
+  filter: brightness(0.95) !important;
 }
 
 .rpg-card-inner {
@@ -7533,11 +7600,29 @@ kbd {
   height: 28px !important;
   min-width: 28px !important;
   min-height: 28px !important;
-  border-radius: 8px !important;
+  border-radius: 9px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
+}
+
+.blue-glow {
+  background: linear-gradient(135deg, rgba(3, 169, 244, 0.45), rgba(1, 87, 155, 0.6)) !important;
+  border: 1px solid rgba(179, 229, 252, 0.65) !important;
+  box-shadow: 0 0 12px rgba(3, 169, 244, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.orange-glow {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.45), rgba(180, 83, 9, 0.6)) !important;
+  border: 1px solid rgba(254, 215, 170, 0.7) !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.purple-glow {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.45), rgba(91, 33, 182, 0.6)) !important;
+  border: 1px solid rgba(233, 213, 255, 0.65) !important;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
 }
 
 .rpg-card-icon-box .material-symbols-rounded {
@@ -7568,10 +7653,10 @@ kbd {
 .rpg-card-subtitle {
   font-size: 9px !important;
   font-weight: 500 !important;
-  opacity: 0.88 !important;
+  opacity: 0.9 !important;
   margin-top: 1px !important;
   line-height: 1.1 !important;
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -7581,6 +7666,15 @@ kbd {
 .rpg-card-arrow .material-symbols-rounded {
   font-size: 18px !important;
   color: #ffffff !important;
+}
+
+.rpg-card-arrow {
+  animation: arrowGentleNudge 2.2s ease-in-out infinite alternate !important;
+}
+
+@keyframes arrowGentleNudge {
+  0% { transform: translateX(0); opacity: 0.85; }
+  100% { transform: translateX(3px); opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)); }
 }
 
 .rpg-card-badge-right {
@@ -7710,10 +7804,70 @@ kbd {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: all 0.25s ease !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  animation: knightFloatArcane 3.6s ease-in-out infinite alternate !important;
+  position: relative !important;
+}
+
+.home-knight-svg-wrap svg {
+  overflow: visible !important;
+}
+
+.svg-aura-pulse {
+  animation: svgAuraBreathe 3.6s ease-in-out infinite alternate !important;
+  transform-origin: 140px 180px !important;
+}
+
+@keyframes svgAuraBreathe {
+  0% { transform: scale(0.92); opacity: 0.55; }
+  50% { opacity: 0.85; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
+.svg-rune-orbit {
+  animation: svgRuneOrbit 14s linear infinite !important;
+  transform-origin: 0 0 !important;
+}
+
+@keyframes svgRuneOrbit {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.svg-eye-glow {
+  animation: eyeTwinkle 4.5s ease-in-out infinite !important;
+}
+
+@keyframes eyeTwinkle {
+  0%, 86%, 100% { opacity: 1; filter: drop-shadow(0 0 2px #fff); }
+  90% { opacity: 0.15; }
+  95% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
+}
+
+@keyframes knightFloatArcane {
+  0% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(147, 51, 234, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.88)) drop-shadow(0 0 18px rgba(0, 245, 212, 0.42));
+  }
+  100% {
+    transform: translateY(-6px) scale(1.02);
+    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 24px rgba(147, 51, 234, 0.45));
+  }
+}
+
+.home-knight-col:hover .home-knight-svg-wrap,
+.home-knight-col:active .home-knight-svg-wrap {
+  transform: scale(1.06) translateY(-5px) !important;
+  filter: drop-shadow(0 20px 32px rgba(0, 245, 212, 0.55)) !important;
 }
 
 .knight-model-badge {
+  background: linear-gradient(135deg, rgba(28, 20, 48, 0.95) 0%, rgba(14, 10, 24, 0.98) 100%) !important;
+  border: 1.2px solid rgba(245, 197, 107, 0.55) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
   margin: clamp(2px, 0.4vh, 4px) auto 0 !important;
   font-size: clamp(0.64rem, 1.6vw, 0.72rem) !important;
   padding: 2px clamp(6px, 1.2vw, 8px) !important;
@@ -7721,6 +7875,13 @@ kbd {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.knight-model-badge:hover {
+  transform: translateY(-2px) scale(1.04) !important;
+  border-color: #f5c56b !important;
+  box-shadow: 0 6px 16px rgba(245, 197, 107, 0.35) !important;
 }
 
 .home-actions-col {
@@ -7830,6 +7991,74 @@ kbd {
   padding: clamp(3px, 0.5vh, 5px) 2px !important;
   border-radius: 12px !important;
   box-sizing: border-box !important;
+  background: linear-gradient(180deg, rgba(34, 26, 52, 0.96) 0%, rgba(16, 12, 28, 0.98) 100%) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease, border-color 0.18s ease !important;
+}
+
+.home-chest-card:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  filter: brightness(1.1) !important;
+}
+
+.home-chest-card:active {
+  transform: translateY(1px) scale(0.97) !important;
+}
+
+.chest-slot-daily {
+  border: 1.5px solid rgba(3, 169, 244, 0.45) !important;
+}
+.chest-slot-daily:hover {
+  border-color: #03a9f4 !important;
+  box-shadow: 0 8px 22px rgba(3, 169, 244, 0.45) !important;
+}
+
+.chest-slot-wheel {
+  border: 1.5px solid rgba(171, 71, 188, 0.45) !important;
+}
+.chest-slot-wheel:hover {
+  border-color: #ab47bc !important;
+  box-shadow: 0 8px 22px rgba(171, 71, 188, 0.45) !important;
+}
+
+.chest-slot-pass {
+  border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+}
+.chest-slot-pass:hover {
+  border-color: #ffd700 !important;
+  box-shadow: 0 8px 22px rgba(255, 215, 0, 0.45) !important;
+}
+
+.chest-slot-tourney {
+  border: 1.5px solid rgba(255, 112, 67, 0.45) !important;
+}
+.chest-slot-tourney:hover {
+  border-color: #ff7043 !important;
+  box-shadow: 0 8px 22px rgba(255, 112, 67, 0.45) !important;
+}
+
+.chest-emoji {
+  animation: chestBobbing 3.2s ease-in-out infinite alternate !important;
+  display: inline-block !important;
+}
+
+.chest-slot-wheel .chest-emoji {
+  animation: wheelSlowRock 4s ease-in-out infinite alternate !important;
+}
+
+@keyframes chestBobbing {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-3px) scale(1.05); }
+}
+
+@keyframes wheelSlowRock {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
+}
+
+.chest-card-action {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1.5px 0 rgba(0, 0, 0, 0.35) !important;
+  transition: transform 0.12s ease, filter 0.12s ease !important;
 }
 
 .rpg-bottom-nav {
@@ -7841,6 +8070,32 @@ kbd {
   align-items: center !important;
   min-height: clamp(40px, 5.8vh, 46px) !important;
   flex-shrink: 0 !important;
+  background: rgba(14, 10, 22, 0.98) !important;
+  border: 1px solid rgba(245, 197, 107, 0.3) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  padding: 4px 6px !important;
+}
+
+.rpg-nav-btn.active,
+.rpg-nav-btn[data-view="home"].active,
+.rpg-nav-btn.btn-active-highlight {
+  color: #f5c56b !important;
+  text-shadow: 0 0 12px rgba(245, 197, 107, 0.7) !important;
+  position: relative !important;
+}
+
+.rpg-nav-btn.active::after,
+.rpg-nav-btn[data-view="home"]::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -2px !important;
+  left: 20% !important;
+  right: 20% !important;
+  height: 3px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent, #f5c56b, transparent) !important;
+  box-shadow: 0 0 8px #f5c56b !important;
 }
 
 /* ==========================================================================
@@ -8452,7 +8707,7 @@ body.device-mobile-landscape .web-platform-banner {
 }
 
 /* ==========================================================================
-   8. HUD DE JOGO, TIMER, BARRA DE AVALIAÇÃO E DOCK RESPONSIVOS
+   8. HUD DE JOGO, TIMER, BARRA DE AVALIAÇÃO E DOCK RESPONSIVOS & POLIDOS
    ========================================================================== */
 .hud-top {
   top: max(8px, env(safe-area-inset-top, 8px)) !important;
@@ -8460,8 +8715,72 @@ body.device-mobile-landscape .web-platform-banner {
   right: max(8px, env(safe-area-inset-right, 8px)) !important;
 }
 
+.brand-pill,
+.turn-pill {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+.brand-pill:hover,
+.turn-pill:hover {
+  transform: translateY(-1px) scale(1.02) !important;
+}
+
+.turn-pill {
+  position: relative !important;
+}
+
+.turn-pill:has(.w-turn) {
+  border-color: rgba(245, 197, 107, 0.7) !important;
+  box-shadow: 0 8px 24px rgba(245, 197, 107, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.turn-pill:has(.b-turn) {
+  border-color: rgba(171, 71, 188, 0.7) !important;
+  box-shadow: 0 8px 24px rgba(171, 71, 188, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.chess-timer {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+.chess-timer.active {
+  border-color: var(--md-gold) !important;
+  box-shadow: 0 0 20px rgba(245, 197, 107, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  animation: activeTimerGlow 2s ease-in-out infinite alternate !important;
+}
+
+@keyframes activeTimerGlow {
+  0% { box-shadow: 0 0 12px rgba(245, 197, 107, 0.4); }
+  100% { box-shadow: 0 0 24px rgba(245, 197, 107, 0.75); }
+}
+
+.eval-bar-container {
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.75), 0 0 14px rgba(0, 245, 212, 0.25) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.eval-bar-fill-w {
+  background: linear-gradient(to top, #e2d7cc 0%, #ffffff 100%) !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.75) !important;
+}
+
 .md3-dock {
   bottom: max(6px, env(safe-area-inset-bottom, 6px)) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.dock-btn {
+  transition: background 0.2s, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s !important;
+}
+
+.dock-btn:hover {
+  transform: translateY(-2px) !important;
+}
+
+.dock-btn:active {
+  transform: scale(0.92) !important;
 }
 
 @media (max-width: 380px) {

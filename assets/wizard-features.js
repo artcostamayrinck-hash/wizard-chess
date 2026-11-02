@@ -1342,15 +1342,15 @@ function getKnightSvg(skinName) {
       </radialGradient>
     </defs>
 
-    <circle cx="140" cy="180" r="110" fill="url(#aura-${skinName})" filter="url(#pedestal-blur-${skinName})" />
+    <circle class="svg-aura-pulse" cx="140" cy="180" r="110" fill="url(#aura-${skinName})" filter="url(#pedestal-blur-${skinName})" />
     <ellipse cx="140" cy="318" rx="85" ry="14" fill="${c.pedestalGlow}" filter="url(#pedestal-blur-${skinName})" />
     <ellipse cx="140" cy="315" rx="80" ry="18" fill="url(#pedestal-${skinName})" stroke="${c.baseRing}" stroke-width="2" />
     <path d="M60 315 v-10 c0 10 160 10 160 0 v10 c0 10 -160 10 -160 0 Z" fill="${c.baseGrad2}" stroke="${c.baseRing}" stroke-width="1.5" />
     <ellipse cx="140" cy="302" rx="72" ry="14" fill="url(#pedestal-${skinName})" stroke="${c.baseRing}" stroke-width="2.5" />
 
-    <g transform="translate(140, 302) scale(0.9, 0.45)" filter="url(#rune-glow-${skinName})">
+    <g class="svg-rune-base" transform="translate(140, 302) scale(0.9, 0.45)" filter="url(#rune-glow-${skinName})">
       <path d="M0 -30 L5 -5 L30 0 L5 5 L0 30 L-5 5 L-30 0 L-5 -5 Z" fill="${c.runeColor}" />
-      <circle cx="0" cy="0" r="16" fill="none" stroke="${c.runeColor}" stroke-width="2.5" stroke-dasharray="4,3" />
+      <circle class="svg-rune-orbit" cx="0" cy="0" r="16" fill="none" stroke="${c.runeColor}" stroke-width="2.5" stroke-dasharray="4,3" />
       <circle cx="0" cy="0" r="4" fill="${c.gemColor}" />
     </g>
 
@@ -1373,7 +1373,7 @@ function getKnightSvg(skinName) {
 
       <path d="M 144 48 C 158 56 168 70 176 86 L 164 88 C 158 76 150 64 140 56 Z" fill="${c.accent}" opacity="0.8" />
 
-      <g filter="url(#rune-glow-${skinName})">
+      <g class="svg-eye-glow" filter="url(#rune-glow-${skinName})">
         <ellipse cx="178" cy="88" rx="8" ry="5" fill="${c.eyeGlow}" />
         <ellipse cx="178" cy="88" rx="4" ry="2.5" fill="#ffffff" />
         <line x1="166" y1="88" x2="190" y2="88" stroke="${c.eyeGlow}" stroke-width="1.5" />
