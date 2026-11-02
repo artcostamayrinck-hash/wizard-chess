@@ -7605,15 +7605,15 @@ kbd {
 }
 
 /* ==========================================================================
-   SISTEMA DE ADAPTAÇÃO UNIVERSAL PARA DIFERENTES TIPOS DE TELA (RESPONSIVE ENGINE)
+   SISTEMA DE ADAPTAÇÃO DINÂMICA: TAMANHO E ORGANIZAÇÃO POR DISPOSITIVO (RESPONSIVE ENGINE)
    ========================================================================== */
 
-/* 1. Base Padrão Fluida (Smartphones modernos em modo Retrato) */
+/* 1. Base Padrão: Smartphones Modernos em Modo Retrato (Organização Lado a Lado Estilo Golf Clash) */
 #start-menu .modal-content.menu-photo2-modal,
 #start-menu .modal-content,
 .menu-photo2-modal {
   width: 100% !important;
-  max-width: clamp(340px, 92vw, 420px) !important;
+  max-width: clamp(340px, 94vw, 430px) !important;
   height: 100% !important;
   max-height: 100dvh !important;
   margin: 0 auto !important;
@@ -7676,22 +7676,25 @@ kbd {
   flex-shrink: 0 !important;
 }
 
+/* ORGANIZAÇÃO HERO: Lado a Lado (Cavalo à Esquerda + 3 Cards de Ação à Direita) */
 .home-hero-split {
   width: 100% !important;
   max-width: 400px !important;
   margin: auto auto !important;
   display: flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   align-items: center !important;
-  justify-content: center !important;
-  gap: clamp(4px, 1vh, 8px) !important;
+  justify-content: space-between !important;
+  gap: clamp(6px, 1.8vw, 10px) !important;
   flex-shrink: 1 !important;
+  box-sizing: border-box !important;
 }
 
 .home-knight-col {
-  width: 100% !important;
-  max-width: 400px !important;
-  margin: 0 auto !important;
+  flex: 0 0 clamp(110px, 38%, 150px) !important;
+  max-width: clamp(110px, 38%, 150px) !important;
+  width: 38% !important;
+  margin: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -7699,10 +7702,10 @@ kbd {
 }
 
 .home-knight-svg-wrap {
-  width: clamp(120px, 18vh, 165px) !important;
-  height: clamp(120px, 18vh, 165px) !important;
-  max-width: 175px !important;
-  max-height: 175px !important;
+  width: 100% !important;
+  max-width: 145px !important;
+  height: clamp(105px, 15vh, 140px) !important;
+  aspect-ratio: 1 / 1 !important;
   margin: 0 auto !important;
   display: flex !important;
   align-items: center !important;
@@ -7711,19 +7714,26 @@ kbd {
 }
 
 .knight-model-badge {
-  margin: clamp(2px, 0.6vh, 4px) auto 0 !important;
-  font-size: clamp(0.7rem, 1.2vh, 0.76rem) !important;
-  padding: clamp(2px, 0.5vh, 4px) clamp(8px, 1.5vw, 12px) !important;
+  margin: clamp(2px, 0.4vh, 4px) auto 0 !important;
+  font-size: clamp(0.64rem, 1.6vw, 0.72rem) !important;
+  padding: 2px clamp(6px, 1.2vw, 8px) !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .home-actions-col {
-  width: 100% !important;
-  max-width: 400px !important;
-  margin: 0 auto !important;
+  flex: 1 1 58% !important;
+  max-width: 60% !important;
+  width: 58% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  align-items: center !important;
+  align-items: stretch !important;
   gap: clamp(4px, 0.8vh, 6px) !important;
+  justify-content: center !important;
 }
 
 .orange-action-card,
@@ -7732,25 +7742,94 @@ kbd {
 .blue-action-card,
 .purple-action-card {
   width: 100% !important;
-  min-height: clamp(40px, 5.8vh, 48px) !important;
-  padding: clamp(5px, 0.9vh, 8px) clamp(10px, 2.5vw, 14px) !important;
+  min-height: clamp(38px, 5.2vh, 46px) !important;
+  padding: clamp(4px, 0.7vh, 6px) clamp(6px, 1.8vw, 10px) !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
 }
 
+.rpg-card-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+
+.rpg-card-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: clamp(6px, 1.5vw, 9px) !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.rpg-card-icon-box {
+  width: clamp(24px, 3.5vw, 28px) !important;
+  height: clamp(24px, 3.5vw, 28px) !important;
+  flex-shrink: 0 !important;
+}
+
+.rpg-card-icon-box .material-symbols-rounded {
+  font-size: clamp(14px, 2.2vh, 18px) !important;
+}
+
+.rpg-card-text {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.rpg-card-title {
+  font-size: clamp(0.78rem, 1.9vw, 0.88rem) !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.15 !important;
+}
+
+.rpg-card-subtitle {
+  font-size: clamp(0.56rem, 1.3vw, 0.64rem) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.1 !important;
+  opacity: 0.88 !important;
+}
+
+.rpg-card-arrow {
+  width: clamp(18px, 2.8vw, 22px) !important;
+  height: clamp(18px, 2.8vw, 22px) !important;
+  flex-shrink: 0 !important;
+}
+
+.rpg-card-arrow .material-symbols-rounded {
+  font-size: clamp(13px, 1.8vh, 16px) !important;
+}
+
+/* 4 Baús e Recompensas Inferiores */
 .home-chest-slots {
   width: 100% !important;
   max-width: 400px !important;
-  margin: clamp(4px, 0.8vh, 6px) auto !important;
+  margin: clamp(4px, 0.8vh, 8px) auto !important;
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: clamp(4px, 1vw, 6px) !important;
+  gap: clamp(3px, 1.2vw, 6px) !important;
   padding: 0 !important;
   box-sizing: border-box !important;
   flex-shrink: 0 !important;
 }
 
 .home-chest-card {
-  min-height: clamp(66px, 9.6vh, 78px) !important;
-  padding: clamp(4px, 0.7vh, 6px) 2px !important;
+  min-height: clamp(62px, 8.8vh, 74px) !important;
+  padding: clamp(3px, 0.5vh, 5px) 2px !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
 }
 
 .rpg-bottom-nav {
@@ -7760,55 +7839,64 @@ kbd {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  min-height: clamp(42px, 6vh, 48px) !important;
+  min-height: clamp(40px, 5.8vh, 46px) !important;
   flex-shrink: 0 !important;
 }
 
 /* ==========================================================================
-   2. CELULARES COMPACTOS E TELAS CURTAS (iPhone SE, Galaxy A, Altura <= 680px)
+   2. ORGANIZAÇÃO: CELULARES COMPACTOS E TELAS CURTAS (iPhone SE, Altura <= 640px)
    ========================================================================== */
-@media (max-height: 680px), (max-width: 360px) {
+@media (max-height: 640px), (max-width: 350px) {
   #start-menu .modal-content.menu-photo2-modal,
   #start-menu .modal-content,
   .menu-photo2-modal {
-    padding: 4px 8px 6px !important;
-    max-width: 350px !important;
-    gap: 2px !important;
+    padding: 3px 6px 5px !important;
+    max-width: 340px !important;
+    gap: 1px !important;
   }
 
   .rpg-top-bar {
-    margin-bottom: 2px !important;
+    margin-bottom: 1px !important;
   }
 
   .rpg-currency-pill {
-    padding: 2px 7px !important;
-    font-size: 0.78rem !important;
+    padding: 1px 6px !important;
+    font-size: 0.74rem !important;
   }
 
   .stats-banner-mini {
-    font-size: 9.5px !important;
-    margin-bottom: 2px !important;
-    gap: 6px !important;
+    font-size: 9px !important;
+    margin-bottom: 1px !important;
+    gap: 5px !important;
   }
 
   .home-hero-split {
-    gap: 3px !important;
+    gap: 4px !important;
     margin: 1px auto !important;
   }
 
+  .home-knight-col {
+    flex: 0 0 34% !important;
+    max-width: 100px !important;
+    width: 34% !important;
+  }
+
   .home-knight-svg-wrap {
-    width: clamp(85px, 13.5vh, 115px) !important;
-    height: clamp(85px, 13.5vh, 115px) !important;
+    height: 95px !important;
+    max-width: 95px !important;
   }
 
   .knight-model-badge {
     margin-top: 1px !important;
-    padding: 1px 7px !important;
-    font-size: 0.65rem !important;
+    padding: 1px 5px !important;
+    font-size: 0.6rem !important;
   }
 
   .home-actions-col {
-    gap: 3px !important;
+    flex: 1 1 63% !important;
+    max-width: 64% !important;
+    width: 63% !important;
+    gap: 2px !important;
   }
 
   .orange-action-card,
@@ -7816,114 +7904,121 @@ kbd {
   .indigo-action-card,
   .blue-action-card,
   .purple-action-card {
-    min-height: 36px !important;
-    padding: 3px 8px !important;
-    border-radius: 12px !important;
+    min-height: 34px !important;
+    padding: 2px 6px !important;
+    border-radius: 10px !important;
   }
 
   .rpg-card-icon-box {
-    width: 24px !important;
-    height: 24px !important;
+    width: 22px !important;
+    height: 22px !important;
   }
 
   .rpg-card-icon-box .material-symbols-rounded {
-    font-size: 15px !important;
+    font-size: 13px !important;
   }
 
   .rpg-card-title {
-    font-size: 0.82rem !important;
-    line-height: 1.1 !important;
+    font-size: 0.76rem !important;
   }
 
   .rpg-card-subtitle {
-    font-size: 0.6rem !important;
-    line-height: 1 !important;
+    font-size: 0.54rem !important;
   }
 
   .rpg-card-arrow {
-    width: 20px !important;
-    height: 20px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .rpg-card-arrow .material-symbols-rounded {
-    font-size: 14px !important;
+    font-size: 12px !important;
   }
 
   .home-chest-slots {
     margin: 2px auto !important;
-    gap: 3px !important;
+    gap: 2px !important;
   }
 
   .home-chest-card {
-    min-height: 58px !important;
+    min-height: 52px !important;
     padding: 2px 1px !important;
     border-radius: 8px !important;
   }
 
   .chest-card-tag {
-    font-size: 0.5rem !important;
-    padding: 1px 3px !important;
+    font-size: 0.48rem !important;
+    padding: 0 2px !important;
   }
 
   .chest-emoji {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
   }
 
   .chest-card-title {
-    font-size: 0.6rem !important;
+    font-size: 0.56rem !important;
   }
 
   .chest-card-action {
-    font-size: 0.55rem !important;
-    padding: 1px 3px !important;
+    font-size: 0.52rem !important;
+    padding: 1px 2px !important;
   }
 
   .rpg-bottom-nav {
-    min-height: 38px !important;
-    padding: 1px 4px !important;
+    min-height: 36px !important;
+    padding: 1px 3px !important;
   }
 
   .rpg-nav-btn {
-    padding: 2px 3px !important;
+    padding: 1px 2px !important;
   }
 
   .rpg-nav-btn .material-symbols-rounded {
-    font-size: 18px !important;
+    font-size: 16px !important;
   }
 
   .rpg-nav-btn .nav-label {
-    font-size: 0.6rem !important;
+    font-size: 0.56rem !important;
   }
 }
 
-/* Suporte também via body.is-compact-phone */
-body.is-compact-phone #start-menu .modal-content.menu-photo2-modal {
-  padding: 4px 8px 6px !important;
-  max-width: 350px !important;
+/* Suporte também pelo class device-mobile-compact */
+body.device-mobile-compact .home-hero-split {
+  flex-direction: row !important;
+  gap: 4px !important;
 }
-body.is-compact-phone .home-knight-svg-wrap {
-  width: clamp(85px, 13.5vh, 115px) !important;
-  height: clamp(85px, 13.5vh, 115px) !important;
+body.device-mobile-compact .home-knight-col {
+  flex: 0 0 34% !important;
+  max-width: 100px !important;
 }
-body.is-compact-phone .orange-action-card,
-body.is-compact-phone .pink-action-card,
-body.is-compact-phone .indigo-action-card,
-body.is-compact-phone .blue-action-card,
-body.is-compact-phone .purple-action-card {
-  min-height: 36px !important;
-  padding: 3px 8px !important;
+body.device-mobile-compact .home-knight-svg-wrap {
+  height: 95px !important;
+  max-width: 95px !important;
 }
-body.is-compact-phone .home-chest-card {
-  min-height: 58px !important;
+body.device-mobile-compact .home-actions-col {
+  flex: 1 1 63% !important;
+  max-width: 64% !important;
+}
+body.device-mobile-compact .orange-action-card,
+body.device-mobile-compact .pink-action-card,
+body.device-mobile-compact .indigo-action-card,
+body.device-mobile-compact .blue-action-card,
+body.device-mobile-compact .purple-action-card {
+  min-height: 34px !important;
+  padding: 2px 6px !important;
+}
+body.device-mobile-compact .home-chest-card {
+  min-height: 52px !important;
 }
 
 /* ==========================================================================
-   3. CELULARES ULTRA-ALTOS (20:9, 21:9, Altura >= 850px)
+   3. ORGANIZAÇÃO: CELULARES ULTRA-ALTOS (20:9, 21:9, Altura >= 850px)
    ========================================================================== */
 @media (min-height: 850px) and (max-width: 599px) {
   #start-menu .modal-content.menu-photo2-modal {
-    padding: 14px 16px 14px !important;
+    padding: 12px 16px 14px !important;
     max-width: 420px !important;
+    justify-content: space-between !important;
   }
 
   .home-hero-split {
@@ -7931,14 +8026,21 @@ body.is-compact-phone .home-chest-card {
     margin: auto auto !important;
   }
 
+  .home-knight-col {
+    flex: 0 0 40% !important;
+    max-width: 165px !important;
+    width: 40% !important;
+  }
+
   .home-knight-svg-wrap {
-    width: clamp(165px, 22vh, 195px) !important;
-    height: clamp(165px, 22vh, 195px) !important;
-    max-width: 210px !important;
-    max-height: 210px !important;
+    height: 155px !important;
+    max-width: 155px !important;
   }
 
   .home-actions-col {
+    flex: 1 1 58% !important;
+    max-width: 60% !important;
+    width: 58% !important;
     gap: 8px !important;
   }
 
@@ -7948,11 +8050,19 @@ body.is-compact-phone .home-chest-card {
   .blue-action-card,
   .purple-action-card {
     min-height: 48px !important;
-    padding: 8px 14px !important;
+    padding: 7px 12px !important;
+  }
+
+  .rpg-card-title {
+    font-size: 0.92rem !important;
+  }
+
+  .rpg-card-subtitle {
+    font-size: 0.68rem !important;
   }
 
   .home-chest-slots {
-    margin: 8px auto !important;
+    margin: 10px auto !important;
     gap: 6px !important;
   }
 
@@ -7961,16 +8071,16 @@ body.is-compact-phone .home-chest-card {
   }
 
   .rpg-bottom-nav {
-    min-height: 50px !important;
+    min-height: 48px !important;
   }
 }
 
 /* ==========================================================================
-   4. TABLETS E DOBRÁVEIS (iPad, Galaxy Tab, 600px <= Width <= 1024px)
+   4. ORGANIZAÇÃO: TABLETS EM MODO RETRATO (iPad, Galaxy Tab, 600px - 1024px)
    ========================================================================== */
-@media (min-width: 600px) and (max-width: 1024px) and (min-height: 600px) {
+@media (min-width: 600px) and (max-width: 1024px) and (min-height: 650px) {
   #start-menu .modal-content.menu-photo2-modal {
-    max-width: 540px !important;
+    max-width: 560px !important;
     max-height: 92vh !important;
     border-radius: 28px !important;
     border: 1.5px solid rgba(245, 197, 107, 0.4) !important;
@@ -7986,16 +8096,33 @@ body.is-compact-phone .home-chest-card {
   .web-platform-banner,
   .stats-banner-mini,
   .home-hero-split,
-  .home-knight-col,
-  .home-actions-col,
   .home-chest-slots,
   .rpg-bottom-nav {
-    max-width: 490px !important;
+    max-width: 510px !important;
+  }
+
+  .home-hero-split {
+    gap: 16px !important;
+    margin: auto auto !important;
+  }
+
+  .home-knight-col {
+    flex: 0 0 38% !important;
+    max-width: 190px !important;
+    width: 38% !important;
   }
 
   .home-knight-svg-wrap {
-    width: 175px !important;
-    height: 175px !important;
+    width: 180px !important;
+    height: 180px !important;
+    max-width: 185px !important;
+  }
+
+  .home-actions-col {
+    flex: 1 1 58% !important;
+    max-width: 60% !important;
+    width: 58% !important;
+    gap: 8px !important;
   }
 
   .orange-action-card,
@@ -8004,7 +8131,7 @@ body.is-compact-phone .home-chest-card {
   .blue-action-card,
   .purple-action-card {
     min-height: 52px !important;
-    padding: 8px 16px !important;
+    padding: 9px 16px !important;
   }
 
   .rpg-card-title {
@@ -8023,70 +8150,85 @@ body.is-compact-phone .home-chest-card {
     min-height: 50px !important;
     padding: 4px 14px !important;
   }
-}
 
-/* Suporte também via body.is-tablet */
-body.is-tablet #start-menu .modal-content.menu-photo2-modal {
-  max-width: 540px !important;
+  /* Catálogos de skins e lojas expandem para grade de 3 colunas no tablet */
+  #menu-view-customize .skins-grid,
+  #menu-view-shop .shop-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+  }
 }
 
 /* ==========================================================================
-   5. DESKTOP E WIDESCREEN (PC / Notebook, Width > 1024px)
+   5. ORGANIZAÇÃO: TABLETS EM MODO PAISAGEM (DASHBOARD PANORÂMICO)
    ========================================================================== */
-@media (min-width: 1025px) {
-  #start-menu {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: radial-gradient(circle at 50% 30%, #17112a 0%, #06050b 100%) !important;
-  }
-
+@media (min-width: 800px) and (orientation: landscape) and (min-height: 550px) {
   #start-menu .modal-content.menu-photo2-modal {
-    max-width: 450px !important;
-    height: 92vh !important;
-    max-height: 880px !important;
+    max-width: 840px !important;
+    max-height: 88vh !important;
     border-radius: 30px !important;
     border: 1.5px solid rgba(245, 197, 107, 0.45) !important;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.92), 0 0 50px rgba(147, 51, 234, 0.28) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(147, 51, 234, 0.28) !important;
     background: rgba(14, 10, 22, 0.97) !important;
     backdrop-filter: blur(24px) !important;
-    -webkit-backdrop-filter: blur(24px) !important;
-    padding: 16px 20px 16px !important;
+    padding: 16px 26px !important;
   }
 
-  #menu-view-home.active,
+  #menu-view-home.active {
+    max-width: 800px !important;
+  }
+
   .rpg-top-bar,
-  .stats-banner-mini,
   .home-hero-split,
-  .home-actions-col,
   .home-chest-slots,
   .rpg-bottom-nav {
-    max-width: 390px !important;
+    max-width: 780px !important;
+  }
+
+  .home-hero-split {
+    gap: 22px !important;
+    margin: 6px auto !important;
+  }
+
+  .home-knight-col {
+    flex: 0 0 35% !important;
+    max-width: 210px !important;
   }
 
   .home-knight-svg-wrap {
-    width: 165px !important;
-    height: 165px !important;
+    width: 175px !important;
+    height: 175px !important;
   }
 
-  /* Modais de Galeria no Desktop expandem para formato arcade amplo */
-  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-customize.active),
-  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-shop.active),
-  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-clans.active),
-  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-ranks.active) {
-    max-width: 720px !important;
+  .home-actions-col {
+    flex: 1 1 62% !important;
+    max-width: 62% !important;
+    gap: 8px !important;
   }
-}
 
-/* Suporte também via body.is-desktop */
-body.is-desktop #start-menu .modal-content.menu-photo2-modal {
-  max-width: 450px !important;
+  .orange-action-card,
+  .pink-action-card,
+  .indigo-action-card,
+  .blue-action-card,
+  .purple-action-card {
+    min-height: 52px !important;
+    padding: 8px 16px !important;
+  }
+
+  .home-chest-slots {
+    margin: 8px auto !important;
+    gap: 8px !important;
+  }
+
+  .home-chest-card {
+    min-height: 78px !important;
+  }
 }
 
 /* ==========================================================================
-   6. ORIENTAÇÃO HORIZONTAL (MOBILE LANDSCAPE: Altura <= 550px)
+   6. ORGANIZAÇÃO: MOBILE LANDSCAPE (Celular na Horizontal, Altura <= 520px)
    ========================================================================== */
-@media (orientation: landscape) and (max-height: 550px) {
+@media (orientation: landscape) and (max-height: 520px) {
   #start-menu .modal-content.menu-photo2-modal,
   #start-menu .modal-content,
   .menu-photo2-modal {
@@ -8098,7 +8240,7 @@ body.is-desktop #start-menu .modal-content.menu-photo2-modal {
     border: none !important;
     box-shadow: none !important;
     margin: 0 !important;
-    padding: 3px 16px 4px !important;
+    padding: 2px 14px 3px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
@@ -8110,7 +8252,7 @@ body.is-desktop #start-menu .modal-content.menu-photo2-modal {
     max-width: 720px !important;
     margin: 0 auto !important;
     justify-content: space-between !important;
-    gap: 2px !important;
+    gap: 1px !important;
   }
 
   .rpg-top-bar {
@@ -8118,44 +8260,40 @@ body.is-desktop #start-menu .modal-content.menu-photo2-modal {
     margin-bottom: 1px !important;
   }
 
-  .stats-banner-mini {
-    display: none !important;
-  }
-
+  .stats-banner-mini,
   .web-platform-banner {
     display: none !important;
   }
 
-  /* Split Lado a Lado: Cavalo na Esquerda + 3 Cards na Direita */
+  /* Split Lado a Lado Horizontal no Celular */
   .home-hero-split {
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
     max-width: 700px !important;
-    gap: 16px !important;
+    gap: 14px !important;
     margin: 1px auto !important;
     flex: 1 !important;
   }
 
   .home-knight-col {
-    width: auto !important;
-    max-width: 160px !important;
-    flex-shrink: 0 !important;
+    flex: 0 0 28% !important;
+    max-width: 130px !important;
   }
 
   .home-knight-svg-wrap {
-    width: 90px !important;
-    height: 90px !important;
+    width: 85px !important;
+    height: 85px !important;
   }
 
   .knight-model-badge {
-    margin-top: 2px !important;
-    padding: 1px 6px !important;
-    font-size: 0.62rem !important;
+    margin-top: 1px !important;
+    padding: 1px 5px !important;
+    font-size: 0.6rem !important;
   }
 
   .home-actions-col {
-    flex: 1 !important;
+    flex: 1 1 68% !important;
     max-width: 440px !important;
     gap: 3px !important;
   }
@@ -8165,102 +8303,156 @@ body.is-desktop #start-menu .modal-content.menu-photo2-modal {
   .indigo-action-card,
   .blue-action-card,
   .purple-action-card {
-    min-height: 34px !important;
-    padding: 3px 10px !important;
-    border-radius: 10px !important;
+    min-height: 32px !important;
+    padding: 2px 8px !important;
+    border-radius: 9px !important;
   }
 
   .rpg-card-title {
-    font-size: 0.8rem !important;
+    font-size: 0.78rem !important;
   }
 
   .rpg-card-subtitle {
-    font-size: 0.58rem !important;
+    font-size: 0.54rem !important;
   }
 
   .home-chest-slots {
     max-width: 700px !important;
-    margin: 2px auto !important;
-    gap: 4px !important;
+    margin: 1px auto !important;
+    gap: 3px !important;
   }
 
   .home-chest-card {
-    min-height: 48px !important;
-    padding: 2px !important;
+    min-height: 46px !important;
+    padding: 2px 1px !important;
   }
 
   .chest-card-tag {
-    font-size: 0.5rem !important;
-    padding: 0 3px !important;
+    font-size: 0.48rem !important;
+    padding: 0 2px !important;
   }
 
   .chest-emoji {
-    font-size: 1rem !important;
+    font-size: 0.95rem !important;
   }
 
   .chest-card-title {
-    font-size: 0.58rem !important;
+    font-size: 0.54rem !important;
   }
 
   .chest-card-action {
-    font-size: 0.52rem !important;
-    padding: 1px 3px !important;
+    font-size: 0.5rem !important;
+    padding: 1px 2px !important;
   }
 
   .rpg-bottom-nav {
     max-width: 700px !important;
-    min-height: 34px !important;
-    padding: 1px 12px !important;
+    min-height: 32px !important;
+    padding: 1px 10px !important;
   }
 
   .rpg-nav-btn {
-    padding: 2px 8px !important;
+    padding: 1px 6px !important;
   }
 
   .rpg-nav-btn .material-symbols-rounded {
-    font-size: 16px !important;
+    font-size: 15px !important;
   }
 
   .rpg-nav-btn .nav-label {
-    font-size: 0.58rem !important;
+    font-size: 0.54rem !important;
   }
 }
 
-/* Suporte também via body.is-landscape */
-body.is-landscape #start-menu .modal-content.menu-photo2-modal {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  height: 100dvh !important;
-  max-height: 100dvh !important;
-  padding: 3px 16px 4px !important;
-}
-body.is-landscape .home-hero-split {
+/* Suporte também pelo class device-mobile-landscape */
+body.device-mobile-landscape .home-hero-split {
   flex-direction: row !important;
-  gap: 16px !important;
+  gap: 14px !important;
 }
-body.is-landscape .home-knight-svg-wrap {
-  width: 90px !important;
-  height: 90px !important;
+body.device-mobile-landscape .home-knight-svg-wrap {
+  width: 85px !important;
+  height: 85px !important;
 }
-body.is-landscape .home-actions-col {
-  flex: 1 !important;
-  max-width: 440px !important;
+body.device-mobile-landscape .home-actions-col {
+  flex: 1 1 68% !important;
 }
-body.is-landscape .orange-action-card,
-body.is-landscape .pink-action-card,
-body.is-landscape .indigo-action-card,
-body.is-landscape .blue-action-card,
-body.is-landscape .purple-action-card {
-  min-height: 34px !important;
-  padding: 3px 10px !important;
-}
-body.is-landscape .stats-banner-mini,
-body.is-landscape .web-platform-banner {
+body.device-mobile-landscape .stats-banner-mini,
+body.device-mobile-landscape .web-platform-banner {
   display: none !important;
 }
 
 /* ==========================================================================
-   7. HUD DE JOGO, TIMER, BARRA DE AVALIAÇÃO E DOCK RESPONSIVOS
+   7. ORGANIZAÇÃO: DESKTOP E WIDESCREEN (PC / Notebook, Largura > 1024px)
+   ========================================================================== */
+@media (min-width: 1025px) {
+  #start-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: radial-gradient(circle at 50% 30%, #17112a 0%, #06050b 100%) !important;
+  }
+
+  #start-menu .modal-content.menu-photo2-modal {
+    max-width: 460px !important;
+    height: 92vh !important;
+    max-height: 860px !important;
+    border-radius: 30px !important;
+    border: 1.5px solid rgba(245, 197, 107, 0.45) !important;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.92), 0 0 50px rgba(147, 51, 234, 0.28) !important;
+    background: rgba(14, 10, 22, 0.97) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    padding: 16px 22px 16px !important;
+    transition: max-width 0.3s ease !important;
+  }
+
+  #menu-view-home.active,
+  .rpg-top-bar,
+  .stats-banner-mini,
+  .home-hero-split,
+  .home-chest-slots,
+  .rpg-bottom-nav {
+    max-width: 410px !important;
+  }
+
+  .home-hero-split {
+    gap: 12px !important;
+    margin: auto auto !important;
+  }
+
+  .home-knight-col {
+    flex: 0 0 38% !important;
+    max-width: 155px !important;
+  }
+
+  .home-knight-svg-wrap {
+    width: 145px !important;
+    height: 145px !important;
+  }
+
+  .home-actions-col {
+    flex: 1 1 58% !important;
+    max-width: 60% !important;
+    gap: 6px !important;
+  }
+
+  /* Modais de Galeria no Desktop expandem para formato arcade amplo de 3 colunas */
+  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-customize.active),
+  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-shop.active),
+  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-clans.active),
+  #start-menu .modal-content.menu-photo2-modal:has(#menu-view-ranks.active) {
+    max-width: 760px !important;
+  }
+
+  #menu-view-customize.active .skins-grid,
+  #menu-view-shop.active .shop-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
+}
+
+/* ==========================================================================
+   8. HUD DE JOGO, TIMER, BARRA DE AVALIAÇÃO E DOCK RESPONSIVOS
    ========================================================================== */
 .hud-top {
   top: max(8px, env(safe-area-inset-top, 8px)) !important;

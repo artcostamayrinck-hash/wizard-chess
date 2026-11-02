@@ -2685,18 +2685,41 @@ function setupAdaptiveFullscreenAndLayout() {
 
       const b = document.body;
       if (b) {
-        const isDesktop = width > 1024;
-        const isTablet = width >= 600 && width <= 1024 && height >= 580;
         const isLandscapeMobile = (aspect >= 1.15 || (window.screen && window.screen.orientation && window.screen.orientation.type && window.screen.orientation.type.includes('landscape'))) && height <= 580;
-        const isCompact = (width <= 380 || height <= 680) && !isLandscapeMobile;
+        const isTablet = (width >= 600 && width <= 1024) || (width > 1024 && aspect < 1.35 && height >= 700);
+        const isTabletLandscape = isTablet && aspect >= 1.15 && height > 580;
+        const isTabletPortrait = isTablet && aspect < 1.15;
+        const isDesktop = width > 1024 && !isTablet;
+        const isCompact = (width <= 360 || height <= 640) && !isLandscapeMobile;
         const isUltraTall = aspect < 0.49 && height >= 840;
+        const isMobilePortrait = !isTablet && !isDesktop && !isLandscapeMobile && !isCompact && !isUltraTall;
 
-        b.classList.toggle('is-landscape', isLandscapeMobile);
-        b.classList.toggle('is-portrait', !isLandscapeMobile && aspect < 1);
+        // Classes gerais de estado e orientação
+        b.classList.toggle('is-landscape', isLandscapeMobile || isTabletLandscape);
+        b.classList.toggle('is-portrait', !isLandscapeMobile && !isTabletLandscape && aspect < 1);
         b.classList.toggle('is-ultra-tall', isUltraTall);
         b.classList.toggle('is-compact-phone', isCompact);
         b.classList.toggle('is-tablet', isTablet);
         b.classList.toggle('is-desktop', isDesktop);
+
+        // Perfis específicos de organização do dispositivo
+        b.classList.toggle('device-mobile-portrait', isMobilePortrait);
+        b.classList.toggle('device-mobile-compact', isCompact);
+        b.classList.toggle('device-mobile-ultra-tall', isUltraTall);
+        b.classList.toggle('device-mobile-landscape', isLandscapeMobile);
+        b.classList.toggle('device-tablet-portrait', isTabletPortrait);
+        b.classList.toggle('device-tablet-landscape', isTabletLandscape);
+        b.classList.toggle('device-desktop', isDesktop);
+
+        let profile = 'mobile-portrait';
+        if (isLandscapeMobile) profile = 'mobile-landscape';
+        else if (isTabletLandscape) profile = 'tablet-landscape';
+        else if (isTabletPortrait) profile = 'tablet-portrait';
+        else if (isDesktop) profile = 'desktop';
+        else if (isCompact) profile = 'mobile-compact';
+        else if (isUltraTall) profile = 'mobile-ultra-tall';
+
+        b.dataset.deviceProfile = profile;
       }
     } finally {
       isUpdating = false;
