@@ -7191,7 +7191,7 @@ kbd {
    ========================================================================== */
 
 /* 1. Card 1 da Tela Inicial: Azul / Ciano "Jogar" (Comece a Batalha) */
-/* 1. Cards Principais da Tela Inicial: Pílulas 3D Vibrantes (Estilo Imagem de Referência / Golf Clash) */
+/* 1. Cards Principais da Tela Inicial: Pílulas Limpas, Leves e Sofisticadas (Estilo Golf Clash) */
 .blue-action-card,
 .orange-action-card,
 .purple-action-card,
@@ -7204,31 +7204,28 @@ kbd {
   width: 100% !important;
   box-sizing: border-box !important;
   display: block !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .blue-action-card {
-  background: linear-gradient(180deg, #24adfc 0%, #0284c7 46%, #0369a1 52%, #014e82 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #003666, 0 8px 22px rgba(2, 132, 199, 0.5) !important;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 60%, #075985 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .orange-action-card {
-  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 46%, #e65100 52%, #b33900 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #802600, 0 8px 22px rgba(251, 140, 0, 0.5) !important;
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 60%, #9a3412 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .purple-action-card {
-  background: linear-gradient(180deg, #c084fc 0%, #9333ea 46%, #7b1fa2 52%, #4a148c 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #310d5c, 0 8px 22px rgba(147, 51, 234, 0.5) !important;
+  background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 60%, #6d28d9 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .green-action-card,
 .emerald-action-card {
-  background: linear-gradient(180deg, #4ade80 0%, #16a34a 46%, #15803d 52%, #14532d 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #0f3d22, 0 8px 22px rgba(22, 163, 74, 0.5) !important;
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 60%, #166534 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .blue-action-card:hover,
@@ -7236,8 +7233,8 @@ kbd {
 .purple-action-card:hover,
 .green-action-card:hover,
 .emerald-action-card:hover {
-  transform: translateY(-2px) scale(1.02) !important;
-  filter: brightness(1.08) !important;
+  transform: translateY(-2px) scale(1.01) !important;
+  filter: brightness(1.05) !important;
 }
 
 .blue-action-card:active,
@@ -7245,19 +7242,23 @@ kbd {
 .purple-action-card:active,
 .green-action-card:active,
 .emerald-action-card:active {
-  transform: translateY(2px) scale(0.98) !important;
-  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.3) !important;
-  filter: brightness(0.96) !important;
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.95) !important;
 }
 
-.blue-glow {
-  background: radial-gradient(circle at 35% 30%, #38bdf8 0%, #0284c7 55%, #0369a1 100%) !important;
-  border: 2px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+.blue-glow,
+.orange-glow,
+.purple-glow,
+.green-glow,
+.emerald-glow {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
 .blue-arrow {
-  color: #ffffff !important;
+  color: rgba(255, 255, 255, 0.88) !important;
 }
 
 .blue-action-card *,
@@ -7498,15 +7499,15 @@ kbd {
   border: 2px solid #ffd700 !important;
   border-radius: 18px !important;
   padding: 8px 6px 6px !important;
-  box-shadow: 0 4px 18px rgba(255, 215, 0, 0.4), 0 0 12px rgba(34, 197, 94, 0.5) !important;
-  transform: scale(1.06) !important;
-  color: #ffd700 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
+  transform: scale(1.04) !important;
+  color: #f5c56b !important;
 }
 
 .rpg-bottom-nav .rpg-nav-item.nav-item-center .rpg-nav-icon .material-symbols-rounded {
   font-size: 24px !important;
-  color: #ffd700 !important;
-  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) !important;
+  color: #f5c56b !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) !important;
 }
 
 .rpg-bottom-nav .rpg-nav-item.nav-item-center .rpg-nav-label {
@@ -7545,79 +7546,35 @@ kbd {
   align-items: center !important;
   position: relative !important;
   overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease, filter 0.16s ease !important;
 }
 
-/* O card principal (Comece a Batalha / Jogar) tem destaque de altura ligeiramente maior, exatamente como na Imagem 1 */
+/* O card principal (Comece a Batalha / Jogar) tem destaque de altura ligeiramente maior */
 #btn-hero-battle,
 .rpg-card-battle {
   min-height: clamp(52px, 7.4vh, 62px) !important;
 }
 
 .blue-action-card {
-  background: linear-gradient(180deg, #24adfc 0%, #0284c7 46%, #0369a1 52%, #014e82 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #003666, 0 8px 22px rgba(2, 132, 199, 0.5) !important;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 60%, #075985 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .orange-action-card {
-  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 46%, #e65100 52%, #b33900 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #802600, 0 8px 22px rgba(251, 140, 0, 0.5) !important;
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 60%, #9a3412 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .purple-action-card {
-  background: linear-gradient(180deg, #c084fc 0%, #9333ea 46%, #7b1fa2 52%, #4a148c 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #310d5c, 0 8px 22px rgba(147, 51, 234, 0.5) !important;
+  background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 60%, #6d28d9 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .green-action-card,
 .emerald-action-card {
-  background: linear-gradient(180deg, #4ade80 0%, #16a34a 46%, #15803d 52%, #14532d 100%) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #0f3d22, 0 8px 22px rgba(22, 163, 74, 0.5) !important;
-}
-
-/* Feixe Prismático de Brilho que Passa Pelos Cards (Sweep Light) */
-.blue-action-card::after,
-.orange-action-card::after,
-.purple-action-card::after,
-.green-action-card::after,
-.emerald-action-card::after {
-  content: "" !important;
-  position: absolute !important;
-  top: -60% !important;
-  left: -130% !important;
-  width: 75% !important;
-  height: 220% !important;
-  background: linear-gradient(
-    110deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.12) 42%,
-    rgba(255, 255, 255, 0.42) 50%,
-    rgba(255, 255, 255, 0.12) 58%,
-    transparent 80%
-  ) !important;
-  transform: rotate(25deg) !important;
-  pointer-events: none !important;
-  animation: cardSweepGleam 5.2s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.orange-action-card::after {
-  animation-delay: 1.7s !important;
-}
-
-.purple-action-card::after,
-.green-action-card::after,
-.emerald-action-card::after {
-  animation-delay: 3.4s !important;
-}
-
-@keyframes cardSweepGleam {
-  0% { left: -130%; }
-  25% { left: 160%; }
-  100% { left: 160%; }
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 60%, #166534 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 .blue-action-card:hover,
@@ -7628,8 +7585,8 @@ kbd {
 .rpg-card-battle:hover,
 .rpg-card-challenges:hover,
 .rpg-card-campaign:hover {
-  transform: translateY(-2px) scale(1.02) !important;
-  filter: brightness(1.08) !important;
+  transform: translateY(-2px) scale(1.01) !important;
+  filter: brightness(1.05) !important;
 }
 
 .blue-action-card:active,
@@ -7640,9 +7597,9 @@ kbd {
 .rpg-card-battle:active,
 .rpg-card-challenges:active,
 .rpg-card-campaign:active {
-  transform: translateY(2px) scale(0.98) !important;
-  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.3) !important;
-  filter: brightness(0.96) !important;
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.95) !important;
 }
 
 .rpg-card-inner {
@@ -7661,7 +7618,7 @@ kbd {
   min-width: 0 !important;
 }
 
-/* Emblemas Circulares 3D Inspirados na Imagem 1 (Golf Clash) */
+/* Emblemas Circulares Limpos e Leves */
 .rpg-card-icon-box {
   width: clamp(34px, 4.8vh, 42px) !important;
   height: clamp(34px, 4.8vh, 42px) !important;
@@ -7672,31 +7629,24 @@ kbd {
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
-  border: 2px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
-.blue-glow {
-  background: radial-gradient(circle at 35% 30%, #38bdf8 0%, #0284c7 55%, #0369a1 100%) !important;
-}
-
-.orange-glow {
-  background: radial-gradient(circle at 35% 30%, #fde047 0%, #f59e0b 55%, #d97706 100%) !important;
-}
-
-.purple-glow {
-  background: radial-gradient(circle at 35% 30%, #f0abfc 0%, #c084fc 45%, #9333ea 70%, #6b21a8 100%) !important;
-}
-
+.blue-glow,
+.orange-glow,
+.purple-glow,
 .green-glow,
 .emerald-glow {
-  background: radial-gradient(circle at 35% 30%, #86efac 0%, #4ade80 45%, #16a34a 70%, #15803d 100%) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
 }
 
 .rpg-card-icon-box .material-symbols-rounded {
   font-size: clamp(18px, 2.6vh, 22px) !important;
   color: #ffffff !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) !important;
 }
 
 .rpg-card-text {
@@ -7709,56 +7659,48 @@ kbd {
 }
 
 .rpg-card-title {
-  font-size: clamp(0.92rem, 2.2vw, 1.1rem) !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.3px !important;
+  font-size: clamp(0.92rem, 2.2vw, 1.08rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px !important;
   line-height: 1.15 !important;
   margin: 0 !important;
   color: #ffffff !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
 }
 
 .rpg-card-subtitle {
   font-size: clamp(0.62rem, 1.4vw, 0.74rem) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   margin-top: 1px !important;
   line-height: 1.1 !important;
-  color: rgba(255, 255, 255, 0.95) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* Botão de Seta Circular com Efeito de Vidro */
+/* Botão de Seta Circular Leve e Discreto */
 .rpg-card-arrow {
   width: clamp(24px, 3.4vw, 28px) !important;
   height: clamp(24px, 3.4vw, 28px) !important;
   min-width: clamp(24px, 3.4vw, 28px) !important;
   min-height: clamp(24px, 3.4vw, 28px) !important;
   border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.22) !important;
-  border: 1.2px solid rgba(255, 255, 255, 0.55) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 2px 4px rgba(0, 0, 0, 0.25) !important;
-  animation: arrowGentleNudge 2.2s ease-in-out infinite alternate !important;
 }
 
 .rpg-card-arrow .material-symbols-rounded {
   font-size: clamp(14px, 2vh, 17px) !important;
-  color: #ffffff !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) !important;
-}
-
-@keyframes arrowGentleNudge {
-  0% { transform: translateX(0); opacity: 0.88; }
-  100% { transform: translateX(3px); opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.7)); }
+  color: rgba(255, 255, 255, 0.88) !important;
 }
 
 .rpg-card-badge-right {
@@ -7887,7 +7829,7 @@ kbd {
   background: linear-gradient(180deg, #ffffff 25%, #f5c56b 75%, #d4a03e 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 12px rgba(245, 197, 107, 0.45)) !important;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.75)) !important;
   line-height: 1.15 !important;
 }
 
@@ -7983,29 +7925,29 @@ kbd {
 }
 
 @keyframes eyeTwinkle {
-  0%, 86%, 100% { opacity: 1; filter: drop-shadow(0 0 2px #fff); }
-  90% { opacity: 0.15; }
-  95% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
+  0%, 86%, 100% { opacity: 1; }
+  90% { opacity: 0.3; }
+  95% { opacity: 1; }
 }
 
 @keyframes knightFloatArcane {
   0% {
     transform: translateY(0px) scale(1);
-    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(147, 51, 234, 0.3));
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.65));
   }
   50% {
-    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.88)) drop-shadow(0 0 18px rgba(0, 245, 212, 0.42));
+    filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.72));
   }
   100% {
-    transform: translateY(-6px) scale(1.02);
-    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 24px rgba(147, 51, 234, 0.45));
+    transform: translateY(-4px) scale(1.01);
+    filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.78));
   }
 }
 
 .home-knight-col:hover .home-knight-svg-wrap,
 .home-knight-col:active .home-knight-svg-wrap {
-  transform: scale(1.06) translateY(-5px) !important;
-  filter: drop-shadow(0 20px 32px rgba(0, 245, 212, 0.55)) !important;
+  transform: scale(1.04) translateY(-3px) !important;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.8)) !important;
 }
 
 .knight-model-badge {
