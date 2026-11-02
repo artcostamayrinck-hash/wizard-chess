@@ -4584,11 +4584,13 @@ div.menu-photo2-modal {
 .pink-action-card,
 .indigo-action-card,
 .blue-action-card,
-.purple-action-card {
+.purple-action-card,
+.green-action-card,
+.emerald-action-card {
   width: 100% !important;
   min-height: 44px !important;
   padding: 8px 12px !important;
-  border-radius: 14px !important;
+  border-radius: 9999px !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
   pointer-events: auto !important;
@@ -5924,8 +5926,7 @@ kbd {
 }
 
 .purple-arrow {
-  background: rgba(192, 132, 252, 0.2) !important;
-  color: #c084fc !important;
+  color: #ffffff !important;
 }
 
 .purple-action-card *,
@@ -7190,38 +7191,80 @@ kbd {
    ========================================================================== */
 
 /* 1. Card 1 da Tela Inicial: Azul / Ciano "Jogar" (Comece a Batalha) */
-.blue-action-card {
-  background: linear-gradient(135deg, #0288d1 0%, #01579b 60%, #002f6c 100%) !important;
-  border: 1.5px solid rgba(129, 212, 250, 0.7) !important;
-  box-shadow: 0 8px 24px rgba(2, 136, 209, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
-  border-radius: 18px !important;
-  padding: 12px 14px !important;
+/* 1. Cards Principais da Tela Inicial: Pílulas 3D Vibrantes (Estilo Imagem de Referência / Golf Clash) */
+.blue-action-card,
+.orange-action-card,
+.purple-action-card,
+.green-action-card,
+.emerald-action-card {
+  border-radius: 9999px !important;
   color: #ffffff !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
+  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease, filter 0.16s ease !important;
   width: 100% !important;
   box-sizing: border-box !important;
   display: block !important;
 }
 
-.blue-action-card:hover {
+.blue-action-card {
+  background: linear-gradient(180deg, #24adfc 0%, #0284c7 46%, #0369a1 52%, #014e82 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #003666, 0 8px 22px rgba(2, 132, 199, 0.5) !important;
+}
+
+.orange-action-card {
+  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 46%, #e65100 52%, #b33900 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #802600, 0 8px 22px rgba(251, 140, 0, 0.5) !important;
+}
+
+.purple-action-card {
+  background: linear-gradient(180deg, #c084fc 0%, #9333ea 46%, #7b1fa2 52%, #4a148c 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #310d5c, 0 8px 22px rgba(147, 51, 234, 0.5) !important;
+}
+
+.green-action-card,
+.emerald-action-card {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 46%, #15803d 52%, #14532d 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #0f3d22, 0 8px 22px rgba(22, 163, 74, 0.5) !important;
+}
+
+.blue-action-card:hover,
+.orange-action-card:hover,
+.purple-action-card:hover,
+.green-action-card:hover,
+.emerald-action-card:hover {
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 12px 28px rgba(2, 136, 209, 0.65) !important;
+  filter: brightness(1.08) !important;
+}
+
+.blue-action-card:active,
+.orange-action-card:active,
+.purple-action-card:active,
+.green-action-card:active,
+.emerald-action-card:active {
+  transform: translateY(2px) scale(0.98) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.96) !important;
 }
 
 .blue-glow {
-  background: rgba(3, 169, 244, 0.28) !important;
-  border: 1px solid rgba(129, 212, 250, 0.5) !important;
-  box-shadow: 0 0 10px rgba(3, 169, 244, 0.5) !important;
+  background: radial-gradient(circle at 35% 30%, #38bdf8 0%, #0284c7 55%, #0369a1 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.45) !important;
 }
 
 .blue-arrow {
-  color: #81d4fa !important;
+  color: #ffffff !important;
 }
 
 .blue-action-card *,
 .orange-action-card *,
-.purple-action-card * {
+.purple-action-card *,
+.green-action-card *,
+.emerald-action-card * {
   pointer-events: none !important;
 }
 
@@ -7488,14 +7531,15 @@ kbd {
 .blue-action-card,
 .orange-action-card,
 .purple-action-card,
+.green-action-card,
+.emerald-action-card,
 .rpg-card-battle,
 .rpg-card-challenges,
 .rpg-card-campaign {
   width: 100% !important;
-  padding: 8px 12px !important;
-  min-height: 44px !important;
-  max-height: 52px !important;
-  border-radius: 16px !important;
+  padding: clamp(6px, 1.1vh, 9px) clamp(10px, 2.6vw, 16px) !important;
+  min-height: clamp(46px, 6.4vh, 54px) !important;
+  border-radius: 9999px !important;
   box-sizing: border-box !important;
   display: flex !important;
   align-items: center !important;
@@ -7504,28 +7548,43 @@ kbd {
   transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease, filter 0.16s ease !important;
 }
 
+/* O card principal (Comece a Batalha / Jogar) tem destaque de altura ligeiramente maior, exatamente como na Imagem 1 */
+#btn-hero-battle,
+.rpg-card-battle {
+  min-height: clamp(52px, 7.4vh, 62px) !important;
+}
+
 .blue-action-card {
-  background: linear-gradient(135deg, #0288d1 0%, #0277bd 40%, #01579b 75%, #002f6c 100%) !important;
-  border: 1.5px solid rgba(179, 229, 252, 0.8) !important;
-  box-shadow: 0 8px 22px rgba(2, 136, 209, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+  background: linear-gradient(180deg, #24adfc 0%, #0284c7 46%, #0369a1 52%, #014e82 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #003666, 0 8px 22px rgba(2, 132, 199, 0.5) !important;
 }
 
 .orange-action-card {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 75%, #78350f 100%) !important;
-  border: 1.5px solid rgba(254, 215, 170, 0.85) !important;
-  box-shadow: 0 8px 22px rgba(217, 119, 6, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 46%, #e65100 52%, #b33900 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #802600, 0 8px 22px rgba(251, 140, 0, 0.5) !important;
 }
 
 .purple-action-card {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 75%, #3b0764 100%) !important;
-  border: 1.5px solid rgba(233, 213, 255, 0.8) !important;
-  box-shadow: 0 8px 22px rgba(124, 58, 237, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.35) !important;
+  background: linear-gradient(180deg, #c084fc 0%, #9333ea 46%, #7b1fa2 52%, #4a148c 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #310d5c, 0 8px 22px rgba(147, 51, 234, 0.5) !important;
+}
+
+.green-action-card,
+.emerald-action-card {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 46%, #15803d 52%, #14532d 100%) !important;
+  border: 1.8px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 2px 1.5px rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 #0f3d22, 0 8px 22px rgba(22, 163, 74, 0.5) !important;
 }
 
 /* Feixe Prismático de Brilho que Passa Pelos Cards (Sweep Light) */
 .blue-action-card::after,
 .orange-action-card::after,
-.purple-action-card::after {
+.purple-action-card::after,
+.green-action-card::after,
+.emerald-action-card::after {
   content: "" !important;
   position: absolute !important;
   top: -60% !important;
@@ -7549,7 +7608,9 @@ kbd {
   animation-delay: 1.7s !important;
 }
 
-.purple-action-card::after {
+.purple-action-card::after,
+.green-action-card::after,
+.emerald-action-card::after {
   animation-delay: 3.4s !important;
 }
 
@@ -7562,6 +7623,8 @@ kbd {
 .blue-action-card:hover,
 .orange-action-card:hover,
 .purple-action-card:hover,
+.green-action-card:hover,
+.emerald-action-card:hover,
 .rpg-card-battle:hover,
 .rpg-card-challenges:hover,
 .rpg-card-campaign:hover {
@@ -7572,11 +7635,14 @@ kbd {
 .blue-action-card:active,
 .orange-action-card:active,
 .purple-action-card:active,
+.green-action-card:active,
+.emerald-action-card:active,
 .rpg-card-battle:active,
 .rpg-card-challenges:active,
 .rpg-card-campaign:active {
-  transform: translateY(1px) scale(0.97) !important;
-  filter: brightness(0.95) !important;
+  transform: translateY(2px) scale(0.98) !important;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+  filter: brightness(0.96) !important;
 }
 
 .rpg-card-inner {
@@ -7584,49 +7650,53 @@ kbd {
   align-items: center !important;
   justify-content: space-between !important;
   width: 100% !important;
-  gap: 8px !important;
+  gap: clamp(8px, 1.8vw, 12px) !important;
 }
 
 .rpg-card-left {
   display: flex !important;
   align-items: center !important;
-  gap: 9px !important;
+  gap: clamp(8px, 1.8vw, 12px) !important;
   flex: 1 !important;
   min-width: 0 !important;
 }
 
+/* Emblemas Circulares 3D Inspirados na Imagem 1 (Golf Clash) */
 .rpg-card-icon-box {
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
-  min-height: 28px !important;
-  border-radius: 9px !important;
+  width: clamp(34px, 4.8vh, 42px) !important;
+  height: clamp(34px, 4.8vh, 42px) !important;
+  min-width: clamp(34px, 4.8vh, 42px) !important;
+  min-height: clamp(34px, 4.8vh, 42px) !important;
+  border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.45) !important;
 }
 
 .blue-glow {
-  background: linear-gradient(135deg, rgba(3, 169, 244, 0.45), rgba(1, 87, 155, 0.6)) !important;
-  border: 1px solid rgba(179, 229, 252, 0.65) !important;
-  box-shadow: 0 0 12px rgba(3, 169, 244, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+  background: radial-gradient(circle at 35% 30%, #38bdf8 0%, #0284c7 55%, #0369a1 100%) !important;
 }
 
 .orange-glow {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.45), rgba(180, 83, 9, 0.6)) !important;
-  border: 1px solid rgba(254, 215, 170, 0.7) !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+  background: radial-gradient(circle at 35% 30%, #fde047 0%, #f59e0b 55%, #d97706 100%) !important;
 }
 
 .purple-glow {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.45), rgba(91, 33, 182, 0.6)) !important;
-  border: 1px solid rgba(233, 213, 255, 0.65) !important;
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+  background: radial-gradient(circle at 35% 30%, #f0abfc 0%, #c084fc 45%, #9333ea 70%, #6b21a8 100%) !important;
+}
+
+.green-glow,
+.emerald-glow {
+  background: radial-gradient(circle at 35% 30%, #86efac 0%, #4ade80 45%, #16a34a 70%, #15803d 100%) !important;
 }
 
 .rpg-card-icon-box .material-symbols-rounded {
-  font-size: 17px !important;
+  font-size: clamp(18px, 2.6vh, 22px) !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) !important;
 }
 
 .rpg-card-text {
@@ -7639,42 +7709,56 @@ kbd {
 }
 
 .rpg-card-title {
-  font-size: 11.5px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.2px !important;
+  font-size: clamp(0.92rem, 2.2vw, 1.1rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.3px !important;
   line-height: 1.15 !important;
   margin: 0 !important;
   color: #ffffff !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
 }
 
 .rpg-card-subtitle {
-  font-size: 9px !important;
-  font-weight: 500 !important;
-  opacity: 0.9 !important;
+  font-size: clamp(0.62rem, 1.4vw, 0.74rem) !important;
+  font-weight: 600 !important;
   margin-top: 1px !important;
   line-height: 1.1 !important;
-  color: rgba(255, 255, 255, 0.92) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55) !important;
 }
 
-.rpg-card-arrow,
-.rpg-card-arrow .material-symbols-rounded {
-  font-size: 18px !important;
-  color: #ffffff !important;
-}
-
+/* Botão de Seta Circular com Efeito de Vidro */
 .rpg-card-arrow {
+  width: clamp(24px, 3.4vw, 28px) !important;
+  height: clamp(24px, 3.4vw, 28px) !important;
+  min-width: clamp(24px, 3.4vw, 28px) !important;
+  min-height: clamp(24px, 3.4vw, 28px) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1.2px solid rgba(255, 255, 255, 0.55) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 2px 4px rgba(0, 0, 0, 0.25) !important;
   animation: arrowGentleNudge 2.2s ease-in-out infinite alternate !important;
 }
 
+.rpg-card-arrow .material-symbols-rounded {
+  font-size: clamp(14px, 2vh, 17px) !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4)) !important;
+}
+
 @keyframes arrowGentleNudge {
-  0% { transform: translateX(0); opacity: 0.85; }
-  100% { transform: translateX(3px); opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)); }
+  0% { transform: translateX(0); opacity: 0.88; }
+  100% { transform: translateX(3px); opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.7)); }
 }
 
 .rpg-card-badge-right {
@@ -7961,14 +8045,21 @@ kbd {
 .pink-action-card,
 .indigo-action-card,
 .blue-action-card,
-.purple-action-card {
+.purple-action-card,
+.green-action-card,
+.emerald-action-card {
   width: 100% !important;
-  min-height: clamp(38px, 5.2vh, 46px) !important;
-  padding: clamp(4px, 0.7vh, 6px) clamp(6px, 1.8vw, 10px) !important;
-  border-radius: 14px !important;
+  min-height: clamp(44px, 6.2vh, 52px) !important;
+  padding: clamp(5px, 0.9vh, 8px) clamp(8px, 2.2vw, 14px) !important;
+  border-radius: 9999px !important;
   display: flex !important;
   align-items: center !important;
   box-sizing: border-box !important;
+}
+
+#btn-hero-battle,
+.rpg-card-battle {
+  min-height: clamp(50px, 7vh, 60px) !important;
 }
 
 .rpg-card-inner {
@@ -7976,26 +8067,29 @@ kbd {
   align-items: center !important;
   justify-content: space-between !important;
   width: 100% !important;
-  gap: 6px !important;
+  gap: clamp(6px, 1.8vw, 10px) !important;
   min-width: 0 !important;
 }
 
 .rpg-card-left {
   display: flex !important;
   align-items: center !important;
-  gap: clamp(6px, 1.5vw, 9px) !important;
+  gap: clamp(6px, 1.8vw, 10px) !important;
   flex: 1 !important;
   min-width: 0 !important;
 }
 
 .rpg-card-icon-box {
-  width: clamp(24px, 3.5vw, 28px) !important;
-  height: clamp(24px, 3.5vw, 28px) !important;
+  width: clamp(32px, 4.4vh, 38px) !important;
+  height: clamp(32px, 4.4vh, 38px) !important;
+  min-width: clamp(32px, 4.4vh, 38px) !important;
+  min-height: clamp(32px, 4.4vh, 38px) !important;
+  border-radius: 50% !important;
   flex-shrink: 0 !important;
 }
 
 .rpg-card-icon-box .material-symbols-rounded {
-  font-size: clamp(14px, 2.2vh, 18px) !important;
+  font-size: clamp(16px, 2.4vh, 20px) !important;
 }
 
 .rpg-card-text {
@@ -8006,8 +8100,8 @@ kbd {
 }
 
 .rpg-card-title {
-  font-size: clamp(0.78rem, 1.9vw, 0.88rem) !important;
-  font-weight: 700 !important;
+  font-size: clamp(0.86rem, 2.1vw, 1.02rem) !important;
+  font-weight: 800 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -8015,17 +8109,21 @@ kbd {
 }
 
 .rpg-card-subtitle {
-  font-size: clamp(0.56rem, 1.3vw, 0.64rem) !important;
+  font-size: clamp(0.58rem, 1.3vw, 0.68rem) !important;
+  font-weight: 600 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   line-height: 1.1 !important;
-  opacity: 0.88 !important;
+  opacity: 0.94 !important;
 }
 
 .rpg-card-arrow {
-  width: clamp(18px, 2.8vw, 22px) !important;
-  height: clamp(18px, 2.8vw, 22px) !important;
+  width: clamp(22px, 3.2vw, 26px) !important;
+  height: clamp(22px, 3.2vw, 26px) !important;
+  min-width: clamp(22px, 3.2vw, 26px) !important;
+  min-height: clamp(22px, 3.2vw, 26px) !important;
+  border-radius: 50% !important;
   flex-shrink: 0 !important;
 }
 
@@ -8228,36 +8326,51 @@ kbd {
   .pink-action-card,
   .indigo-action-card,
   .blue-action-card,
-  .purple-action-card {
-    min-height: 34px !important;
-    padding: 2px 6px !important;
-    border-radius: 10px !important;
+  .purple-action-card,
+  .green-action-card,
+  .emerald-action-card {
+    min-height: 38px !important;
+    padding: 3px 8px !important;
+    border-radius: 9999px !important;
+  }
+
+  #btn-hero-battle,
+  .rpg-card-battle {
+    min-height: 44px !important;
   }
 
   .rpg-card-icon-box {
-    width: 22px !important;
-    height: 22px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    border-radius: 50% !important;
   }
 
   .rpg-card-icon-box .material-symbols-rounded {
-    font-size: 13px !important;
+    font-size: 15px !important;
   }
 
   .rpg-card-title {
-    font-size: 0.76rem !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
   }
 
   .rpg-card-subtitle {
-    font-size: 0.54rem !important;
+    font-size: 0.56rem !important;
+    font-weight: 600 !important;
   }
 
   .rpg-card-arrow {
-    width: 18px !important;
-    height: 18px !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    border-radius: 50% !important;
   }
 
   .rpg-card-arrow .material-symbols-rounded {
-    font-size: 12px !important;
+    font-size: 13px !important;
   }
 
   .home-chest-slots {
@@ -8328,9 +8441,12 @@ body.device-mobile-compact .orange-action-card,
 body.device-mobile-compact .pink-action-card,
 body.device-mobile-compact .indigo-action-card,
 body.device-mobile-compact .blue-action-card,
-body.device-mobile-compact .purple-action-card {
-  min-height: 34px !important;
-  padding: 2px 6px !important;
+body.device-mobile-compact .purple-action-card,
+body.device-mobile-compact .green-action-card,
+body.device-mobile-compact .emerald-action-card {
+  min-height: 38px !important;
+  padding: 3px 8px !important;
+  border-radius: 9999px !important;
 }
 body.device-mobile-compact .home-chest-card {
   min-height: 52px !important;
@@ -8373,9 +8489,17 @@ body.device-mobile-compact .home-chest-card {
   .pink-action-card,
   .indigo-action-card,
   .blue-action-card,
-  .purple-action-card {
+  .purple-action-card,
+  .green-action-card,
+  .emerald-action-card {
     min-height: 48px !important;
     padding: 7px 12px !important;
+    border-radius: 9999px !important;
+  }
+
+  #btn-hero-battle,
+  .rpg-card-battle {
+    min-height: 56px !important;
   }
 
   .rpg-card-title {
@@ -8455,9 +8579,17 @@ body.device-mobile-compact .home-chest-card {
   .pink-action-card,
   .indigo-action-card,
   .blue-action-card,
-  .purple-action-card {
+  .purple-action-card,
+  .green-action-card,
+  .emerald-action-card {
     min-height: 52px !important;
     padding: 9px 16px !important;
+    border-radius: 9999px !important;
+  }
+
+  #btn-hero-battle,
+  .rpg-card-battle {
+    min-height: 60px !important;
   }
 
   .rpg-card-title {
@@ -8630,10 +8762,12 @@ body.device-mobile-compact .home-chest-card {
   .pink-action-card,
   .indigo-action-card,
   .blue-action-card,
-  .purple-action-card {
-    min-height: 32px !important;
-    padding: 2px 8px !important;
-    border-radius: 9px !important;
+  .purple-action-card,
+  .green-action-card,
+  .emerald-action-card {
+    min-height: 34px !important;
+    padding: 2px 10px !important;
+    border-radius: 9999px !important;
   }
 
   .rpg-card-title {
