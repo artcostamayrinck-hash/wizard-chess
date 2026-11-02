@@ -30,30 +30,17 @@ function getJson(path) {
 
 function downloadFile(url, dest) {
   return new Promise((resolve, reject) => {
-    https.get(url, {
-      headers: {
-        'User-Agent': 'NodeJS',
-        'Authorization': 'Bearer ' + token
-      }
-    }, res => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        https.get(res.headers.location, { headers: { 'User-Agent': 'NodeJS' } }, redirectRes => {
-          const file = fs.createWriteStream(dest);
-          redirectRes.pipe(file);
-          file.on('finish', () => {
-            file.close();
-            resolve();
-          });
-        }).on('error', reject);
+    try {
+      console.log(`Downloading via curl.exe to ${dest}...`);
+      execSync(`curl.exe -L --fail --retry 3 --max-time 180 -H "Authorization: Bearer ${token}" -H "User-Agent: NodeJS" "${url}" -o "${dest}"`, { stdio: 'inherit' });
+      if (fs.existsSync(dest) && fs.statSync(dest).size > 1000) {
+        resolve();
       } else {
-        const file = fs.createWriteStream(dest);
-        res.pipe(file);
-        file.on('finish', () => {
-          file.close();
-          resolve();
-        });
+        reject(new Error('Downloaded file is missing or too small'));
       }
-    }).on('error', reject);
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 
