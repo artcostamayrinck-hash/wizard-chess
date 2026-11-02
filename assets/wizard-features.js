@@ -4233,6 +4233,17 @@ window._switchCampaignWorld = function(w) {
   const w2 = document.getElementById("campaign-world-2-container");
   const b1 = document.getElementById("btn-world-1");
   const b2 = document.getElementById("btn-world-2");
+  const progress = getCampaignProgress();
+  const isWorld1Completed = progress[4] === true;
+
+  if (w === 2 && !isWorld1Completed) {
+    if (typeof showToast === "function") {
+      showToast("🔒 O Mundo 2 está bloqueado! Derrote Malakor (Chefe 4) no Mundo 1 para desbloquear.");
+    } else {
+      alert("🔒 O Mundo 2 está bloqueado! Derrote Malakor (Chefe 4) no Mundo 1 para desbloquear.");
+    }
+    return;
+  }
 
   if (w === 1) {
     if (w1) w1.classList.remove("hidden");
@@ -4249,13 +4260,47 @@ window._switchCampaignWorld = function(w) {
 
 function updateCampaignUI() {
   const progress = getCampaignProgress();
+  const isWorld1Completed = progress[4] === true;
+
+  // Atualiza botão do Mundo 2 (bloqueado até completar o Mundo 1)
+  const b2 = document.getElementById("btn-world-2");
+  if (b2) {
+    if (isWorld1Completed) {
+      b2.classList.remove("locked");
+      b2.innerHTML = "⚡ Mundo 2: Domínio dos Titãs";
+      b2.title = "Mundo 2 Desbloqueado!";
+    } else {
+      b2.classList.add("locked");
+      b2.innerHTML = "🔒 Mundo 2: Domínio dos Titãs";
+      b2.title = "Bloqueado: complete o Mundo 1 derrotando Malakor";
+
+      // Garante que a visualização volte ao Mundo 1 se o Mundo 2 estiver fechado
+      const w2 = document.getElementById("campaign-world-2-container");
+      if (w2 && !w2.classList.contains("hidden")) {
+        const w1 = document.getElementById("campaign-world-1-container");
+        const b1 = document.getElementById("btn-world-1");
+        if (w1) w1.classList.remove("hidden");
+        w2.classList.add("hidden");
+        if (b1) b1.classList.add("active");
+        b2.classList.remove("active");
+      }
+    }
+  }
+
   CAMPAIGN_BOSSES.forEach(boss => {
     const card = document.getElementById("boss-card-" + boss.id);
     const btn = document.getElementById("btn-boss-challenge-" + boss.id);
     if (!card || !btn) return;
 
-    // Boss 1 e Boss 5 são desbloqueados por padrão como início de seus mundos
-    const isUnlocked = boss.id === 1 || boss.id === 5 || progress[boss.id - 1] === true;
+    // Mundo 1: Boss 1 livre, 2-4 exigem anterior. Mundo 2: exige Mundo 1 completo e anterior.
+    let isUnlocked = false;
+    if (boss.id === 1) {
+      isUnlocked = true;
+    } else if (boss.id <= 4) {
+      isUnlocked = progress[boss.id - 1] === true;
+    } else {
+      isUnlocked = isWorld1Completed && progress[boss.id - 1] === true;
+    }
     const isCompleted = progress[boss.id] === true;
 
     card.classList.toggle("boss-completed", isCompleted);
@@ -4269,7 +4314,7 @@ function updateCampaignUI() {
       btn.innerHTML = "🔒 Bloqueado";
       btn.disabled = true;
     } else {
-      btn.innerHTML = boss.id === 4 ? "👑 Duelo Final" : "⚔️ Desafiar Mago";
+      btn.innerHTML = (boss.id === 4 || boss.id === 8) ? "👑 Duelo Final" : "⚔️ Desafiar Mago";
       btn.style.background = "";
       btn.disabled = false;
     }
@@ -4384,10 +4429,15 @@ function setupWizardCampaign() {
           }
 
           const prog = getCampaignProgress();
+          const wasWorld1Done = prog[4] === true;
           prog[boss.id] = true;
           saveCampaignProgress(prog);
           updateCampaignUI();
-          showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+          if (boss.id === 4 && !wasWorld1Done) {
+            showToast(`🌟 VITÓRIA ÉPICA! Você derrotou Malakor e desbloqueou o Mundo 2: Domínio dos Titãs!`);
+          } else {
+            showToast(`🏆 Você derrotou ${boss.name}! Recompensas concedidas!`);
+          }
         } else {
           showBossSpeech(_activeCampaignBoss.lines.defeat, _activeCampaignBoss.avatar, _activeCampaignBoss.name);
         }
