@@ -6281,6 +6281,12 @@ function setupHUDPlayerOrientationAndLayout() {
       if (typeof window.showToast === "function") {
         window.showToast("📲 Baixando aplicativo nativo Android (APK)...");
       }
+      // Garante navegação direta para o release público oficial se o download local falhar
+      setTimeout(() => {
+        try {
+          window.open("https://github.com/artcostamayrinck-hash/wizard-chess/releases/download/latest/app-debug.apk", "_blank");
+        } catch(err) {}
+      }, 300);
     });
   }
 }
