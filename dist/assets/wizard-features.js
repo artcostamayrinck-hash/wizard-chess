@@ -526,7 +526,8 @@ function initWizardFeatures() {
     { name: "PuzzleRush", fn: setupPuzzleRush },
     { name: "EnhancedGameReview", fn: setupEnhancedGameReview },
     { name: "CampaignWorld2", fn: setupCampaignWorld2 },
-    { name: "Tournament", fn: setupTournament }
+    { name: "Tournament", fn: setupTournament },
+    { name: "HUDPlayerOrientationAndLayout", fn: setupHUDPlayerOrientationAndLayout }
   ];
 
   for (const task of tasks) {
@@ -6164,3 +6165,123 @@ function setupTournament() {
     bindAction(btnOpenCard, () => window._openTournamentModal(), "openTournamentCard");
   }
 }
+
+// ==========================================================================
+// V1.5.4: HUD PLAYER ORIENTATION, COMPACT LAYOUT & APK DOWNLOAD ROBUSTNESS
+// ==========================================================================
+function setupHUDPlayerOrientationAndLayout() {
+  const playerBar = document.getElementById("player-bar");
+  const opponentBar = document.getElementById("opponent-bar");
+  const timerW = document.getElementById("timer-w");
+  const timerB = document.getElementById("timer-b");
+  const graveW = document.getElementById("grave-w");
+  const graveB = document.getElementById("grave-b");
+
+  const pNameEl = document.getElementById("player-name-hud");
+  const pAvatarEl = document.getElementById("player-avatar-hud");
+  const pBadgeEl = document.getElementById("player-badge-hud");
+  const pRatingEl = document.getElementById("player-rating-bottom");
+
+  const oNameEl = document.getElementById("opponent-name-hud");
+  const oAvatarEl = document.getElementById("opponent-avatar-hud");
+  const oBadgeEl = document.getElementById("opponent-badge-hud");
+  const oRatingEl = document.getElementById("opponent-rating-hud");
+
+  function syncHUD() {
+    if (!playerBar || !opponentBar) return;
+
+    const userColor = (typeof window.Qe !== "undefined") ? window.Qe : "w";
+    const savedName = localStorage.getItem("wizard_chess_player_name") || "Mago";
+    const savedAvatar = localStorage.getItem("wizard_chess_player_avatar") || "🧙‍♂️";
+
+    const isOnline = (typeof window.st !== "undefined" && window.st) || (window._WIZARD_GAME && window._WIZARD_GAME.getMode && window._WIZARD_GAME.getMode() === "online");
+    const isAI = (typeof window.it !== "undefined" && window.it) || (window._WIZARD_GAME && window._WIZARD_GAME.getMode && window._WIZARD_GAME.getMode() === "ai");
+    const isPuzzle = (typeof window.Rt !== "undefined" && window.Rt);
+    const isLocal2P = !isOnline && !isAI && !isPuzzle;
+
+    // 1. Relógios e Cemitérios (Grave) de acordo com a cor do jogador principal
+    const pDetails = playerBar.querySelector(".player-details");
+    const oDetails = opponentBar.querySelector(".player-details");
+
+    if (userColor === "b") {
+      // Jogador principal é Pretas: relógio preto e peças pretas capturadas ficam embaixo com o usuário principal!
+      if (timerB && !playerBar.contains(timerB)) playerBar.appendChild(timerB);
+      if (timerW && !opponentBar.contains(timerW)) opponentBar.appendChild(timerW);
+      if (graveB && pDetails && !pDetails.contains(graveB)) pDetails.appendChild(graveB);
+      if (graveW && oDetails && !oDetails.contains(graveW)) oDetails.appendChild(graveW);
+    } else {
+      // Jogador principal é Brancas: relógio branco e peças brancas capturadas ficam embaixo!
+      if (timerW && !playerBar.contains(timerW)) playerBar.appendChild(timerW);
+      if (timerB && !opponentBar.contains(timerB)) opponentBar.appendChild(timerB);
+      if (graveW && pDetails && !pDetails.contains(graveW)) pDetails.appendChild(graveW);
+      if (graveB && oDetails && !oDetails.contains(graveB)) oDetails.appendChild(graveB);
+    }
+
+    // 2. Sempre em baixo o nome do usuário principal (Imagem 1 - Laranja)
+    if (isLocal2P) {
+      if (pNameEl) pNameEl.textContent = "Jogador 1 (Você)";
+      if (pAvatarEl) pAvatarEl.textContent = "🧙‍♂️";
+      if (pBadgeEl) pBadgeEl.textContent = "P1";
+      if (pRatingEl) pRatingEl.textContent = "(Local)";
+
+      // Topo: Adversário local
+      if (oNameEl) oNameEl.textContent = "Jogador 2";
+      if (oAvatarEl) oAvatarEl.textContent = "💀";
+      if (oBadgeEl) oBadgeEl.textContent = "P2";
+      if (oRatingEl) oRatingEl.textContent = "(Adversário)";
+    } else {
+      // IA, Online ou Campanha: Embaixo é SEMPRE o usuário principal
+      if (pNameEl) pNameEl.textContent = savedName;
+      if (pAvatarEl) pAvatarEl.textContent = savedAvatar;
+      if (pBadgeEl) pBadgeEl.textContent = "MAGO";
+      if (pRatingEl) pRatingEl.textContent = "(Você)";
+
+      if (isOnline) {
+        if (oBadgeEl) oBadgeEl.textContent = "ONLINE";
+        if (oRatingEl) oRatingEl.textContent = "(Adversário)";
+      } else if (isPuzzle) {
+        if (oNameEl && !oNameEl.textContent.includes("Desafio")) oNameEl.textContent = "Desafio Tático";
+        if (oAvatarEl) oAvatarEl.textContent = "🧩";
+        if (oBadgeEl) oBadgeEl.textContent = "PUZZLE";
+        if (oRatingEl) oRatingEl.textContent = "";
+      } else {
+        // VS IA
+        if (oBadgeEl && oBadgeEl.textContent !== "CHEFE" && !oBadgeEl.textContent.startsWith("TORNEIO")) {
+          oBadgeEl.textContent = "IA";
+        }
+      }
+    }
+  }
+
+  // Executa sync imediatamente
+  syncHUD();
+
+  // Monitora mudanças de modo, cor e reinício de jogo
+  document.querySelectorAll("#menu-color-group .toggle-btn, #btn-color").forEach(btn => {
+    btn.addEventListener("click", () => setTimeout(syncHUD, 50));
+  });
+
+  document.querySelectorAll("#menu-mode-group .toggle-btn, #btn-mode").forEach(btn => {
+    btn.addEventListener("click", () => setTimeout(syncHUD, 50));
+  });
+
+  const btnStart = document.getElementById("btn-start-game");
+  if (btnStart) btnStart.addEventListener("click", () => setTimeout(syncHUD, 100));
+
+  const btnRestart = document.getElementById("btn-restart");
+  if (btnRestart) btnRestart.addEventListener("click", () => setTimeout(syncHUD, 100));
+
+  window.syncHUDPlayerLayout = syncHUD;
+  setInterval(syncHUD, 2000);
+
+  // 3. Suporte e Fallback ao Download Direto do APK Android
+  const btnDownloadApk = document.getElementById("btn-settings-download-apk");
+  if (btnDownloadApk) {
+    btnDownloadApk.addEventListener("click", (e) => {
+      if (typeof window.showToast === "function") {
+        window.showToast("📲 Baixando aplicativo nativo Android (APK)...");
+      }
+    });
+  }
+}
+

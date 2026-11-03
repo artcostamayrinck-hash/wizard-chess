@@ -453,40 +453,47 @@
    Design Fiel à Imagem 2 (Chess.com Mobile) - Barras de Jogador e Relógios
    ========================================================================== */
 
-/* Barra do Oponente no Topo (acima do tabuleiro) */
+/* Barra do Oponente no Topo (acima do tabuleiro) - Compacto & Elegante */
 .opponent-bar {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  width: 100% !important;
-  background: rgba(14, 11, 20, 0.85) !important;
+  max-width: clamp(260px, 84vw, 360px) !important;
+  width: calc(100% - 24px) !important;
+  margin: 4px auto 0 auto !important;
+  background: rgba(14, 11, 20, 0.88) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
-  border: 1px solid rgba(208, 188, 255, 0.2) !important;
-  border-radius: 14px !important;
-  padding: 6px 12px !important;
+  border: 1px solid rgba(208, 188, 255, 0.22) !important;
+  border-radius: 12px !important;
+  padding: 4px 10px !important;
+  min-height: 36px !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
   pointer-events: auto !important;
-  margin-top: 4px !important;
 }
 
-/* Barra do Jogador na Base (abaixo do tabuleiro e acima do dock) */
+/* Barra do Jogador na Base (abaixo do tabuleiro e acima do dock) - Compacto & Fixo */
 .player-bar-bottom {
   position: fixed !important;
-  bottom: calc(env(safe-area-inset-bottom, 16px) + 52px) !important;
-  left: 12px !important;
-  right: 12px !important;
+  bottom: calc(max(8px, env(safe-area-inset-bottom, 12px)) + 50px) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  max-width: clamp(260px, 84vw, 360px) !important;
+  width: calc(100% - 24px) !important;
+  margin: 0 auto !important;
   z-index: 45 !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  background: rgba(14, 11, 20, 0.9) !important;
+  background: rgba(14, 11, 20, 0.92) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
   border: 1px solid rgba(245, 197, 107, 0.35) !important;
-  border-radius: 14px !important;
-  padding: 6px 12px !important;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.7), 0 0 16px rgba(245, 197, 107, 0.18) !important;
+  border-radius: 12px !important;
+  padding: 4px 10px !important;
+  min-height: 36px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 14px rgba(245, 197, 107, 0.15) !important;
   pointer-events: auto !important;
 }
 
@@ -494,17 +501,17 @@
 .player-profile {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 7px !important;
 }
 
 .chess-avatar {
-  width: 34px !important;
-  height: 34px !important;
+  width: 28px !important;
+  height: 28px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 1.15rem !important;
+  font-size: 0.95rem !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
   flex-shrink: 0 !important;
 }
@@ -4162,19 +4169,36 @@ html, body {
 }
 
 .opponent-bar {
-  max-width: 680px !important;
-  width: 100% !important;
-  margin: 0 auto !important;
+  max-width: clamp(260px, 84vw, 360px) !important;
+  width: calc(100% - 24px) !important;
+  margin: 4px auto 0 auto !important;
 }
 
 .player-bar-bottom {
   position: fixed !important;
-  bottom: calc(max(10px, var(--safe-bottom)) + 52px) !important;
-  left: max(12px, var(--safe-left)) !important;
-  right: max(12px, var(--safe-right)) !important;
-  max-width: 680px !important;
+  bottom: calc(max(8px, var(--safe-bottom)) + 50px) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  max-width: clamp(260px, 84vw, 360px) !important;
+  width: calc(100% - 24px) !important;
   margin: 0 auto !important;
   z-index: 45 !important;
+}
+
+@media (orientation: landscape) {
+  .opponent-bar {
+    max-width: clamp(230px, 46vw, 340px) !important;
+    padding: 2px 8px !important;
+    min-height: 32px !important;
+    margin-top: 2px !important;
+  }
+  .player-bar-bottom {
+    max-width: clamp(230px, 46vw, 340px) !important;
+    padding: 2px 8px !important;
+    min-height: 32px !important;
+    bottom: calc(max(6px, var(--safe-bottom)) + 46px) !important;
+  }
 }
 
 .md3-dock {
