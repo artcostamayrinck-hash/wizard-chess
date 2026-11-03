@@ -4,9 +4,13 @@ const { execSync } = require('child_process');
 
 console.log('[Build] Sincronizando arquivos entre root, dist e public...');
 
-// 1. Sincroniza index.html para dist/index.html
+// 1. Sincroniza index.html para dist/index.html e .nojekyll
 fs.copyFileSync('index.html', 'dist/index.html');
-console.log('✓ index.html copiado para dist/index.html');
+if (fs.existsSync('.nojekyll')) {
+  fs.copyFileSync('.nojekyll', 'dist/.nojekyll');
+  fs.copyFileSync('.nojekyll', 'public/.nojekyll');
+}
+console.log('✓ index.html e .nojekyll copiados para dist/');
 
 // 2. Executa sync-assets.cjs
 require('./sync-assets.cjs');
