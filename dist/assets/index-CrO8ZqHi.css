@@ -7857,40 +7857,40 @@ kbd {
   flex-shrink: 0 !important;
 }
 
-/* ORGANIZAÇÃO HERO: Lado a Lado (Cavalo à Esquerda + 3 Cards de Ação à Direita) */
+/* ORGANIZAÇÃO HERO: Cavalo em Destaque no Centro (Maior e Centralizado) + Ações Abaixo */
 .home-hero-split {
   width: 100% !important;
   max-width: 420px !important;
   flex: 1 1 auto !important;
-  margin: clamp(4px, 1vh, 12px) auto !important;
+  margin: clamp(2px, 0.6vh, 8px) auto !important;
   display: flex !important;
-  flex-direction: row !important;
+  flex-direction: column !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  gap: clamp(8px, 2.2vw, 14px) !important;
+  justify-content: center !important;
+  gap: clamp(6px, 1.2vh, 12px) !important;
   flex-shrink: 0 !important;
   box-sizing: border-box !important;
 }
 
 .home-knight-col {
-  flex: 0 0 clamp(135px, 39%, 175px) !important;
-  max-width: clamp(135px, 39%, 175px) !important;
-  width: clamp(135px, 39%, 175px) !important;
+  width: 100% !important;
+  max-width: 320px !important;
   min-width: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 0 !important;
+  cursor: pointer !important;
 }
 
 .home-knight-svg-wrap {
   width: 100% !important;
-  max-width: 170px !important;
-  height: clamp(140px, 21.5vh, 190px) !important;
+  max-width: clamp(210px, 52vw, 280px) !important;
+  height: clamp(165px, 23vh, 230px) !important;
   min-height: 0 !important;
-  max-height: 200px !important;
+  max-height: 240px !important;
   aspect-ratio: auto !important;
   margin: 0 auto !important;
   display: flex !important;
@@ -7911,7 +7911,7 @@ kbd {
   max-height: 100% !important;
   object-fit: contain !important;
   display: block !important;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.75)) !important;
+  filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.8)) !important;
 }
 
 .svg-aura-pulse {
@@ -7969,9 +7969,9 @@ kbd {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 5px !important;
-  margin: clamp(4px, 0.6vh, 8px) auto 0 !important;
-  padding: 3px clamp(7px, 1.5vw, 10px) !important;
+  gap: 6px !important;
+  margin: clamp(3px, 0.5vh, 6px) auto 0 !important;
+  padding: 3px 12px !important;
   background: linear-gradient(135deg, rgba(32, 22, 54, 0.95) 0%, rgba(16, 11, 28, 0.98) 100%) !important;
   border: 1.2px solid rgba(245, 197, 107, 0.55) !important;
   border-radius: 999px !important;
@@ -7990,13 +7990,13 @@ kbd {
 }
 
 .knight-model-badge .badge-icon {
-  font-size: clamp(11px, 1.4vh, 13px) !important;
+  font-size: clamp(12px, 1.5vh, 14px) !important;
   line-height: 1 !important;
   flex-shrink: 0 !important;
 }
 
 .knight-model-badge .badge-name {
-  font-size: clamp(10px, 1.3vh, 11.5px) !important;
+  font-size: clamp(10.5px, 1.3vh, 12px) !important;
   font-weight: 700 !important;
   color: #fce7f3 !important;
   white-space: nowrap !important;
@@ -8011,8 +8011,8 @@ kbd {
   border: 1px solid rgba(192, 132, 252, 0.5) !important;
   color: #e9d5ff !important;
   border-radius: 6px !important;
-  padding: 1.5px 5px !important;
-  font-size: clamp(8px, 1vh, 9px) !important;
+  padding: 1.5px 6px !important;
+  font-size: clamp(8.5px, 1.1vh, 9.5px) !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.3px !important;
@@ -8021,15 +8021,14 @@ kbd {
 }
 
 .home-actions-col {
-  flex: 1 1 58% !important;
-  max-width: 61% !important;
-  width: 58% !important;
+  width: 100% !important;
+  max-width: 380px !important;
   min-width: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
-  gap: clamp(7px, 1.2vh, 11px) !important;
+  gap: clamp(5px, 0.9vh, 8px) !important;
   justify-content: center !important;
 }
 
@@ -8041,8 +8040,8 @@ kbd {
 .green-action-card,
 .emerald-action-card {
   width: 100% !important;
-  min-height: clamp(46px, 6.4vh, 54px) !important;
-  padding: clamp(4px, 0.7vh, 7px) clamp(8px, 2vw, 13px) !important;
+  min-height: clamp(42px, 5.6vh, 48px) !important;
+  padding: clamp(3px, 0.6vh, 6px) clamp(10px, 2.5vw, 16px) !important;
   border-radius: 9999px !important;
   display: flex !important;
   align-items: center !important;
@@ -8053,7 +8052,7 @@ kbd {
 
 #btn-hero-battle,
 .rpg-card-battle {
-  min-height: clamp(52px, 7.2vh, 60px) !important;
+  min-height: clamp(46px, 6.2vh, 54px) !important;
 }
 
 .rpg-card-inner {
@@ -8068,16 +8067,16 @@ kbd {
 .rpg-card-left {
   display: flex !important;
   align-items: center !important;
-  gap: clamp(6px, 1.8vw, 10px) !important;
+  gap: clamp(8px, 2vw, 12px) !important;
   flex: 1 !important;
   min-width: 0 !important;
 }
 
 .rpg-card-icon-box {
-  width: clamp(32px, 4.4vh, 38px) !important;
-  height: clamp(32px, 4.4vh, 38px) !important;
-  min-width: clamp(32px, 4.4vh, 38px) !important;
-  min-height: clamp(32px, 4.4vh, 38px) !important;
+  width: clamp(30px, 4.2vh, 36px) !important;
+  height: clamp(30px, 4.2vh, 36px) !important;
+  min-width: clamp(30px, 4.2vh, 36px) !important;
+  min-height: clamp(30px, 4.2vh, 36px) !important;
   border-radius: 50% !important;
   flex-shrink: 0 !important;
 }
@@ -8128,8 +8127,8 @@ kbd {
 /* 4 Baús e Recompensas Inferiores (Estilo Golf Clash) */
 .home-chest-slots {
   width: 100% !important;
-  max-width: 420px !important;
-  margin: clamp(4px, 0.8vh, 10px) auto clamp(4px, 0.8vh, 8px) !important;
+  max-width: 380px !important;
+  margin: clamp(4px, 0.7vh, 8px) auto clamp(4px, 0.7vh, 8px) !important;
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
   gap: clamp(4px, 1.2vw, 7px) !important;
@@ -8139,8 +8138,8 @@ kbd {
 }
 
 .home-chest-card {
-  min-height: clamp(76px, 10.5vh, 90px) !important;
-  padding: clamp(4px, 0.6vh, 6px) 2px clamp(5px, 0.7vh, 7px) !important;
+  min-height: clamp(70px, 9.5vh, 84px) !important;
+  padding: clamp(3px, 0.5vh, 5px) 2px clamp(4px, 0.6vh, 6px) !important;
   border-radius: 12px !important;
   box-sizing: border-box !important;
   background: linear-gradient(180deg, rgba(34, 26, 52, 0.96) 0%, rgba(16, 12, 28, 0.98) 100%) !important;
@@ -8219,12 +8218,12 @@ kbd {
 
 .rpg-bottom-nav {
   width: 100% !important;
-  max-width: 420px !important;
+  max-width: 380px !important;
   margin: 0 auto !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  min-height: clamp(44px, 6vh, 50px) !important;
+  min-height: clamp(42px, 5.8vh, 48px) !important;
   flex-shrink: 0 !important;
   background: rgba(14, 10, 22, 0.98) !important;
   border: 1px solid rgba(245, 197, 107, 0.3) !important;
@@ -8292,31 +8291,33 @@ kbd {
   }
 
   .home-hero-split {
-    gap: 4px !important;
+    flex-direction: column !important;
+    gap: 3px !important;
     margin: 1px auto !important;
   }
 
   .home-knight-col {
-    flex: 0 0 34% !important;
-    max-width: 100px !important;
-    width: 34% !important;
+    width: 100% !important;
+    max-width: 220px !important;
+    margin: 0 auto !important;
   }
 
   .home-knight-svg-wrap {
-    height: 95px !important;
-    max-width: 95px !important;
+    height: 105px !important;
+    max-width: 130px !important;
+    min-height: 0 !important;
   }
 
   .knight-model-badge {
     margin-top: 1px !important;
-    padding: 1px 5px !important;
+    padding: 1px 6px !important;
     font-size: 0.6rem !important;
   }
 
   .home-actions-col {
-    flex: 1 1 63% !important;
-    max-width: 64% !important;
-    width: 63% !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
     gap: 2px !important;
   }
 
@@ -8420,20 +8421,23 @@ kbd {
 
 /* Suporte também pelo class device-mobile-compact */
 body.device-mobile-compact .home-hero-split {
-  flex-direction: row !important;
-  gap: 4px !important;
+  flex-direction: column !important;
+  gap: 3px !important;
 }
 body.device-mobile-compact .home-knight-col {
-  flex: 0 0 34% !important;
-  max-width: 100px !important;
+  width: 100% !important;
+  max-width: 220px !important;
+  margin: 0 auto !important;
 }
 body.device-mobile-compact .home-knight-svg-wrap {
-  height: 95px !important;
-  max-width: 95px !important;
+  height: 105px !important;
+  max-width: 130px !important;
+  min-height: 0 !important;
 }
 body.device-mobile-compact .home-actions-col {
-  flex: 1 1 63% !important;
-  max-width: 64% !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  margin: 0 auto !important;
 }
 body.device-mobile-compact .orange-action-card,
 body.device-mobile-compact .pink-action-card,
@@ -8461,28 +8465,29 @@ body.device-mobile-compact .home-chest-card {
   }
 
   .home-hero-split {
-    gap: 14px !important;
+    flex-direction: column !important;
+    gap: 12px !important;
     margin: clamp(6px, 1.2vh, 14px) auto !important;
     flex: 1 1 auto !important;
   }
 
   .home-knight-col {
-    flex: 0 0 40% !important;
-    max-width: 175px !important;
-    width: 40% !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
   }
 
   .home-knight-svg-wrap {
-    height: 185px !important;
-    max-width: 175px !important;
+    height: 235px !important;
+    max-width: 290px !important;
     min-height: 0 !important;
   }
 
   .home-actions-col {
-    flex: 1 1 58% !important;
-    max-width: 60% !important;
-    width: 58% !important;
-    gap: 10px !important;
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto !important;
+    gap: 8px !important;
   }
 
   .orange-action-card,
@@ -8552,29 +8557,30 @@ body.device-mobile-compact .home-chest-card {
   }
 
   .home-hero-split {
-    gap: 16px !important;
+    flex-direction: column !important;
+    gap: 14px !important;
     margin: clamp(8px, 1.5vh, 18px) auto !important;
     flex: 1 1 auto !important;
   }
 
   .home-knight-col {
-    flex: 0 0 38% !important;
-    max-width: 195px !important;
-    width: 38% !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
   }
 
   .home-knight-svg-wrap {
-    width: 185px !important;
-    height: 185px !important;
-    max-width: 195px !important;
+    width: 250px !important;
+    height: 250px !important;
+    max-width: 260px !important;
     min-height: 0 !important;
   }
 
   .home-actions-col {
-    flex: 1 1 58% !important;
-    max-width: 60% !important;
-    width: 58% !important;
-    gap: 8px !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    margin: 0 auto !important;
+    gap: 10px !important;
   }
 
   .orange-action-card,
@@ -8881,26 +8887,29 @@ body.device-mobile-landscape .web-platform-banner {
   }
 
   .home-hero-split {
-    gap: 14px !important;
+    flex-direction: column !important;
+    gap: 12px !important;
     margin: clamp(8px, 1.5vh, 18px) auto !important;
     flex: 1 1 auto !important;
   }
 
   .home-knight-col {
-    flex: 0 0 38% !important;
-    max-width: 165px !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
   }
 
   .home-knight-svg-wrap {
-    width: 155px !important;
-    height: 155px !important;
+    width: 210px !important;
+    height: 210px !important;
     min-height: 0 !important;
   }
 
   .home-actions-col {
-    flex: 1 1 58% !important;
-    max-width: 60% !important;
-    gap: 6px !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    gap: 7px !important;
   }
 
   /* Modais de Galeria no Desktop expandem para formato arcade amplo de 3 colunas */
