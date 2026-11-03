@@ -21,3 +21,4 @@ console.log('3. Pushing dist directly to wizard-chess.git gh-pages...');
 execSync('git push --force https://github.com/artcostamayrinck-hash/wizard-chess.git gh-pages:gh-pages', { cwd: distDir, stdio: 'inherit' });
 
 console.log('✓ Successfully deployed dist to gh-pages of wizard-chess!');
+
