@@ -1768,6 +1768,163 @@ ${movesText ? `\n${movesText.trim()}` : ""}`;
 // --------------------------------------------------------
 // 8. Menu Inicial Foto 2: Comece a Batalha, Puzzles Aleatórios e Configurações
 // --------------------------------------------------------
+// ==============================================================
+// V1.5.0: BAÚ ARCANO DIÁRIO (DAILY ARCANE CHEST)
+// ==============================================================
+const DailyChest = {
+  COOLDOWN_MS: 24 * 60 * 60 * 1000,
+
+  getLastClaim() {
+    try {
+      const k1 = parseInt(localStorage.getItem("wizard_chess_daily_chest_last") || "0", 10);
+      const k2 = parseInt(localStorage.getItem("wizard_last_daily_chest") || "0", 10);
+      return Math.max(isNaN(k1) ? 0 : k1, isNaN(k2) ? 0 : k2);
+    } catch (e) {
+      return 0;
+    }
+  },
+
+  getRemainingTime() {
+    const last = this.getLastClaim();
+    if (!last || last === 0) {
+      return { remain: 0, hours: 0, mins: 0, secs: 0, isReady: true };
+    }
+    const now = Date.now();
+    const elapsed = now - last;
+    const remain = this.COOLDOWN_MS - elapsed;
+    if (remain <= 0) {
+      return { remain: 0, hours: 0, mins: 0, secs: 0, isReady: true };
+    }
+    const hours = Math.floor(remain / (1000 * 60 * 60));
+    const mins = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((remain % (1000 * 60)) / 1000);
+    return { remain, hours, mins, secs, isReady: false };
+  },
+
+  isAvailable() {
+    return this.getRemainingTime().isReady;
+  },
+
+  updateUI() {
+    const { remain, hours, mins, secs, isReady } = this.getRemainingTime();
+
+    // 1. Home Lobby Slot Card (#home-slot-chest)
+    const homeCard = document.getElementById("home-slot-chest");
+    if (homeCard) {
+      const tagEl = homeCard.querySelector(".chest-card-tag");
+      const actionEl = homeCard.querySelector(".chest-card-action");
+      const iconEl = homeCard.querySelector(".chest-emoji");
+
+      if (isReady) {
+        homeCard.classList.remove("chest-cooldown");
+        homeCard.classList.add("chest-available");
+        homeCard.setAttribute("title", "Baú Grátis Diário Pronto! Toque para abrir.");
+        if (tagEl) {
+          tagEl.textContent = "DIÁRIO";
+          tagEl.className = "chest-card-tag blue-tag";
+        }
+        if (actionEl) {
+          actionEl.textContent = "ABRIR";
+          actionEl.className = "chest-card-action blue-btn";
+        }
+        if (iconEl) {
+          iconEl.style.filter = "";
+        }
+      } else {
+        homeCard.classList.add("chest-cooldown");
+        homeCard.classList.remove("chest-available");
+        const timeBadge = hours > 0 ? `${hours}h ${mins}m` : `${mins}m ${secs}s`;
+        homeCard.setAttribute("title", `Baú Diário em recarga. Disponível em ${timeBadge}.`);
+        if (tagEl) {
+          tagEl.textContent = "AGUARDE";
+          tagEl.className = "chest-card-tag cooldown-tag";
+        }
+        if (actionEl) {
+          actionEl.textContent = timeBadge;
+          actionEl.className = "chest-card-action cooldown-btn";
+        }
+        if (iconEl) {
+          iconEl.style.filter = "grayscale(0.55) opacity(0.85)";
+        }
+      }
+    }
+
+    // 2. Daily Quests Modal Chest (#btn-claim-daily-chest, #chest-desc-text, #daily-chest-card)
+    const btn = document.getElementById("btn-claim-daily-chest");
+    const desc = document.getElementById("chest-desc-text");
+    const chestBox = document.getElementById("daily-chest-card");
+
+    if (btn) {
+      if (isReady) {
+        btn.disabled = false;
+        btn.textContent = "🎁 Abrir Baú";
+        btn.classList.remove("cooldown-btn");
+        if (desc) desc.textContent = "Baú Arcano Pronto! Toque para resgatar.";
+        if (chestBox) chestBox.classList.remove("chest-cooldown");
+      } else {
+        btn.disabled = true;
+        const timeBadge = hours > 0 ? `⏳ ${hours}h ${mins}m` : `⏳ ${mins}m ${secs}s`;
+        btn.textContent = timeBadge;
+        btn.classList.add("cooldown-btn");
+        if (desc) {
+          desc.textContent = hours > 0
+            ? `Recompensa renova em ${hours} horas e ${mins} minutos.`
+            : `Recompensa renova em ${mins} minutos e ${secs} segundos.`;
+        }
+        if (chestBox) chestBox.classList.add("chest-cooldown");
+      }
+    }
+  },
+
+  claim() {
+    const { hours, mins, secs, isReady } = this.getRemainingTime();
+    if (!isReady) {
+      const timeStr = hours > 0 ? `${hours}h ${mins}min` : `${mins}min e ${secs}s`;
+      if (typeof showToast === "function") {
+        showToast(`⏳ Baú Diário em recarga! Retorne em ${timeStr} para abrir de novo.`);
+      }
+      this.updateUI();
+      return false;
+    }
+
+    const now = Date.now();
+    try {
+      localStorage.setItem("wizard_chess_daily_chest_last", now.toString());
+      localStorage.setItem("wizard_last_daily_chest", now.toString());
+    } catch (e) {}
+
+    // Rewards
+    if (typeof addPlayerCoins === "function") {
+      addPlayerCoins(200, "Baú Arcano Diário");
+    }
+    if (typeof addXP === "function") {
+      addXP(100, "Baú Arcano Diário");
+    }
+    if (typeof addArcaneCrowns === "function") {
+      addArcaneCrowns(2);
+    }
+    if (typeof updateCoinsUI === "function") {
+      updateCoinsUI();
+    }
+
+    // Audio chime
+    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
+      try { ArcaneAudio.playQuestRewardChime(); } catch (e) {}
+    }
+
+    // Visual fanfare
+    if (typeof showAchievementToast === "function") {
+      showAchievementToast("🎁 BAÚ DIÁRIO ABERTO!", "+200 Moedas, +100 XP e +2 Coroas Arcanas coletadas!", "🎁");
+    } else if (typeof showToast === "function") {
+      showToast("🎁 Baú Aberto! Você recebeu +200 Moedas, +100 XP e +2 Coroas!");
+    }
+
+    this.updateUI();
+    return true;
+  }
+};
+window.DailyChest = DailyChest;
+
 function setupStartMenuGrid() {
   // Sincronização rigorosa da visibilidade da Dificuldade da IA
   function syncAiDifficulty() {
@@ -1833,6 +1990,9 @@ function setupStartMenuGrid() {
       v.style.setProperty("display", "none", "important");
     });
     const target = document.getElementById('menu-view-' + viewName);
+    if (viewName === 'home' && window.DailyChest) {
+      window.DailyChest.updateUI();
+    }
     if (!target) {
       console.warn('[WizardChess] Subview não encontrada: ' + viewName);
       const fallback = document.getElementById('menu-view-home');
@@ -1975,20 +2135,8 @@ function setupStartMenuGrid() {
 
   // 4.2. Fileira de 4 Slots de Baús e Recompensas (Golf Clash Style)
   function claimDailyChest() {
-    const lastClaim = parseInt(localStorage.getItem("wizard_last_daily_chest") || "0", 10);
-    const now = Date.now();
-    const ONE_DAY = 24 * 60 * 60 * 1000;
-    if (now - lastClaim > ONE_DAY) {
-      localStorage.setItem("wizard_last_daily_chest", now.toString());
-      addPlayerCoins(150, "Baú Diário Grátis");
-      if (typeof addArcaneCrowns === "function") addArcaneCrowns(2);
-      updateCoinsUI();
-      showAchievementToast("🎁 BAÚ DIÁRIO ABERTO!", "+150 Moedas e +2 Coroas Arcanas coletadas!", "🎁");
-    } else {
-      const remainingMs = ONE_DAY - (now - lastClaim);
-      const hours = Math.floor(remainingMs / (60 * 60 * 1000));
-      const mins = Math.floor((remainingMs % (60 * 60 * 1000)) / (60 * 1000));
-      showToast(`⏳ Próximo Baú Diário em ${hours}h ${mins}min! (Ou ganhe moedas na Loja)`);
+    if (window.DailyChest) {
+      window.DailyChest.claim();
     }
   }
   window._claimDailyChest = claimDailyChest;
@@ -4737,63 +4885,23 @@ function setupDynamicWeather() {
 }
 
 // ==============================================================
-// V1.5.0: BAÚ ARCANO DIÁRIO
+// V1.5.0: SETUP BAÚ ARCANO DIÁRIO
 // ==============================================================
-const DailyChest = {
-  COOLDOWN_MS: 24 * 60 * 60 * 1000,
-
-  getLastClaim() {
-    return parseInt(localStorage.getItem("wizard_chess_daily_chest_last") || "0", 10);
-  },
-
-  updateUI() {
-    const btn = document.getElementById("btn-claim-daily-chest");
-    const desc = document.getElementById("chest-desc-text");
-    if (!btn) return;
-
-    const last = this.getLastClaim();
-    const now = Date.now();
-    const elapsed = now - last;
-
-    if (elapsed >= this.COOLDOWN_MS || last === 0) {
-      btn.disabled = false;
-      btn.textContent = "🎁 Abrir Baú";
-      if (desc) desc.textContent = "Baú Arcano Pronto! Toque para resgatar.";
-    } else {
-      btn.disabled = true;
-      const remain = this.COOLDOWN_MS - elapsed;
-      const hours = Math.floor(remain / (1000 * 60 * 60));
-      const mins = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
-      btn.textContent = `Próximo em ${hours}h ${mins}m`;
-      if (desc) desc.textContent = `Recompensa renova em ${hours} horas e ${mins} minutos.`;
-    }
-  },
-
-  claim() {
-    const last = this.getLastClaim();
-    const now = Date.now();
-    if (now - last < this.COOLDOWN_MS && last !== 0) return;
-
-    localStorage.setItem("wizard_chess_daily_chest_last", now);
-    addPlayerCoins(200, "Baú Arcano Diário");
-    addXP(100, "Baú Arcano Diário");
-
-    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playQuestRewardChime) {
-      ArcaneAudio.playQuestRewardChime();
-    }
-
-    showToast("🎉 Baú Aberto! Você recebeu +200 Moedas e +100 XP!");
-    this.updateUI();
-  }
-};
-
 function setupDailyChest() {
-  DailyChest.updateUI();
+  if (window.DailyChest) {
+    window.DailyChest.updateUI();
+  }
   const btn = document.getElementById("btn-claim-daily-chest");
   if (btn) {
-    bindAction(btn, () => DailyChest.claim(), "claimDailyChest");
+    bindAction(btn, () => {
+      if (window.DailyChest) window.DailyChest.claim();
+    }, "claimDailyChestFromModal");
   }
-  setInterval(() => DailyChest.updateUI(), 60000);
+  if (!window._dailyChestTimer) {
+    window._dailyChestTimer = setInterval(() => {
+      if (window.DailyChest) window.DailyChest.updateUI();
+    }, 1000);
+  }
 }
 
 // ==============================================================
