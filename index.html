@@ -3710,13 +3710,26 @@
             </div>
           </div>
 
-          <!-- 6. Dificuldade da IA (Ocultado quando Online ou 2 Jogadores) -->
+          <!-- 6. Grimório de Magos (Adversários da IA - Grid 2x2 Organizado) -->
           <div class="setup-group" id="menu-diff-section">
-            <label class="setup-label photo2-label">DIFICULDADE DA IA</label>
-            <div class="toggle-group photo2-toggle-group" id="menu-diff-group">
-              <button type="button" class="toggle-btn" data-diff="1">Fácil</button>
-              <button type="button" class="toggle-btn active" data-diff="2">Média</button>
-              <button type="button" class="toggle-btn" data-diff="3">Difícil</button>
+            <label class="setup-label photo2-label">ADVERSÁRIO (IA)</label>
+            <div class="toggle-group photo2-toggle-group magus-2x2-grid" id="menu-diff-group">
+              <button type="button" class="toggle-btn" data-diff="1" title="Aprendiz Elara (800 Elo) - Cautelosa">
+                <span class="magus-icon">🧙‍♀️</span>
+                <span class="magus-name">Elara (800)</span>
+              </button>
+              <button type="button" class="toggle-btn active" data-diff="2" title="Piromante Ignis (1300 Elo) - Agressivo">
+                <span class="magus-icon">🔥</span>
+                <span class="magus-name">Ignis (1300)</span>
+              </button>
+              <button type="button" class="toggle-btn" data-diff="3" title="Rainha Glacia (1700 Elo) - Tática e Fria">
+                <span class="magus-icon">❄️</span>
+                <span class="magus-name">Glacia (1700)</span>
+              </button>
+              <button type="button" class="toggle-btn" data-diff="4" title="Lich Malakor (2100 Elo) - Mestre Implacável">
+                <span class="magus-icon">💀</span>
+                <span class="magus-name">Malakor (2100)</span>
+              </button>
             </div>
           </div>
         </div>
@@ -4296,6 +4309,7 @@
 
     <!-- Barra do Oponente no Topo (Baseada na Imagem 2 - Chess.com) -->
     <div id="opponent-bar" class="player-bar opponent-bar">
+      <div id="bubble-opponent" class="hud-speech-bubble bubble-top hidden"></div>
       <div class="player-profile">
         <div class="chess-avatar b-avatar" id="opponent-avatar-hud">💀</div>
         <div class="player-details">
@@ -4333,6 +4347,7 @@
 
   <!-- Barra do Jogador na Base (Vermelho / Baseada na Imagem 2 - Chess.com) -->
   <div id="player-bar" class="player-bar player-bar-bottom">
+      <div id="bubble-player" class="hud-speech-bubble bubble-bottom hidden"></div>
     <div class="player-profile">
       <div class="chess-avatar w-avatar" id="player-avatar-hud">🧙‍♂️</div>
       <div class="player-details">
@@ -4417,13 +4432,15 @@
         <span class="material-symbols-rounded" style="font-size: 1.1rem;">close</span>
       </button>
     </div>
-    <div class="emotes-grid">
-      <button class="emote-btn" data-msg="⚔️ Em guarda!">⚔️ Em guarda!</button>
-      <button class="emote-btn" data-msg="👑 Rei em perigo!">👑 Rei em perigo!</button>
-      <button class="emote-btn" data-msg="🧙 Belo lance!">🧙 Belo lance!</button>
-      <button class="emote-btn" data-msg="🤝 Bom jogo!">🤝 Bom jogo!</button>
-      <button class="emote-btn" data-msg="⚡ O tempo ruge!">⚡ O tempo ruge!</button>
-      <button class="emote-btn" data-msg="🔮 Runa ativada!">🔮 Runa ativada!</button>
+    <div class="emotes-grid" id="emotes-grid">
+      <button class="emote-btn" data-msg="🧙‍♂️ Em guarda!">🧙‍♂️ Em guarda!</button>
+      <button class="emote-btn" data-msg="🔥 Sinta o fogo!">🔥 Sinta o fogo!</button>
+      <button class="emote-btn" data-msg="⚡ Belo lance!">⚡ Belo lance!</button>
+      <button class="emote-btn" data-msg="❄️ Rei em perigo!">❄️ Rei em perigo!</button>
+      <button class="emote-btn" data-msg="🔮 Prevejo o fim!">🔮 Prevejo o fim!</button>
+      <button class="emote-btn" data-msg="⏳ O tempo ruge!">⏳ O tempo ruge!</button>
+      <button class="emote-btn" data-msg="👏 Partida incrível!">👏 Partida incrível!</button>
+      <button class="emote-btn" data-msg="💀 Xeque-mate!">💀 Xeque-mate!</button>
     </div>
   </div>
 

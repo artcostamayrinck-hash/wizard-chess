@@ -571,8 +571,16 @@ function setupWhatsAppShare() {
 }
 
 function openWhatsAppFallback(msg) {
-  const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-  window.open(url, "_blank");
+  const encoded = encodeURIComponent(msg);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (isMobile) {
+    window.location.href = `whatsapp://send?text=${encoded}`;
+    setTimeout(() => {
+      window.open(`https://api.whatsapp.com/send?text=${encoded}`, "_blank");
+    }, 800);
+  } else {
+    window.open(`https://api.whatsapp.com/send?text=${encoded}`, "_blank");
+  }
 }
 
 // --------------------------------------------------------
@@ -6353,10 +6361,12 @@ function setupHUDPlayerOrientationAndLayout() {
         if (oBadgeEl) oBadgeEl.textContent = "PUZZLE";
         if (oRatingEl) oRatingEl.textContent = "";
       } else {
-        // VS IA
-        if (oBadgeEl && oBadgeEl.textContent !== "CHEFE" && !oBadgeEl.textContent.startsWith("TORNEIO")) {
-          oBadgeEl.textContent = "IA";
-        }
+        // VS IA - Grimório de Magos
+        const magus = getActiveMagus();
+        if (oNameEl) oNameEl.textContent = magus.name;
+        if (oAvatarEl) oAvatarEl.textContent = magus.avatar;
+        if (oBadgeEl) oBadgeEl.textContent = magus.badge;
+        if (oRatingEl) oRatingEl.textContent = magus.rating;
       }
     }
   }
@@ -6370,6 +6380,10 @@ function setupHUDPlayerOrientationAndLayout() {
   });
 
   document.querySelectorAll("#menu-mode-group .toggle-btn, #btn-mode").forEach(btn => {
+    btn.addEventListener("click", () => setTimeout(syncHUD, 50));
+  });
+
+  document.querySelectorAll("#menu-diff-group .toggle-btn").forEach(btn => {
     btn.addEventListener("click", () => setTimeout(syncHUD, 50));
   });
 
@@ -6399,3 +6413,168 @@ function setupHUDPlayerOrientationAndLayout() {
   }
 }
 
+
+
+// ==============================================================
+// MELHORIAS V1.5.7: GRIMÓRIO DE MAGOS, BALÕES DE EMOTE E VITÓRIA ÉPICA
+// ==============================================================
+
+const MAGUS_OPPONENTS = {
+  1: { id: "elara", name: "Aprendiz Elara", shortName: "Elara", avatar: "🧙‍♀️", rating: "(800)", badge: "APRENDIZ", greeting: "As runas guiarão meu caminho!" },
+  2: { id: "ignis", name: "Piromante Ignis", shortName: "Ignis", avatar: "🔥", rating: "(1300)", badge: "PIROMANTE", greeting: "O tabuleiro arderá em chamas!" },
+  3: { id: "glacia", name: "Rainha Glacia", shortName: "Glacia", avatar: "❄️", rating: "(1700)", badge: "ARQUIMAGA", greeting: "Cada movimento seu será congelado!" },
+  4: { id: "malakor", name: "Lich Malakor", shortName: "Malakor", avatar: "💀", rating: "(2100)", badge: "MESTRE", greeting: "Nenhum mortal escapa ao xeque-mate!" }
+};
+
+function getActiveMagus() {
+  const diff = (typeof window.Ji !== "undefined") ? window.Ji : 2;
+  return MAGUS_OPPONENTS[diff] || MAGUS_OPPONENTS[2];
+}
+
+// Balões de Fala no HUD
+function showHudSpeechBubble(target, text, duration = 3200) {
+  const bubble = document.getElementById(target === "opponent" ? "bubble-opponent" : "bubble-player");
+  if (!bubble) return;
+
+  bubble.textContent = text;
+  bubble.classList.remove("hidden");
+
+  if (bubble._timer) clearTimeout(bubble._timer);
+  bubble._timer = setTimeout(() => {
+    bubble.classList.add("hidden");
+  }, duration);
+}
+
+// Vitória Épica com Confetes e Moedas
+function launchVictoryConfetti() {
+  const canvas = document.getElementById("victory-confetti-canvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const colors = ["#ffd700", "#ffb300", "#c084fc", "#7c3aed", "#00f5d4", "#ff4081", "#ffffff"];
+
+  for (let i = 0; i < 90; i++) {
+    particles.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 80,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 80,
+      vx: (Math.random() - 0.5) * 16,
+      vy: (Math.random() - 0.8) * 18,
+      size: 4 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      rotation: Math.random() * Math.PI * 2,
+      vRot: (Math.random() - 0.5) * 0.2,
+      isCoin: Math.random() > 0.5
+    });
+  }
+
+  let startTime = performance.now();
+  function animate() {
+    const elapsed = performance.now() - startTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let alive = false;
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.38; // gravidade
+      p.rotation += p.vRot;
+      p.alpha = Math.max(0, 1 - (elapsed / 2600));
+
+      if (p.alpha > 0) {
+        alive = true;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+
+        if (p.isCoin) {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#ffe082";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else {
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        }
+        ctx.restore();
+      }
+    });
+
+    if (alive && elapsed < 2800) {
+      requestAnimationFrame(animate);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+// Hook de Vitória Épica no Fim de Jogo
+function triggerEpicGameOverCelebration(isWin, title, msg) {
+  const ribbon = document.getElementById("victory-ribbon-badge");
+  const modal = document.getElementById("game-over-modal");
+
+  if (isWin) {
+    if (ribbon) ribbon.classList.remove("hidden");
+    launchVictoryConfetti();
+    if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playVictoryChime) {
+      try { ArcaneAudio.playVictoryChime(); } catch(e) {}
+    }
+  } else {
+    if (ribbon) ribbon.classList.add("hidden");
+  }
+}
+
+window._showHudSpeechBubble = showHudSpeechBubble;
+window._launchVictoryConfetti = launchVictoryConfetti;
+window._triggerEpicGameOverCelebration = triggerEpicGameOverCelebration;
+
+
+// Binds de Emotes para Balões de Fala no HUD
+function setupEmoteSpeechBubbles() {
+  document.querySelectorAll(".emote-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const msg = btn.dataset.msg;
+      if (msg) {
+        showHudSpeechBubble("player", msg);
+
+        // Se for jogo vs IA, o Mago responde com inteligência mágica!
+        const isAI = !(typeof window.st !== "undefined" && window.st);
+        if (isAI) {
+          setTimeout(() => {
+            const magus = getActiveMagus();
+            const replies = [
+              `${magus.avatar} "${magus.greeting}"`,
+              `${magus.avatar} "Um bruxo prudente observa antes de agir!"`,
+              `${magus.avatar} "Sua runa não intimidará meu poder!"`,
+              `${magus.avatar} "Que os deuses do xadrez decidam!"`
+            ];
+            const chosen = replies[Math.floor(Math.random() * replies.length)];
+            showHudSpeechBubble("opponent", chosen, 3500);
+          }, 1200);
+        }
+      }
+    });
+  });
+
+  // Mostra fala do Mago ao iniciar partida vs IA
+  const btnStart = document.getElementById("btn-start-game");
+  if (btnStart) {
+    btnStart.addEventListener("click", () => {
+      setTimeout(() => {
+        const isAI = !(typeof window.st !== "undefined" && window.st);
+        if (isAI) {
+          const magus = getActiveMagus();
+          showHudSpeechBubble("opponent", `${magus.avatar} "${magus.greeting}"`, 4000);
+        }
+      }, 800);
+    });
+  }
+}
