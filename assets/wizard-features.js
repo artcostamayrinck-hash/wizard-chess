@@ -508,7 +508,6 @@ function initWizardFeatures() {
     { name: "AdaptiveLayout", fn: setupAdaptiveFullscreenAndLayout },
     { name: "AvatarFramesAndArenas", fn: setupAvatarFramesAndArenas },
     { name: "CampaignTower", fn: setupCampaignTower },
-    { name: "MatchReplay", fn: setupMatchReplay },
     { name: "EpicCombatAnimations", fn: setupEpicCombatAnimations },
     { name: "WebShortcutsAndAdaptations", fn: setupWebShortcutsAndAdaptations },
     { name: "AdMobManager", fn: setupAdMobManager },
@@ -3256,125 +3255,7 @@ let _replayMoves = [];
 let _replayIndex = 0;
 let _isReplayActive = false;
 
-function setupMatchReplay() {
-  const replayBar = document.getElementById("replay-controller-bar");
-  const btnCloseReplay = document.getElementById("btn-close-replay");
-  const btnReplayStart = document.getElementById("btn-replay-start");
-  const btnReplayPrev = document.getElementById("btn-replay-prev");
-  const btnReplayNext = document.getElementById("btn-replay-next");
-  const btnReplayEnd = document.getElementById("btn-replay-end");
-  const replayStatus = document.getElementById("replay-move-status");
-  const replaySan = document.getElementById("replay-current-san");
-
-  function openReplay() {
-    // Tenta obter histórico atual do chess.js ou salvo
-    let moves = [];
-    if (window._WIZARD_GAME && typeof window._WIZARD_GAME.getChess === "function") {
-      const chess = window._WIZARD_GAME.getChess();
-      if (chess && typeof chess.history === "function") {
-        moves = chess.history({ verbose: true });
-      }
-    }
-    if (!moves || moves.length === 0) {
-      try {
-        const raw = localStorage.getItem("wizard_chess_last_match_history");
-        if (raw) moves = JSON.parse(raw);
-      } catch (e) {}
-    }
-
-    if (!moves || moves.length === 0) {
-      showToast("Nenhum lance registrado para rever nesta partida.");
-      return;
-    }
-
-    _replayMoves = moves;
-    _replayIndex = moves.length;
-    _isReplayActive = true;
-
-    // Fecha modais de fim de jogo ou pausa se abertos
-    const gameOverModal = document.getElementById("game-over-modal");
-    if (gameOverModal) { gameOverModal.classList.add("hidden"); gameOverModal.style.removeProperty("display"); }
-    const pauseModal = document.getElementById("pause-modal");
-    if (pauseModal) { pauseModal.classList.add("hidden"); pauseModal.style.removeProperty("display"); }
-
-    if (replayBar) {
-      replayBar.classList.remove("hidden");
-      replayBar.style.setProperty("display", "flex", "important");
-    }
-
-    updateReplayView();
-    showToast("🎬 Modo Replay ativado! Use as setas para rever cada lance.");
-  }
-
-  function updateReplayView() {
-    const total = _replayMoves.length;
-    if (replayStatus) {
-      replayStatus.textContent = `Lance ${_replayIndex} de ${total}`;
-    }
-    if (replaySan) {
-      if (_replayIndex === 0) {
-        replaySan.textContent = "Posição Inicial";
-      } else {
-        const m = _replayMoves[_replayIndex - 1];
-        const pieceSymbol = m.piece ? m.piece.toUpperCase() : "";
-        replaySan.textContent = `${m.color === 'w' ? '⚪' : '⚫'} ${pieceSymbol}${m.san || (m.from + '-' + m.to)}`;
-      }
-    }
-  }
-
-  function closeReplay() {
-    _isReplayActive = false;
-    if (replayBar) {
-      replayBar.classList.add("hidden");
-      replayBar.style.removeProperty("display");
-    }
-  }
-
-  // Vincular botões
-  const btnGameOverReplay = document.getElementById("btn-game-over-replay");
-  if (btnGameOverReplay) bindAction(btnGameOverReplay, openReplay, "openReplayGameOver");
-
-  const btnPauseReplay = document.getElementById("btn-pause-replay");
-  if (btnPauseReplay) bindAction(btnPauseReplay, openReplay, "openReplayPause");
-
-  const btnDockReplay = document.getElementById("btn-dock-replay");
-  if (btnDockReplay) bindAction(btnDockReplay, openReplay, "openReplayDock");
-
-  if (btnCloseReplay) bindAction(btnCloseReplay, closeReplay, "closeReplayBar");
-
-  if (btnReplayStart) {
-    bindAction(btnReplayStart, () => {
-      _replayIndex = 0;
-      updateReplayView();
-    }, "replayStart");
-  }
-
-  if (btnReplayPrev) {
-    bindAction(btnReplayPrev, () => {
-      if (_replayIndex > 0) {
-        _replayIndex--;
-        updateReplayView();
-      }
-    }, "replayPrev");
-  }
-
-  if (btnReplayNext) {
-    bindAction(btnReplayNext, () => {
-      if (_replayIndex < _replayMoves.length) {
-        _replayIndex++;
-        updateReplayView();
-      }
-    }, "replayNext");
-  }
-
-  if (btnReplayEnd) {
-    bindAction(btnReplayEnd, () => {
-      _replayIndex = _replayMoves.length;
-      updateReplayView();
-    }, "replayEnd");
-  }
-}
-
+function setupMatchReplay() {}
 
 // ==========================================================================
 // 15. ANIMAÇÕES ÉPICAS DE COMBATE MÁGICO (SEM VIBRAÇÃO)

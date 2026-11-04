@@ -4409,10 +4409,6 @@
       <span class="material-symbols-rounded">format_list_numbered</span>
       <span class="btn-label">Registo</span>
     </button>
-    <button id="btn-dock-replay" class="dock-btn" title="Rever Lances (Replay)">
-      <span class="material-symbols-rounded">smart_display</span>
-      <span class="btn-label">Replay</span>
-    </button>
     <button id="btn-reset" class="dock-btn" title="Reiniciar Partida">
       <span class="material-symbols-rounded">restart_alt</span>
       <span class="btn-label">Reiniciar</span>
@@ -4582,9 +4578,6 @@
       <button id="btn-open-magus-review" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: linear-gradient(135deg, rgba(0, 245, 212, 0.25), rgba(10, 30, 40, 0.95)); border-color: #00f5d4; color: #00f5d4;">
         <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">psychology</span>🧠 Análise Mágica do Grimório
       </button>
-      <button id="btn-game-over-replay" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(0, 245, 212, 0.15); border-color: #00f5d4; color: #00f5d4;">
-        <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Partida (Replay Lance a Lance)
-      </button>
       <button id="btn-game-over-share" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: rgba(192, 132, 252, 0.18); border-color: #c084fc; color: #c084fc;">
         <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">share</span>Compartilhar Vitória
       </button>
@@ -4632,9 +4625,6 @@
         <button id="btn-pause-restart" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem;">
           <span class="material-symbols-rounded"
             style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
-        </button>
-        <button id="btn-pause-replay" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.5); color: #00f5d4;">
-          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">smart_display</span>Rever Lances da Partida (Replay)
         </button>
         <button id="btn-pause-main-menu" class="promo-btn" onclick="if(window._goToMainMenuFromPause) window._goToMainMenuFromPause(event);" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
@@ -4836,34 +4826,6 @@
 
   <!-- Ligação com a lógica central do jogo -->
   <script type="module" src="./assets/wizard-features.js"></script>
-  <!-- Barra Flutuante de Controle de Replay de Partidas -->
-  <div id="replay-controller-bar" class="replay-controller-bar hidden">
-    <div class="replay-controller-header">
-      <div class="replay-title-wrap">
-        <span class="material-symbols-rounded" style="color: #00f5d4;">smart_display</span>
-        <span class="replay-main-tag">REPLAY DA BATALHA</span>
-      </div>
-      <div id="replay-move-status" class="replay-move-status">Lance 0 de 0</div>
-      <button type="button" id="btn-close-replay" class="replay-close-btn" title="Fechar Replay">
-        <span class="material-symbols-rounded">close</span>
-      </button>
-    </div>
-    <div class="replay-nav-controls">
-      <button type="button" id="btn-replay-start" class="replay-btn" title="Início da Partida">
-        <span class="material-symbols-rounded">first_page</span>
-      </button>
-      <button type="button" id="btn-replay-prev" class="replay-btn" title="Lance Anterior">
-        <span class="material-symbols-rounded">chevron_left</span>
-      </button>
-      <div id="replay-current-san" class="replay-current-san">Posição Inicial</div>
-      <button type="button" id="btn-replay-next" class="replay-btn" title="Próximo Lance">
-        <span class="material-symbols-rounded">chevron_right</span>
-      </button>
-      <button type="button" id="btn-replay-end" class="replay-btn" title="Final da Partida">
-        <span class="material-symbols-rounded">last_page</span>
-      </button>
-    </div>
-  </div>
 
   <!-- Modal Comemorativo de Vitória na Torre dos Magos -->
   <div id="tower-victory-modal" class="modal-overlay hidden">
@@ -4902,7 +4864,6 @@
         <div class="shortcut-row"><div class="shortcut-keys"><kbd>M</kbd></div> <span>Ligar / Silenciar Música</span></div>
         <div class="shortcut-row"><div class="shortcut-keys"><kbd>Z</kbd> ou <kbd>Ctrl+Z</kbd></div> <span>Desfazer Jogada (Modo Fácil / 2P)</span></div>
         <div class="shortcut-row"><div class="shortcut-keys"><kbd>R</kbd></div> <span>Reiniciar Partida</span></div>
-        <div class="shortcut-row"><div class="shortcut-keys"><kbd>←</kbd> <kbd>→</kbd></div> <span>Navegar Lances no Replay</span></div>
       </div>
 
       <div style="margin-top: 18px; text-align: center;">
