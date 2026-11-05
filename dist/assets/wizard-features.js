@@ -312,6 +312,41 @@ window._closeAchievementsModal = function(e) {
   }
 };
 
+window._openAchievementsFromSettings = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  const modalAch = document.getElementById("achievements-modal");
+  if (modalAch) {
+    if (typeof renderAchievementsList === "function") renderAchievementsList();
+    modalAch.classList.remove("hidden");
+    modalAch.style.setProperty("display", "flex", "important");
+    document.body.classList.add("modal-open");
+    document.body.classList.add("achievements-modal-open");
+  }
+};
+
+window._openTutorialFromSettings = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  if (typeof window._switchSubView === "function") {
+    window._switchSubView("tutorial");
+  } else {
+    document.querySelectorAll(".menu-subview").forEach(v => {
+      v.classList.remove("active");
+      v.style.setProperty("display", "none", "important");
+    });
+    const tutView = document.getElementById("menu-view-tutorial");
+    if (tutView) {
+      tutView.classList.add("active");
+      tutView.style.setProperty("display", "flex", "important");
+    }
+  }
+};
+
 window._goToMainMenuFromPause = function(e) {
   if (e) {
     if (typeof e.preventDefault === "function") e.preventDefault();
@@ -1993,8 +2028,13 @@ function setupStartMenuGrid() {
   const btnSettingsClose = document.getElementById("btn-settings-close-view");
   const btnTutorialBack = document.getElementById("btn-tutorial-back");
 
+  let _lastSubViewBeforeTutorial = "home";
+
   // Subview Switcher
   function switchSubView(viewName) {
+    if (viewName !== "tutorial") {
+      _lastSubViewBeforeTutorial = viewName;
+    }
     _lastViewTransition = Date.now();
     document.querySelectorAll(".menu-subview").forEach(v => {
       v.classList.remove("active");
@@ -2217,7 +2257,35 @@ function setupStartMenuGrid() {
   if (btnBattleBack) bindAction(btnBattleBack, () => switchSubView("home"));
   if (btnSettingsBack) bindAction(btnSettingsBack, () => switchSubView("home"));
   if (btnSettingsClose) bindAction(btnSettingsClose, () => switchSubView("home"));
-  if (btnTutorialBack) bindAction(btnTutorialBack, () => switchSubView("home"));
+  if (btnTutorialBack) {
+    bindAction(btnTutorialBack, () => {
+      switchSubView(_lastSubViewBeforeTutorial || "home");
+      _lastSubViewBeforeTutorial = "home";
+    }, "btnTutorialBackAction");
+  }
+
+  // 6.1. Configurações: Abrir Conquistas e Tutorial
+  const btnOpenAchSet = document.getElementById("btn-open-achievements-setting");
+  const cardAchSet = document.getElementById("card-setting-achievements");
+  const handleOpenAchFromSet = (e) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    if (typeof window._openAchievementsFromSettings === "function") {
+      window._openAchievementsFromSettings(e);
+    }
+  };
+  if (btnOpenAchSet) bindAction(btnOpenAchSet, handleOpenAchFromSet, "btnOpenAchSetting");
+  if (cardAchSet) bindAction(cardAchSet, handleOpenAchFromSet, "cardAchSetting");
+
+  const btnOpenTutSet = document.getElementById("btn-open-tutorial-setting");
+  const cardTutSet = document.getElementById("card-setting-tutorial");
+  const handleOpenTutFromSet = (e) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    if (typeof window._openTutorialFromSettings === "function") {
+      window._openTutorialFromSettings(e);
+    }
+  };
+  if (btnOpenTutSet) bindAction(btnOpenTutSet, handleOpenTutFromSet, "btnOpenTutSetting");
+  if (cardTutSet) bindAction(cardTutSet, handleOpenTutFromSet, "cardTutSetting");
 
   // 7. Seleção de Peças na Aba Personalizar (Delegado para onSkinCardClick)
   document.querySelectorAll("#customize-skin-grid .custom-card[data-skin]").forEach(card => {

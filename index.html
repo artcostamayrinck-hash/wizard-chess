@@ -4517,7 +4517,7 @@
           </div>
 
           <!-- 5. Conquistas & Títulos -->
-          <div class="photo2-setting-card">
+          <div class="photo2-setting-card" id="card-setting-achievements" style="cursor: pointer;" onclick="if(window._openAchievementsFromSettings) window._openAchievementsFromSettings(event);">
             <div class="settings-row-info">
               <div class="photo2-setting-icon" style="color: #81c784; background: rgba(129, 199, 132, 0.12);">
                 <span class="material-symbols-rounded">military_tech</span>
@@ -4527,14 +4527,14 @@
                 <span class="settings-desc">Ver troféus, títulos e progresso de XP</span>
               </div>
             </div>
-            <button type="button" id="btn-open-achievements-setting" class="photo2-action-btn">
+            <button type="button" id="btn-open-achievements-setting" class="photo2-action-btn" onclick="if(window._openAchievementsFromSettings) window._openAchievementsFromSettings(event);">
               <span>Abrir</span>
               <span class="material-symbols-rounded" style="font-size: 1rem;">open_in_new</span>
             </button>
           </div>
 
           <!-- 6. Modo Tutorial -->
-          <div class="photo2-setting-card">
+          <div class="photo2-setting-card" id="card-setting-tutorial" style="cursor: pointer;" onclick="if(window._openTutorialFromSettings) window._openTutorialFromSettings(event);">
             <div class="settings-row-info">
               <div class="photo2-setting-icon" style="color: #64b5f6; background: rgba(100, 181, 246, 0.12);">
                 <span class="material-symbols-rounded">school</span>
@@ -4544,7 +4544,7 @@
                 <span class="settings-desc">Aprenda regras mágicas e movimentos das peças</span>
               </div>
             </div>
-            <button type="button" id="btn-open-tutorial-setting" class="photo2-action-btn">
+            <button type="button" id="btn-open-tutorial-setting" class="photo2-action-btn" onclick="if(window._openTutorialFromSettings) window._openTutorialFromSettings(event);">
               <span>Abrir</span>
               <span class="material-symbols-rounded" style="font-size: 1rem;">open_in_new</span>
             </button>
