@@ -3152,6 +3152,28 @@
   touch-action: pan-y !important;
 }
 
+/* ==========================================================================
+   Ajuste Fino de Layout Responsivo do Tabuleiro e HUD em Telas Diversificadas
+   ========================================================================== */
+#eval-bar-container {
+  z-index: 38 !important;
+  pointer-events: auto !important;
+  transition: opacity 0.3s ease, left 0.3s ease !important;
+}
+
+@media (max-width: 600px) {
+  #eval-bar-container {
+    left: 4px !important;
+    width: 12px !important;
+    height: clamp(120px, 22vh, 160px) !important;
+  }
+  .eval-score-badge {
+    font-size: 0.60rem !important;
+    padding: 1px 4px !important;
+    top: -20px !important;
+  }
+}
+
   </style>
 </head>
 
