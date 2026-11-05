@@ -1853,6 +1853,8 @@ const DailyChest = {
 
   updateUI() {
     const { remain, hours, mins, secs, isReady } = this.getRemainingTime();
+    const pad = n => String(n).padStart(2, "0");
+    const formattedTimer = `${pad(hours)}:${pad(mins)}:${pad(secs)}`;
 
     // 1. Home Lobby Slot Card (#home-slot-chest)
     const homeCard = document.getElementById("home-slot-chest");
@@ -1879,14 +1881,13 @@ const DailyChest = {
       } else {
         homeCard.classList.add("chest-cooldown");
         homeCard.classList.remove("chest-available");
-        const timeBadge = hours > 0 ? `${hours}h ${mins}m` : `${mins}m ${secs}s`;
-        homeCard.setAttribute("title", `Baú Diário em recarga. Disponível em ${timeBadge}.`);
+        homeCard.setAttribute("title", `Baú Diário em recarga. Disponível em ${formattedTimer}.`);
         if (tagEl) {
           tagEl.textContent = "AGUARDE";
           tagEl.className = "chest-card-tag cooldown-tag";
         }
         if (actionEl) {
-          actionEl.textContent = timeBadge;
+          actionEl.textContent = "⏳ " + formattedTimer;
           actionEl.className = "chest-card-action cooldown-btn";
         }
         if (iconEl) {
@@ -1909,13 +1910,10 @@ const DailyChest = {
         if (chestBox) chestBox.classList.remove("chest-cooldown");
       } else {
         btn.disabled = true;
-        const timeBadge = hours > 0 ? `⏳ ${hours}h ${mins}m` : `⏳ ${mins}m ${secs}s`;
-        btn.textContent = timeBadge;
+        btn.textContent = "⏳ " + formattedTimer;
         btn.classList.add("cooldown-btn");
         if (desc) {
-          desc.textContent = hours > 0
-            ? `Recompensa renova em ${hours} horas e ${mins} minutos.`
-            : `Recompensa renova em ${mins} minutos e ${secs} segundos.`;
+          desc.textContent = `Recarregando essência arcana... Disponível em ${formattedTimer}.`;
         }
         if (chestBox) chestBox.classList.add("chest-cooldown");
       }
@@ -5002,6 +5000,9 @@ function setupDailyChest() {
   if (!window._dailyChestTimer) {
     window._dailyChestTimer = setInterval(() => {
       if (window.DailyChest) window.DailyChest.updateUI();
+      if (window.FortuneWheel && typeof window.FortuneWheel.updateUI === "function") {
+        window.FortuneWheel.updateUI();
+      }
     }, 1000);
   }
 }
@@ -5036,18 +5037,35 @@ const FortuneWheel = {
     return this.canFreeSpin() ? 0 : 50;
   },
 
+  getRemainingFreeSpinTime() {
+    try {
+      const last = parseInt(localStorage.getItem("wizard_fortune_last_spin") || "0", 10);
+      const remain = (20 * 60 * 60 * 1000) - (Date.now() - last);
+      if (remain <= 0) return { isReady: true, hours: 0, mins: 0, secs: 0 };
+      const hours = Math.floor(remain / (1000 * 60 * 60));
+      const mins = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((remain % (1000 * 60)) / 1000);
+      return { isReady: false, hours, mins, secs };
+    } catch(e) {
+      return { isReady: true, hours: 0, mins: 0, secs: 0 };
+    }
+  },
+
   updateUI() {
     const btn = document.getElementById("btn-spin-wheel");
     const label = document.getElementById("spin-btn-label");
     const subtext = document.getElementById("wheel-status-text");
     const cost = this.getSpinCost();
+    const freeInfo = this.getRemainingFreeSpinTime();
+    const pad = n => String(n).padStart(2, "0");
 
-    if (cost === 0) {
+    if (cost === 0 || freeInfo.isReady) {
       if (label) label.textContent = "GIRAR ROLETA (GRÁTIS)";
       if (subtext) subtext.textContent = "✨ 1 Giro Grátis Diário Disponível!";
     } else {
+      const timerStr = `${pad(freeInfo.hours)}:${pad(freeInfo.mins)}:${pad(freeInfo.secs)}`;
       if (label) label.textContent = "GIRAR ROLETA (50 🪙)";
-      if (subtext) subtext.textContent = "Giro extra: 50 Moedas Arcanas";
+      if (subtext) subtext.textContent = `Giro extra: 50 🪙 (Grátis em ${timerStr})`;
     }
   },
 
