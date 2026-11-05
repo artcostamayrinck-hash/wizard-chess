@@ -2949,6 +2949,11 @@ function setupAdaptiveFullscreenAndLayout() {
 
         b.dataset.deviceProfile = profile;
       }
+      try {
+        if (window._WIZARD_GAME && typeof window._WIZARD_GAME.adaptCamera === 'function') {
+          window._WIZARD_GAME.adaptCamera();
+        }
+      } catch (camErr) {}
     } finally {
       isUpdating = false;
     }
