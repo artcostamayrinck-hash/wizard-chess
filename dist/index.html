@@ -32,6 +32,142 @@
   <script type="module" crossorigin src="./assets/index-Dmtay6rb.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CrO8ZqHi.css">
   <style>
+    /* Aviso de Xeque Épico */
+    .check-warning {
+      position: fixed !important;
+      top: 84px !important;
+      left: 50% !important;
+      transform: translate(-50%) !important;
+      background: linear-gradient(135deg, rgba(46, 12, 22, 0.94), rgba(22, 8, 15, 0.97)) !important;
+      border: 1.5px solid #ff4d6d !important;
+      color: #fff !important;
+      padding: 8px 24px !important;
+      border-radius: 999px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      z-index: 45 !important;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 24px rgba(255, 77, 109, 0.55) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      backdrop-filter: blur(14px) !important;
+      animation: checkPulseArcane 0.75s ease-in-out infinite alternate !important;
+      pointer-events: none !important;
+    }
+    .check-warning-icon {
+      font-size: 1.35rem !important;
+      color: #f5c56b !important;
+      text-shadow: 0 0 12px rgba(245, 197, 107, 0.9) !important;
+    }
+    .check-warning-body {
+      display: flex !important;
+      flex-direction: column !important;
+      line-height: 1.15 !important;
+      text-align: left !important;
+    }
+    .check-warning-title {
+      font-family: Cinzel, serif !important;
+      font-weight: 700 !important;
+      font-size: 0.95rem !important;
+      letter-spacing: 0.08em !important;
+      color: #ff859d !important;
+    }
+    .check-warning-subtitle {
+      font-size: 0.68rem !important;
+      color: #ffccd5 !important;
+      font-weight: 500 !important;
+    }
+    @keyframes checkPulseArcane {
+      0% { transform: translate(-50%) scale(0.97); box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 15px rgba(255, 77, 109, 0.4); }
+      100% { transform: translate(-50%) scale(1.03); box-shadow: 0 12px 36px rgba(0,0,0,0.85), 0 0 32px rgba(255, 77, 109, 0.75); }
+    }
+
+    /* Card de Retomar Partida (Auto-Save) */
+    .rpg-card-resume {
+      width: 100% !important;
+      background: linear-gradient(135deg, rgba(38, 28, 56, 0.96) 0%, rgba(20, 14, 30, 0.98) 100%) !important;
+      border: 1.5px solid rgba(245, 197, 107, 0.6) !important;
+      border-radius: 16px !important;
+      padding: 10px 14px !important;
+      margin-bottom: 10px !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 197, 107, 0.25) !important;
+      animation: pulseResume 2.5s ease-in-out infinite !important;
+      box-sizing: border-box !important;
+    }
+    .rpg-card-resume.hidden {
+      display: none !important;
+    }
+    @keyframes pulseResume {
+      0%, 100% { border-color: rgba(245, 197, 107, 0.5); box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 12px rgba(245, 197, 107, 0.2); }
+      50% { border-color: rgba(245, 197, 107, 0.9); box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 20px rgba(245, 197, 107, 0.45); }
+    }
+    .rpg-resume-inner {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 10px !important;
+    }
+    .rpg-resume-badge {
+      font-size: 0.62rem !important;
+      font-weight: 800 !important;
+      color: #f5c56b !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+    }
+    .rpg-resume-title {
+      font-family: Cinzel, serif !important;
+      font-size: 0.92rem !important;
+      font-weight: 700 !important;
+      color: #fff !important;
+      margin: 1px 0 !important;
+      text-align: left !important;
+    }
+    .rpg-resume-sub {
+      font-size: 0.7rem !important;
+      color: #d0bcff !important;
+      text-align: left !important;
+    }
+    .rpg-resume-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      flex-shrink: 0 !important;
+    }
+    .btn-resume-action {
+      background: linear-gradient(135deg, #f5c56b, #d49a37) !important;
+      color: #1a1202 !important;
+      border: none !important;
+      border-radius: 10px !important;
+      padding: 7px 12px !important;
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 12px rgba(245, 197, 107, 0.4) !important;
+      transition: transform 0.15s !important;
+    }
+    .btn-resume-action:hover {
+      transform: translateY(-2px) !important;
+    }
+    .btn-discard-action {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      color: #c9bede !important;
+      border-radius: 10px !important;
+      padding: 6px !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s !important;
+    }
+    .btn-discard-action:hover {
+      background: rgba(255, 77, 109, 0.25) !important;
+      border-color: #ff4d6d !important;
+      color: #ff4d6d !important;
+    }
+
     #btn-whatsapp-share:hover {
       background: #25d366 !important;
       color: #121212 !important;
@@ -2528,10 +2664,13 @@
   <!-- Contêiner de Notificações de Emotes / Reações -->
   <div id="emote-toast-container"></div>
 
-  <!-- Aviso de Xeque -->
-  <div id="check-warning" class="check-warning hidden">
-    <span class="material-symbols-rounded">warning</span>
-    <span>REI EM XEQUE!</span>
+  <!-- Aviso de Xeque Épico com Runas -->
+  <div id="check-warning" class="check-warning hidden" role="alert">
+    <span class="check-warning-icon">⚡</span>
+    <div class="check-warning-body">
+      <span class="check-warning-title">REI EM XEQUE!</span>
+      <span class="check-warning-subtitle">Proteja o Monarca no Tabuleiro</span>
+    </div>
   </div>
 
   <!-- Barra de Avaliação Arcana (Eval Bar) -->
@@ -2660,6 +2799,26 @@
 
           <!-- Lado Direito: Cards de Ação Verticais (Estilo Imagem de Referência - 3 Cards Principais em Pílula 3D) -->
           <div class="home-actions-col">
+            <!-- Card de Partida Salva (Auto-Save) -->
+            <div id="card-resume-battle" class="rpg-card-resume hidden">
+              <div class="rpg-resume-inner">
+                <div class="rpg-resume-info">
+                  <div class="rpg-resume-badge">⚔️ BATALHA EM ANDAMENTO</div>
+                  <div class="rpg-resume-title" id="resume-match-title">Vs Elara (800)</div>
+                  <div class="rpg-resume-sub" id="resume-match-sub">12 lances • Catedral Arcana</div>
+                </div>
+                <div class="rpg-resume-actions">
+                  <button type="button" class="btn-resume-action" id="btn-resume-action" title="Continuar partida de onde parou">
+                    <span>Retomar</span>
+                    <span class="material-symbols-rounded" style="font-size:1.1rem;">play_arrow</span>
+                  </button>
+                  <button type="button" class="btn-discard-action" id="btn-discard-action" title="Descartar partida salva">
+                    <span class="material-symbols-rounded" style="font-size:1.1rem;">close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <!-- Card 1 (Azul): Jogar / Comece a Batalha -->
             <button type="button" class="rpg-card-battle blue-action-card" id="btn-hero-battle" title="Iniciar Batalha de Xadrez">
               <div class="rpg-card-inner">

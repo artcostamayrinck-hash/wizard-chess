@@ -526,7 +526,8 @@ function initWizardFeatures() {
     { name: "EnhancedGameReview", fn: setupEnhancedGameReview },
     { name: "CampaignWorld2", fn: setupCampaignWorld2 },
     { name: "Tournament", fn: setupTournament },
-    { name: "HUDPlayerOrientationAndLayout", fn: setupHUDPlayerOrientationAndLayout }
+    { name: "HUDPlayerOrientationAndLayout", fn: setupHUDPlayerOrientationAndLayout },
+    { name: "ArcaneAutoSave", fn: setupArcaneAutoSave }
   ];
 
   for (const task of tasks) {
@@ -3568,6 +3569,120 @@ const ArcaneAudio = {
   soundEnabled: true,
   musicEnabled: false,
 
+  bgm: {
+    isPlaying: false,
+    masterGain: null,
+    chordTimer: null,
+    arpeggioTimer: null,
+    chordIndex: 0,
+    chords: [
+      [146.83, 174.61, 220.00, 261.63, 329.63], // Dm9 (D, F, A, C, E)
+      [116.54, 146.83, 174.61, 220.00, 277.18], // Bbmaj7#11 (Bb, D, F, A, C#)
+      [98.00,  146.83, 174.61, 220.00, 293.66], // Gm9 (G, D, F, A, D)
+      [110.00, 164.81, 220.00, 246.94, 329.63]  // Asus4(b9) (A, E, A, B, E)
+    ],
+    crystalNotes: [587.33, 659.25, 698.46, 783.99, 880.00, 1046.50, 1174.66],
+
+    start(ctx) {
+      if (this.isPlaying || !ctx) return;
+      this.isPlaying = true;
+      try {
+        this.masterGain = ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
+        this.masterGain.gain.exponentialRampToValueAtTime(0.065, ctx.currentTime + 2.5);
+        this.masterGain.connect(ctx.destination);
+        this.playNextChord(ctx);
+        this.scheduleCrystals(ctx);
+      } catch(e) {
+        console.warn("[ArcaneAudio] Erro ao iniciar BGM:", e);
+      }
+    },
+
+    playNextChord(ctx) {
+      if (!this.isPlaying || !ctx || !this.masterGain) return;
+      try {
+        const now = ctx.currentTime;
+        const chord = this.chords[this.chordIndex];
+        this.chordIndex = (this.chordIndex + 1) % this.chords.length;
+
+        const chordGain = ctx.createGain();
+        chordGain.gain.setValueAtTime(0.001, now);
+        chordGain.gain.exponentialRampToValueAtTime(0.075, now + 2.2);
+        chordGain.gain.setValueAtTime(0.075, now + 5.2);
+        chordGain.gain.exponentialRampToValueAtTime(0.001, now + 7.8);
+        chordGain.connect(this.masterGain);
+
+        chord.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const filter = ctx.createBiquadFilter();
+          osc.type = idx % 2 === 0 ? "sine" : "triangle";
+          osc.frequency.setValueAtTime(freq, now);
+          osc.detune.setValueAtTime((idx - 2) * 5, now);
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(380 + idx * 75, now);
+          osc.connect(filter).connect(chordGain);
+          osc.start(now);
+          osc.stop(now + 8.0);
+        });
+
+        this.chordTimer = setTimeout(() => {
+          if (this.isPlaying) this.playNextChord(ctx);
+        }, 6200);
+      } catch(e){}
+    },
+
+    scheduleCrystals(ctx) {
+      if (!this.isPlaying || !ctx) return;
+      const delay = 3400 + Math.random() * 3000;
+      this.arpeggioTimer = setTimeout(() => {
+        if (!this.isPlaying) return;
+        this.playCrystalChime(ctx);
+        this.scheduleCrystals(ctx);
+      }, delay);
+    },
+
+    playCrystalChime(ctx) {
+      if (!this.isPlaying || !ctx || !this.masterGain) return;
+      try {
+        const now = ctx.currentTime;
+        const count = 2 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < count; i++) {
+          const note = this.crystalNotes[Math.floor(Math.random() * this.crystalNotes.length)];
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          osc.type = "sine";
+          const start = now + i * (0.16 + Math.random() * 0.08);
+          osc.frequency.setValueAtTime(note, start);
+          filter.type = "bandpass";
+          filter.frequency.setValueAtTime(note, start);
+          filter.Q.setValueAtTime(7, start);
+          gain.gain.setValueAtTime(0.001, start);
+          gain.gain.exponentialRampToValueAtTime(0.032, start + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 1.3);
+          osc.connect(filter).connect(gain).connect(this.masterGain);
+          osc.start(start);
+          osc.stop(start + 1.4);
+        }
+      } catch(e){}
+    },
+
+    stop(ctx) {
+      this.isPlaying = false;
+      clearTimeout(this.chordTimer);
+      clearTimeout(this.arpeggioTimer);
+      if (this.masterGain && ctx) {
+        try {
+          this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, ctx.currentTime);
+          this.masterGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.0);
+          setTimeout(() => {
+            try { this.masterGain.disconnect(); } catch(e){}
+          }, 1100);
+        } catch(e){}
+      }
+    }
+  },
+
   init() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -3583,6 +3698,9 @@ const ArcaneAudio = {
       if (savedMusic !== null) this.musicEnabled = savedMusic === "true";
     } catch(e) {}
     this.updateUI();
+    if (this.musicEnabled && !this.bgm.isPlaying && this.ctx && this.ctx.state === "running") {
+      this.bgm.start(this.ctx);
+    }
   },
 
   playMoveSound(pieceType) {
@@ -3732,14 +3850,16 @@ const ArcaneAudio = {
 
   toggleMusic() {
     this.init();
-    if (window._WIZARD_GAME && window._WIZARD_GAME.toggleMusic) {
-      this.musicEnabled = window._WIZARD_GAME.toggleMusic();
-    } else {
-      this.musicEnabled = !this.musicEnabled;
-    }
+    this.musicEnabled = !this.musicEnabled;
     try { localStorage.setItem("wizard_chess_music_enabled", this.musicEnabled); } catch(e){}
+    if (this.musicEnabled) {
+      this.bgm.start(this.ctx);
+    } else {
+      this.bgm.stop(this.ctx);
+    }
     this.updateUI();
     showToast(this.musicEnabled ? "🎶 Música Arcana iniciada" : "🔇 Música pausada");
+    return this.musicEnabled;
   },
 
   playSpellCaptureBoom(arena) {
@@ -3835,6 +3955,19 @@ window._WIZARD_AUDIO = ArcaneAudio;
 
 function setupArcaneAudio() {
   ArcaneAudio.init();
+
+  const unlockAudio = () => {
+    if (ArcaneAudio.ctx && ArcaneAudio.ctx.state === "suspended") {
+      ArcaneAudio.ctx.resume();
+    }
+    if (ArcaneAudio.musicEnabled && !ArcaneAudio.bgm.isPlaying && ArcaneAudio.ctx) {
+      ArcaneAudio.bgm.start(ArcaneAudio.ctx);
+    }
+    window.removeEventListener("pointerdown", unlockAudio);
+    window.removeEventListener("keydown", unlockAudio);
+  };
+  window.addEventListener("pointerdown", unlockAudio, { passive: true });
+  window.addEventListener("keydown", unlockAudio, { passive: true });
 
   const hudSoundBtn = document.getElementById("btn-hud-sound-toggle");
   if (hudSoundBtn) {
@@ -6457,5 +6590,201 @@ function setupEmoteSpeechBubbles() {
         }
       }, 800);
     });
+  }
+}
+
+
+// ============================================================================
+// V1.5.7: AUTO-SAVE DE PARTIDAS ARCANO (CONTINUAR DE ONDE PAROU)
+// ============================================================================
+function boardToFenString(board, turn) {
+  let fen = "";
+  for (let r = 0; r < 8; r++) {
+    let empty = 0;
+    for (let c = 0; c < 8; c++) {
+      const p = board[r][c];
+      if (!p) {
+        empty++;
+      } else {
+        if (empty > 0) { fen += empty; empty = 0; }
+        const ch = p.type === 'P' ? 'p' : p.type;
+        fen += p.color === 'w' ? ch.toUpperCase() : ch.toLowerCase();
+      }
+    }
+    if (empty > 0) fen += empty;
+    if (r < 7) fen += "/";
+  }
+  fen += " " + (turn || "w") + " - - 0 1";
+  return fen;
+}
+
+const ArcaneAutoSave = {
+  STORAGE_KEY: "wizard_chess_autosave",
+
+  save() {
+    if (!window._WIZARD_GAME) return;
+    const game = window._WIZARD_GAME;
+    const mode = game.getMode ? game.getMode() : "ai";
+    if (mode === "online" || mode === "puzzle") return;
+
+    const chess = game.getChess ? game.getChess() : null;
+    if (!chess || !chess.board || !chess.history || chess.history.length === 0) return;
+
+    // Não salvar se a partida estiver encerrada
+    const gameOverModal = document.getElementById("game-over-modal");
+    if (gameOverModal && !gameOverModal.classList.contains("hidden")) return;
+
+    try {
+      const oppElem = document.getElementById("opp-hud-name");
+      const opponentName = oppElem ? oppElem.textContent.trim() : "Obsidiana";
+      const arena = game.getArena ? game.getArena() : "cathedral";
+      const diff = game.getDiff ? game.getDiff() : 2;
+      const timers = game.getTimers ? game.getTimers() : { w: 300, b: 300, total: 300 };
+      const historyList = document.getElementById("history-list");
+      const historyHtml = historyList ? historyList.innerHTML : "";
+
+      const data = {
+        fen: boardToFenString(chess.board, chess.turn),
+        turn: chess.turn,
+        opponent: opponentName,
+        arena: arena,
+        diff: diff,
+        mode: mode,
+        timerW: timers.w,
+        timerB: timers.b,
+        moveCount: chess.history.length,
+        historyHtml: historyHtml,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      this.checkAndRenderCard();
+    } catch(e) {
+      console.warn("[ArcaneAutoSave] Erro ao salvar:", e);
+    }
+  },
+
+  clear() {
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+      this.checkAndRenderCard();
+    } catch(e){}
+  },
+
+  getSaved() {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.fen && parsed.moveCount > 0 && (Date.now() - (parsed.timestamp || 0) < 7 * 86400000)) {
+        return parsed;
+      }
+      this.clear();
+      return null;
+    } catch(e) {
+      return null;
+    }
+  },
+
+  resume() {
+    const saved = this.getSaved();
+    if (!saved || !window._WIZARD_GAME) {
+      showToast("Nenhuma partida salva encontrada.");
+      return;
+    }
+    try {
+      const game = window._WIZARD_GAME;
+      if (game.setArena) game.setArena(saved.arena || "cathedral");
+      if (game.loadFen) game.loadFen(saved.fen);
+      if (game.setTimers) game.setTimers(saved.timerW || 300, saved.timerB || 300);
+
+      const historyList = document.getElementById("history-list");
+      if (historyList && saved.historyHtml) {
+        historyList.innerHTML = saved.historyHtml;
+      }
+
+      // Fechar modal inicial
+      const startMenu = document.getElementById("start-menu");
+      if (startMenu) startMenu.classList.add("hidden");
+      if (game.startBattle) game.startBattle();
+
+      showToast("⚔️ Batalha retomada de onde você parou!");
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.playClick) {
+        ArcaneAudio.playClick();
+      }
+    } catch(e) {
+      console.warn("[ArcaneAutoSave] Erro ao retomar:", e);
+      showToast("Erro ao retomar batalha salva.");
+    }
+  },
+
+  checkAndRenderCard() {
+    const card = document.getElementById("card-resume-battle");
+    if (!card) return;
+    const saved = this.getSaved();
+    if (!saved) {
+      card.classList.add("hidden");
+      return;
+    }
+    const title = document.getElementById("resume-match-title");
+    const sub = document.getElementById("resume-match-sub");
+    if (title) title.textContent = `Vs ${saved.opponent || "Adversário"}`;
+    if (sub) {
+      const arenaNames = { cathedral: "Catedral Arcana", inferno: "Cripta Infernal", frost: "Templo de Gelo", cosmos: "Observatório Cósmico" };
+      const arenaLabel = arenaNames[saved.arena] || "Catedral Arcana";
+      sub.textContent = `${saved.moveCount} lances jogados • ${arenaLabel}`;
+    }
+    card.classList.remove("hidden");
+  }
+};
+
+function setupArcaneAutoSave() {
+  ArcaneAutoSave.checkAndRenderCard();
+
+  const btnResume = document.getElementById("btn-resume-action");
+  if (btnResume) {
+    btnResume.addEventListener("click", (e) => {
+      e.stopPropagation();
+      ArcaneAutoSave.resume();
+    });
+  }
+
+  const btnDiscard = document.getElementById("btn-discard-action");
+  if (btnDiscard) {
+    btnDiscard.addEventListener("click", (e) => {
+      e.stopPropagation();
+      ArcaneAutoSave.clear();
+      showToast("Batalha salva descartada.");
+    });
+  }
+
+  // Auto-salva após novos lances no histórico
+  const historyList = document.getElementById("history-list");
+  if (historyList) {
+    const observer = new MutationObserver(() => {
+      ArcaneAutoSave.save();
+    });
+    observer.observe(historyList, { childList: true });
+  }
+
+  // Limpa o save quando a partida terminar
+  const gameOverModal = document.getElementById("game-over-modal");
+  if (gameOverModal) {
+    const observer = new MutationObserver(() => {
+      if (!gameOverModal.classList.contains("hidden")) {
+        ArcaneAutoSave.clear();
+      }
+    });
+    observer.observe(gameOverModal, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  // Ao clicar em desistir ou reiniciar
+  const btnConfirmResign = document.getElementById("btn-confirm-resign");
+  if (btnConfirmResign) {
+    btnConfirmResign.addEventListener("click", () => ArcaneAutoSave.clear());
+  }
+
+  const btnReset = document.getElementById("btn-reset");
+  if (btnReset) {
+    btnReset.addEventListener("click", () => ArcaneAutoSave.clear());
   }
 }
