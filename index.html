@@ -2069,6 +2069,534 @@
   text-overflow: ellipsis !important;
 }
 
+/* ==============================================================
+   SELETOR DE ARENAS DA BATALHA: GRID 2x2 PERFEITO & ESPAÇOSO
+   ============================================================== */
+#menu-arena-group,
+.arena-2x2-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #110e19 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 8px !important;
+  margin: 3px 0 8px !important;
+}
+
+#menu-arena-group .toggle-btn,
+.arena-2x2-grid .toggle-btn {
+  flex: none !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 8px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  color: #c9bede !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+#menu-arena-group .toggle-btn:hover,
+.arena-2x2-grid .toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+#menu-arena-group .arena-icon,
+.arena-2x2-grid .arena-icon {
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+#menu-arena-group .arena-name,
+.arena-2x2-grid .arena-name {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Temas Visuais Específicos para cada Arena Ativa */
+#menu-arena-group .toggle-btn.active,
+.arena-2x2-grid .toggle-btn.active {
+  font-weight: 800 !important;
+}
+
+#menu-arena-group .toggle-btn[data-arena="cathedral"].active {
+  background: linear-gradient(135deg, rgba(200, 182, 255, 0.35) 0%, rgba(157, 130, 245, 0.45) 100%) !important;
+  border: 1.5px solid #c8b6ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(200, 182, 255, 0.45) !important;
+}
+
+#menu-arena-group .toggle-btn[data-arena="inferno"].active {
+  background: linear-gradient(135deg, rgba(255, 112, 67, 0.35) 0%, rgba(216, 67, 21, 0.45) 100%) !important;
+  border: 1.5px solid #ff7043 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(255, 112, 67, 0.45) !important;
+}
+
+#menu-arena-group .toggle-btn[data-arena="frost"].active {
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.28) 0%, rgba(0, 180, 216, 0.38) 100%) !important;
+  border: 1.5px solid #00f5d4 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(0, 245, 212, 0.4) !important;
+}
+
+#menu-arena-group .toggle-btn[data-arena="cosmos"].active {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.35) 0%, rgba(124, 58, 237, 0.45) 100%) !important;
+  border: 1.5px solid #c084fc !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.45) !important;
+}
+
+/* ==============================================================
+   SELETOR DE MAGOS DA IA: GRID 2x2 PERFEITO & ORGANIZADO
+   ============================================================== */
+#menu-diff-group,
+.magus-2x2-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #110e19 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 8px !important;
+  margin: 3px 0 8px !important;
+}
+
+#menu-diff-group .toggle-btn,
+.magus-2x2-grid .toggle-btn {
+  flex: none !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 8px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  color: #c9bede !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+#menu-diff-group .toggle-btn:hover,
+.magus-2x2-grid .toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+#menu-diff-group .magus-icon,
+.magus-2x2-grid .magus-icon {
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+#menu-diff-group .magus-name,
+.magus-2x2-grid .magus-name {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+#menu-diff-group .toggle-btn.active,
+.magus-2x2-grid .toggle-btn.active {
+  background: linear-gradient(135deg, rgba(200, 182, 255, 0.35) 0%, rgba(157, 130, 245, 0.45) 100%) !important;
+  border: 1.5px solid #c8b6ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(200, 182, 255, 0.45) !important;
+}
+
+/* ==============================================================
+   BADGE DE ELO MÁGICO NO TOPO (RPG TOP BAR)
+   ============================================================== */
+.rpg-top-elo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(22, 16, 38, 0.92) !important;
+  border: 1.5px solid rgba(245, 197, 107, 0.5) !important;
+  border-radius: 999px !important;
+  padding: 4px 10px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #f5c56b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 10px rgba(245, 197, 107, 0.25) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+.rpg-top-elo:active {
+  transform: scale(0.96) !important;
+}
+.rpg-top-elo .elo-rank-icon {
+  font-size: 0.95rem !important;
+  line-height: 1 !important;
+}
+.rpg-top-elo .elo-val {
+  color: #ffd700 !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem !important;
+}
+.rpg-top-elo .elo-tag {
+  font-size: 0.65rem !important;
+  opacity: 0.85 !important;
+  color: #c8b6ff !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ==============================================================
+   MODAL DO CARTÃO DE FEITICEIRO (CARD COLEÇÃO RPG HOLOGRÁFICO)
+   ============================================================== */
+.wizard-card-modal-content {
+  background: radial-gradient(circle at top, #23193a 0%, #120e20 70%, #0a0812 100%) !important;
+  border: 1.5px solid rgba(200, 182, 255, 0.4) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(124, 58, 237, 0.3) !important;
+  max-width: 380px !important;
+  width: 92% !important;
+  padding: 24px 20px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.arcane-rpg-card {
+  position: relative !important;
+  width: 100% !important;
+  background: linear-gradient(165deg, rgba(30, 22, 50, 0.95) 0%, rgba(18, 14, 30, 0.98) 100%) !important;
+  border: 2px solid #ffd700 !important;
+  border-radius: 18px !important;
+  padding: 18px 16px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 215, 0, 0.15) !important;
+  overflow: hidden !important;
+}
+
+.arcane-rpg-card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(200, 182, 255, 0.15) 50%,
+    rgba(255, 215, 0, 0.1) 55%,
+    transparent 60%
+  ) !important;
+  pointer-events: none !important;
+  animation: cardShimmer 6s infinite linear !important;
+}
+
+@keyframes cardShimmer {
+  0% { transform: translateY(-30%) rotate(25deg); }
+  100% { transform: translateY(30%) rotate(25deg); }
+}
+
+.card-header-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+}
+
+.card-game-brand {
+  font-family: 'Cinzel', serif !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 1.5px !important;
+  color: #ffd700 !important;
+  font-weight: 900 !important;
+}
+
+.card-rarity-badge {
+  background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%) !important;
+  color: #1a0f00 !important;
+  font-size: 0.65rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  text-transform: uppercase !important;
+}
+
+.card-avatar-container {
+  position: relative !important;
+  margin: 6px 0 12px !important;
+}
+
+.card-avatar-halo {
+  position: absolute !important;
+  inset: -8px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(200, 182, 255, 0.4) 0%, transparent 70%) !important;
+  animation: pulseGlow 2.5s infinite alternate !important;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.card-avatar-emoji {
+  width: 76px !important;
+  height: 76px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #2b1f48 0%, #171126 100%) !important;
+  border: 2px solid #c8b6ff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 2.5rem !important;
+  position: relative !important;
+  z-index: 2 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.card-identity-box {
+  text-align: center !important;
+  width: 100% !important;
+  margin-bottom: 14px !important;
+}
+
+.card-player-name {
+  margin: 0 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.5px !important;
+}
+
+.card-rank-title {
+  margin: 2px 0 8px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #c8b6ff !important;
+}
+
+.card-elo-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: rgba(255, 215, 0, 0.12) !important;
+  border: 1px solid rgba(255, 215, 0, 0.4) !important;
+  border-radius: 999px !important;
+  padding: 3px 12px !important;
+}
+
+.card-elo-num {
+  font-size: 1.1rem !important;
+  font-weight: 900 !important;
+  color: #ffd700 !important;
+}
+
+.card-elo-label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1px !important;
+  color: #f5c56b !important;
+  font-weight: 800 !important;
+}
+
+.card-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+}
+
+.card-stat-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 8px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.card-stat-box .stat-icon {
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+
+.card-stat-box .stat-val {
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+.card-stat-box .stat-lbl {
+  font-size: 0.68rem !important;
+  color: #a79cb8 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.card-footer-quote {
+  font-style: italic !important;
+  font-size: 0.72rem !important;
+  color: #b0a4c8 !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding-top: 8px !important;
+  width: 100% !important;
+}
+
+.wizard-card-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.card-action-btn {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: transform 0.15s ease, filter 0.15s ease !important;
+}
+
+.card-action-btn:active {
+  transform: scale(0.97) !important;
+}
+
+.btn-share-whatsapp {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4) !important;
+}
+
+.btn-copy-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #f1edff !important;
+}
+
+/* ==============================================================
+   GRIMÓRIO DE ABERTURAS (ABA DO TUTORIAL)
+   ============================================================== */
+.tut-opening-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(200, 182, 255, 0.18) !important;
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+  margin-bottom: 10px !important;
+  transition: border-color 0.2s ease, background 0.2s ease !important;
+}
+
+.tut-opening-card:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(200, 182, 255, 0.4) !important;
+}
+
+.tut-opening-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 6px !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+.tut-opening-title {
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+  color: #f5c56b !important;
+}
+
+.tut-opening-moves-tag {
+  background: rgba(200, 182, 255, 0.12) !important;
+  border: 1px solid rgba(200, 182, 255, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 2px 7px !important;
+  font-size: 0.74rem !important;
+  font-family: monospace !important;
+  color: #d8b4fe !important;
+}
+
+.tut-opening-desc {
+  font-size: 0.8rem !important;
+  color: #c9bede !important;
+  line-height: 1.35 !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.tut-opening-demo-btn {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(99, 102, 241, 0.4) 100%) !important;
+  border: 1.5px solid #a855f7 !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  padding: 8px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.tut-opening-demo-btn:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%) !important;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.5) !important;
+}
+
 #btn-start-game,
 .photo2-btn-start {
   margin-top: 14px !important;
@@ -2750,6 +3278,11 @@
                 <span class="star-icon">⭐</span>
                 <span id="top-player-lvl">1</span>
               </div>
+            </div>
+            <div class="rpg-top-elo" id="rpg-top-elo-badge" title="Seu Elo e Ranque Mágico (Toque para ver sua Ficha Arcana)" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._WIZARD_CARD && window._WIZARD_CARD.openCard) window._WIZARD_CARD.openCard();">
+              <span class="elo-rank-icon" id="top-elo-rank-icon">🥉</span>
+              <span class="elo-val" id="top-elo-val">600</span>
+              <span class="elo-tag">ELO</span>
             </div>
           </div>
         </div>
@@ -3810,7 +4343,7 @@
           <!-- 2. Arena da Batalha (Atmosfera: Grid 2x2 Organizado) -->
           <div class="setup-group" id="menu-arena-section">
             <label class="setup-label photo2-label">ARENA DA BATALHA</label>
-            <div class="toggle-group photo2-toggle-group arena-2x2-grid" id="menu-arena-group">
+            <div class="toggle-group arena-2x2-grid" id="menu-arena-group">
               <button type="button" class="toggle-btn active" data-arena="cathedral">
                 <span class="arena-icon">🏛️</span>
                 <span class="arena-name">Catedral</span>
@@ -3872,7 +4405,7 @@
           <!-- 6. Grimório de Magos (Adversários da IA - Grid 2x2 Organizado) -->
           <div class="setup-group" id="menu-diff-section">
             <label class="setup-label photo2-label">ADVERSÁRIO (IA)</label>
-            <div class="toggle-group photo2-toggle-group magus-2x2-grid" id="menu-diff-group">
+            <div class="toggle-group magus-2x2-grid" id="menu-diff-group">
               <button type="button" class="toggle-btn" data-diff="1" title="Aprendiz Elara (800 Elo) - Cautelosa">
                 <span class="magus-icon">🧙‍♀️</span>
                 <span class="magus-name">Elara (800)</span>
@@ -4086,6 +4619,7 @@
           <button class="tutorial-tab-btn active" data-tab="basics">♟️ Peças & Regras</button>
           <button class="tutorial-tab-btn" data-tab="powers">🔮 Feitiços & Oráculo</button>
           <button class="tutorial-tab-btn" data-tab="strategy">👑 Xeque-Mate</button>
+          <button class="tutorial-tab-btn" data-tab="openings">📜 Aberturas</button>
         </div>
 
         <!-- Conteúdo das Lições -->
@@ -4175,6 +4709,85 @@
               <div>
                 <strong>Xeque-Mate:</strong> O Rei está em perigo e não há nenhum movimento legal para salvá-lo. A partida termina com sua vitória gloriosa!
               </div>
+            </div>
+          </div>
+
+          <!-- Tab 4: Grimório de Aberturas Lendárias -->
+          <div class="tutorial-tab-pane" id="tut-pane-openings">
+            <div style="font-size: 0.84rem; color: #c8b6ff; margin-bottom: 12px; line-height: 1.4; text-align: center;">
+              📜 <em>Aprenda as aberturas clássicas e veja a demonstração dos lances interativamente no tabuleiro 3D!</em>
+            </div>
+
+            <!-- 1. Abertura Italiana -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">🇮🇹 Abertura Italiana</span>
+                <span class="tut-opening-moves-tag">1. e4 e5 2. Cf3 Cc6 3. Bc4</span>
+              </div>
+              <p class="tut-opening-desc">Desenvolve rapidamente o Bispo e o Cavalo, visando a casa fraca f7 das pretas e preparando o roque seguro.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="italian">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
+            </div>
+
+            <!-- 2. Defesa Siciliana -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">⚔️ Defesa Siciliana</span>
+                <span class="tut-opening-moves-tag">1. e4 c5</span>
+              </div>
+              <p class="tut-opening-desc">A defesa mais agressiva e combativa do xadrez mundial. Luta pela iniciativa central com desequilíbrio assimétrico.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="sicilian">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
+            </div>
+
+            <!-- 3. Gambito da Dama -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">👑 Gambito da Dama</span>
+                <span class="tut-opening-moves-tag">1. d4 d5 2. c4</span>
+              </div>
+              <p class="tut-opening-desc">As brancas oferecem temporariamente um peão de flanco para conquistar total domínio posicional sobre o centro.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="queens_gambit">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
+            </div>
+
+            <!-- 4. Ruy Lopez (Espanhola) -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">🇪🇸 Abertura Ruy Lopez</span>
+                <span class="tut-opening-moves-tag">1. e4 e5 2. Cf3 Cc6 3. Bb5</span>
+              </div>
+              <p class="tut-opening-desc">Uma das aberturas clássicas mais nobres e profundas. Pressiona o cavalo defensor de e5 com rica estratégia posicional.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="ruy_lopez">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
+            </div>
+
+            <!-- 5. Ataque Fried Liver -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">🔥 Ataque Fígado Frito</span>
+                <span class="tut-opening-moves-tag">1. e4 e5 2. Cf3 Cc6 3. Bc4 Cf6 4. Cg5 d5 5. exd5 Cxd5 6. Cxf7!</span>
+              </div>
+              <p class="tut-opening-desc">Um dos sacrifícios mais agressivos e eletrizantes! O cavalo é imolado em f7 arrastando o Rei exposto para o fogo.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="fried_liver">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
+            </div>
+
+            <!-- 6. Defesa Francesa -->
+            <div class="tut-opening-card">
+              <div class="tut-opening-header">
+                <span class="tut-opening-title">🛡️ Defesa Francesa</span>
+                <span class="tut-opening-moves-tag">1. e4 e6 2. d4 d5</span>
+              </div>
+              <p class="tut-opening-desc">Cria uma sólida cadeia de peões de granito impenetrável, contra-atacando a base do peão central das brancas.</p>
+              <button type="button" class="tut-opening-demo-btn" data-opening="french">
+                <span class="material-symbols-rounded">play_circle</span> Demonstrar no Tabuleiro
+              </button>
             </div>
           </div>
         </div>
@@ -4834,8 +5447,8 @@
         <div class="profile-avatar-large" id="profile-avatar-preview">🧙‍♂️</div>
         <div class="profile-hero-info">
           <div class="profile-name-display" id="profile-name-display">Mago</div>
-          <div class="profile-title-display">Mestre Arcano do Tabuleiro</div>
-          <div class="profile-stats-tag">⭐ Nível <span id="profile-lvl-number">1</span> • <span id="profile-xp-display">0 XP</span> • 🪙 <span id="profile-coins-display">100</span> Moedas</div>
+          <div class="profile-title-display" id="profile-rank-title-display">Aprendiz Rúnico</div>
+          <div class="profile-stats-tag">⭐ Nível <span id="profile-lvl-number">1</span> • <span id="profile-xp-display">0 XP</span> • 🪙 <span id="profile-coins-display">100</span> Moedas • 🔮 <span id="profile-elo-display">600 Elo</span></div>
         </div>
       </div>
 
@@ -4883,6 +5496,20 @@
           <div style="display: flex; align-items: center; gap: 4px;">
             <span style="font-size: 0.78rem; color: #c8b6ff; opacity: 0.9;">Visualizar</span>
             <span class="material-symbols-rounded" style="font-size: 1.1rem; color: #ffd700;">arrow_forward</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- 4. Botão Cartão de Feiticeiro (Card Colecionável RPG) -->
+      <div style="margin: 6px 0 10px; width: 100%;">
+        <button type="button" id="btn-open-wizard-card" class="btn-profile-achievements" onclick="if(window._WIZARD_CARD && window._WIZARD_CARD.openCard) window._WIZARD_CARD.openCard();" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(79, 70, 229, 0.3) 100%) !important; border-color: rgba(192, 132, 252, 0.45) !important;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.3rem;">🎴</span>
+            <span style="font-weight: 800; font-size: 0.95rem; color: #d8b4fe;">Cartão de Feiticeiro</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <span style="font-size: 0.78rem; color: #e9d5ff; opacity: 0.9;">Ver Carta RPG</span>
+            <span class="material-symbols-rounded" style="font-size: 1.1rem; color: #d8b4fe;">arrow_forward</span>
           </div>
         </button>
       </div>
@@ -5271,6 +5898,73 @@
       <!-- Card do Confronto Atual -->
       <div class="tournament-active-match-card" id="tournament-active-match-card">
         <!-- Injetado via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal do Cartão de Feiticeiro (Card RPG Colecionável) -->
+  <div id="wizard-card-modal" class="modal hidden" style="z-index: 9999;">
+    <div class="modal-content wizard-card-modal-content">
+      <button type="button" class="modal-corner-close-btn" id="btn-close-wizard-card" onclick="if(window._WIZARD_CARD && window._WIZARD_CARD.closeCard) window._WIZARD_CARD.closeCard();">✕</button>
+
+      <!-- Cartão RPG Estilo Colecionável com Brilho Holográfico -->
+      <div class="arcane-rpg-card" id="arcane-rpg-card">
+        <div class="card-header-bar">
+          <span class="card-game-brand">WIZARD'S CHESS 3D</span>
+          <span class="card-rarity-badge" id="card-rank-badge">APRENDIZ</span>
+        </div>
+        
+        <div class="card-avatar-container">
+          <div class="card-avatar-halo"></div>
+          <div class="card-avatar-emoji" id="card-avatar-display">🧙‍♂️</div>
+        </div>
+
+        <div class="card-identity-box">
+          <h3 class="card-player-name" id="card-player-name">Mago</h3>
+          <p class="card-rank-title" id="card-rank-title">Aprendiz Rúnico</p>
+          <div class="card-elo-pill">
+            <span class="card-elo-num" id="card-elo-num">600</span>
+            <span class="card-elo-label">ELO MÁGICO</span>
+          </div>
+        </div>
+
+        <div class="card-stats-grid">
+          <div class="card-stat-box">
+            <span class="stat-icon">🏆</span>
+            <span class="stat-val" id="card-stat-wins">0</span>
+            <span class="stat-lbl">Vitórias</span>
+          </div>
+          <div class="card-stat-box">
+            <span class="stat-icon">⚔️</span>
+            <span class="stat-val" id="card-stat-matches">0</span>
+            <span class="stat-lbl">Partidas</span>
+          </div>
+          <div class="card-stat-box">
+            <span class="stat-icon">🎯</span>
+            <span class="stat-val" id="card-stat-winrate">0%</span>
+            <span class="stat-lbl">Vitória</span>
+          </div>
+          <div class="card-stat-box">
+            <span class="stat-icon">🛡️</span>
+            <span class="stat-val" id="card-stat-guardian">Cavalo</span>
+            <span class="stat-lbl">Guardião</span>
+          </div>
+        </div>
+
+        <div class="card-footer-quote">
+          "As runas de mármore e obsidiana curvam-se diante do verdadeiro Mestre do Tabuleiro."
+        </div>
+      </div>
+
+      <!-- Ações de Compartilhamento -->
+      <div class="wizard-card-actions">
+        <button type="button" class="card-action-btn btn-share-whatsapp" id="btn-card-share-whatsapp" onclick="if(window._WIZARD_CARD && window._WIZARD_CARD.shareWhatsApp) window._WIZARD_CARD.shareWhatsApp();">
+          <span>📲 Compartilhar no WhatsApp</span>
+        </button>
+        <button type="button" class="card-action-btn btn-copy-card" id="btn-card-copy-info" onclick="if(window._WIZARD_CARD && window._WIZARD_CARD.copyCard) window._WIZARD_CARD.copyCard();">
+          <span class="material-symbols-rounded">content_copy</span>
+          <span>Copiar Ficha Arcana</span>
+        </button>
       </div>
     </div>
   </div>
