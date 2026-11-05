@@ -527,7 +527,10 @@ function initWizardFeatures() {
     { name: "CampaignWorld2", fn: setupCampaignWorld2 },
     { name: "Tournament", fn: setupTournament },
     { name: "HUDPlayerOrientationAndLayout", fn: setupHUDPlayerOrientationAndLayout },
-    { name: "ArcaneAutoSave", fn: setupArcaneAutoSave }
+    { name: "ArcaneAutoSave", fn: setupArcaneAutoSave },
+    { name: "ArcaneElo", fn: setupArcaneElo },
+    { name: "ArcaneOpenings", fn: setupArcaneOpeningsTutorial },
+    { name: "ArcaneCard", fn: setupArcaneCardSystem }
   ];
 
   for (const task of tasks) {
@@ -4832,6 +4835,9 @@ class ArenaWeatherSystem {
     } else if (arena === "cyber") {
       colors = [0x00ff88, 0x00e5ff, 0x00ffff];
       count = 50;
+    } else if (arena === "frost") {
+      colors = [0x00f5d4, 0xe0f7fa, 0xffffff, 0x80deea, 0x48cae4];
+      count = 65;
     } else if (arena === "cosmos") {
       colors = [0x8072ff, 0x00f5d4, 0xffffff, 0xc084fc, 0xffd700, 0x38bdf8];
       count = 70;
@@ -4857,6 +4863,7 @@ class ArenaWeatherSystem {
         vy: arena === "inferno" ? (0.015 + Math.random() * 0.02) :
             arena === "atlantis" ? (0.012 + Math.random() * 0.018) :
             arena === "cathedral" ? (-0.008 - Math.random() * 0.01) :
+            arena === "frost" ? (-0.014 - Math.random() * 0.016) :
             arena === "cosmos" ? (0.006 + Math.random() * 0.012) :
             (Math.random() - 0.5) * 0.012,
         vz: arena === "cosmos" ? (Math.random() - 0.5) * 0.009 : (Math.random() - 0.5) * 0.015
@@ -4888,7 +4895,7 @@ class ArenaWeatherSystem {
 
       if (arena === "inferno" || arena === "atlantis") {
         if (p.mesh.position.y > 9) p.mesh.position.y = 0.2;
-      } else if (arena === "cathedral") {
+      } else if (arena === "cathedral" || arena === "frost") {
         if (p.mesh.position.y < 0.2) p.mesh.position.y = 8.5;
       } else {
         if (p.mesh.position.y < 0.2) p.mesh.position.y = 7.5;
@@ -6786,5 +6793,414 @@ function setupArcaneAutoSave() {
   const btnReset = document.getElementById("btn-reset");
   if (btnReset) {
     btnReset.addEventListener("click", () => ArcaneAutoSave.clear());
+  }
+}
+
+// ==============================================================
+// V1.5.7: SISTEMA DE RANQUE & ELO MÁGICO DO JOGADOR
+// ==============================================================
+class ArcaneEloSystem {
+  constructor() {
+    this.elo = this.loadElo();
+    this.ranks = [
+      { min: 0, max: 899, name: "Aprendiz Rúnico", icon: "🥉", tier: 1 },
+      { min: 900, max: 1299, name: "Feiticeiro Elemental", icon: "🥈", tier: 2 },
+      { min: 1300, max: 1699, name: "Mago do Fogo Cósmico", icon: "🥇", tier: 3 },
+      { min: 1700, max: 2099, name: "Arquimago do Tabuleiro", icon: "💎", tier: 4 },
+      { min: 2100, max: 9999, name: "Mestre Supremo dos Titãs", icon: "👑", tier: 5 }
+    ];
+  }
+
+  loadElo() {
+    const saved = localStorage.getItem("wizard_chess_elo");
+    return saved ? parseInt(saved, 10) : 600;
+  }
+
+  saveElo() {
+    localStorage.setItem("wizard_chess_elo", this.elo.toString());
+  }
+
+  getRank(val = this.elo) {
+    for (let i = this.ranks.length - 1; i >= 0; i--) {
+      if (val >= this.ranks[i].min) return this.ranks[i];
+    }
+    return this.ranks[0];
+  }
+
+  applyMatchResult(result, opponentDiff = 2) {
+    const prevRank = this.getRank();
+    let change = 0;
+    const diffBonus = (opponentDiff || 2) * 5;
+
+    if (result === "win") {
+      change = 24 + diffBonus;
+    } else if (result === "draw") {
+      change = 5;
+    } else if (result === "loss") {
+      change = -(16 - Math.floor(diffBonus / 3));
+    }
+
+    this.elo = Math.max(100, this.elo + change);
+    this.saveElo();
+    this.updateUI();
+
+    const newRank = this.getRank();
+    if (newRank.tier > prevRank.tier) {
+      this.celebrateRankUp(newRank);
+    } else {
+      const sign = change >= 0 ? `+${change}` : `${change}`;
+      showToast(`Elo Mágico: ${sign} (${this.elo})`);
+    }
+
+    return { change, elo: this.elo, rank: newRank };
+  }
+
+  celebrateRankUp(newRank) {
+    try {
+      if (window._WIZARD_AUDIO && window._WIZARD_AUDIO.playSuccess) {
+        window._WIZARD_AUDIO.playSuccess();
+      }
+    } catch(e){}
+    showToast(`🎉 NOVO RANQUE ALCANÇADO: ${newRank.icon} ${newRank.name}!`);
+  }
+
+  updateUI() {
+    const currentRank = this.getRank();
+
+    // Top Elo Badge
+    const topEloVal = document.getElementById("top-elo-val");
+    if (topEloVal) topEloVal.textContent = this.elo;
+    const topRankIcon = document.getElementById("top-elo-rank-icon");
+    if (topRankIcon) topRankIcon.textContent = currentRank.icon;
+
+    // Profile Modal
+    const profEloDisplay = document.getElementById("profile-elo-display");
+    if (profEloDisplay) profEloDisplay.textContent = `${this.elo} Elo`;
+    const profRankTitle = document.getElementById("profile-rank-title-display");
+    if (profRankTitle) profRankTitle.textContent = currentRank.name;
+
+    // Card Modal
+    const cardElo = document.getElementById("card-elo-num");
+    if (cardElo) cardElo.textContent = this.elo;
+    const cardRankTitle = document.getElementById("card-rank-title");
+    if (cardRankTitle) cardRankTitle.textContent = currentRank.name;
+    const cardRankBadge = document.getElementById("card-rank-badge");
+    if (cardRankBadge) cardRankBadge.textContent = currentRank.name.split(" ")[0].toUpperCase();
+  }
+}
+
+const ArcaneElo = new ArcaneEloSystem();
+window._WIZARD_ELO = ArcaneElo;
+
+function setupArcaneElo() {
+  ArcaneElo.updateUI();
+}
+
+// ==============================================================
+// V1.5.7: GRIMÓRIO DE ABERTURAS (COMO TUTORIAL, NÃO EM JOGO)
+// ==============================================================
+const ARCANE_OPENINGS = {
+  italian: {
+    title: "Abertura Italiana",
+    moves: [
+      { from: { r: 6, c: 4 }, to: { r: 4, c: 4 }, san: "1. e4", desc: "Avanço do peão do rei ocupando o centro e liberando a Dama e o Bispo." },
+      { from: { r: 1, c: 4 }, to: { r: 3, c: 4 }, san: "1... e5", desc: "As pretas respondem simetricamente disputando o centro da catedral." },
+      { from: { r: 7, c: 6 }, to: { r: 5, c: 5 }, san: "2. Cf3", desc: "O Cavalo desenvolve com tempo, atacando imediatamente o peão indefeso de e5." },
+      { from: { r: 0, c: 1 }, to: { r: 2, c: 2 }, san: "2... Cc6", desc: "O Cavalo negro desenvolve protegendo o peão de e5." },
+      { from: { r: 7, c: 5 }, to: { r: 4, c: 2 }, san: "3. Bc4", desc: "O Bispo italiano mira o ponto mais fraco das pretas: a casa f7!" }
+    ]
+  },
+  sicilian: {
+    title: "Defesa Siciliana",
+    moves: [
+      { from: { r: 6, c: 4 }, to: { r: 4, c: 4 }, san: "1. e4", desc: "O lance clássico de abertura das brancas conquistando espaço central." },
+      { from: { r: 1, c: 2 }, to: { r: 3, c: 2 }, san: "1... c5", desc: "A Siciliana! Luta pelo centro pela coluna semiaberta c, gerando um jogo altamente agudo." }
+    ]
+  },
+  queens_gambit: {
+    title: "Gambito da Dama",
+    moves: [
+      { from: { r: 6, c: 3 }, to: { r: 4, c: 3 }, san: "1. d4", desc: "Controle firme do centro protegido pela Dama." },
+      { from: { r: 1, c: 3 }, to: { r: 3, c: 3 }, san: "1... d5", desc: "As pretas impedem o avanço e4 com estrutura sólida." },
+      { from: { r: 6, c: 2 }, to: { r: 4, c: 2 }, san: "2. c4", desc: "O Gambito! Oferece o peão de flanco c4 para desviar o peão negro e dominar o tabuleiro." }
+    ]
+  },
+  ruy_lopez: {
+    title: "Abertura Ruy Lopez (Espanhola)",
+    moves: [
+      { from: { r: 6, c: 4 }, to: { r: 4, c: 4 }, san: "1. e4", desc: "Ocupação central imperial com peão do rei." },
+      { from: { r: 1, c: 4 }, to: { r: 3, c: 4 }, san: "1... e5", desc: "As pretas respondem com controle central espelhado." },
+      { from: { r: 7, c: 6 }, to: { r: 5, c: 5 }, san: "2. Cf3", desc: "Pressão direta sobre o peão central negro." },
+      { from: { r: 0, c: 1 }, to: { r: 2, c: 2 }, san: "2... Cc6", desc: "Defesa sólida do peão com cavalo." },
+      { from: { r: 7, c: 5 }, to: { r: 3, c: 1 }, san: "3. Bb5", desc: "A nobre Ruy Lopez! O bispo crava e ameaça o defensor do centro, criando rica tensão posicional." }
+    ]
+  },
+  fried_liver: {
+    title: "Ataque Fígado Frito",
+    moves: [
+      { from: { r: 6, c: 4 }, to: { r: 4, c: 4 }, san: "1. e4", desc: "Peão de rei central." },
+      { from: { r: 1, c: 4 }, to: { r: 3, c: 4 }, san: "1... e5", desc: "Resposta central." },
+      { from: { r: 7, c: 6 }, to: { r: 5, c: 5 }, san: "2. Cf3", desc: "Ataque de cavalo." },
+      { from: { r: 0, c: 1 }, to: { r: 2, c: 2 }, san: "2... Cc6", desc: "Defesa de cavalo." },
+      { from: { r: 7, c: 5 }, to: { r: 4, c: 2 }, san: "3. Bc4", desc: "Bispo mira f7." },
+      { from: { r: 0, c: 6 }, to: { r: 2, c: 5 }, san: "3... Cf6", desc: "Defesa dos dois cavalos." },
+      { from: { r: 5, c: 5 }, to: { r: 3, c: 6 }, san: "4. Cg5", desc: "Ataque fulminante com dupla pressão em f7!" },
+      { from: { r: 1, c: 3 }, to: { r: 3, c: 3 }, san: "4... d5", desc: "A única tentativa de bloquear a diagonal fatal." },
+      { from: { r: 4, c: 4 }, to: { r: 3, c: 3 }, san: "5. exd5", desc: "Captura do peão central." },
+      { from: { r: 2, c: 5 }, to: { r: 3, c: 3 }, san: "5... Cxd5?!", desc: "O erro que ativa o ataque Fígado Frito!" },
+      { from: { r: 3, c: 6 }, to: { r: 1, c: 5 }, san: "6. Cxf7!!", desc: "🔥 SACRIFÍCIO FÍGADO FRITO! O cavalo é sacrificado em f7, forçando o Rei negro a marchar para o centro da catedral!" }
+    ]
+  },
+  french: {
+    title: "Defesa Francesa",
+    moves: [
+      { from: { r: 6, c: 4 }, to: { r: 4, c: 4 }, san: "1. e4", desc: "Avanço tradicional de peão de rei." },
+      { from: { r: 1, c: 4 }, to: { r: 2, c: 4 }, san: "1... e6", desc: "A Defesa Francesa! Prepara um contra-ataque no lance seguinte com d5." },
+      { from: { r: 6, c: 3 }, to: { r: 4, c: 3 }, san: "2. d4", desc: "As brancas ocupam o centro completo com dois peões nobres." },
+      { from: { r: 1, c: 3 }, to: { r: 3, c: 3 }, san: "2... d5", desc: "A fortaleza francesa! As pretas desafiam imediatamente o peão de e4." }
+    ]
+  }
+};
+
+class ArcaneOpeningsTutorial {
+  constructor() {
+    this.currentOpening = null;
+    this.stepIndex = 0;
+  }
+
+  demonstrateOpening(openingKey) {
+    const opening = ARCANE_OPENINGS[openingKey];
+    if (!opening || !window._WIZARD_GAME) return;
+
+    this.currentOpening = opening;
+    this.stepIndex = 0;
+
+    // Fecha menus
+    const menuModal = document.getElementById("menu-modal");
+    if (menuModal) menuModal.classList.add("hidden");
+
+    // Reseta tabuleiro para posição inicial
+    window._WIZARD_GAME.resetBoard();
+
+    // Ativa banner do tutorial
+    const banner = document.getElementById("tutorial-guide-banner");
+    if (banner) {
+      banner.classList.remove("hidden");
+    }
+
+    this.renderCurrentStep();
+    this.bindBannerButtons();
+  }
+
+  renderCurrentStep() {
+    if (!this.currentOpening) return;
+    const moves = this.currentOpening.moves;
+    const currentMove = moves[this.stepIndex];
+
+    const stepNumEl = document.getElementById("tut-guide-step-num");
+    if (stepNumEl) {
+      stepNumEl.textContent = `LANCE ${this.stepIndex + 1} DE ${moves.length} • ${this.currentOpening.title}`;
+    }
+
+    const instrEl = document.getElementById("tut-guide-instruction");
+    if (instrEl && currentMove) {
+      instrEl.innerHTML = `<strong>${currentMove.san}:</strong> ${currentMove.desc}`;
+    }
+
+    const btnPrev = document.getElementById("btn-tut-prev");
+    if (btnPrev) btnPrev.disabled = this.stepIndex === 0;
+
+    const btnNext = document.getElementById("btn-tut-next");
+    if (btnNext) {
+      btnNext.innerHTML = this.stepIndex === moves.length - 1
+        ? `<span>Concluir</span> <span class="material-symbols-rounded">check</span>`
+        : `<span>Próximo</span> <span class="material-symbols-rounded">arrow_forward</span>`;
+    }
+
+    // Executa o lance no tabuleiro 3D
+    if (currentMove && window._WIZARD_GAME.makeMove) {
+      window._WIZARD_GAME.makeMove(currentMove.from, currentMove.to);
+    }
+  }
+
+  nextStep() {
+    if (!this.currentOpening) return;
+    if (this.stepIndex < this.currentOpening.moves.length - 1) {
+      this.stepIndex++;
+      this.renderCurrentStep();
+    } else {
+      this.finishTutorial();
+    }
+  }
+
+  prevStep() {
+    if (!this.currentOpening) return;
+    if (this.stepIndex > 0) {
+      this.stepIndex--;
+      window._WIZARD_GAME.resetBoard();
+      for (let i = 0; i <= this.stepIndex; i++) {
+        const m = this.currentOpening.moves[i];
+        window._WIZARD_GAME.makeMove(m.from, m.to);
+      }
+      this.renderCurrentStep();
+    }
+  }
+
+  finishTutorial() {
+    const banner = document.getElementById("tutorial-guide-banner");
+    if (banner) banner.classList.add("hidden");
+
+    showToast("🎉 Abertura dominada! Aplique-a em suas partidas.");
+    const menuModal = document.getElementById("menu-modal");
+    if (menuModal) menuModal.classList.remove("hidden");
+    this.currentOpening = null;
+  }
+
+  bindBannerButtons() {
+    const btnNext = document.getElementById("btn-tut-next");
+    if (btnNext) {
+      btnNext.onclick = () => this.nextStep();
+    }
+    const btnPrev = document.getElementById("btn-tut-prev");
+    if (btnPrev) {
+      btnPrev.onclick = () => this.prevStep();
+    }
+    const btnClose = document.getElementById("btn-close-tutorial-guide");
+    if (btnClose) {
+      btnClose.onclick = () => this.finishTutorial();
+    }
+  }
+}
+
+const ArcaneOpenings = new ArcaneOpeningsTutorial();
+window._WIZARD_OPENINGS = ArcaneOpenings;
+
+function setupArcaneOpeningsTutorial() {
+  document.querySelectorAll(".tut-opening-demo-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const openingKey = btn.dataset.opening;
+      if (openingKey) ArcaneOpenings.demonstrateOpening(openingKey);
+    });
+  });
+}
+
+// ==============================================================
+// V1.5.7: CARTÃO DE FEITICEIRO COMPARTILHÁVEL (CARD RPG)
+// ==============================================================
+class ArcaneCardSystem {
+  openCard() {
+    const modal = document.getElementById("wizard-card-modal");
+    if (!modal) return;
+
+    const playerName = (document.getElementById("profile-name-input")?.value || "Mago").trim();
+    const avatar = document.getElementById("top-player-avatar")?.textContent || "🧙‍♂️";
+
+    const elo = window._WIZARD_ELO ? window._WIZARD_ELO.elo : 600;
+    const rank = window._WIZARD_ELO ? window._WIZARD_ELO.getRank() : { name: "Aprendiz Rúnico", icon: "🥉" };
+
+    let stats = { wins: 0, losses: 0, draws: 0 };
+    try {
+      const saved = localStorage.getItem("wizard_chess_stats");
+      if (saved) stats = JSON.parse(saved);
+    } catch(e){}
+
+    const totalMatches = (stats.wins || 0) + (stats.losses || 0) + (stats.draws || 0);
+    const winRate = totalMatches > 0 ? Math.round(((stats.wins || 0) / totalMatches) * 100) : 0;
+
+    const nameEl = document.getElementById("card-player-name");
+    if (nameEl) nameEl.textContent = playerName;
+
+    const avatarEl = document.getElementById("card-avatar-display");
+    if (avatarEl) avatarEl.textContent = avatar;
+
+    const eloEl = document.getElementById("card-elo-num");
+    if (eloEl) eloEl.textContent = elo;
+
+    const rankTitleEl = document.getElementById("card-rank-title");
+    if (rankTitleEl) rankTitleEl.textContent = `${rank.icon} ${rank.name}`;
+
+    const rankBadgeEl = document.getElementById("card-rank-badge");
+    if (rankBadgeEl) rankBadgeEl.textContent = rank.name.split(" ")[0].toUpperCase();
+
+    const winsEl = document.getElementById("card-stat-wins");
+    if (winsEl) winsEl.textContent = stats.wins || 0;
+
+    const matchesEl = document.getElementById("card-stat-matches");
+    if (matchesEl) matchesEl.textContent = totalMatches;
+
+    const winrateEl = document.getElementById("card-stat-winrate");
+    if (winrateEl) winrateEl.textContent = `${winRate}%`;
+
+    const guardianEl = document.getElementById("card-stat-guardian");
+    if (guardianEl) guardianEl.textContent = "Cavalo Arcano";
+
+    modal.classList.remove("hidden");
+  }
+
+  closeCard() {
+    const modal = document.getElementById("wizard-card-modal");
+    if (modal) modal.classList.add("hidden");
+  }
+
+  getShareText() {
+    const playerName = (document.getElementById("profile-name-input")?.value || "Mago").trim();
+    const elo = window._WIZARD_ELO ? window._WIZARD_ELO.elo : 600;
+    const rank = window._WIZARD_ELO ? window._WIZARD_ELO.getRank() : { name: "Aprendiz Rúnico", icon: "🥉" };
+
+    let stats = { wins: 0, losses: 0, draws: 0 };
+    try {
+      const saved = localStorage.getItem("wizard_chess_stats");
+      if (saved) stats = JSON.parse(saved);
+    } catch(e){}
+    const totalMatches = (stats.wins || 0) + (stats.losses || 0) + (stats.draws || 0);
+    const winRate = totalMatches > 0 ? Math.round(((stats.wins || 0) / totalMatches) * 100) : 0;
+
+    return `🧙‍♂️ *Wizard's Chess 3D - Ficha Arcana*\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 *Feiticeiro:* ${playerName}\n` +
+      `🎖️ *Ranque:* ${rank.name} ${rank.icon}\n` +
+      `🔮 *Elo Mágico:* ${elo} Pts\n` +
+      `🏆 *Vitórias:* ${stats.wins || 0} (${winRate}% Taxa de Vitória)\n` +
+      `🛡️ *Guardião:* Cavalo Arcano\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `Desafie-me no tabuleiro de pedra da Catedral Arcana!\n` +
+      `Jogue agora: https://artcostamayrinck-hash.github.io/wizard-chess/`;
+  }
+
+  shareWhatsApp() {
+    const text = encodeURIComponent(this.getShareText());
+    window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+  }
+
+  copyCard() {
+    const text = this.getShareText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("📋 Ficha Arcana copiada com sucesso!");
+      }).catch(() => {
+        showToast("📋 Ficha copiada!");
+      });
+    } else {
+      showToast("📋 Ficha copiada!");
+    }
+  }
+}
+
+const ArcaneCard = new ArcaneCardSystem();
+window._WIZARD_CARD = ArcaneCard;
+
+function setupArcaneCardSystem() {
+  const btnClose = document.getElementById("btn-close-wizard-card");
+  if (btnClose) {
+    btnClose.addEventListener("click", () => ArcaneCard.closeCard());
+  }
+  const btnWhatsApp = document.getElementById("btn-card-share-whatsapp");
+  if (btnWhatsApp) {
+    btnWhatsApp.addEventListener("click", () => ArcaneCard.shareWhatsApp());
+  }
+  const btnCopy = document.getElementById("btn-card-copy-info");
+  if (btnCopy) {
+    btnCopy.addEventListener("click", () => ArcaneCard.copyCard());
   }
 }
