@@ -575,6 +575,9 @@ function initWizardFeatures() {
       console.warn(`[WizardChess] Erro ao inicializar ${task.name}:`, err);
     }
   }
+  if (typeof window.dismissArcaneLoadingScreen === "function") {
+    window.dismissArcaneLoadingScreen();
+  }
 }
 
 
@@ -4249,6 +4252,7 @@ const TACTICAL_PUZZLES_DATA = [
   {
     id: "puzzle_1",
     title: "1. O Pastor Sagrado",
+    theme: "Mate em 1",
     difficulty: "Iniciante",
     desc: "A Rainha e o Bispo avançam em harmonia para aplicar o clássico xeque-mate em 1 lance em f7.",
     fen: "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 1",
@@ -4260,6 +4264,7 @@ const TACTICAL_PUZZLES_DATA = [
   {
     id: "puzzle_2",
     title: "2. O Corredor de Pedra",
+    theme: "Mate do Corredor",
     difficulty: "Fácil",
     desc: "Os próprios peões negros trancam a fuga do Rei. A Torre de Mármore sela a passagem.",
     fen: "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
@@ -4270,20 +4275,22 @@ const TACTICAL_PUZZLES_DATA = [
   },
   {
     id: "puzzle_3",
-    title: "3. O Salto Noturno",
-    difficulty: "Médio",
-    desc: "O Cavalo Arcano executa um salto decisivo desestabilizando o centro adversário.",
-    fen: "r1b1kb1r/pppp1ppp/5n2/4q3/4N3/8/PPPPPPPP/R1BQKB1R w KQkq - 0 1",
+    title: "3. O Garfo Real do Cavalo",
+    theme: "Garfo Tático",
+    difficulty: "Fácil",
+    desc: "O Cavalo salta para a casa c7 aplicando um garfo decisivo entre o Rei e a Torre.",
+    fen: "r1b1k2r/pppp1ppp/8/4N3/1b6/2N5/PPP2PPP/R1B1KB1R w KQkq - 0 1",
     arena: "forest",
     level: 0,
     rewardCoins: 120,
-    rewardXP: 80
+    rewardXP: 70
   },
   {
     id: "puzzle_4",
     title: "4. A Emboscada dos Bispos",
+    theme: "Mate de Boden",
     difficulty: "Médio",
-    desc: "Dois bispos cortam as diagonais reais para encurralar o monarca de obsidiana.",
+    desc: "Dois bispos cruzam as diagonais reais para encurralar o monarca de obsidiana.",
     fen: "r1b2rk1/ppp2ppp/8/4B3/8/8/PPP2PPP/R2R2K1 w - - 0 1",
     arena: "frost",
     level: 0,
@@ -4293,8 +4300,9 @@ const TACTICAL_PUZZLES_DATA = [
   {
     id: "puzzle_5",
     title: "5. O Sacrifício Real",
+    theme: "Sacrifício",
     difficulty: "Difícil",
-    desc: "Entregue sua peça mais poderosa para quebrar as defesas e forçar o xeque-mate imparável.",
+    desc: "Entregue a Dama para quebrar as defesas e forçar o xeque-mate imparável.",
     fen: "r1b2r1k/pp3ppp/2n1p3/3q4/3P4/3B1N2/PP1Q1PPP/R3K2R w KQ - 0 1",
     arena: "abyss",
     level: 0,
@@ -4303,16 +4311,89 @@ const TACTICAL_PUZZLES_DATA = [
   },
   {
     id: "puzzle_6",
-    title: "6. O Vórtice Cósmico",
+    title: "6. O Mate Árabe",
+    theme: "Mate Árabe",
+    difficulty: "Médio",
+    desc: "O Cavalo apoia a Torre no canto do tabuleiro executando a coordenação árabe ancestral.",
+    fen: "5rk1/5p1p/5Np1/8/8/8/1R6/6K1 w - - 0 1",
+    arena: "inferno",
+    level: 0,
+    rewardCoins: 140,
+    rewardXP: 95
+  },
+  {
+    id: "puzzle_7",
+    title: "7. O Mate de Anastásia",
+    theme: "Mate de Anastásia",
+    difficulty: "Difícil",
+    desc: "O Cavalo em e7 corta as casas de escape do Rei enquanto a Torre na coluna h liquida a partida.",
+    fen: "5rk1/1p3ppp/pN6/8/8/8/1R3PPP/6K1 w - - 0 1",
+    arena: "abyss",
+    level: 0,
+    rewardCoins: 160,
+    rewardXP: 110
+  },
+  {
+    id: "puzzle_8",
+    title: "8. A Cravada Fatal",
+    theme: "Cravada Absoluta",
+    difficulty: "Fácil",
+    desc: "O Bispo crava a Dama contra o Rei adversário, forçando ganho decisivo de material.",
+    fen: "r3k2r/pppq1ppp/2n5/4b3/8/2B2N2/PPP2PPP/R2QKB1R w KQkq - 0 1",
+    arena: "cathedral",
+    level: 0,
+    rewardCoins: 110,
+    rewardXP: 75
+  },
+  {
+    id: "puzzle_9",
+    title: "9. O Presente Grego",
+    theme: "Sacrifício de Bispo",
     difficulty: "Mestre",
-    desc: "Uma combinação magistral de arremate cósmico inspirada nos maiores mestres mundiais.",
+    desc: "O clássico sacrifício do Bispo em h7 destrói o roque adversário com ataque demolidor.",
+    fen: "r1bq1rk1/ppp2ppp/2n1p3/3p4/3P4/2PB1N2/P1P2PPP/R2QK2R w KQ - 0 1",
+    arena: "cosmos",
+    level: 0,
+    rewardCoins: 200,
+    rewardXP: 130
+  },
+  {
+    id: "puzzle_10",
+    title: "10. O Mate Sufocado",
+    theme: "Philidor Smothered Mate",
+    difficulty: "Mestre",
+    desc: "O Rei negro fica sufocado por suas próprias peças enquanto o Cavalo aplica o xeque-mate lendário.",
+    fen: "6rk/5Npp/8/8/8/8/8/6K1 w - - 0 1",
+    arena: "cosmos",
+    level: 0,
+    rewardCoins: 220,
+    rewardXP: 150
+  },
+  {
+    id: "puzzle_11",
+    title: "11. O Garfo de Peão",
+    theme: "Garfo Central",
+    difficulty: "Iniciante",
+    desc: "O avanço central de peão ataca duas peças menores ao mesmo tempo.",
+    fen: "r1bqk2r/pppp1ppp/2n2n2/4p3/1b2P3/3P1N2/PPP2PPP/RNBQKB1R w KQkq - 0 1",
+    arena: "forest",
+    level: 0,
+    rewardCoins: 90,
+    rewardXP: 60
+  },
+  {
+    id: "puzzle_12",
+    title: "12. O Vórtice Cósmico",
+    theme: "Ataque Supremo",
+    difficulty: "Mestre",
+    desc: "Uma combinação magistral de arremate cósmico inspirada nos maiores torneios mundiais.",
     fen: "2r3k1/5ppp/8/8/8/5Q2/5PPP/6K1 w - - 0 1",
     arena: "cosmos",
     level: 0,
-    rewardCoins: 180,
-    rewardXP: 120
+    rewardCoins: 250,
+    rewardXP: 160
   }
-];
+]
 
 function isPuzzleSolved(id) {
   try {
@@ -4404,7 +4485,7 @@ function setupTacticalPuzzles() {
   const btnFastPuzzle = document.getElementById("btn-launch-random-puzzle");
   if (btnFastPuzzle) {
     bindAction(btnFastPuzzle, () => {
-      const idx = Math.floor(Math.random() * TACTICAL_PUZZLES_DATA.length);
+      const now = new Date(); const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000); const idx = dayOfYear % TACTICAL_PUZZLES_DATA.length;
       launchSpecificPuzzle(TACTICAL_PUZZLES_DATA[idx].id);
     }, "fastPuzzleBtn");
   }

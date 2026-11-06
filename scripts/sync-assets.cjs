@@ -8,27 +8,25 @@ function copyFileSafe(src, dest) {
   console.log(`Copied ${src} -> ${dest}`);
 }
 
-// 1. Ensure root has all dist static files (favicon, icon, manifest, ads.txt)
-['favicon.png', 'icon-512.png', 'manifest.json', 'ads.txt'].forEach(f => {
-  if (fs.existsSync(`dist/${f}`)) {
-    copyFileSafe(`dist/${f}`, f);
-  }
-});
-
-// 2. Ensure public has everything needed for Vite raw static serving
-const publicFiles = [
+// Arquivos raiz que devem ser sincronizados para dist e public
+const staticFiles = [
   'favicon.png',
   'icon-512.png',
   'manifest.json',
   'ads.txt',
+  'sw.js',
   'app-debug.apk',
+  'assets/arcane-db.js',
+  'assets/chess-worker.js',
+  'assets/privacy-lgpd.js',
   'assets/index-CrO8ZqHi.css',
   'assets/index-Dmtay6rb.js',
   'assets/wizard-features.js'
 ];
 
-publicFiles.forEach(f => {
+staticFiles.forEach(f => {
   if (fs.existsSync(f)) {
+    copyFileSafe(f, `dist/${f}`);
     copyFileSafe(f, `public/${f}`);
   }
 });
