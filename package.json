@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "node scripts/perft-and-rules-suite.cjs",
     "build": "node scripts/build.cjs",
     "preview": "vite preview",
     "push": "node scripts/git-push.js"

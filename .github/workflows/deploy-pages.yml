@@ -21,10 +21,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies and build
-        run: |
-          npm ci
-          npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Chess Rules & Perft Validation Tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
 
       - name: Deploy to gh-pages branch
         uses: JamesIves/github-pages-deploy-action@v4
