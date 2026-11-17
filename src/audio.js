@@ -5,6 +5,7 @@ export class SoundFX {
     this.ambientPlaying = false;
     this.ambientGain = null;
     this.ambientNodes = [];
+    this.slideNoiseBuffer = null;
   }
 
   init() {
@@ -17,20 +18,22 @@ export class SoundFX {
     }
   }
 
-  // Deslizamento de pedra ao mover peça
+  // Deslizamento de pedra ao mover peça (com cache de buffer de ruído)
   playSlide() {
     if (!this.enabled) return;
     this.init();
     const duration = 0.45;
-    const bufferSize = Math.floor(this.ctx.sampleRate * duration);
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.6));
+    if (!this.slideNoiseBuffer || this.slideNoiseBuffer.sampleRate !== this.ctx.sampleRate) {
+      const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+      this.slideNoiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = this.slideNoiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.6));
+      }
     }
 
     const noise = this.ctx.createBufferSource();
-    noise.buffer = buffer;
+    noise.buffer = this.slideNoiseBuffer;
 
     const filter = this.ctx.createBiquadFilter();
     filter.type = 'lowpass';

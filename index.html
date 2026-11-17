@@ -157,6 +157,18 @@
             <button class="toggle-btn" data-diff="3">Difícil</button>
           </div>
         </div>
+
+        <!-- Seção Entrar com Código Online (Jogador 2) -->
+        <div class="setup-group" id="menu-online-code-section" style="display: none;">
+          <label class="setup-label">Entrar em Partida Online</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="menu-input-join-code" placeholder="Código de 4 dígitos (ex: WIZ7)" class="modal-input"
+              style="text-transform: uppercase; margin: 0; text-align: center; letter-spacing: 2px; font-weight: 700; flex: 1;">
+            <button id="menu-btn-join-code" class="promo-btn" style="padding: 10px 18px; white-space: nowrap;">
+              <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 1.1rem;">login</span>Conectar
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="menu-actions" style="margin-top: 26px;">
@@ -197,13 +209,9 @@
     </div>
   </header>
 
-  <!-- Barra de Navegação Inferior (Material Design 3 Dock) -->
+  <!-- Barra de Navegação Inferior (Material Design 3 Dock - 4 Atalhos Essenciais) -->
   <nav class="md3-dock">
-    <button id="btn-mode" class="dock-btn active" title="Alternar Modo de Jogo">
-      <span class="material-symbols-rounded">smart_toy</span>
-      <span class="btn-label">vs IA</span>
-    </button>
-    <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
+    <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmera">
       <span class="material-symbols-rounded">videocam</span>
       <span class="btn-label">Câmera</span>
     </button>
@@ -211,33 +219,13 @@
       <span class="material-symbols-rounded">lightbulb</span>
       <span class="btn-label">Oráculo</span>
     </button>
-    <button id="btn-audio" class="dock-btn active" title="Efeitos Sonoros">
-      <span class="material-symbols-rounded">volume_up</span>
-      <span class="btn-label">Som</span>
-    </button>
-    <button id="btn-emotes" class="dock-btn" title="Emotes Mágicos">
-      <span class="material-symbols-rounded">sentiment_satisfied</span>
-      <span class="btn-label">Emotes</span>
-    </button>
-    <button id="btn-resign" class="dock-btn" title="Abandonar Partida (Rendição)">
-      <span class="material-symbols-rounded">flag</span>
-      <span class="btn-label">Desistir</span>
-    </button>
-    <button id="btn-pause" class="dock-btn" title="Menu de Pausa e Regras">
-      <span class="material-symbols-rounded">pause_circle</span>
-      <span class="btn-label">Menu de Pausa</span>
-    </button>
     <button id="btn-history" class="dock-btn" title="Histórico de Jogadas">
       <span class="material-symbols-rounded">format_list_numbered</span>
       <span class="btn-label">Registo</span>
     </button>
-    <button id="btn-reset" class="dock-btn" title="Reiniciar Partida">
-      <span class="material-symbols-rounded">restart_alt</span>
-      <span class="btn-label">Reiniciar</span>
-    </button>
-    <button id="btn-fullscreen" class="dock-btn" title="Tela Cheia">
-      <span class="material-symbols-rounded">fullscreen</span>
-      <span class="btn-label">Tela Cheia</span>
+    <button id="btn-pause" class="dock-btn" title="Menu de Pausa e Configurações">
+      <span class="material-symbols-rounded">menu</span>
+      <span class="btn-label">Menu</span>
     </button>
   </nav>
 
@@ -333,11 +321,15 @@
       <h3 id="game-over-title">Xeque-Mate!</h3>
       <p id="game-over-msg" style="margin-bottom: 16px; font-size: 1.1rem; color: #d0bcff;">O Mármore venceu.</p>
 
-      <!-- Bloco de Anúncio AdSense no Fim de Jogo (Alta Rentabilidade) -->
+      <!-- Bloco de Anúncio AdSense no Fim de Jogo (com Fallback Gracioso) -->
       <div class="ad-unit-card" id="ad-game-over-card">
         <span class="ad-label">PUBLICIDADE</span>
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342"
           data-ad-slot="1463332817" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <div class="ad-fallback-card" id="ad-game-over-fallback" style="display: none; padding: 12px; text-align: center;">
+          <span class="material-symbols-rounded" style="color: var(--md-gold); font-size: 1.8rem;">auto_awesome</span>
+          <p style="font-size: 0.85rem; color: #d0bcff; margin-top: 4px;">Dica Arcana: O Oráculo analisa a posição e revela lances ocultos quando você precisa de sabedoria.</p>
+        </div>
       </div>
 
       <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
@@ -395,10 +387,28 @@
           <span class="material-symbols-rounded"
             style="vertical-align: middle; margin-right: 6px;">play_arrow</span>Continuar Batalha
         </button>
+
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-pause-audio" class="promo-btn" style="flex: 1; padding: 10px 14px; font-size: 0.85rem;" title="Ligar/Desligar Som">
+            <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 1.1rem;">volume_up</span><span class="audio-label">Som: Ligado</span>
+          </button>
+          <button id="btn-pause-fullscreen" class="promo-btn" style="flex: 1; padding: 10px 14px; font-size: 0.85rem;" title="Alternar Tela Cheia">
+            <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 1.1rem;">fullscreen</span>Tela Cheia
+          </button>
+          <button id="btn-pause-emotes" class="promo-btn" style="flex: 1; padding: 10px 14px; font-size: 0.85rem;" title="Abrir Emotes">
+            <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 1.1rem;">sentiment_satisfied</span>Emotes
+          </button>
+        </div>
+
         <button id="btn-pause-restart" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem;">
           <span class="material-symbols-rounded"
-            style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
+            style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Partida
         </button>
+
+        <button id="btn-pause-resign" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 77, 109, 0.15); border-color: #ff4d6d; color: #ff4d6d;">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">flag</span>Abandonar Partida (Desistir)
+        </button>
+
         <button id="btn-pause-main-menu" class="promo-btn"
           style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu

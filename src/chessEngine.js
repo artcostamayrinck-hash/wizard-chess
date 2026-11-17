@@ -29,6 +29,8 @@ export class ChessEngine {
     const parts = fen.trim().split(/\s+/);
     const piecePlacement = parts[0];
     const activeColor = parts[1] || 'w';
+    const castlingPart = parts[2] || '';
+    const epPart = parts[3] || '-';
 
     this.board = Array.from({ length: 8 }, () => Array(8).fill(null));
     this.turn = activeColor;
@@ -48,11 +50,42 @@ export class ChessEngine {
           const isWhite = char === char.toUpperCase();
           const type = char.toUpperCase();
           const color = isWhite ? 'w' : 'b';
-          this.board[r][c] = { type, color, moved: true };
+          let moved = true;
+
+          // Preservação canônica e por flag FEN de roques e avanços
+          if (type === 'P') {
+            if ((color === 'w' && r === 6) || (color === 'b' && r === 1)) moved = false;
+          } else if (type === 'K') {
+            if (color === 'w' && r === 7 && c === 4) {
+              if (castlingPart.includes('K') || castlingPart.includes('Q') || castlingPart === '') moved = false;
+            } else if (color === 'b' && r === 0 && c === 4) {
+              if (castlingPart.includes('k') || castlingPart.includes('q') || castlingPart === '') moved = false;
+            }
+          } else if (type === 'R') {
+            if (color === 'w' && r === 7 && c === 7 && (castlingPart.includes('K') || castlingPart === '')) moved = false;
+            if (color === 'w' && r === 7 && c === 0 && (castlingPart.includes('Q') || castlingPart === '')) moved = false;
+            if (color === 'b' && r === 0 && c === 7 && (castlingPart.includes('k') || castlingPart === '')) moved = false;
+            if (color === 'b' && r === 0 && c === 0 && (castlingPart.includes('q') || castlingPart === '')) moved = false;
+          }
+
+          this.board[r][c] = { type, color, moved };
           c++;
         }
       }
     }
+
+    // Configuração de En Passant a partir da FEN
+    if (epPart && epPart !== '-' && epPart.length >= 2) {
+      const epCol = epPart.charCodeAt(0) - 97;
+      if (epCol >= 0 && epCol < 8) {
+        if (activeColor === 'w') {
+          this.lastMove = { piece: { type: 'P', color: 'b' }, from: { r: 1, c: epCol }, to: { r: 3, c: epCol } };
+        } else {
+          this.lastMove = { piece: { type: 'P', color: 'w' }, from: { r: 6, c: epCol }, to: { r: 4, c: epCol } };
+        }
+      }
+    }
+
     this.positionHistory.push(this.getPositionHash());
   }
 
@@ -64,9 +97,27 @@ export class ChessEngine {
 
   inBounds(r, c) { return r >= 0 && r < 8 && c >= 0 && c < 8; }
 
-  // Gera uma impressão digital rápida do estado do tabuleiro
+  // Gera uma impressão digital completa do estado do tabuleiro (FIDE: Peças + Turno + Roques + En Passant)
   getPositionHash(boardState = this.board, turn = this.turn) {
-    let str = turn + ':';
+    let castling = '';
+    const wK = boardState[7]?.[4];
+    if (wK && wK.type === 'K' && wK.color === 'w' && !wK.moved) {
+      if (boardState[7][7]?.type === 'R' && !boardState[7][7]?.moved) castling += 'K';
+      if (boardState[7][0]?.type === 'R' && !boardState[7][0]?.moved) castling += 'Q';
+    }
+    const bK = boardState[0]?.[4];
+    if (bK && bK.type === 'K' && bK.color === 'b' && !bK.moved) {
+      if (boardState[0][7]?.type === 'R' && !boardState[0][7]?.moved) castling += 'k';
+      if (boardState[0][0]?.type === 'R' && !boardState[0][0]?.moved) castling += 'q';
+    }
+    if (!castling) castling = '-';
+
+    let ep = '-';
+    if (this.lastMove && this.lastMove.piece?.type === 'P' && Math.abs(this.lastMove.from.r - this.lastMove.to.r) === 2) {
+      ep = `${this.lastMove.to.c}`;
+    }
+
+    let str = `${turn}:${castling}:${ep}:`;
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const p = boardState[r][c];
@@ -102,15 +153,45 @@ export class ChessEngine {
     return count >= 3;
   }
 
-  // Verifica se restam apenas os dois Reis no tabuleiro (Empate automático)
-  isInsufficientMaterial() {
-    let pieceCount = 0;
+  // Verifica critérios oficiais da FIDE para empate por Material Insuficiente
+  isInsufficientMaterial(boardState = this.board) {
+    const pieces = [];
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
-        if (this.board[r][c]) pieceCount++;
+        const p = boardState[r][c];
+        if (p) pieces.push({ type: p.type, color: p.color, r, c });
       }
     }
-    return pieceCount === 2;
+
+    // Se houver peões, torres ou damas, ainda há capacidade de xeque-mate
+    if (pieces.some(p => p.type === 'P' || p.type === 'R' || p.type === 'Q')) {
+      return false;
+    }
+
+    const kings = pieces.filter(p => p.type === 'K');
+    const knights = pieces.filter(p => p.type === 'N');
+    const bishops = pieces.filter(p => p.type === 'B');
+
+    if (kings.length !== 2) return false;
+
+    // 1. K vs K
+    if (pieces.length === 2) return true;
+
+    // 2. K+N vs K ou K+B vs K
+    if (pieces.length === 3 && (knights.length === 1 || bishops.length === 1)) {
+      return true;
+    }
+
+    // 3. K+B vs K+B com bispos ocupando casas da mesma cor (ambos claros ou ambos escuros)
+    if (pieces.length === 4 && bishops.length === 2 && knights.length === 0) {
+      const b1 = bishops[0];
+      const b2 = bishops[1];
+      const b1Color = (b1.r + b1.c) % 2;
+      const b2Color = (b2.r + b2.c) % 2;
+      if (b1Color === b2Color) return true;
+    }
+
+    return false;
   }
 
   getPseudoLegalMoves(r, c, boardState = this.board) {
@@ -188,13 +269,78 @@ export class ChessEngine {
     return moves;
   }
 
+  // Avalia estritamente se a casa (r, c) está sob ataque do exército inimigo
   isSquareAttacked(r, c, attackerColor, boardState = this.board) {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
         const piece = boardState[i][j];
-        if (piece && piece.color === attackerColor) {
-          const pseudoMoves = this.getPseudoLegalMoves(i, j, boardState);
-          if (pseudoMoves.some(m => m.r === r && m.c === c)) return true;
+        if (!piece || piece.color !== attackerColor) continue;
+
+        // 1. Peão: ataca estritamente as diagonais frontais (independente de ocupação)
+        if (piece.type === 'P') {
+          const dir = attackerColor === 'w' ? -1 : 1;
+          if (r === i + dir && (c === j - 1 || c === j + 1)) {
+            return true;
+          }
+          continue;
+        }
+
+        // 2. Cavalo: saltos em L
+        if (piece.type === 'N') {
+          const dr = Math.abs(r - i);
+          const dc = Math.abs(c - j);
+          if ((dr === 1 && dc === 2) || (dr === 2 && dc === 1)) {
+            return true;
+          }
+          continue;
+        }
+
+        // 3. Rei: casas adjacentes
+        if (piece.type === 'K') {
+          if (Math.abs(r - i) <= 1 && Math.abs(c - j) <= 1) {
+            return true;
+          }
+          continue;
+        }
+
+        // 4. Peças de Deslize (Bispo, Torre, Rainha): raio de visão desobstruído
+        if (piece.type === 'R' || piece.type === 'B' || piece.type === 'Q') {
+          const dr = r - i;
+          const dc = c - j;
+          const isDiagonal = Math.abs(dr) === Math.abs(dc) && dr !== 0;
+          const isStraight = (dr === 0 && dc !== 0) || (dc === 0 && dr !== 0);
+
+          if (isDiagonal && (piece.type === 'B' || piece.type === 'Q')) {
+            const stepR = dr > 0 ? 1 : -1;
+            const stepC = dc > 0 ? 1 : -1;
+            let cr = i + stepR;
+            let cc = j + stepC;
+            let blocked = false;
+            while (cr !== r || cc !== c) {
+              if (boardState[cr][cc]) {
+                blocked = true;
+                break;
+              }
+              cr += stepR;
+              cc += stepC;
+            }
+            if (!blocked) return true;
+          } else if (isStraight && (piece.type === 'R' || piece.type === 'Q')) {
+            const stepR = dr === 0 ? 0 : (dr > 0 ? 1 : -1);
+            const stepC = dc === 0 ? 0 : (dc > 0 ? 1 : -1);
+            let cr = i + stepR;
+            let cc = j + stepC;
+            let blocked = false;
+            while (cr !== r || cc !== c) {
+              if (boardState[cr][cc]) {
+                blocked = true;
+                break;
+              }
+              cr += stepR;
+              cc += stepC;
+            }
+            if (!blocked) return true;
+          }
         }
       }
     }
@@ -292,6 +438,39 @@ export class ChessEngine {
     return myScore - enemyScore;
   }
 
+  // Simula com precisão o lance no tabuleiro virtual (Promoção para Dama, Roque sincronizado e En Passant)
+  simulateMove(boardState, m) {
+    const nextBoard = boardState.map(row => [...row]);
+    const piece = nextBoard[m.from.r][m.from.c];
+    if (!piece) return nextBoard;
+
+    let movedPiece = { ...piece, moved: true };
+    // Promoção de Peão para Rainha na simulação Minimax
+    if (movedPiece.type === 'P' && (m.to.r === 0 || m.to.r === 7)) {
+      movedPiece = { type: 'Q', color: movedPiece.color, moved: true };
+    }
+
+    nextBoard[m.to.r][m.to.c] = movedPiece;
+    nextBoard[m.from.r][m.from.c] = null;
+
+    if (m.to.enPassant) {
+      nextBoard[m.from.r][m.to.c] = null;
+    }
+
+    // Sincronização da Torre no Roque
+    if (m.to.castling === 'kingside') {
+      const rook = nextBoard[m.to.r][7];
+      nextBoard[m.to.r][5] = rook ? { ...rook, moved: true } : null;
+      nextBoard[m.to.r][7] = null;
+    } else if (m.to.castling === 'queenside') {
+      const rook = nextBoard[m.to.r][0];
+      nextBoard[m.to.r][3] = rook ? { ...rook, moved: true } : null;
+      nextBoard[m.to.r][0] = null;
+    }
+
+    return nextBoard;
+  }
+
   // Minimax recursivo com Poda Alpha-Beta (Profundidade 2-3 para a IA Difícil)
   minimaxAlphaBeta(boardState, depth, alpha, beta, isMaximizing, myColor, enemyColor) {
     if (depth === 0) {
@@ -320,11 +499,7 @@ export class ChessEngine {
     if (isMaximizing) {
       let maxEval = -Infinity;
       for (const m of moves) {
-        const nextBoard = boardState.map(row => [...row]);
-        nextBoard[m.to.r][m.to.c] = nextBoard[m.from.r][m.from.c];
-        nextBoard[m.from.r][m.from.c] = null;
-        if (m.to.enPassant) nextBoard[m.from.r][m.to.c] = null;
-
+        const nextBoard = this.simulateMove(boardState, m);
         const evalScore = this.minimaxAlphaBeta(nextBoard, depth - 1, alpha, beta, false, myColor, enemyColor);
         maxEval = Math.max(maxEval, evalScore);
         alpha = Math.max(alpha, evalScore);
@@ -334,11 +509,7 @@ export class ChessEngine {
     } else {
       let minEval = Infinity;
       for (const m of moves) {
-        const nextBoard = boardState.map(row => [...row]);
-        nextBoard[m.to.r][m.to.c] = nextBoard[m.from.r][m.from.c];
-        nextBoard[m.from.r][m.from.c] = null;
-        if (m.to.enPassant) nextBoard[m.from.r][m.to.c] = null;
-
+        const nextBoard = this.simulateMove(boardState, m);
         const evalScore = this.minimaxAlphaBeta(nextBoard, depth - 1, alpha, beta, true, myColor, enemyColor);
         minEval = Math.min(minEval, evalScore);
         beta = Math.min(beta, evalScore);
@@ -394,11 +565,7 @@ export class ChessEngine {
     // Dificuldade 2 (Média): Avaliação de tabuleiro + busca de Xeque
     if (difficulty === 2) {
       legalMoves.forEach(m => {
-        const tempBoard = this.board.map(row => [...row]);
-        tempBoard[m.to.r][m.to.c] = tempBoard[m.from.r][m.from.c];
-        tempBoard[m.from.r][m.from.c] = null;
-        if (m.to.enPassant) tempBoard[m.from.r][m.to.c] = null;
-
+        const tempBoard = this.simulateMove(this.board, m);
         let score = this.evaluateBoard(tempBoard, color);
         if (this.isInCheck(enemyColor, tempBoard)) score += 35;
         score += Math.random() * 4;
@@ -413,11 +580,7 @@ export class ChessEngine {
     let bestScore = -Infinity;
 
     for (const m of legalMoves) {
-      const tempBoard = this.board.map(row => [...row]);
-      tempBoard[m.to.r][m.to.c] = tempBoard[m.from.r][m.from.c];
-      tempBoard[m.from.r][m.from.c] = null;
-      if (m.to.enPassant) tempBoard[m.from.r][m.to.c] = null;
-
+      const tempBoard = this.simulateMove(this.board, m);
       const score = this.minimaxAlphaBeta(tempBoard, 2, -Infinity, Infinity, false, color, enemyColor);
       const randomized = score + Math.random() * 1.5; // Desempate natural
 

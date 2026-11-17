@@ -141,16 +141,29 @@ applyCameraPreset(0, true);
 // ==========================================
 function createStoneTexture(baseHex, veinHex) {
   const canvas = document.createElement('canvas');
-  canvas.width = 256; canvas.height = 256;
+  canvas.width = 512; canvas.height = 512;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = baseHex; ctx.fillRect(0, 0, 256, 256);
-  ctx.strokeStyle = veinHex; ctx.lineWidth = 2;
-  for (let i = 0; i < 18; i++) {
+  ctx.fillStyle = baseHex; ctx.fillRect(0, 0, 512, 512);
+
+  // Micro-granulação de rocha natural
+  const imgData = ctx.getImageData(0, 0, 512, 512);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const n = (Math.random() - 0.5) * 16;
+    data[i] = Math.min(255, Math.max(0, data[i] + n));
+    data[i+1] = Math.min(255, Math.max(0, data[i+1] + n));
+    data[i+2] = Math.min(255, Math.max(0, data[i+2] + n));
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  // Fissuras e veios minerais
+  ctx.strokeStyle = veinHex; ctx.lineWidth = 2.5;
+  for (let i = 0; i < 28; i++) {
     ctx.beginPath();
-    let x = Math.random() * 256; let y = Math.random() * 256;
+    let x = Math.random() * 512; let y = Math.random() * 512;
     ctx.moveTo(x, y);
-    for (let j = 0; j < 6; j++) {
-      x += (Math.random() - 0.5) * 60; y += (Math.random() - 0.5) * 60;
+    for (let j = 0; j < 7; j++) {
+      x += (Math.random() - 0.5) * 75; y += (Math.random() - 0.5) * 75;
       ctx.lineTo(x, y);
     }
     ctx.stroke();
@@ -160,18 +173,52 @@ function createStoneTexture(baseHex, veinHex) {
   return tex;
 }
 
+function createBumpTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512; canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#808080'; ctx.fillRect(0, 0, 512, 512);
+
+  const imgData = ctx.getImageData(0, 0, 512, 512);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const val = Math.min(255, Math.max(0, 128 + (Math.random() - 0.5) * 45));
+    data[i] = val; data[i+1] = val; data[i+2] = val;
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  ctx.strokeStyle = '#252525'; ctx.lineWidth = 3;
+  for (let i = 0; i < 32; i++) {
+    ctx.beginPath();
+    let x = Math.random() * 512; let y = Math.random() * 512;
+    ctx.moveTo(x, y);
+    for (let j = 0; j < 7; j++) {
+      x += (Math.random() - 0.5) * 80; y += (Math.random() - 0.5) * 80;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+const stoneBumpTex = createBumpTexture();
 const marbleTex = createStoneTexture('#f3efe6', '#c5b8a5');
 const obsidianTex = createStoneTexture('#16131d', '#3b2d54');
 
 const materials = {
-  marble: new THREE.MeshStandardMaterial({ map: marbleTex, roughness: 0.25, metalness: 0.1 }),
-  obsidian: new THREE.MeshStandardMaterial({ map: obsidianTex, roughness: 0.18, metalness: 0.45 }),
+  marble: new THREE.MeshStandardMaterial({ map: marbleTex, bumpMap: stoneBumpTex, bumpScale: 0.035, roughness: 0.28, metalness: 0.1 }),
+  obsidian: new THREE.MeshStandardMaterial({ map: obsidianTex, bumpMap: stoneBumpTex, bumpScale: 0.045, roughness: 0.22, metalness: 0.45 }),
   runeWhite: new THREE.MeshStandardMaterial({ color: 0xf5c56b, emissive: 0xf5c56b, emissiveIntensity: 1.6 }),
   runeBlack: new THREE.MeshStandardMaterial({ color: 0xb583ff, emissive: 0x9b51e0, emissiveIntensity: 1.9 }),
-  stoneDark: new THREE.MeshStandardMaterial({ color: 0x1a1721, roughness: 0.85 }),
-  stoneLight: new THREE.MeshStandardMaterial({ color: 0xd8d2c9, roughness: 0.4 }),
+  stoneDark: new THREE.MeshStandardMaterial({ color: 0x1a1721, bumpMap: stoneBumpTex, bumpScale: 0.04, roughness: 0.85 }),
+  stoneLight: new THREE.MeshStandardMaterial({ color: 0xd8d2c9, bumpMap: stoneBumpTex, bumpScale: 0.03, roughness: 0.4 }),
   magicBeam: new THREE.MeshBasicMaterial({ color: 0x00f5d4, transparent: true, opacity: 0.85, side: THREE.DoubleSide })
 };
+materials.runeWhite.userData = { isGlobal: true };
+materials.runeBlack.userData = { isGlobal: true };
+materials.magicBeam.userData = { isGlobal: true };
 
 // ==========================================
 // 4. ILUMINAÇÃO E CATEDRAL
@@ -182,7 +229,8 @@ scene.add(ambientLight);
 const mainSpot = new THREE.SpotLight(0xfff2d6, 95);
 mainSpot.position.set(6, 18, 8);
 mainSpot.angle = Math.PI / 4; mainSpot.penumbra = 0.6; mainSpot.castShadow = true;
-mainSpot.shadow.mapSize.set(512, 512);
+mainSpot.shadow.mapSize.set(1024, 1024);
+mainSpot.shadow.radius = 1.5;
 scene.add(mainSpot);
 
 const rimLight = new THREE.DirectionalLight(0x8a5cf5, 1.4);
@@ -258,6 +306,22 @@ scene.add(highlightGroup);
 
 function boardToWorld(r, c) { return new THREE.Vector3((c - 3.5) * 1.15, 0.1, (r - 3.5) * 1.15); }
 
+function createCoordinateTexture(text) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128; canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 128, 128);
+  ctx.font = 'bold 72px "Cinzel", "Cinzel Decorative", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#f5c56b';
+  ctx.shadowColor = '#f5c56b';
+  ctx.shadowBlur = 10;
+  ctx.fillText(text, 64, 64);
+  const tex = new THREE.CanvasTexture(canvas);
+  return tex;
+}
+
 function buildBoard() {
   const frame = new THREE.Mesh(new THREE.BoxGeometry(9.8, 0.22, 9.8), materials.stoneDark);
   frame.position.y = -0.05; frame.receiveShadow = true;
@@ -281,6 +345,46 @@ function buildBoard() {
       sq.userData = { isSquare: true, r, c };
       boardGroup.add(sq); squareMeshes.push(sq);
     }
+  }
+
+  // Marcações de coordenadas algébricas (A–H e 1–8) entalhadas na moldura de pedra
+  const colLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  const labelGeo = new THREE.PlaneGeometry(0.48, 0.48);
+  labelGeo.rotateX(-Math.PI / 2);
+
+  colLabels.forEach((char, c) => {
+    const x = (c - 3.5) * 1.15;
+    const tex = createCoordinateTexture(char);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.85, depthWrite: false });
+
+    // Borda Sul (visão das Brancas)
+    const labelSouth = new THREE.Mesh(labelGeo, mat);
+    labelSouth.position.set(x, 0.07, 4.45);
+    boardGroup.add(labelSouth);
+
+    // Borda Norte (visão das Pretas)
+    const labelNorth = new THREE.Mesh(labelGeo, mat);
+    labelNorth.position.set(x, 0.07, -4.45);
+    labelNorth.rotation.y = Math.PI;
+    boardGroup.add(labelNorth);
+  });
+
+  for (let r = 0; r < 8; r++) {
+    const rankNum = `${8 - r}`;
+    const z = (r - 3.5) * 1.15;
+    const tex = createCoordinateTexture(rankNum);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.85, depthWrite: false });
+
+    // Borda Oeste
+    const labelWest = new THREE.Mesh(labelGeo, mat);
+    labelWest.position.set(-4.45, 0.07, z);
+    boardGroup.add(labelWest);
+
+    // Borda Leste
+    const labelEast = new THREE.Mesh(labelGeo, mat);
+    labelEast.position.set(4.45, 0.07, z);
+    labelEast.rotation.y = Math.PI;
+    boardGroup.add(labelEast);
   }
 }
 buildBoard();
@@ -527,7 +631,7 @@ function createPieceMesh(type, color) {
     const earInnerMesh = new THREE.Mesh(earInnerGeom, runeMat);
     horseHead.add(earInnerMesh);
 
-    // 4. O OLHO AMビRELO
+    // 4. O OLHO AMARELO
     const eyeShape = new THREE.Shape();
     eyeShape.moveTo(-0.035, 0);
     eyeShape.lineTo(0.01, 0.025);
@@ -567,7 +671,8 @@ function createPieceMesh(type, color) {
       horseHead.add(maneStripe);
     }
 
-    horseHead.rotation.y = Math.PI / 2; 
+    // Alinhamento anatômico: frente para o campo adversário
+    horseHead.rotation.y = -Math.PI / 2;
     body.add(horseHead);
   }
   else if (type === 'B') {
@@ -660,6 +765,10 @@ function syncBoardMeshes() {
         mesh.userData.r = r;
         mesh.userData.c = c;
         mesh.userData.basePosY = pos.y;
+        if (pieceData.type === 'N') {
+          // Leve rotação de 15° em direção ao centro do tabuleiro
+          mesh.rotation.y += (c <= 3 ? 0.24 : -0.24);
+        }
         scene.add(mesh);
         pieceMeshes[r][c] = mesh;
       }
@@ -813,33 +922,52 @@ function updateClockDisplays() {
   }
 }
 
+let turnStartTime = Date.now();
+let lastTickTime = Date.now();
+
 function startClockTimer() {
   if (clockInterval) clearInterval(clockInterval);
   if (gameTimeSeconds <= 0) return;
+  turnStartTime = Date.now();
+  lastTickTime = Date.now();
 
   clockInterval = setInterval(() => {
-    if (isPaused || isAnimating || isCameraAnimating) return;
+    if (isPaused) {
+      lastTickTime = Date.now();
+      return;
+    }
     const modalOver = document.getElementById('game-over-modal');
     if (modalOver && !modalOver.classList.contains('hidden')) return;
 
-    if (engine.turn === 'w') {
-      whiteTimeRemaining--;
-      if (whiteTimeRemaining <= 0) {
-        whiteTimeRemaining = 0;
-        clearInterval(clockInterval);
-        handleTimeForfeit('w');
+    const now = Date.now();
+    const delta = (now - lastTickTime) / 1000;
+    lastTickTime = now;
+
+    if (delta > 0) {
+      if (engine.turn === 'w') {
+        whiteTimeRemaining = Math.max(0, whiteTimeRemaining - delta);
+        if (whiteTimeRemaining <= 0) {
+          whiteTimeRemaining = 0;
+          clearInterval(clockInterval);
+          handleTimeForfeit('w');
+        }
+      } else {
+        blackTimeRemaining = Math.max(0, blackTimeRemaining - delta);
+        if (blackTimeRemaining <= 0) {
+          blackTimeRemaining = 0;
+          clearInterval(clockInterval);
+          handleTimeForfeit('b');
+        }
       }
-    } else {
-      blackTimeRemaining--;
-      if (blackTimeRemaining <= 0) {
-        blackTimeRemaining = 0;
-        clearInterval(clockInterval);
-        handleTimeForfeit('b');
-      }
+      updateClockDisplays();
     }
-    updateClockDisplays();
-  }, 1000);
+  }, 250);
 }
+
+document.addEventListener('visibilitychange', () => {
+  lastTickTime = Date.now();
+  updateClockDisplays();
+});
 
 function handleTimeForfeit(loserColor) {
   const modal = document.getElementById('game-over-modal');
@@ -890,13 +1018,20 @@ function recordGameStats(result) {
 loadStats();
 
 // ==========================================
-// INTEGRAÇÃO SEGURA COM GOOGLE ADSENSE
+// INTEGRAÇÃO SEGURA COM GOOGLE ADSENSE E FALLBACK
 // ==========================================
 function refreshAdSense() {
+  const fallback = document.getElementById('ad-game-over-fallback');
   try {
     (window.adsbygoogle = window.adsbygoogle || []).push({});
+    setTimeout(() => {
+      const ins = document.querySelector('#ad-game-over-card ins.adsbygoogle');
+      if (fallback && (!ins || ins.clientHeight === 0 || ins.getAttribute('data-ad-status') === 'unfilled')) {
+        fallback.style.display = 'flex';
+      }
+    }, 1200);
   } catch (e) {
-    // Silencioso se adblocker ativo ou ambiente local
+    if (fallback) fallback.style.display = 'flex';
   }
 }
 
@@ -995,6 +1130,25 @@ function openPromotionModal(callback) {
 const activeShards = [];
 const activeAnimations = [];
 
+function safeDisposeMesh(mesh) {
+  if (!mesh) return;
+  scene.remove(mesh);
+  if (mesh.geometry) {
+    mesh.geometry.dispose();
+  }
+  if (mesh.material) {
+    if (Array.isArray(mesh.material)) {
+      mesh.material.forEach(m => {
+        if (!m.userData?.isGlobal) m.dispose();
+      });
+    } else {
+      if (!mesh.material.userData?.isGlobal) {
+        mesh.material.dispose();
+      }
+    }
+  }
+}
+
 function shatterPieceAt(worldPos, color) {
   sfx.playShatter();
   const isWhite = color === 'w';
@@ -1041,7 +1195,7 @@ function spawnShockwave(pos, colorHex = 0x00f5d4, maxRadius = 1.8) {
       const s = 1 + t * maxRadius;
       ring.scale.set(s, s, s);
       ring.material.opacity = Math.max(0, 0.9 * (1 - t));
-      if (t >= 1) { scene.remove(ring); return true; }
+      if (t >= 1) { safeDisposeMesh(ring); return true; }
       return false;
     }
   });
@@ -1061,7 +1215,7 @@ function spawnHolyPillar(targetPos) {
       const t = Math.min(this.elapsed / this.duration, 1);
       pillar.scale.set(1 + t * 0.8, 1, 1 + t * 0.8);
       pillar.material.opacity = Math.max(0, 0.75 * (1 - t));
-      if (t >= 1) { scene.remove(pillar); return true; }
+      if (t >= 1) { safeDisposeMesh(pillar); return true; }
       return false;
     }
   });
@@ -1365,13 +1519,20 @@ function executeMove(from, to, onComplete) {
           }
         };
 
-        // Promoção de Peão
+        // Promoção de Peão (com blindagem de promoção remota)
         if (pieceData.type === 'P' && (to.r === 0 || to.r === 7)) {
-          if (vsAI && pieceData.color !== myColor) {
+          if (to.promote) {
+            promotePawn(to.promote, to.r, to.c, pieceData, attackerMesh, targetPos);
+            finalizeTurn();
+          } else if (isOnlineGame && pieceData.color !== myColor) {
+            promotePawn('Q', to.r, to.c, pieceData, attackerMesh, targetPos);
+            finalizeTurn();
+          } else if (vsAI && pieceData.color !== myColor) {
             promotePawn('Q', to.r, to.c, pieceData, attackerMesh, targetPos);
             finalizeTurn();
           } else {
             openPromotionModal((cType) => {
+              to.promote = cType;
               promotePawn(cType, to.r, to.c, pieceData, attackerMesh, targetPos);
               finalizeTurn();
             });
@@ -1510,18 +1671,61 @@ function showHighlights(r, c, moves, isHint = false) {
   });
 }
 
+// Web Worker para busca de lances da IA em segundo plano sem travar a thread principal da GPU
+let chessWorker = null;
+let workerMsgId = 0;
+const workerCallbacks = new Map();
+
+try {
+  chessWorker = new Worker(new URL('./chess-worker.js', import.meta.url), { type: 'module' });
+  chessWorker.onmessage = (e) => {
+    const { id, bestMove } = e.data;
+    if (workerCallbacks.has(id)) {
+      const cb = workerCallbacks.get(id);
+      workerCallbacks.delete(id);
+      cb(bestMove);
+    }
+  };
+  chessWorker.onerror = (err) => {
+    console.warn('Worker de xadrez indisponível, usando fallback síncrono:', err);
+    chessWorker = null;
+  };
+} catch (e) {
+  console.warn('Web Workers não suportados neste ambiente');
+}
+
+function requestBestMoveAsync(color, difficulty, callback) {
+  if (chessWorker) {
+    const msgId = ++workerMsgId;
+    workerCallbacks.set(msgId, callback);
+    chessWorker.postMessage({
+      id: msgId,
+      board: engine.board,
+      turn: color,
+      difficulty,
+      history: engine.history,
+      lastMove: engine.lastMove,
+      halfmoveClock: engine.halfmoveClock
+    });
+  } else {
+    const bestMove = engine.chooseBestMove(color, difficulty);
+    callback(bestMove);
+  }
+}
+
 function checkAITurn() {
   if (isPaused) return;
   const aiColor = myColor === 'w' ? 'b' : 'w';
   if (vsAI && engine.turn === aiColor && !isAnimating) {
-    setTimeout(() => {
-      const aiMove = engine.chooseBestMove(aiColor, aiDifficulty);
-      if (aiMove) executeMove(aiMove.from, aiMove.to, checkAITurn);
-    }, 420);
+    requestBestMoveAsync(aiColor, aiDifficulty, (aiMove) => {
+      if (!isPaused && vsAI && engine.turn === aiColor && aiMove) {
+        executeMove(aiMove.from, aiMove.to, checkAITurn);
+      }
+    });
   }
 }
 
-// Evento de Movimento do Ponteiro (Hover e Levitação Mágica)
+// Evento de Movimento do Ponteiro (Otimizado: Raycaster restrito a squareMeshes)
 renderer.domElement.addEventListener('pointermove', (e) => {
   if (!isGameStarted || isPaused || isAnimating || isCameraAnimating) {
     hoverMarker.visible = false;
@@ -1534,24 +1738,19 @@ renderer.domElement.addEventListener('pointermove', (e) => {
   pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(pointer, camera);
-  const intersects = raycaster.intersectObjects(scene.children, true);
+  const intersects = raycaster.intersectObjects(squareMeshes, false);
 
   let hoveredRC = null;
   let targetPieceMesh = null;
 
-  for (const hit of intersects) {
-    let obj = hit.object;
-    while (obj) {
-      if (obj.userData && typeof obj.userData.r === 'number') {
-        hoveredRC = { r: obj.userData.r, c: obj.userData.c };
-        if (pieceMeshes[hoveredRC.r] && pieceMeshes[hoveredRC.r][hoveredRC.c]) {
-          targetPieceMesh = pieceMeshes[hoveredRC.r][hoveredRC.c];
-        }
-        break;
+  if (intersects.length > 0) {
+    const obj = intersects[0].object;
+    if (obj.userData && typeof obj.userData.r === 'number') {
+      hoveredRC = { r: obj.userData.r, c: obj.userData.c };
+      if (pieceMeshes[hoveredRC.r] && pieceMeshes[hoveredRC.r][hoveredRC.c]) {
+        targetPieceMesh = pieceMeshes[hoveredRC.r][hoveredRC.c];
       }
-      obj = obj.parent;
     }
-    if (hoveredRC) break;
   }
 
   if (hoveredRC) {
@@ -1574,8 +1773,23 @@ renderer.domElement.addEventListener('pointermove', (e) => {
   }
 });
 
-// Evento de Clique / Toque
+// Evento de Clique / Toque com Drag Threshold para não conflitar com OrbitControls
+let pointerDownPos = null;
+
 renderer.domElement.addEventListener('pointerdown', (e) => {
+  pointerDownPos = { x: e.clientX, y: e.clientY };
+});
+
+renderer.domElement.addEventListener('pointerup', (e) => {
+  if (!pointerDownPos) return;
+  const dx = e.clientX - pointerDownPos.x;
+  const dy = e.clientY - pointerDownPos.y;
+  const dist = Math.hypot(dx, dy);
+  pointerDownPos = null;
+
+  // Tolerância de arraste (drag threshold 7px): se arrastou para girar câmera, ignora
+  if (dist > 7) return;
+
   if (!isGameStarted || isPaused || isAnimating || isCameraAnimating) return;
 
   const aiColor = myColor === 'w' ? 'b' : 'w';
@@ -1586,19 +1800,14 @@ renderer.domElement.addEventListener('pointerdown', (e) => {
   pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1; 
   pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
-  const intersects = raycaster.intersectObjects(scene.children, true);
+  const intersects = raycaster.intersectObjects(squareMeshes, false);
 
   let clickedRC = null;
-  for (const hit of intersects) {
-    let obj = hit.object;
-    while (obj) { 
-      if (obj.userData && typeof obj.userData.r === 'number') { 
-        clickedRC = { r: obj.userData.r, c: obj.userData.c }; 
-        break; 
-      } 
-      obj = obj.parent; 
+  if (intersects.length > 0) {
+    const obj = intersects[0].object;
+    if (obj.userData && typeof obj.userData.r === 'number') {
+      clickedRC = { r: obj.userData.r, c: obj.userData.c };
     }
-    if (clickedRC) break;
   }
 
   if (!clickedRC) { selectedSquare = null; validMoves = []; clearHighlights(); return; }
@@ -1661,12 +1870,40 @@ document.querySelectorAll('#menu-mode-group .toggle-btn').forEach(btn => {
     const diffSection = document.getElementById('menu-diff-section');
     if (diffSection) diffSection.style.display = vsAI ? 'flex' : 'none';
 
+    const onlineSection = document.getElementById('menu-online-code-section');
+    if (onlineSection) onlineSection.style.display = isOnlineGame ? 'block' : 'none';
+
     const btnMode = document.getElementById('btn-mode');
     if (btnMode) {
       btnMode.querySelector('.btn-label').textContent = isPuzzleMode ? 'Desafios' : (vsAI ? 'vs IA' : (isOnlineGame ? 'Online' : '2 Jogadores'));
     }
   });
 });
+
+// Entrada manual de código para partida online diretamente no menu inicial
+const menuBtnJoinCode = document.getElementById('menu-btn-join-code');
+const menuInputJoinCode = document.getElementById('menu-input-join-code');
+if (menuBtnJoinCode && menuInputJoinCode) {
+  const handleMenuJoin = (e) => {
+    if (e) e.stopPropagation();
+    const code = menuInputJoinCode.value.trim().toUpperCase();
+    if (code) {
+      sfx.playClick();
+      startMenu.classList.add('hidden');
+      isGameStarted = true;
+      controls.enabled = true;
+      isOnlineGame = true;
+      vsAI = false;
+      joinOnlineRoom(code);
+      window.history.replaceState(null, '', `?room=${code}`);
+      showEmoteToast(`⚔️ Conectando à sala ${code}...`);
+    }
+  };
+  menuBtnJoinCode.addEventListener('click', handleMenuJoin);
+  menuInputJoinCode.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleMenuJoin(e);
+  });
+}
 
 // Grupo de Seleção de Arena / Atmosfera
 document.querySelectorAll('#menu-arena-group .toggle-btn, #pause-arena-group .toggle-btn').forEach(btn => {
@@ -1684,7 +1921,6 @@ document.querySelectorAll('#menu-color-group .toggle-btn').forEach(btn => {
     document.querySelectorAll('#menu-color-group .toggle-btn').forEach(b => b.classList.remove('active'));
     e.currentTarget.classList.add('active');
     myColor = e.currentTarget.dataset.color;
-    updateColorButton();
   });
 });
 
@@ -1709,32 +1945,16 @@ document.querySelectorAll('#menu-diff-group .toggle-btn').forEach(btn => {
   });
 });
 
-function updateColorButton() {
-  const btnColor = document.getElementById('btn-color');
-  if (btnColor) {
-    btnColor.querySelector('.btn-label').textContent = myColor === 'w' ? 'Lado: Mármore' : 'Lado: Obsidiana';
-  }
-}
-
 function updateAIDifficultyView() {
-  const nomesDiff = { 1: 'Fácil', 2: 'Média', 3: 'Difícil' };
-  const btnDiff = document.getElementById('btn-diff');
-  if (btnDiff) {
-    btnDiff.querySelector('.btn-label').textContent = 'IA: ' + nomesDiff[aiDifficulty];
-    const icon = btnDiff.querySelector('.material-symbols-rounded');
-    if (aiDifficulty === 1) {
-      if (icon) icon.style.color = '#00f5d4';
-      ambientLight.color.setHex(0x9e8cbe);
-      ambientLight.intensity = 0.65;
-    } else if (aiDifficulty === 2) {
-      if (icon) icon.style.color = '#d0bcff';
-      ambientLight.color.setHex(0x8a5cf5);
-      ambientLight.intensity = 0.9;
-    } else {
-      if (icon) icon.style.color = '#ff4d6d';
-      ambientLight.color.setHex(0xff0033);
-      ambientLight.intensity = 0.5;
-    }
+  if (aiDifficulty === 1) {
+    ambientLight.color.setHex(0x9e8cbe);
+    ambientLight.intensity = 0.65;
+  } else if (aiDifficulty === 2) {
+    ambientLight.color.setHex(0x8a5cf5);
+    ambientLight.intensity = 0.9;
+  } else {
+    ambientLight.color.setHex(0xff0033);
+    ambientLight.intensity = 0.5;
   }
 }
 
@@ -1861,19 +2081,7 @@ if (btnOpenMenu && startMenu) {
   });
 }
 
-// Botão Alternar Cor no Dock
-const btnColor = document.getElementById('btn-color');
-if (btnColor) {
-  btnColor.addEventListener('click', () => {
-    sfx.playClick();
-    myColor = myColor === 'w' ? 'b' : 'w';
-    updateColorButton();
-    applyCameraPreset(myColor === 'w' ? 0 : 1);
-    if (vsAI && engine.turn !== myColor) {
-      checkAITurn();
-    }
-  });
-}
+
 
 // Botão Música Ambiente / Drone
 const btnMusic = document.getElementById('btn-music');
@@ -2082,18 +2290,62 @@ if (btnCam) {
   });
 }
 
-// Botão Oráculo (Dicas)
+// Botão Oráculo (Dicas via Web Worker assíncrono)
 const btnHint = document.getElementById('btn-hint');
 if (btnHint) {
   btnHint.addEventListener('click', () => {
     if (isAnimating || isCameraAnimating) return;
     sfx.playClick();
-    const best = engine.chooseBestMove(engine.turn, aiDifficulty);
-    if (best) { 
-      selectedSquare = best.from; 
-      validMoves = [best.to]; 
-      showHighlights(best.from.r, best.from.c, [best.to], true); 
+    requestBestMoveAsync(engine.turn, aiDifficulty, (best) => {
+      if (best) { 
+        selectedSquare = best.from; 
+        validMoves = [best.to]; 
+        showHighlights(best.from.r, best.from.c, [best.to], true); 
+      }
+    });
+  });
+}
+
+// Ações no Menu de Pausa (Som, Tela Cheia, Emotes, Rendição)
+const btnPauseAudio = document.getElementById('btn-pause-audio');
+if (btnPauseAudio) {
+  btnPauseAudio.addEventListener('click', () => {
+    sfx.init();
+    sfx.enabled = !sfx.enabled;
+    const label = btnPauseAudio.querySelector('.audio-label');
+    const icon = btnPauseAudio.querySelector('.material-symbols-rounded');
+    if (label) label.textContent = sfx.enabled ? 'Som: Ligado' : 'Som: Mudo';
+    if (icon) icon.textContent = sfx.enabled ? 'volume_up' : 'volume_off';
+    btnPauseAudio.classList.toggle('active', sfx.enabled);
+  });
+}
+
+const btnPauseFullscreen = document.getElementById('btn-pause-fullscreen');
+if (btnPauseFullscreen) {
+  btnPauseFullscreen.addEventListener('click', () => {
+    sfx.playClick();
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
     }
+  });
+}
+
+const btnPauseEmotes = document.getElementById('btn-pause-emotes');
+if (btnPauseEmotes && emotesPopup) {
+  btnPauseEmotes.addEventListener('click', () => {
+    sfx.playClick();
+    emotesPopup.classList.toggle('hidden');
+  });
+}
+
+const btnPauseResign = document.getElementById('btn-pause-resign');
+if (btnPauseResign && resignModal) {
+  btnPauseResign.addEventListener('click', () => {
+    sfx.playClick();
+    if (pauseModal) pauseModal.classList.add('hidden');
+    resignModal.classList.remove('hidden');
   });
 }
 
@@ -2568,7 +2820,7 @@ function animate() {
     const scale = Math.max(s.life / s.maxLife, 0.01);
     s.mesh.scale.set(scale, scale, scale);
     if (s.life <= 0) { 
-      scene.remove(s.mesh); 
+      safeDisposeMesh(s.mesh); 
       activeShards.splice(i, 1); 
     }
   }
@@ -2584,7 +2836,7 @@ function animate() {
     const scale = Math.max(s.life / s.maxLife, 0.01);
     s.mesh.scale.set(scale, scale, scale);
     if (s.life <= 0) { 
-      scene.remove(s.mesh); 
+      safeDisposeMesh(s.mesh); 
       celebrationShards.splice(i, 1); 
     }
   }
