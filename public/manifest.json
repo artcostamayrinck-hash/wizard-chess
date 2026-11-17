@@ -1,0 +1,17 @@
+{
+  "short_name": "WizardChess",
+  "name": "3D Wizard's Chess: Gothic Cathedral",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#0b0a0e",
+  "theme_color": "#d0bcff",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "id": "bd3dd49a-b3fe-46fb-974d-70619eb871b2"
+}
