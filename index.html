@@ -99,6 +99,25 @@
       100% { transform: translate(-50%) scale(1.03); box-shadow: 0 12px 36px rgba(0,0,0,0.85), 0 0 32px rgba(255, 77, 109, 0.75); }
     }
 
+    /* Dock Superior Compacto com Efeito Glassmorphism Arcane */
+    .rpg-top-bar {
+      margin-bottom: 8px !important;
+    }
+    .rpg-top-resources-center {
+      background: rgba(18, 14, 28, 0.78) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      backdrop-filter: blur(14px) !important;
+      padding: 4px 12px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(245, 197, 107, 0.28) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      transition: all 0.25s ease !important;
+    }
+    .rpg-top-resources-center:hover {
+      border-color: rgba(245, 197, 107, 0.5) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(245, 197, 107, 0.2) !important;
+    }
+
     /* Card de Retomar Partida (Auto-Save) */
     .rpg-card-resume {
       width: 100% !important;
@@ -4813,6 +4832,22 @@ body.in-lobby #emote-toast-container,
             </button>
           </div>
 
+          <!-- 4b. Feedback Tátil (Vibração) -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #4ade80; background: rgba(74, 222, 128, 0.12);">
+                <span class="material-symbols-rounded">vibration</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Feedback Tátil</span>
+                <span class="settings-desc">Vibração em jogadas, capturas e xeque</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-haptic-setting" class="photo2-switch-btn active">
+              <span>Ativado</span>
+            </button>
+          </div>
+
           <!-- 5. Conquistas & Títulos -->
           <div class="photo2-setting-card" id="card-setting-achievements" style="cursor: pointer;" onclick="if(window._openAchievementsFromSettings) window._openAchievementsFromSettings(event);">
             <div class="settings-row-info">
@@ -4875,7 +4910,7 @@ body.in-lobby #emote-toast-container,
                 <span class="settings-desc">Instale o jogo nativo diretamente no seu celular Android</span>
               </div>
             </div>
-            <a href="https://github.com/artcostamayrinck-hash/wizard-chess/releases/download/latest/app-debug.apk" target="_blank" rel="noopener noreferrer" download="wizard-chess-3d.apk" id="btn-settings-download-apk" class="photo2-action-btn" style="background: #22c55e; color: #0f172a; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 12px;">
+            <a href="./app-debug.apk" download="wizards-chess-3d.apk" id="btn-settings-download-apk" class="photo2-action-btn" style="background: #22c55e; color: #0f172a; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 12px;">
               <span>Baixar APK</span>
               <span class="material-symbols-rounded" style="font-size: 1.05rem;">download</span>
             </a>
@@ -5695,6 +5730,10 @@ body.in-lobby #emote-toast-container,
     <button id="btn-copy-pgn" class="promo-btn"
       style="width: 100%; margin-top: 6px; padding: 7px 10px; font-size: 0.78rem; border-radius: 8px;">
       Copiar Registro
+    </button>
+    <button id="btn-export-fide-pgn" class="promo-btn"
+      style="width: 100%; margin-top: 6px; padding: 7px 10px; font-size: 0.78rem; border-radius: 8px; background: linear-gradient(135deg, rgba(30, 20, 50, 0.95), rgba(15, 10, 30, 0.98)); border: 1px solid rgba(245, 197, 107, 0.4); color: #f5c56b;">
+      📜 Exportar PGN FIDE (.pgn)
     </button>
   </div>
 
