@@ -6174,12 +6174,21 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
 
         <h2 class="game-title photo2-title" style="font-size: 1.8rem; margin: 4px 0 8px 0;">WIZARD’S CHESS</h2>
 
-        <div class="stats-banner photo2-stats" style="margin: 0 auto 12px auto; width: fit-content; max-width: 95%;">
-          <span class="stat-item"><span class="stat-icon">🏆</span> <span class="stat-wins-mirror">0</span> Vitórias</span>
-          <span class="stat-divider">•</span>
-          <span class="stat-item"><span class="stat-icon">⚖️</span> <span class="stat-draws-mirror">0</span> Empates</span>
-          <span class="stat-divider">•</span>
-          <span class="stat-item"><span class="stat-icon">💀</span> <span class="stat-losses-mirror">0</span> Derrotas</span>
+        <div class="stats-banner photo2-stats" style="margin: 0 auto 12px auto; width: fit-content; max-width: 95%; display: flex; align-items: center; gap: 8px;">
+          <span class="stat-item" style="display: inline-flex; align-items: center; gap: 4px;">
+            <svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21H16M12 17V21M7 4H17V10C17 12.8 14.8 15 12 15C9.2 15 7 12.8 7 10V4Z"/><path d="M7 6H4.5V8.5C4.5 10.2 5.6 11.4 7 11.5M17 6H19.5V8.5C19.5 10.2 18.4 11.4 17 11.5"/></svg>
+            <span class="stat-wins-mirror font-bold">0</span> <span class="stat-wins-label">Vitórias</span>
+          </span>
+          <span class="stat-divider" style="opacity: 0.35;">•</span>
+          <span class="stat-item" style="display: inline-flex; align-items: center; gap: 4px;">
+            <svg class="w-3.5 h-3.5 text-amethyst-bright shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3V21M3 7L12 5L21 7M6 13L3 7M18 13L21 7M3 13C3 15 4.5 16.5 6 16.5C7.5 16.5 9 15 9 13C9 13 3 13 3 13ZM15 13C15 15 16.5 16.5 18 16.5C19.5 16.5 21 15 21 13C21 13 15 13 15 13Z"/></svg>
+            <span class="stat-draws-mirror font-bold">0</span> <span class="stat-draws-label">Empates</span>
+          </span>
+          <span class="stat-divider" style="opacity: 0.35;">•</span>
+          <span class="stat-item" style="display: inline-flex; align-items: center; gap: 4px;">
+            <svg class="w-3.5 h-3.5 text-[#E05A5A] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9C5 12 7 14 8 15V19C8 19.6 8.4 20 9 20H15C15.6 20 16 19.6 16 19V15C17 14 19 12 19 9C19 5 16 2 12 2Z"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><path d="M10 16H14"/></svg>
+            <span class="stat-losses-mirror font-bold">0</span> <span class="stat-losses-label">Derrotas</span>
+          </span>
         </div>
 
         <p class="photo2-subtitle" style="margin-bottom: 14px;">Prepare suas runas e desafie o destino no tabuleiro de pedra.</p>
@@ -6284,8 +6293,24 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
         </div>
 
         <!-- Botão Iniciar Batalha: Entrar na Catedral (Estilo Idêntico à Foto 2) -->
-        <div class="menu-actions" style="margin-top: 18px; width: 100%;">
-          <button id="btn-start-game" class="promo-btn photo2-btn-start">
+        <div class="menu-actions" style="margin-top: 18px; width: 100%; display: flex; flex-col; gap: 10px;">
+          <!-- Resumo Compacto ao Vivo da Configuração -->
+          <div id="battle-setup-summary-bar" class="w-full rounded-2xl bg-gradient-to-r from-[#1E1735]/90 via-[#18122B]/90 to-[#120E22]/90 border border-gold/30 px-3.5 py-2 flex items-center justify-between text-xs tabular-nums shadow-lg">
+            <div class="flex items-center gap-1.5 font-bold text-[#F3EFE6] truncate">
+              <span id="setup-sum-mode" class="text-gold">vs IA</span>
+              <span class="text-white/25">•</span>
+              <span id="setup-sum-arena">Catedral</span>
+              <span class="text-white/25">•</span>
+              <span id="setup-sum-color">Mármore</span>
+              <span class="text-white/25">•</span>
+              <span id="setup-sum-time">5+3</span>
+              <span class="text-white/25">•</span>
+              <span id="setup-sum-diff">Ignis</span>
+            </div>
+            <span class="text-[10px] font-bold text-gold uppercase tracking-wider pl-2 shrink-0">Pronto</span>
+          </div>
+
+          <button id="btn-start-game" class="promo-btn photo2-btn-start cta-gold-btn tap-scale" style="width: 100%; height: 52px; font-size: 1.05rem; font-weight: 800; border-radius: 18px;">
             Entrar na Catedral
           </button>
         </div>
@@ -10193,6 +10218,94 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       initArcaneDust();
     };
   
+  </script>
+
+  <script>
+
+      // ==================== SINCRONIZAÇÃO AO VIVO DO SETUP DE BATALHA ====================
+      (function() {
+        function updateBattleSetupSummary() {
+          const sumMode = document.getElementById('setup-sum-mode');
+          const sumArena = document.getElementById('setup-sum-arena');
+          const sumColor = document.getElementById('setup-sum-color');
+          const sumTime = document.getElementById('setup-sum-time');
+          const sumDiff = document.getElementById('setup-sum-diff');
+          const startBtn = document.getElementById('btn-start-game');
+          const arenaPill = document.getElementById('menu-arena-pill-text');
+
+          const activeMode = document.querySelector('#menu-mode-group .toggle-btn.active');
+          const activeArena = document.querySelector('#menu-arena-group .toggle-btn.active');
+          const activeColor = document.querySelector('#menu-color-group .toggle-btn.active');
+          const activeTime = document.querySelector('#menu-time-group .toggle-btn.active');
+          const activeDiff = document.querySelector('#menu-diff-group .toggle-btn.active');
+
+          const modeText = activeMode ? activeMode.textContent.trim() : 'vs IA';
+          let arenaName = 'Catedral';
+          if (activeArena) {
+            const nameEl = activeArena.querySelector('.arena-name');
+            arenaName = nameEl ? nameEl.textContent.trim() : activeArena.textContent.trim();
+          }
+          const colorText = activeColor ? (activeColor.dataset.color === 'w' ? 'Mármore' : 'Obsidiana') : 'Mármore';
+          const timeText = activeTime ? activeTime.textContent.trim() : '5+3';
+          let diffText = 'Ignis';
+          if (activeDiff) {
+            const magusEl = activeDiff.querySelector('.magus-name');
+            diffText = magusEl ? magusEl.textContent.trim() : activeDiff.textContent.trim();
+          }
+
+          if (sumMode) sumMode.textContent = modeText;
+          if (sumArena) sumArena.textContent = arenaName;
+          if (sumColor) sumColor.textContent = colorText;
+          if (sumTime) sumTime.textContent = timeText;
+          if (sumDiff) sumDiff.textContent = diffText;
+
+          if (startBtn) {
+            startBtn.innerHTML = '<span class="material-symbols-rounded" style="vertical-align:middle;margin-right:6px;">swords</span>Entrar na ' + arenaName;
+          }
+          if (arenaPill) {
+            arenaPill.textContent = arenaName.toUpperCase();
+          }
+
+          // Ajusta visibilidade do grupo de IA se for 2 Jogadores ou Online
+          const diffSection = document.getElementById('menu-diff-section');
+          if (diffSection) {
+            const isAI = activeMode && activeMode.dataset.mode === 'ai';
+            diffSection.style.display = isAI ? 'block' : 'none';
+          }
+        }
+
+        // Observer ou listeners de clique nos botões de setup
+        document.querySelectorAll('#menu-mode-group .toggle-btn, #menu-arena-group .toggle-btn, #menu-color-group .toggle-btn, #menu-time-group .toggle-btn, #menu-diff-group .toggle-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            setTimeout(updateBattleSetupSummary, 50);
+          });
+        });
+
+        // Pluralização dinâmica das estatísticas
+        function syncPluralStats() {
+          const wEl = document.querySelector('.stat-wins-mirror');
+          const dEl = document.querySelector('.stat-draws-mirror');
+          const lEl = document.querySelector('.stat-losses-mirror');
+
+          const w = wEl ? parseInt(wEl.textContent.trim(), 10) || 0 : 0;
+          const d = dEl ? parseInt(dEl.textContent.trim(), 10) || 0 : 0;
+          const l = lEl ? parseInt(lEl.textContent.trim(), 10) || 0 : 0;
+
+          document.querySelectorAll('.stat-wins-label').forEach(el => el.textContent = (w === 1) ? 'Vitória' : 'Vitórias');
+          document.querySelectorAll('.stat-draws-label').forEach(el => el.textContent = (d === 1) ? 'Empate' : 'Empates');
+          document.querySelectorAll('.stat-losses-label').forEach(el => el.textContent = (l === 1) ? 'Derrota' : 'Derrotas');
+        }
+
+        const statObs = new MutationObserver(syncPluralStats);
+        const wMirror = document.querySelector('.stat-wins-mirror');
+        if (wMirror) statObs.observe(wMirror, { childList: true, characterData: true, subtree: true });
+
+        setTimeout(() => {
+          updateBattleSetupSummary();
+          syncPluralStats();
+        }, 300);
+      })();
+
   </script>
 </body>
 
