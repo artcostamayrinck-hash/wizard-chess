@@ -4060,6 +4060,126 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
     body.in-lobby .md3-dock {
       display: none !important;
     }
+  
+    /* ========================================================================== */
+    /* FASE 3: ACESSIBILIDADE, DALTONISMO, COORDENADAS, PREMOVE E GAME FEEL       */
+    /* ========================================================================== */
+
+    /* Overlay de Coordenadas do Tabuleiro (a–h, 1–8) */
+    .board-coords-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+      font-family: "Cinzel", serif, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(229, 190, 110, 0.75);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+      user-select: none;
+    }
+
+    .coords-files-row {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      letter-spacing: 0.1em;
+    }
+
+    .coords-ranks-col {
+      position: absolute;
+      top: 24px;
+      bottom: 24px;
+      left: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      letter-spacing: 0.05em;
+    }
+
+    /* Banner Briefing de Modo Especial */
+    .mode-briefing-banner {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      max-width: 90vw;
+      width: 380px;
+      background: linear-gradient(135deg, rgba(28, 20, 48, 0.96) 0%, rgba(14, 11, 25, 0.98) 100%);
+      border: 1.5px solid rgba(229, 190, 110, 0.55);
+      border-radius: 14px;
+      padding: 10px 16px;
+      color: #f6efe2;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 85, 247, 0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: bannerSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: auto;
+    }
+
+    @keyframes bannerSlideIn {
+      from { opacity: 0; transform: translate(-50%, -15px) scale(0.95); }
+      to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+
+    /* Onboarding Toast da 1ª Partida */
+    .onboarding-toast {
+      position: fixed;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 995;
+      width: 90vw;
+      max-width: 380px;
+      background: linear-gradient(180deg, rgba(24, 18, 42, 0.95) 0%, rgba(14, 10, 26, 0.98) 100%);
+      border: 1.5px solid rgba(229, 190, 110, 0.45);
+      border-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: #f6efe2;
+    }
+
+    /* Pré-lance (Premove) */
+    .premove-active-ring {
+      outline: 2px dashed #38bdf8 !important;
+      outline-offset: -3px !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
+    }
+
+    /* Modo Daltonismo / Alto Contraste */
+    body.daltonism-mode .square-hint-dot {
+      width: 16px !important;
+      height: 16px !important;
+      background: #ffffff !important;
+      border: 2px solid #000000 !important;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9) !important;
+    }
+
+    body.daltonism-mode .square-capture-ring {
+      border: 4px solid #facc15 !important;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.85), inset 0 0 8px rgba(250, 204, 21, 0.5) !important;
+    }
+
+    body.daltonism-mode .king-in-check {
+      animation: daltonCheckPulse 0.8s infinite alternate !important;
+      outline: 4px solid #ef4444 !important;
+    }
+
+    @keyframes daltonCheckPulse {
+      from { box-shadow: 0 0 10px #ef4444; }
+      to   { box-shadow: 0 0 25px #ff0000, inset 0 0 15px #ef4444; }
+    }
+
   </style>
 <style>
 /* ========================================================================== */
@@ -5597,7 +5717,43 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
     </div>
   </div>
   <!-- Onde o tabuleiro 3D é desenhado -->
-  <div id="canvas-container"></div>
+  <div id="canvas-container">
+    <!-- Overlay de Coordenadas do Tabuleiro (a–h, 1–8) -->
+    <div id="board-coords-overlay" class="board-coords-overlay hidden">
+      <div class="coords-ranks-col">
+        <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+      </div>
+      <div style="flex: 1;"></div>
+      <div class="coords-files-row">
+        <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+      </div>
+    </div>
+
+    <!-- Banner Briefing de Modo Especial (Arcano / Morte Súbita) -->
+    <div id="mode-briefing-banner" class="mode-briefing-banner hidden">
+      <span id="mode-briefing-icon" style="font-size: 24px;">🔮</span>
+      <div style="flex: 1;">
+        <div id="mode-briefing-title" style="font-family: 'Cinzel', serif; font-weight: 700; color: #ffd700; font-size: 0.85rem;">MODO ARCANO</div>
+        <div id="mode-briefing-text" style="font-size: 0.74rem; color: #d1c9e2; line-height: 1.3;">Capturas de peças nobres aumentam sua mana e oráculo.</div>
+      </div>
+    </div>
+
+    <!-- Onboarding Único da 1ª Partida -->
+    <div id="match-onboarding-toast" class="onboarding-toast hidden">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 22px;">🧙‍♂️</span>
+          <span style="font-family: 'Cinzel', serif; font-weight: 700; color: #ffd700; font-size: 0.86rem;">Guia Rápido dos Arquimagos</span>
+        </div>
+        <button type="button" class="modal-corner-close-btn" style="position: static; font-size: 14px;" onclick="if(window._closeOnboarding) window._closeOnboarding();">✕</button>
+      </div>
+      <p style="font-size: 0.74rem; color: #d1c9e2; margin: 6px 0 10px 0; line-height: 1.4;">
+        • <strong>Girar visão:</strong> Arraste o dedo ou mouse pelo tabuleiro.<br>
+        • <strong>Zoom:</strong> Use pinça com 2 dedos ou a roda do mouse.<br>
+        • <strong>Visão 2D / 3D:</strong> Toque no botão superior direito a qualquer momento.
+      </p>
+      <button type="button" class="promo-btn cta-gold-btn" style="width: 100%; padding: 7px 14px; font-size: 0.78rem; font-weight: 700;" onclick="if(window._closeOnboarding) window._closeOnboarding();">Entendido, Iniciar Batalha!</button>
+    </div></div>
 
   <!-- Botão Flutuante de Alternância Rápida 2D / 3D -->
   <button id="btn-quick-cam-toggle" class="quick-cam-float-btn" title="Alternar Visão 2D Tática / 3D" aria-label="Alternar Visão 2D / 3D">
@@ -7079,6 +7235,70 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
             </button>
           </div>
 
+          <!-- 4a. Coordenadas do Tabuleiro (a–h, 1–8) -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.12);">
+                <span class="material-symbols-rounded">grid_4x4</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Coordenadas no Tabuleiro</span>
+                <span class="settings-desc">Exibir letras (a–h) e números (1–8) nas bordas</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-coords-setting" class="photo2-switch-btn" onclick="if(window._toggleCoordsSetting) window._toggleCoordsSetting();">
+              <span id="label-coords-setting">Desativado</span>
+            </button>
+          </div>
+
+          <!-- 4b. Girar Câmera no Modo 2 Jogadores Local -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #38bdf8; background: rgba(56, 189, 248, 0.12);">
+                <span class="material-symbols-rounded">screen_rotation</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Girar Câmera (Modo 2P)</span>
+                <span class="settings-desc">Inverter visão 180° automaticamente a cada turno local</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-camera-rotate-2p" class="photo2-switch-btn active" onclick="if(window._toggleRotate2PSetting) window._toggleRotate2PSetting();">
+              <span id="label-rotate-2p-setting">Ativado</span>
+            </button>
+          </div>
+
+          <!-- 4c. Modo Alto Contraste / Daltonismo -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #eab308; background: rgba(234, 179, 8, 0.12);">
+                <span class="material-symbols-rounded">visibility</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Modo Alto Contraste (Daltonismo)</span>
+                <span class="settings-desc">Ícones geométricos e alto contraste nas jogadas</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-daltonism-setting" class="photo2-switch-btn" onclick="if(window._toggleDaltonismSetting) window._toggleDaltonismSetting();">
+              <span id="label-daltonism-setting">Desativado</span>
+            </button>
+          </div>
+
+          <!-- 4d. Reduzir Movimento -->
+          <div class="photo2-setting-card">
+            <div class="settings-row-info">
+              <div class="photo2-setting-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.12);">
+                <span class="material-symbols-rounded">motion_photos_off</span>
+              </div>
+              <div class="settings-row-text">
+                <span class="settings-title">Reduzir Movimento</span>
+                <span class="settings-desc">Suavizar animações e desativar tremores de câmera</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-reduced-motion" class="photo2-switch-btn" onclick="if(window._toggleReducedMotionSetting) window._toggleReducedMotionSetting();">
+              <span id="label-reduced-motion-setting">Desativado</span>
+            </button>
+          </div>
+
           <!-- 4b. Feedback Tátil (Vibração) -->
           <div class="photo2-setting-card">
             <div class="settings-row-info">
@@ -7194,7 +7414,7 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
             <span>Retornar ao Menu Inicial</span>
           </button>
           <div class="settings-version-badge">
-            <span>WIZARD’S CHESS 3D • Versão 1.5.12</span>
+            <span>WIZARD’S CHESS 3D • Versão 1.5.26</span>
           </div>
         </div>
       </div>
@@ -8242,8 +8462,20 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
           data-ad-slot="1463332817" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </div>
 
-      <button id="btn-play-again" class="promo-btn" style="padding: 14px 32px; font-size: 1.05rem; width: 100%;">Jogar
-        Novamente</button>
+      <div id="game-over-elo-pill" class="game-over-elo-badge" style="margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; width: 100%; gap: 6px; padding: 6px 14px; border-radius: 999px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.88rem; background: rgba(229, 190, 110, 0.16); border: 1px solid rgba(229, 190, 110, 0.45); color: #ffd700;">
+        <span>⭐ Variação de ELO: +24 (1240 → 1264)</span>
+      </div>
+
+      <button id="btn-play-again" class="promo-btn cta-gold-btn" style="padding: 13px 28px; font-size: 1.02rem; width: 100%;">⚔️ Revanche</button>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; width: 100%;">
+        <button type="button" id="btn-replay-last-moves" class="promo-btn" style="padding: 10px 12px; font-size: 0.82rem; background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(30, 20, 50, 0.95)); border-color: #a855f7; color: #e9d5ff;" onclick="if(window._replayLastMoves) window._replayLastMoves();">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 16px;">fast_rewind</span>🎬 Replay Rápido
+        </button>
+        <button type="button" id="btn-copy-pgn" class="promo-btn" style="padding: 10px 12px; font-size: 0.82rem; background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.25); color: #f6efe2;" onclick="if(window._copyMatchPGN) window._copyMatchPGN();">
+          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 4px; font-size: 16px;">content_copy</span>📋 Copiar PGN
+        </button>
+      </div>
       <button id="btn-open-magus-review" class="promo-btn" style="margin-top: 8px; padding: 12px 24px; font-size: 0.95rem; width: 100%; background: linear-gradient(135deg, rgba(0, 245, 212, 0.25), rgba(10, 30, 40, 0.95)); border-color: #00f5d4; color: #00f5d4;">
         <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">psychology</span>🧠 Análise Mágica do Grimório
       </button>
