@@ -3448,7 +3448,8 @@ body.in-lobby #emote-toast-container,
   color: #fff !important;
 }
 
-  </style>
+    #canvas-container, #canvas-container canvas { touch-action: none !important; -webkit-touch-callout: none; user-select: none; }
+</style>
 </head>
 
 <body>
@@ -5508,6 +5509,10 @@ body.in-lobby #emote-toast-container,
     <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
       <span class="material-symbols-rounded">videocam</span>
       <span class="btn-label">Câmera</span>
+    </button>
+    <button id="btn-cam-reset" class="dock-btn" title="Resetar Posicao da Camera">
+      <span class="material-symbols-rounded">restart_alt</span>
+      <span class="btn-label">Resetar</span>
     </button>
     <button id="btn-hint" class="dock-btn" title="Pedir Dica ao Oráculo">
       <span class="material-symbols-rounded">lightbulb</span>
