@@ -4897,6 +4897,687 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       display: none !important;
     }
 
+    /* ========================================================================== */
+    /* FASE 2: CAMPANHA ARCANA & RODA DA FORTUNA (CATEDRAL ARCANA)                */
+    /* ========================================================================== */
+
+    /* --- 1. CAMPANHA ARCANA --- */
+    #menu-view-campaign {
+      padding-bottom: 90px !important;
+    }
+
+    .campaign-world-selector {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 8px !important;
+      margin: 10px 0 16px 0 !important;
+      background: rgba(14, 11, 25, 0.75) !important;
+      border: 1px solid rgba(229, 190, 110, 0.22) !important;
+      border-radius: 12px !important;
+      padding: 4px !important;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .campaign-world-tab {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      padding: 9px 12px !important;
+      border-radius: 8px !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.03em !important;
+      color: #a299bc !important;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+      user-select: none !important;
+    }
+
+    .campaign-world-tab.active {
+      background: linear-gradient(135deg, rgba(229, 190, 110, 0.22) 0%, rgba(168, 85, 247, 0.16) 100%) !important;
+      border-color: rgba(229, 190, 110, 0.45) !important;
+      color: #F6EFE2 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .campaign-world-tab.locked {
+      opacity: 0.55 !important;
+      cursor: not-allowed !important;
+    }
+
+    /* Barra de Progresso Rúnica (4 Nós) */
+    .campaign-runic-progress {
+      background: linear-gradient(180deg, rgba(20, 15, 36, 0.82) 0%, rgba(12, 9, 22, 0.88) 100%) !important;
+      border: 1px solid rgba(229, 190, 110, 0.25) !important;
+      border-radius: 14px !important;
+      padding: 12px 14px 14px 14px !important;
+      margin-bottom: 18px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .runic-progress-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      margin-bottom: 10px !important;
+    }
+
+    .runic-progress-title {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.05em !important;
+      color: #e5be6e !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+    }
+
+    .runic-counter-badge {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+      color: #f6efe2 !important;
+      background: rgba(168, 85, 247, 0.18) !important;
+      border: 1px solid rgba(168, 85, 247, 0.35) !important;
+      padding: 2px 8px !important;
+      border-radius: 999px !important;
+    }
+
+    .runic-track-wrap {
+      position: relative !important;
+      margin: 14px 10px 8px 10px !important;
+    }
+
+    .runic-progress-track {
+      height: 4px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-radius: 999px !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    .runic-progress-fill {
+      height: 100% !important;
+      background: linear-gradient(90deg, #f97316 0%, #a855f7 50%, #ffd700 100%) !important;
+      border-radius: 999px !important;
+      box-shadow: 0 0 10px rgba(229, 190, 110, 0.6) !important;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+
+    .runic-nodes-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      position: relative !important;
+      margin-top: -12px !important;
+    }
+
+    .runic-node {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 4px !important;
+      cursor: pointer !important;
+      user-select: none !important;
+    }
+
+    .runic-node-orb {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 50% !important;
+      background: #140f24 !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.68rem !important;
+      font-weight: 700 !important;
+      color: #7e749a !important;
+      transition: all 0.25s ease !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .runic-node-label {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.62rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em !important;
+      color: #7e749a !important;
+    }
+
+    .runic-node.node-completed .runic-node-orb {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.5) !important;
+    }
+
+    .runic-node.node-completed .runic-node-label {
+      color: #34d399 !important;
+    }
+
+    .runic-node.node-active .runic-node-orb {
+      background: linear-gradient(135deg, #e5be6e 0%, #a855f7 100%) !important;
+      border-color: #ffd700 !important;
+      color: #120b22 !important;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.6) !important;
+      animation: pulseNodeOrb 1.8s infinite ease-in-out !important;
+    }
+
+    .runic-node.node-active .runic-node-label {
+      color: #ffd700 !important;
+      font-weight: 700 !important;
+    }
+
+    .runic-node.node-locked .runic-node-orb {
+      opacity: 0.5 !important;
+    }
+
+    @keyframes pulseNodeOrb {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+      50% { transform: scale(1.12); box-shadow: 0 0 16px rgba(255, 215, 0, 0.8); }
+    }
+
+    /* Linha do Tempo Vertical da Campanha */
+    .campaign-timeline-v {
+      position: relative !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+    }
+
+    .campaign-timeline-v::before {
+      content: "" !important;
+      position: absolute !important;
+      top: 36px !important;
+      bottom: 40px !important;
+      left: 27px !important;
+      width: 2px !important;
+      background: linear-gradient(180deg, #f97316 0%, #a855f7 35%, #38bdf8 70%, #ffd700 100%) !important;
+      opacity: 0.4 !important;
+      z-index: 1 !important;
+      border-radius: 999px !important;
+    }
+
+    /* Card do Chefe Arcana */
+    .boss-card {
+      position: relative !important;
+      z-index: 2 !important;
+      background: linear-gradient(180deg, rgba(22, 17, 39, 0.90) 0%, rgba(14, 11, 25, 0.94) 100%) !important;
+      border: 1px solid rgba(229, 190, 110, 0.22) !important;
+      border-radius: 14px !important;
+      padding: 14px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .boss-card:hover {
+      border-color: rgba(229, 190, 110, 0.45) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6), 0 0 14px rgba(229, 190, 110, 0.18) !important;
+    }
+
+    /* Card do Chefe Final Malakor com borda dourada dupla e brilho espectral */
+    .boss-card.boss-final-boss {
+      border: 2px solid #ffd700 !important;
+      box-shadow: 0 0 26px rgba(168, 85, 247, 0.45), inset 0 0 16px rgba(255, 215, 0, 0.22) !important;
+      background: linear-gradient(180deg, rgba(28, 18, 48, 0.94) 0%, rgba(16, 10, 30, 0.96) 100%) !important;
+    }
+
+    .boss-card.boss-completed {
+      border-color: rgba(52, 211, 153, 0.35) !important;
+    }
+
+    .boss-card.boss-locked {
+      opacity: 0.58 !important;
+      filter: grayscale(0.2) !important;
+    }
+
+    .boss-card-header {
+      display: flex !important;
+      gap: 12px !important;
+      align-items: flex-start !important;
+    }
+
+    .boss-crest-box {
+      width: 52px !important;
+      height: 52px !important;
+      border-radius: 12px !important;
+      background: rgba(14, 11, 25, 0.85) !important;
+      border: 1.5px solid rgba(229, 190, 110, 0.35) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .boss-crest-box svg {
+      width: 32px !important;
+      height: 32px !important;
+    }
+
+    .boss-meta-text {
+      flex: 1 !important;
+      min-width: 0 !important;
+    }
+
+    .boss-tag-row {
+      display: flex !important;
+      align-items: center !important;
+      flex-wrap: wrap !important;
+      gap: 6px !important;
+      margin-bottom: 4px !important;
+    }
+
+    .chapter-badge {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.65rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      padding: 1px 6px !important;
+      border-radius: 4px !important;
+    }
+
+    .badge-ember {
+      background: rgba(249, 115, 22, 0.18) !important;
+      border: 1px solid rgba(249, 115, 22, 0.45) !important;
+      color: #fb923c !important;
+    }
+
+    .badge-amethyst {
+      background: rgba(168, 85, 247, 0.18) !important;
+      border: 1px solid rgba(168, 85, 247, 0.45) !important;
+      color: #c084fc !important;
+    }
+
+    .badge-cyan {
+      background: rgba(56, 189, 248, 0.18) !important;
+      border: 1px solid rgba(56, 189, 248, 0.45) !important;
+      color: #38bdf8 !important;
+    }
+
+    .badge-lich {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.22) 0%, rgba(168, 85, 247, 0.25) 100%) !important;
+      border: 1px solid rgba(255, 215, 0, 0.55) !important;
+      color: #ffd700 !important;
+    }
+
+    .arena-tag {
+      font-size: 0.68rem !important;
+      color: #a299bc !important;
+    }
+
+    .boss-status-pill {
+      margin-left: auto !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.64rem !important;
+      font-weight: 700 !important;
+      padding: 1px 7px !important;
+      border-radius: 999px !important;
+    }
+
+    .status-completed {
+      background: rgba(52, 211, 153, 0.18) !important;
+      border: 1px solid rgba(52, 211, 153, 0.45) !important;
+      color: #34d399 !important;
+    }
+
+    .status-active {
+      background: rgba(255, 215, 0, 0.16) !important;
+      border: 1px solid rgba(255, 215, 0, 0.4) !important;
+      color: #ffd700 !important;
+      animation: pulseStatus 2s infinite ease-in-out !important;
+    }
+
+    .status-locked {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      color: #7e749a !important;
+    }
+
+    @keyframes pulseStatus {
+      0%, 100% { opacity: 0.85; }
+      50% { opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6)); }
+    }
+
+    .boss-title {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 1.05rem !important;
+      font-weight: 700 !important;
+      color: #f6efe2 !important;
+      margin: 0 0 2px 0 !important;
+      letter-spacing: 0.02em !important;
+    }
+
+    .boss-desc {
+      font-size: 0.74rem !important;
+      line-height: 1.35 !important;
+      color: #a299bc !important;
+      margin: 0 !important;
+    }
+
+    .boss-card-footer {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 8px !important;
+      margin-top: 4px !important;
+    }
+
+    .boss-rewards-row {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 4px !important;
+    }
+
+    .reward-pill {
+      font-size: 0.68rem !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: #d1c9e2 !important;
+    }
+
+    .reward-pill.title-reward {
+      color: #ffd700 !important;
+      border-color: rgba(255, 215, 0, 0.3) !important;
+      background: rgba(255, 215, 0, 0.08) !important;
+    }
+
+    .btn-boss-challenge {
+      padding: 8px 16px !important;
+      border-radius: 8px !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .btn-boss-challenge:disabled {
+      opacity: 0.45 !important;
+      cursor: not-allowed !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: #7e749a !important;
+      box-shadow: none !important;
+    }
+
+    /* --- 2. MODAL RODA DA FORTUNA (ASTROLÁBIO ARCANO) --- */
+    .fortune-modal-content {
+      max-width: 410px !important;
+      background: linear-gradient(180deg, rgba(24, 18, 42, 0.96) 0%, rgba(14, 11, 25, 0.98) 100%) !important;
+      border: 1px solid rgba(229, 190, 110, 0.35) !important;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 24px rgba(168, 85, 247, 0.2) !important;
+      border-radius: 20px !important;
+      padding: 18px !important;
+    }
+
+    .fortune-header-bar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      margin-bottom: 8px !important;
+    }
+
+    .fortune-coin-chip {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: rgba(229, 190, 110, 0.12) !important;
+      border: 1px solid rgba(229, 190, 110, 0.35) !important;
+      border-radius: 999px !important;
+      padding: 3px 10px !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: #ffd700 !important;
+    }
+
+    .wheel-odds-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      border-radius: 999px !important;
+      padding: 3px 8px !important;
+      font-size: 0.68rem !important;
+      color: #a299bc !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .wheel-odds-btn:hover {
+      border-color: rgba(229, 190, 110, 0.4) !important;
+      color: #f6efe2 !important;
+    }
+
+    .wheel-stage-container {
+      position: relative !important;
+      width: 290px !important;
+      height: 290px !important;
+      margin: 10px auto 14px auto !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    /* Aro em Bronze/Ouro Estilo Astrolábio Arcano */
+    .astrolabe-bezel {
+      position: absolute !important;
+      inset: -6px !important;
+      border-radius: 50% !important;
+      border: 3.5px solid #d4af37 !important;
+      box-shadow: 0 0 16px rgba(212, 175, 55, 0.35), inset 0 0 12px rgba(0, 0, 0, 0.8) !important;
+      pointer-events: none !important;
+      z-index: 3 !important;
+      background: radial-gradient(circle, transparent 92%, rgba(138, 98, 30, 0.35) 98%, #c59b27 100%) !important;
+    }
+
+    /* Ponteiro Místico com Gema Deflexionando */
+    .wheel-pointer-gem {
+      position: absolute !important;
+      top: -12px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 10 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      pointer-events: none !important;
+      transform-origin: 50% 10px !important;
+      transition: transform 0.08s ease !important;
+    }
+
+    .wheel-pointer-gem.deflect-tick {
+      transform: translateX(-50%) rotate(-14deg) !important;
+    }
+
+    .pointer-needle {
+      width: 0 !important;
+      height: 0 !important;
+      border-left: 9px solid transparent !important;
+      border-right: 9px solid transparent !important;
+      border-top: 20px solid #ffd700 !important;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7)) !important;
+    }
+
+    .pointer-gem-orb {
+      width: 14px !important;
+      height: 14px !important;
+      border-radius: 50% !important;
+      background: radial-gradient(circle, #f43f5e 20%, #881337 100%) !important;
+      border: 1.5px solid #ffd700 !important;
+      box-shadow: 0 0 8px rgba(244, 63, 94, 0.8) !important;
+      margin-top: -6px !important;
+    }
+
+    .fortune-wheel-canvas {
+      width: 280px !important;
+      height: 280px !important;
+      border-radius: 50% !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+      z-index: 2 !important;
+    }
+
+    .wheel-center-orb {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 44px !important;
+      height: 44px !important;
+      border-radius: 50% !important;
+      background: radial-gradient(circle, #ffd700 0%, #a855f7 60%, #170d2b 100%) !important;
+      border: 2px solid #ffd700 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 18px !important;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.6) !important;
+      z-index: 5 !important;
+      pointer-events: none !important;
+    }
+
+    /* Faixa de Progresso dos 5 Fragmentos de Peças */
+    .wheel-fragments-strip {
+      display: grid !important;
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 4px !important;
+      margin: 10px 0 14px 0 !important;
+    }
+
+    .wheel-frag-card {
+      background: rgba(14, 11, 25, 0.8) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 8px !important;
+      padding: 4px 2px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 2px !important;
+    }
+
+    .wheel-frag-icon {
+      font-size: 14px !important;
+    }
+
+    .wheel-frag-name {
+      font-size: 0.58rem !important;
+      color: #a299bc !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100% !important;
+    }
+
+    .wheel-frag-bar {
+      width: 80% !important;
+      height: 3px !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-radius: 999px !important;
+      overflow: hidden !important;
+    }
+
+    .wheel-frag-fill {
+      height: 100% !important;
+      border-radius: 999px !important;
+      background: linear-gradient(90deg, #a855f7, #ffd700) !important;
+    }
+
+    .wheel-frag-pct {
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.62rem !important;
+      font-weight: 700 !important;
+      color: #ffd700 !important;
+    }
+
+    /* Banner de Resultado Elegante */
+    .wheel-result-banner {
+      background: linear-gradient(135deg, rgba(229, 190, 110, 0.18) 0%, rgba(168, 85, 247, 0.22) 100%) !important;
+      border: 1.5px solid rgba(229, 190, 110, 0.5) !important;
+      border-radius: 12px !important;
+      padding: 10px 14px !important;
+      margin: 8px 0 12px 0 !important;
+      text-align: center !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(229, 190, 110, 0.25) !important;
+      animation: bannerPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
+
+    @keyframes bannerPop {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .wheel-result-title {
+      display: block !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      color: #ffd700 !important;
+      margin-bottom: 2px !important;
+    }
+
+    .wheel-result-desc {
+      display: block !important;
+      font-size: 0.78rem !important;
+      color: #f6efe2 !important;
+    }
+
+    /* Modal de Probabilidades Reais */
+    .odds-popover {
+      position: absolute !important;
+      inset: 12px !important;
+      background: rgba(14, 11, 25, 0.96) !important;
+      border: 1.5px solid rgba(229, 190, 110, 0.4) !important;
+      border-radius: 16px !important;
+      padding: 16px !important;
+      z-index: 50 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+
+    .odds-table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin: 10px 0 !important;
+      font-size: 0.75rem !important;
+    }
+
+    .odds-table td {
+      padding: 5px 6px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #d1c9e2 !important;
+    }
+
+    .odds-table td.odd-pct {
+      text-align: right !important;
+      font-family: "Cinzel", serif, sans-serif !important;
+      font-weight: 700 !important;
+      color: #ffd700 !important;
+    }
+
+
   </style>
 </head>
 
@@ -6732,16 +7413,16 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
             <span class="material-symbols-rounded">arrow_back</span>
             <span>Voltar</span>
           </button>
-          <div class="brand-pill" style="margin: 0; width: fit-content; border-color: rgba(192, 132, 252, 0.6); background: rgba(192, 132, 252, 0.12); color: #c084fc;">
+          <div class="brand-pill" style="margin: 0; width: fit-content; border-color: rgba(229, 190, 110, 0.45); background: rgba(229, 190, 110, 0.12); color: #e5be6e;">
             <span class="material-symbols-rounded">shield_person</span>
             <span>CAMPANHA DOS ARQUIMAGOS</span>
           </div>
         </div>
 
-        <h2 class="game-title photo2-title" style="font-size: 1.6rem; margin: 4px 0 6px 0; color: #c084fc;">CAMPANHA ARCANA</h2>
+        <h2 class="game-title photo2-title" style="font-size: 1.6rem; margin: 4px 0 6px 0; background: linear-gradient(135deg, #F6EFE2 0%, #E5BE6E 50%, #C084FC 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CAMPANHA ARCANA</h2>
         <p class="photo2-subtitle" style="margin-bottom: 12px;">Derrote os Grandes Mestres em suas arenas sagradas e conquiste o Trono do Xadrez Ancestral.</p>
 
-        <!-- Seletor de Mundos da Campanha -->
+        <!-- Seletor de Mundos da Campanha (Controle Segmentado de 2 Colunas Equilibradas) -->
         <div class="campaign-world-selector">
           <button type="button" class="campaign-world-tab active" id="btn-world-1" onclick="if(window._switchCampaignWorld) window._switchCampaignWorld(1);">
             🌍 Mundo 1: Elementais
@@ -6751,20 +7432,69 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
           </button>
         </div>
 
-        <!-- Trilha de Chefes da Campanha -->
+        <!-- Barra de Progresso Rúnica (4 Nós Rúnicos) -->
+        <div class="campaign-runic-progress" id="campaign-runic-progress">
+          <div class="runic-progress-header">
+            <span class="runic-progress-title">
+              <span class="material-symbols-rounded" style="font-size: 16px; color: #e5be6e;">auto_awesome</span>
+              Capítulos Conquistados
+            </span>
+            <span class="runic-counter-badge" id="campaign-progress-counter">0 de 4 Conquistados</span>
+          </div>
+          <div class="runic-track-wrap">
+            <div class="runic-progress-track">
+              <div class="runic-progress-fill" id="campaign-progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div class="runic-nodes-row">
+              <!-- Nó 1: Ignis -->
+              <div class="runic-node node-active" id="runic-node-1" title="Capítulo I: Ignis, o Piromante">
+                <div class="runic-node-orb">ᚠ</div>
+                <span class="runic-node-label">Cap. I</span>
+              </div>
+              <!-- Nó 2: Morgana -->
+              <div class="runic-node node-locked" id="runic-node-2" title="Capítulo II: Morgana, a Ilusionista">
+                <div class="runic-node-orb">ᛗ</div>
+                <span class="runic-node-label">Cap. II</span>
+              </div>
+              <!-- Nó 3: Chronos -->
+              <div class="runic-node node-locked" id="runic-node-3" title="Capítulo III: Chronos, o Teurgista do Tempo">
+                <div class="runic-node-orb">ᛞ</div>
+                <span class="runic-node-label">Cap. III</span>
+              </div>
+              <!-- Nó 4: Malakor -->
+              <div class="runic-node node-locked" id="runic-node-4" title="Capítulo IV: Malakor, o Rei Lich">
+                <div class="runic-node-orb">ᛟ</div>
+                <span class="runic-node-label">Chefe Final</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trilha de Chefes da Campanha (Linha do Tempo Vertical) -->
         <div class="campaign-roadmap" id="campaign-roadmap-list">
           <!-- MUNDO 1: ELEMENTAIS (Chefes 1 a 4) -->
-          <div id="campaign-world-1-container" class="campaign-world-pane">
+          <div id="campaign-world-1-container" class="campaign-world-pane campaign-timeline-v">
+            
             <!-- Chefe 1: Ignis -->
             <div class="boss-card" id="boss-card-1" data-stage="1">
               <div class="boss-card-header">
-                <div class="boss-avatar-box ember-avatar">
-                  <span class="boss-avatar-emoji">🔥</span>
+                <div class="boss-crest-box" style="border-color: rgba(249, 115, 22, 0.45); background: radial-gradient(circle, rgba(249, 115, 22, 0.22), rgba(14, 11, 25, 0.9));">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4C24 4 15 15 15 26C15 32.5 19 38 24 40C29 38 33 32.5 33 26C33 15 24 4 24 4Z" fill="url(#ignis-grad)" stroke="#f97316" stroke-width="1.8"/>
+                    <path d="M24 16C24 16 19 22 19 28C19 32 21.5 35 24 36C26.5 35 29 32 29 28C29 22 24 16 24 16Z" fill="#fed7aa"/>
+                    <defs>
+                      <linearGradient id="ignis-grad" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ea580c"/>
+                        <stop offset="1" stop-color="#7c2d12"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-easy">Capítulo I • Fácil</span>
-                    <span class="boss-arena-tag">Cripta Infernal</span>
+                    <span class="chapter-badge badge-ember">Capítulo I • Fácil</span>
+                    <span class="arena-tag">🌋 Cripta Infernal</span>
+                    <span class="boss-status-pill status-active" id="boss-status-1">⚔️ Ativo</span>
                   </div>
                   <h3 class="boss-title">Ignis, o Piromante</h3>
                   <p class="boss-desc">Domina o fogo ancestral. Joga de forma impetuosa e agressiva com suas peças carmesins.</p>
@@ -6776,20 +7506,33 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
                   <span class="reward-pill">⭐ +100 XP</span>
                   <span class="reward-pill title-reward">🏷️ "Domador de Chamas"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-1">⚔️ Desafiar Mago</button>
+                <button type="button" class="btn-boss-challenge cta-gold-btn" id="btn-boss-challenge-1">⚔️ Desafiar Mago</button>
               </div>
             </div>
 
             <!-- Chefe 2: Morgana -->
-            <div class="boss-card" id="boss-card-2" data-stage="2">
+            <div class="boss-card boss-locked" id="boss-card-2" data-stage="2">
               <div class="boss-card-header">
-                <div class="boss-avatar-box mist-avatar">
-                  <span class="boss-avatar-emoji">👁️</span>
+                <div class="boss-crest-box" style="border-color: rgba(168, 85, 247, 0.45); background: radial-gradient(circle, rgba(168, 85, 247, 0.22), rgba(14, 11, 25, 0.9));">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M12 24C12 24 17 14 24 14C31 14 36 24 36 24C36 24 31 34 24 34C17 34 12 24 12 24Z" fill="url(#morg-grad)" stroke="#c084fc" stroke-width="1.8"/>
+                    <circle cx="24" cy="24" r="5" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5"/>
+                    <circle cx="24" cy="24" r="2" fill="#3b0764"/>
+                    <path d="M7 24C7 14 15 7 24 7" stroke="#a855f7" stroke-width="1.2" stroke-dasharray="2 3"/>
+                    <path d="M41 24C41 34 33 41 24 41" stroke="#a855f7" stroke-width="1.2" stroke-dasharray="2 3"/>
+                    <defs>
+                      <linearGradient id="morg-grad" x1="24" y1="14" x2="24" y2="34" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#7e22ce"/>
+                        <stop offset="1" stop-color="#2e1065"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-med">Capítulo II • Médio</span>
-                    <span class="boss-arena-tag">Abismo do Vazio</span>
+                    <span class="chapter-badge badge-amethyst">Capítulo II • Médio</span>
+                    <span class="arena-tag">🌌 Abismo do Vazio</span>
+                    <span class="boss-status-pill status-locked" id="boss-status-2">🔒 Selado</span>
                   </div>
                   <h3 class="boss-title">Morgana, a Ilusionista</h3>
                   <p class="boss-desc">Mestre dos espelhos e sombras. Prepara emboscadas táticas e garfos traiçoeiros com seus cavalos.</p>
@@ -6801,123 +7544,150 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
                   <span class="reward-pill">⭐ +150 XP</span>
                   <span class="reward-pill title-reward">🏷️ "Vidente Arcano"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-2">⚔️ Desafiar Mago</button>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-2" disabled>🔒 Bloqueado</button>
               </div>
             </div>
 
             <!-- Chefe 3: Chronos -->
-            <div class="boss-card" id="boss-card-3" data-stage="3">
+            <div class="boss-card boss-locked" id="boss-card-3" data-stage="3">
               <div class="boss-card-header">
-                <div class="boss-avatar-box time-avatar">
-                  <span class="boss-avatar-emoji">⏳</span>
+                <div class="boss-crest-box" style="border-color: rgba(56, 189, 248, 0.45); background: radial-gradient(circle, rgba(56, 189, 248, 0.22), rgba(14, 11, 25, 0.9));">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="18" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2"/>
+                    <path d="M16 12H32M16 36H32M18 12L24 24L18 36M30 12L24 24L30 36" stroke="#e0f2fe" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="24" cy="24" r="3" fill="#38bdf8"/>
+                    <defs>
+                      <linearGradient id="chron-grad" x1="16" y1="12" x2="32" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0284c7"/>
+                        <stop offset="1" stop-color="#082f49"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-hard">Capítulo III • Difícil</span>
-                    <span class="boss-arena-tag">Pirâmide das Areias</span>
+                    <span class="chapter-badge badge-cyan">Capítulo III • Difícil</span>
+                    <span class="arena-tag">🪐 Observatório Cósmico</span>
+                    <span class="boss-status-pill status-locked" id="boss-status-3">🔒 Selado</span>
                   </div>
-                  <h3 class="boss-title">Chronos, o Guardião do Tempo</h3>
-                  <p class="boss-desc">Enxerga cada desfecho mil lances à frente. Defesa cirúrgica e finais de jogo implacáveis.</p>
+                  <h3 class="boss-title">Chronos, o Teurgista do Tempo</h3>
+                  <p class="boss-desc">Manipulador do fluxo temporal. Posições ultra sólidas, paciência infinita e finais milimétricos.</p>
                 </div>
               </div>
               <div class="boss-card-footer">
                 <div class="boss-rewards-row">
                   <span class="reward-pill">🪙 +400 Moedas</span>
                   <span class="reward-pill">⭐ +250 XP</span>
-                  <span class="reward-pill title-reward">🏷️ "Mestre do Tempo"</span>
+                  <span class="reward-pill title-reward">🏷️ "Lorde do Tempo"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-3">⚔️ Desafiar Mago</button>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-3" disabled>🔒 Bloqueado</button>
               </div>
             </div>
 
-            <!-- Chefe 4: Malakor -->
-            <div class="boss-card boss-final" id="boss-card-4" data-stage="4">
+            <!-- Chefe 4: Malakor (CHEFE FINAL DO MUNDO 1) -->
+            <div class="boss-card boss-final-boss boss-locked" id="boss-card-4" data-stage="4">
               <div class="boss-card-header">
-                <div class="boss-avatar-box lich-avatar">
-                  <span class="boss-avatar-emoji">💀</span>
+                <div class="boss-crest-box" style="border-color: #ffd700; background: radial-gradient(circle, rgba(255, 215, 0, 0.25), rgba(168, 85, 247, 0.3), rgba(14, 11, 25, 0.95)); box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M10 34L14 16L20 25L24 10L28 25L34 16L38 34H10Z" fill="url(#lich-grad)" stroke="#ffd700" stroke-width="1.8" stroke-linejoin="round"/>
+                    <circle cx="24" cy="26" r="3.5" fill="#c084fc" filter="drop-shadow(0 0 4px #a855f7)"/>
+                    <path d="M16 34C16 39 32 39 32 34" stroke="#ffd700" stroke-width="1.6"/>
+                    <circle cx="14" cy="16" r="2" fill="#ffd700"/>
+                    <circle cx="24" cy="10" r="2.5" fill="#ffd700"/>
+                    <circle cx="34" cy="16" r="2" fill="#ffd700"/>
+                    <defs>
+                      <linearGradient id="lich-grad" x1="24" y1="10" x2="24" y2="34" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ffd700"/>
+                        <stop offset="0.6" stop-color="#7e22ce"/>
+                        <stop offset="1" stop-color="#1e1035"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-boss">Chefe Final • Arquimago</span>
-                    <span class="boss-arena-tag">Catedral Cósmica</span>
+                    <span class="chapter-badge badge-lich">👑 CHEFE FINAL • Grande Mestre</span>
+                    <span class="arena-tag">⚡ Trono das Sombras</span>
+                    <span class="boss-status-pill status-locked" id="boss-status-4">🔒 Selado</span>
                   </div>
-                  <h3 class="boss-title">Malakor, o Rei Lich</h3>
-                  <p class="boss-desc">O soberano imortal do tabuleiro. Precisão de grande mestre e frieza milenar na Catedral.</p>
+                  <h3 class="boss-title" style="color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);">Malakor, o Rei Lich</h3>
+                  <p class="boss-desc">O soberano imortal da Catedral Arcana. Cálculo impiedoso, sacrifícios venenosos e domínio total do tabuleiro.</p>
                 </div>
               </div>
               <div class="boss-card-footer">
                 <div class="boss-rewards-row">
-                  <span class="reward-pill">🪙 +700 Moedas</span>
+                  <span class="reward-pill">🪙 +800 Moedas</span>
                   <span class="reward-pill">⭐ +500 XP</span>
-                  <span class="reward-pill title-reward">👑 "Conquistador do Trono"</span>
+                  <span class="reward-pill title-reward">👑 "Soberano dos Magos"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-4">👑 Duelo Final</button>
+                <button type="button" class="btn-boss-challenge cta-gold-btn" id="btn-boss-challenge-4" disabled>👑 Duelo Final</button>
               </div>
             </div>
+
           </div>
 
           <!-- MUNDO 2: DOMÍNIO DOS TITÃS (Chefes 5 a 8) -->
-          <div id="campaign-world-2-container" class="campaign-world-pane hidden">
-            <!-- Chefe 5: Zephyr -->
-            <div class="boss-card" id="boss-card-5" data-stage="5">
+          <div id="campaign-world-2-container" class="campaign-world-pane hidden campaign-timeline-v">
+            <!-- Chefe 5: Terran -->
+            <div class="boss-card boss-locked" id="boss-card-5" data-stage="5">
               <div class="boss-card-header">
-                <div class="boss-avatar-box frost-avatar" style="background: radial-gradient(circle, #80deea, #006064);">
-                  <span class="boss-avatar-emoji">🌪️</span>
+                <div class="boss-crest-box" style="border-color: rgba(234, 179, 8, 0.45); background: radial-gradient(circle, rgba(234, 179, 8, 0.22), rgba(14, 11, 25, 0.9));">
+                  <span style="font-size: 24px;">🗿</span>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-med">Capítulo V • Ágil</span>
-                    <span class="boss-arena-tag">Templo de Gelo</span>
+                    <span class="chapter-badge badge-ember">Capítulo V • Titã da Terra</span>
+                    <span class="arena-tag">Cripta Infernal</span>
                   </div>
-                  <h3 class="boss-title">Zephyr, o Tecedor dos Ventos</h3>
-                  <p class="boss-desc">Sopra vendavais gélidos que desconcertam o adversário com aberturas rápidas e lances táticos fulminantes.</p>
+                  <h3 class="boss-title">Terran, o Colosso de Pedra</h3>
+                  <p class="boss-desc">Defesa de rocha impenetrável. Estrutura de peões inabalável e contra-ataques devastadores.</p>
                 </div>
               </div>
               <div class="boss-card-footer">
                 <div class="boss-rewards-row">
                   <span class="reward-pill">🪙 +450 Moedas</span>
                   <span class="reward-pill">⭐ +300 XP</span>
-                  <span class="reward-pill title-reward">🏷️ "Lorde dos Ventos"</span>
+                  <span class="reward-pill title-reward">🏷️ "Coração de Pedra"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-5">⚔️ Desafiar Titã</button>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-5" disabled>⚔️ Desafiar Titã</button>
               </div>
             </div>
 
-            <!-- Chefe 6: Gólem de Granito -->
-            <div class="boss-card" id="boss-card-6" data-stage="6">
+            <!-- Chefe 6: Zephyrus -->
+            <div class="boss-card boss-locked" id="boss-card-6" data-stage="6">
               <div class="boss-card-header">
-                <div class="boss-avatar-box forest-avatar" style="background: radial-gradient(circle, #a5d6a7, #1b5e20);">
-                  <span class="boss-avatar-emoji">🗿</span>
+                <div class="boss-crest-box" style="border-color: rgba(56, 189, 248, 0.45); background: radial-gradient(circle, rgba(56, 189, 248, 0.22), rgba(14, 11, 25, 0.9));">
+                  <span style="font-size: 24px;">🌪️</span>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-hard">Capítulo VI • Rocha Impenetrável</span>
-                    <span class="boss-arena-tag">Floresta Proibida</span>
+                    <span class="chapter-badge badge-cyan">Capítulo VI • Mestre dos Ventos</span>
+                    <span class="arena-tag">Observatório Cósmico</span>
                   </div>
-                  <h3 class="boss-title">Gólem de Granito Ancestral</h3>
-                  <p class="boss-desc">Esculpido no granito mais antigo. Estrutura de peões inquebrável e defesa impenetrável contra qualquer assalto.</p>
+                  <h3 class="boss-title">Zephyrus, Tempestade Astral</h3>
+                  <p class="boss-desc">Velocidade e mobilidade estonteante. Domina diagonais abertas com seus bispos celestiais.</p>
                 </div>
               </div>
               <div class="boss-card-footer">
                 <div class="boss-rewards-row">
                   <span class="reward-pill">🪙 +600 Moedas</span>
                   <span class="reward-pill">⭐ +400 XP</span>
-                  <span class="reward-pill title-reward">🏷️ "Titã Inabalável"</span>
+                  <span class="reward-pill title-reward">🏷️ "Lorde dos Ventos"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-6">⚔️ Desafiar Titã</button>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-6" disabled>⚔️ Desafiar Titã</button>
               </div>
             </div>
 
-            <!-- Chefe 7: Sombra do Rei -->
-            <div class="boss-card" id="boss-card-7" data-stage="7">
+            <!-- Chefe 7: Sombra do Rei Esquecido -->
+            <div class="boss-card boss-locked" id="boss-card-7" data-stage="7">
               <div class="boss-card-header">
-                <div class="boss-avatar-box abyss-avatar" style="background: radial-gradient(circle, #ce93d8, #4a148c);">
-                  <span class="boss-avatar-emoji">👤</span>
+                <div class="boss-crest-box" style="border-color: rgba(168, 85, 247, 0.45); background: radial-gradient(circle, rgba(168, 85, 247, 0.22), rgba(14, 11, 25, 0.9));">
+                  <span style="font-size: 24px;">👤</span>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-hard">Capítulo VII • Espectro Caído</span>
-                    <span class="boss-arena-tag">Abismo do Vazio</span>
+                    <span class="chapter-badge badge-amethyst">Capítulo VII • Espectro Caído</span>
+                    <span class="arena-tag">Abismo do Vazio</span>
                   </div>
                   <h3 class="boss-title">Sombra do Rei Esquecido</h3>
                   <p class="boss-desc">O antigo soberano banido. Sacrifica peças sem hesitar para sufocar seu rei nas trevas infinitas.</p>
@@ -6929,22 +7699,22 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
                   <span class="reward-pill">⭐ +500 XP</span>
                   <span class="reward-pill title-reward">🏷️ "Lâmina Sombria"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-7">⚔️ Desafiar Titã</button>
+                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-7" disabled>⚔️ Desafiar Titã</button>
               </div>
             </div>
 
             <!-- Chefe 8: Aethelgard -->
-            <div class="boss-card boss-final" id="boss-card-8" data-stage="8">
+            <div class="boss-card boss-final-boss boss-locked" id="boss-card-8" data-stage="8">
               <div class="boss-card-header">
-                <div class="boss-avatar-box cosmos-avatar" style="background: radial-gradient(circle, #ffd54f, #311b92);">
-                  <span class="boss-avatar-emoji">🪞</span>
+                <div class="boss-crest-box" style="border-color: #ffd700; background: radial-gradient(circle, rgba(255, 215, 0, 0.25), rgba(14, 11, 25, 0.95)); box-shadow: 0 0 16px rgba(255, 215, 0, 0.4);">
+                  <span style="font-size: 24px;">🪞</span>
                 </div>
                 <div class="boss-meta-text">
                   <div class="boss-tag-row">
-                    <span class="boss-difficulty-tag diff-boss">Chefe Supremo • Reino dos Espelhos</span>
-                    <span class="boss-arena-tag">Observatório Cósmico</span>
+                    <span class="chapter-badge badge-lich">👑 Chefe Supremo • Reino dos Espelhos</span>
+                    <span class="arena-tag">Observatório Cósmico</span>
                   </div>
-                  <h3 class="boss-title">Aethelgard, Arquimago do Espelho</h3>
+                  <h3 class="boss-title" style="color: #ffd700;">Aethelgard, Arquimago do Espelho</h3>
                   <p class="boss-desc">O reflexo perfeito de todo o conhecimento do tabuleiro. Pune qualquer imperfeição com precisão absoluta.</p>
                 </div>
               </div>
@@ -6954,15 +7724,14 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
                   <span class="reward-pill">⭐ +800 XP</span>
                   <span class="reward-pill title-reward">👑 "Soberano dos Titãs"</span>
                 </div>
-                <button type="button" class="btn-boss-challenge" id="btn-boss-challenge-8">👑 Duelo Supremo</button>
+                <button type="button" class="btn-boss-challenge cta-gold-btn" id="btn-boss-challenge-8" disabled>👑 Duelo Supremo</button>
               </div>
             </div>
+
           </div>
-        </div>
         </div>
       </div>
 
-      <!-- Container Oculto para suporte a modo puzzle no motor sem alterar funções -->
       <div id="menu-mode-group-hidden" style="display: none !important;">
         <button class="toggle-btn" data-mode="puzzle"></button>
       </div>
@@ -8009,39 +8778,117 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
   <div id="fortune-wheel-modal" class="modal-overlay hidden">
     <div class="modal-content fortune-modal-content">
       <button type="button" id="btn-close-fortune-wheel" class="modal-corner-close-btn" onclick="if(window._closeFortuneWheel) window._closeFortuneWheel();">✕</button>
-      <div class="fortune-modal-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-rounded" style="color: #ffd700; font-size: 24px;">casino</span>
-          <h3 style="margin: 0; color: #ffd700; font-size: 1.3rem;">Roda da Fortuna Arcana</h3>
+      
+      <!-- Topo do Modal: Saldo Animado + Probabilidades Reais + Título -->
+      <div class="fortune-header-bar">
+        <div class="fortune-coin-chip" id="fortune-coin-chip" title="Seu saldo de Moedas Arcanas">
+          <span>🪙</span>
+          <span id="fortune-coin-balance">100</span>
+          <span style="font-size: 0.65rem; color: #e5be6e;">MOEDAS</span>
+        </div>
+        <button type="button" class="wheel-odds-btn" id="btn-wheel-odds" onclick="if(window._toggleWheelOdds) window._toggleWheelOdds();" title="Ver taxas de probabilidade">
+          <span class="material-symbols-rounded" style="font-size: 13px;">info</span>
+          <span>Probabilidades</span>
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 4px;">
+        <h3 style="margin: 0; color: #ffd700; font-family: 'Cinzel', serif, sans-serif; font-size: 1.25rem; letter-spacing: 0.04em;">Roda da Fortuna Arcana</h3>
+        <p class="fortune-subtitle" style="margin: 4px 0 0 0; font-size: 0.74rem; color: #a299bc;">Gire o Astrolábio Arcano para conquistar Moedas e Fragmentos de Peças Místicas.</p>
+      </div>
+
+      <!-- Palco da Roleta: Aro em Bronze/Ouro Estilo Astrolábio Arcano -->
+      <div class="wheel-stage-container">
+        <!-- Aro Exterior Astrolábio com Marcações -->
+        <div class="astrolabe-bezel"></div>
+        
+        <!-- Ponteiro Místico com Gema Deflexionando -->
+        <div class="wheel-pointer-gem" id="wheel-pointer-wrap">
+          <div class="pointer-needle"></div>
+          <div class="pointer-gem-orb"></div>
+        </div>
+
+        <!-- Canvas da Roleta com 8 Fatias em Tons de Joia Escura -->
+        <canvas id="fortune-wheel-canvas" width="560" height="560" class="fortune-wheel-canvas"></canvas>
+        
+        <!-- Orbe Central com Runas e Brilho -->
+        <div class="wheel-center-orb">🔮</div>
+
+        <!-- Popover de Probabilidades Reais (Transparente e Discreto) -->
+        <div class="odds-popover hidden" id="wheel-odds-popover">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 700; color: #ffd700;">Probabilidades Reais</span>
+            <button type="button" class="modal-corner-close-btn" style="position: static; font-size: 14px;" onclick="if(window._toggleWheelOdds) window._toggleWheelOdds();">✕</button>
+          </div>
+          <table class="odds-table">
+            <tbody>
+              <tr><td>🪙 +150 Moedas Arcanas</td><td class="odd-pct">25.0%</td></tr>
+              <tr><td>🪙 +300 Moedas Arcanas</td><td class="odd-pct">20.0%</td></tr>
+              <tr><td>🔮 Fragmento Ametista (+20%)</td><td class="odd-pct">15.0%</td></tr>
+              <tr><td>💎 Fragmento Rubi (+25%)</td><td class="odd-pct">12.0%</td></tr>
+              <tr><td>🌿 Fragmento Esmeralda (+20%)</td><td class="odd-pct">10.0%</td></tr>
+              <tr><td>🪙 +500 Moedas Arcanas</td><td class="odd-pct">8.0%</td></tr>
+              <tr><td>👻 Fragmento Espectral (+20%)</td><td class="odd-pct">7.0%</td></tr>
+              <tr><td>👑 Fragmento Místico (+30%)</td><td class="odd-pct">3.0%</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.65rem; color: #a299bc; margin: 4px 0 0 0; text-align: center;">Total = 100%. Sorteio certificado e transparente.</p>
         </div>
       </div>
 
-      <p class="fortune-subtitle">Gire a roleta mística para ganhar Moedas Arcanas e Fragmentos de % para desbloquear peças grátis!</p>
-
-      <div class="wheel-stage-container">
-        <div class="wheel-pointer-arrow">▼</div>
-        <canvas id="fortune-wheel-canvas" width="300" height="300" class="fortune-wheel-canvas"></canvas>
-        <div class="wheel-center-orb">🔮</div>
-      </div>
-
+      <!-- Banner de Resultado Elegante com Partículas -->
       <div class="wheel-result-banner hidden" id="wheel-result-banner">
-        <span class="wheel-result-title" id="wheel-result-title">Parabéns!</span>
+        <span class="wheel-result-title" id="wheel-result-title">🎉 Tesouro Conquistado!</span>
         <span class="wheel-result-desc" id="wheel-result-desc">+250 Moedas Arcanas</span>
       </div>
 
+      <!-- Progresso dos 5 Fragmentos de Peças -->
+      <div class="wheel-fragments-strip">
+        <div class="wheel-frag-card" title="Peça Ametista Mística">
+          <span class="wheel-frag-icon">🔮</span>
+          <span class="wheel-frag-name">Ametista</span>
+          <div class="wheel-frag-bar"><div class="wheel-frag-fill" id="frag-fill-amethyst" style="width: 0%;"></div></div>
+          <span class="wheel-frag-pct" id="frag-pct-amethyst">0%</span>
+        </div>
+        <div class="wheel-frag-card" title="Peça Rubi de Fogo">
+          <span class="wheel-frag-icon">💎</span>
+          <span class="wheel-frag-name">Rubi</span>
+          <div class="wheel-frag-bar"><div class="wheel-frag-fill" id="frag-fill-ruby" style="width: 0%;"></div></div>
+          <span class="wheel-frag-pct" id="frag-pct-ruby">0%</span>
+        </div>
+        <div class="wheel-frag-card" title="Peça Esmeralda Arcana">
+          <span class="wheel-frag-icon">🌿</span>
+          <span class="wheel-frag-name">Esmeralda</span>
+          <div class="wheel-frag-bar"><div class="wheel-frag-fill" id="frag-fill-emerald" style="width: 0%;"></div></div>
+          <span class="wheel-frag-pct" id="frag-pct-emerald">0%</span>
+        </div>
+        <div class="wheel-frag-card" title="Peça Espectral das Sombras">
+          <span class="wheel-frag-icon">👻</span>
+          <span class="wheel-frag-name">Espectral</span>
+          <div class="wheel-frag-bar"><div class="wheel-frag-fill" id="frag-fill-spectral" style="width: 0%;"></div></div>
+          <span class="wheel-frag-pct" id="frag-pct-spectral">0%</span>
+        </div>
+        <div class="wheel-frag-card" title="Peça Celestial / Mística">
+          <span class="wheel-frag-icon">👑</span>
+          <span class="wheel-frag-name">Místico</span>
+          <div class="wheel-frag-bar"><div class="wheel-frag-fill" id="frag-fill-celestial" style="width: 0%;"></div></div>
+          <span class="wheel-frag-pct" id="frag-pct-celestial">0%</span>
+        </div>
+      </div>
+
+      <!-- Botão Protagonista em Ouro (GIRAR ROLETA) -->
       <div class="wheel-actions-row">
-        <button type="button" class="promo-btn wheel-spin-btn" id="btn-spin-wheel" onclick="if(typeof FortuneWheel !== 'undefined' && FortuneWheel.spin) FortuneWheel.spin();">
+        <button type="button" class="promo-btn wheel-spin-btn cta-gold-btn" id="btn-spin-wheel" onclick="if(typeof FortuneWheel !== 'undefined' && FortuneWheel.spin) FortuneWheel.spin();">
           <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">cached</span>
           <span id="spin-btn-label">GIRAR ROLETA (GRÁTIS)</span>
         </button>
       </div>
-      <div class="wheel-info-subtext" id="wheel-status-text">1 Giro Grátis Disponível Hoje!</div>
+      
+      <!-- Cronômetro ao Vivo do Próximo Giro Grátis -->
+      <div class="wheel-info-subtext" id="wheel-status-text">✨ 1 Giro Grátis Diário Disponível!</div>
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- MODAL: COMPARTILHAR VITÓRIA (SHARE CERTIFICATE)                -->
-  <!-- ============================================================== -->
   <div id="share-victory-modal" class="modal-overlay hidden">
     <div class="modal-content share-modal-content">
       <button type="button" id="btn-close-share-modal" class="modal-corner-close-btn" onclick="if(window._closeShareModal) window._closeShareModal();">✕</button>

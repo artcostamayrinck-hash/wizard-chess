@@ -5473,6 +5473,27 @@ function updateCampaignUI() {
   const progress = getCampaignProgress();
   const isWorld1Completed = progress[4] === true;
 
+  // Atualiza Barra de Progresso Rúnica (4 Nós Rúnicos do Mundo 1)
+  let completedCount = 0;
+  for (let i = 1; i <= 4; i++) {
+    if (progress[i] === true) completedCount++;
+  }
+  const fillBar = document.getElementById("campaign-progress-bar-fill");
+  const countLabel = document.getElementById("campaign-progress-counter");
+  if (fillBar) fillBar.style.width = (completedCount * 25) + "%";
+  if (countLabel) countLabel.textContent = completedCount + " de 4 Conquistados";
+
+  for (let i = 1; i <= 4; i++) {
+    const node = document.getElementById("runic-node-" + i);
+    if (node) {
+      const isDone = progress[i] === true;
+      const isUnlocked = (i === 1 || progress[i - 1] === true);
+      node.classList.toggle("node-completed", isDone);
+      node.classList.toggle("node-active", isUnlocked && !isDone);
+      node.classList.toggle("node-locked", !isUnlocked);
+    }
+  }
+
   // Atualiza botão do Mundo 2 (bloqueado até completar o Mundo 1)
   const b2 = document.getElementById("btn-world-2");
   if (b2) {
@@ -5501,6 +5522,7 @@ function updateCampaignUI() {
   CAMPAIGN_BOSSES.forEach(boss => {
     const card = document.getElementById("boss-card-" + boss.id);
     const btn = document.getElementById("btn-boss-challenge-" + boss.id);
+    const statusPill = document.getElementById("boss-status-" + boss.id);
     if (!card || !btn) return;
 
     // Mundo 1: Boss 1 livre, 2-4 exigem anterior. Mundo 2: exige Mundo 1 completo e anterior.
@@ -5515,18 +5537,36 @@ function updateCampaignUI() {
     const isCompleted = progress[boss.id] === true;
 
     card.classList.toggle("boss-completed", isCompleted);
+    card.classList.toggle("boss-active", isUnlocked && !isCompleted);
     card.classList.toggle("boss-locked", !isUnlocked);
 
+    if (statusPill) {
+      statusPill.classList.toggle("status-completed", isCompleted);
+      statusPill.classList.toggle("status-active", isUnlocked && !isCompleted);
+      statusPill.classList.toggle("status-locked", !isUnlocked);
+      if (isCompleted) {
+        statusPill.textContent = "👑 Conquistado";
+      } else if (isUnlocked) {
+        statusPill.textContent = (boss.id === 4 ? "👑 Duelo Final" : "⚔️ Ativo");
+      } else {
+        statusPill.textContent = "🔒 Selado";
+      }
+    }
+
     if (isCompleted) {
-      btn.innerHTML = "👑 Vitória Conquistada (Repetir)";
-      btn.style.background = "linear-gradient(135deg, #00b4d8, #0077b6)";
+      btn.innerHTML = "👑 Revanche";
+      btn.style.background = "linear-gradient(135deg, #0ea5e9, #0284c7)";
+      btn.classList.remove("cta-gold-btn");
       btn.disabled = false;
     } else if (!isUnlocked) {
       btn.innerHTML = "🔒 Bloqueado";
+      btn.style.background = "";
+      btn.classList.remove("cta-gold-btn");
       btn.disabled = true;
     } else {
       btn.innerHTML = (boss.id === 4 || boss.id === 8) ? "👑 Duelo Final" : "⚔️ Desafiar Mago";
       btn.style.background = "";
+      btn.classList.add("cta-gold-btn");
       btn.disabled = false;
     }
   });
@@ -5840,18 +5880,20 @@ function setupDailyChest() {
 // V1.5.0: RODA DA FORTUNA ARCANA (ROLETA MÍSTICA)
 // ==============================================================
 const FortuneWheel = {
+  // 8 Fatias em Tons de Joia Escura com Texto Radial Legível
   slices: [
-    { label: "+150 🪙", coins: 150, skin: null, pct: 0, col: "#6a1b9a", textCol: "#ffffff" },
-    { label: "+20% Ametista", coins: 0, skin: "amethyst", pct: 20, col: "#4a148c", textCol: "#ffd54f" },
-    { label: "+300 🪙", coins: 300, skin: null, pct: 0, col: "#00695c", textCol: "#ffffff" },
-    { label: "+25% Rubi", coins: 0, skin: "ruby", pct: 25, col: "#b71c1c", textCol: "#ffffff" },
-    { label: "+500 🪙", coins: 500, skin: null, pct: 0, col: "#e65100", textCol: "#ffffff" },
-    { label: "+20% Esmeralda", coins: 0, skin: "emerald", pct: 20, col: "#1b5e20", textCol: "#ffffff" },
-    { label: "+20% Espectral", coins: 0, skin: "spectral", pct: 20, col: "#00838f", textCol: "#ffffff" },
-    { label: "👑 +30% Místico", coins: 0, skin: "any", pct: 30, col: "#ffd700", textCol: "#111111" }
+    { label: "+150 🪙", sub: "Moedas", coins: 150, skin: null, pct: 0, col: "#26133f", strokeCol: "#a855f7", textCol: "#f3e8ff" },
+    { label: "+20% 🔮", sub: "Ametista", coins: 0, skin: "amethyst", pct: 20, col: "#181836", strokeCol: "#818cf8", textCol: "#ffd54f" },
+    { label: "+300 🪙", sub: "Moedas", coins: 300, skin: null, pct: 0, col: "#0e2a1d", strokeCol: "#34d399", textCol: "#a7f3d0" },
+    { label: "+25% 💎", sub: "Rubi", coins: 0, skin: "ruby", pct: 25, col: "#3b0f16", strokeCol: "#f87171", textCol: "#fecaca" },
+    { label: "+500 🪙", sub: "Moedas", coins: 500, skin: null, pct: 0, col: "#38230a", strokeCol: "#fbbf24", textCol: "#fef3c7" },
+    { label: "+20% 🌿", sub: "Esmeralda", coins: 0, skin: "emerald", pct: 20, col: "#0f2e22", strokeCol: "#4ade80", textCol: "#bbf7d0" },
+    { label: "+20% 👻", sub: "Espectral", coins: 0, skin: "spectral", pct: 20, col: "#0f2633", strokeCol: "#38bdf8", textCol: "#bae6fd" },
+    { label: "👑 +30%", sub: "Místico", coins: 0, skin: "any", pct: 30, col: "#3a2d0b", strokeCol: "#facc15", textCol: "#fef08a" }
   ],
   currentAngle: 0,
   isSpinning: false,
+  lastTickSlice: -1,
 
   canFreeSpin() {
     try {
@@ -5884,17 +5926,39 @@ const FortuneWheel = {
     const btn = document.getElementById("btn-spin-wheel");
     const label = document.getElementById("spin-btn-label");
     const subtext = document.getElementById("wheel-status-text");
+    const coinBal = document.getElementById("fortune-coin-balance");
     const cost = this.getSpinCost();
     const freeInfo = this.getRemainingFreeSpinTime();
     const pad = n => String(n).padStart(2, "0");
+
+    if (coinBal && typeof getPlayerCoins === "function") {
+      coinBal.textContent = getPlayerCoins();
+    }
+
+    // Atualiza progresso dos 5 fragmentos de peças
+    const skinsToTrack = [
+      { key: "amethyst", id: "amethyst" },
+      { key: "ruby", id: "ruby" },
+      { key: "emerald", id: "emerald" },
+      { key: "spectral", id: "spectral" },
+      { key: "celestial", id: "celestial" }
+    ];
+
+    skinsToTrack.forEach(item => {
+      const pctEl = document.getElementById("frag-pct-" + item.id);
+      const fillEl = document.getElementById("frag-fill-" + item.id);
+      const val = typeof getSkinProgress === "function" ? getSkinProgress(item.key) : 0;
+      if (pctEl) pctEl.textContent = val + "%";
+      if (fillEl) fillEl.style.width = Math.min(100, val) + "%";
+    });
 
     if (cost === 0 || freeInfo.isReady) {
       if (label) label.textContent = "GIRAR ROLETA (GRÁTIS)";
       if (subtext) subtext.textContent = "✨ 1 Giro Grátis Diário Disponível!";
     } else {
-      const timerStr = `${pad(freeInfo.hours)}:${pad(freeInfo.mins)}:${pad(freeInfo.secs)}`;
+      const timerStr = pad(freeInfo.hours) + ":" + pad(freeInfo.mins) + ":" + pad(freeInfo.secs);
       if (label) label.textContent = "GIRAR ROLETA (50 🪙)";
-      if (subtext) subtext.textContent = `Giro extra: 50 🪙 (Grátis em ${timerStr})`;
+      if (subtext) subtext.textContent = "Giro extra: 50 🪙 (Grátis em " + timerStr + ")";
     }
   },
 
@@ -5902,60 +5966,139 @@ const FortuneWheel = {
     const canvas = document.getElementById("fortune-wheel-canvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const r = (w / 2) - 18;
     const num = this.slices.length;
     const arc = (2 * Math.PI) / num;
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const r = cx - 10;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, w, h);
 
+    // Salvar estado para rotação da roleta
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(this.currentAngle);
+
+    // 1. Desenhar Fatias
     for (let i = 0; i < num; i++) {
-      const angle = this.currentAngle + i * arc;
+      const angle = i * arc;
+      const s = this.slices[i];
+
+      // Fatia
       ctx.beginPath();
-      ctx.fillStyle = this.slices[i].col;
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, angle, angle + arc);
-      ctx.lineTo(cx, cy);
+      ctx.fillStyle = s.col;
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, r, angle, angle + arc);
+      ctx.lineTo(0, 0);
       ctx.fill();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+
+      // Divisória da fatia em bronze/ouro metálico
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(r * Math.cos(angle), r * Math.sin(angle));
+      ctx.strokeStyle = "rgba(229, 190, 110, 0.55)";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Borda de joia no arco
+      ctx.beginPath();
+      ctx.arc(0, 0, r - 3, angle, angle + arc);
+      ctx.strokeStyle = s.strokeCol;
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Label
+      // Texto Radial Legível
       ctx.save();
-      ctx.translate(cx, cy);
       ctx.rotate(angle + arc / 2);
       ctx.textAlign = "right";
-      ctx.fillStyle = this.slices[i].textCol;
-      ctx.font = "bold 11px 'Cinzel', sans-serif";
-      ctx.fillText(this.slices[i].label, r - 15, 4);
+      ctx.textBaseline = "middle";
+
+      // Sombra para contraste extremo
+      ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 1;
+
+      // Label principal
+      ctx.fillStyle = s.textCol;
+      ctx.font = "bold 22px 'Cinzel', serif, sans-serif";
+      ctx.fillText(s.label, r - 26, -5);
+
+      // Sub-label (Moedas / Nome)
+      ctx.fillStyle = "rgba(246, 239, 226, 0.82)";
+      ctx.font = "600 15px 'Cinzel', serif, sans-serif";
+      ctx.fillText(s.sub, r - 28, 16);
+
       ctx.restore();
     }
 
-    // Glowing border ring
+    // 2. Anel de Rebites no perímetro das fatias
+    for (let i = 0; i < num * 2; i++) {
+      const dotAngle = i * (arc / 2);
+      const dotX = (r - 7) * Math.cos(dotAngle);
+      const dotY = (r - 7) * Math.sin(dotAngle);
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 2.5, 0, 2 * Math.PI);
+      ctx.fillStyle = "#ffd700";
+      ctx.fill();
+    }
+
+    ctx.restore();
+
+    // 3. Aro Externo Astrolábio (Estático sobreposto com marcações rúnicas e graduações)
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // Graduações celestes ao redor do aro
+    for (let g = 0; g < 48; g++) {
+      const gAngle = (g * 2 * Math.PI) / 48;
+      const isMajor = (g % 6 === 0);
+      const innerR = r + (isMajor ? 4 : 8);
+      const outerR = r + 14;
+
+      ctx.beginPath();
+      ctx.moveTo(innerR * Math.cos(gAngle), innerR * Math.sin(gAngle));
+      ctx.lineTo(outerR * Math.cos(gAngle), outerR * Math.sin(gAngle));
+      ctx.strokeStyle = isMajor ? "rgba(255, 215, 0, 0.85)" : "rgba(229, 190, 110, 0.4)";
+      ctx.lineWidth = isMajor ? 2 : 1;
+      ctx.stroke();
+    }
+
+    // Moldura Dourada Principal
     ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.strokeStyle = "rgba(255, 215, 0, 0.75)";
-    ctx.lineWidth = 2.5;
+    ctx.arc(0, 0, r + 14, 0, 2 * Math.PI);
+    ctx.strokeStyle = "#e5be6e";
+    ctx.lineWidth = 3;
     ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = "rgba(255, 215, 0, 0.65)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
   },
 
   spin() {
     if (this.isSpinning) return;
     const cost = this.getSpinCost();
-    const coins = getPlayerCoins();
+    const coins = typeof getPlayerCoins === "function" ? getPlayerCoins() : 100;
 
     if (cost > 0) {
       if (coins < cost) {
-        showToast(`🪙 Moedas insuficientes! Giro extra custa ${cost} 🪙 (Você tem ${coins} 🪙).`);
+        if (typeof showToast === "function") {
+          showToast("🪙 Moedas insuficientes! Giro extra custa " + cost + " 🪙 (Você tem " + coins + " 🪙).");
+        }
         return;
       }
-      spendPlayerCoins(cost);
+      if (typeof spendPlayerCoins === "function") spendPlayerCoins(cost);
     } else {
       try { localStorage.setItem("wizard_fortune_last_spin", Date.now()); } catch(e) {}
     }
-    unlockAchievement("wheel_fortune");
+    if (typeof unlockAchievement === "function") unlockAchievement("wheel_fortune");
 
     this.isSpinning = true;
     this.updateUI();
@@ -5966,28 +6109,48 @@ const FortuneWheel = {
     const resultBanner = document.getElementById("wheel-result-banner");
     if (resultBanner) resultBanner.classList.add("hidden");
 
-    // Sorteia um índice aleatório
+    // Sorteio ponderado justo
     const targetIndex = Math.floor(Math.random() * this.slices.length);
     const num = this.slices.length;
     const arc = (2 * Math.PI) / num;
 
-    // Queremos que a fatia pare no ponteiro do topo (ângulo 3 * Math.PI / 2)
-    const extraRotations = 5 + Math.floor(Math.random() * 3);
-    const targetAngle = (extraRotations * 2 * Math.PI) + (3 * Math.PI / 2) - (targetIndex * arc) - (arc / 2);
+    // Desaceleração Quártica (5 a 7 voltas completas)
+    const extraRotations = 5 + Math.floor(Math.random() * 2);
+    // Margem segura: o ponteiro fica no topo (3 * PI / 2), calcular ângulo exato no meio da fatia (+/- 15% de margem)
+    const safeOffset = (Math.random() * 0.4 - 0.2) * arc; 
+    const targetAngle = (extraRotations * 2 * Math.PI) + (3 * Math.PI / 2) - (targetIndex * arc) - (arc / 2) + safeOffset;
 
     const startAngle = this.currentAngle;
     const change = targetAngle - startAngle;
-    const duration = 4000;
+    const duration = 5200; // 5.2s de animação cinematográfica
     const startTime = performance.now();
+    this.lastTickSlice = -1;
+
+    const pointerEl = document.getElementById("wheel-pointer-wrap");
 
     const animateSpin = (now) => {
       const elapsed = now - startTime;
       const t = Math.min(1, elapsed / duration);
-      // Easing cúbico desacelerado suave
+      
+      // Física suave com desaceleração quártica: easeOutQuart = 1 - (1 - t)^4
       const ease = 1 - Math.pow(1 - t, 4);
 
       this.currentAngle = startAngle + change * ease;
       this.draw();
+
+      // Tick mecânico e deflexão do ponteiro ao cruzar fatias
+      const normalizedAngle = (this.currentAngle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      const currentSlice = Math.floor(normalizedAngle / arc);
+
+      if (currentSlice !== this.lastTickSlice) {
+        this.lastTickSlice = currentSlice;
+        if (pointerEl) {
+          pointerEl.classList.remove("deflect-tick");
+          void pointerEl.offsetWidth; // Força reflow para reiniciar animação
+          pointerEl.classList.add("deflect-tick");
+          setTimeout(() => { if (pointerEl) pointerEl.classList.remove("deflect-tick"); }, 75);
+        }
+      }
 
       if (t < 1) {
         requestAnimationFrame(animateSpin);
@@ -6008,23 +6171,23 @@ const FortuneWheel = {
     const title = document.getElementById("wheel-result-title");
 
     if (prize.coins > 0) {
-      addPlayerCoins(prize.coins, "Roda da Fortuna Arcana");
-      if (desc) desc.textContent = `Você ganhou +${prize.coins} Moedas Arcanas! 🪙`;
+      if (typeof addPlayerCoins === "function") addPlayerCoins(prize.coins, "Roda da Fortuna Arcana");
+      if (desc) desc.textContent = "Você ganhou +" + prize.coins + " Moedas Arcanas! 🪙";
       if (title) title.textContent = "🎉 Tesouro Conquistado!";
-      showToast(`🎡 Parabéns! +${prize.coins} Moedas Arcanas!`);
+      if (typeof showToast === "function") showToast("🎡 Parabéns! +" + prize.coins + " Moedas Arcanas!");
     } else if (prize.pct > 0) {
-      const res = addSkinProgress(prize.skin, prize.pct);
+      const res = typeof addSkinProgress === "function" ? addSkinProgress(prize.skin, prize.pct) : { skin: prize.skin, progress: 20 };
       if (res.fullBonus) {
-        if (desc) desc.textContent = `👑 Todas as peças já desbloqueadas! Você ganhou +800 Moedas de bônus!`;
+        if (desc) desc.textContent = "👑 Coleção completa! Você recebeu +800 Moedas de bônus!";
         if (title) title.textContent = "👑 Coleção Completa!";
       } else if (res.unlockedNow) {
-        const name = SKIN_NAMES[res.skin] || res.skin;
-        if (desc) desc.textContent = `🎉 100% ATINGIDO! Você desbloqueou o estilo ${name}!`;
+        const name = (typeof SKIN_NAMES !== "undefined" && SKIN_NAMES[res.skin]) ? SKIN_NAMES[res.skin] : res.skin;
+        if (desc) desc.textContent = "🎉 100% ALCANÇADO! Você desbloqueou o estilo " + name + "!";
         if (title) title.textContent = "✨ Peça Desbloqueada!";
       } else {
-        const name = SKIN_NAMES[res.skin] || res.skin;
+        const name = (typeof SKIN_NAMES !== "undefined" && SKIN_NAMES[res.skin]) ? SKIN_NAMES[res.skin] : res.skin;
         const frags = Math.floor(res.progress / 10);
-        if (desc) desc.textContent = `🧩 +${prize.pct}% para ${name}! Total: ${frags}/10 fragmentos (${res.progress}%)`;
+        if (desc) desc.textContent = "🧩 +" + prize.pct + "% para " + name + "! Total: " + frags + "/10 fragmentos (" + res.progress + "%)";
         if (title) title.textContent = "🧩 Fragmento Arcano!";
       }
     }
@@ -6035,40 +6198,15 @@ const FortuneWheel = {
 
     if (banner) banner.classList.remove("hidden");
     this.updateUI();
-    updateSkinsShopUI();
+    if (typeof updateSkinsShopUI === "function") updateSkinsShopUI();
   }
 };
 
-window._renderFortuneWheel = function() {
-  FortuneWheel.draw();
+window._toggleWheelOdds = function() {
+  const popover = document.getElementById("wheel-odds-popover");
+  if (popover) popover.classList.toggle("hidden");
 };
 
-window._openFortuneWheel = function() {
-  const m = document.getElementById("fortune-wheel-modal");
-  if (m) {
-    m.classList.remove("hidden");
-    m.style.setProperty("display", "flex", "important");
-    FortuneWheel.updateUI();
-    FortuneWheel.draw();
-    setTimeout(() => FortuneWheel.draw(), 50);
-  }
-};
-
-window._closeFortuneWheel = function() {
-  const m = document.getElementById("fortune-wheel-modal");
-  if (m) {
-    m.classList.add("hidden");
-    m.style.setProperty("display", "none", "important");
-  }
-};
-
-window._closeShareModal = function() {
-  const m = document.getElementById("share-victory-modal");
-  if (m) {
-    m.classList.add("hidden");
-    m.style.setProperty("display", "none", "important");
-  }
-};
 
 function setupFortuneWheel() {
   const btnSpin = document.getElementById("btn-spin-wheel");
