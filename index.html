@@ -4370,7 +4370,534 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
   transform: translateY(-2px);
 }
 
-</style>
+
+/* ==================== DESAFIOS & ENIGMAS ARCANOS STYLES ==================== */
+
+    /* =====================================================================
+       DESIGN SYSTEM — CATEDRAL ARCANA (Obsidiana, Ouro Antigo & Ametista)
+       ===================================================================== */
+    :root {
+      --bg-obsidian: #09080F;
+      --gold-light: #F2D28B;
+      --gold-deep: #C99A45;
+      --amethyst: #8B5CF6;
+      --ember: #E06C2D;
+    }
+
+    
+
+    
+
+    /* Vinheta atmosférica de Catedral ao redor do viewport no desktop */
+    
+
+    /* Viewport mobile-first (full-bleed no mobile, moldura obsidiana no desktop) */
+    .cathedral-shell {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      min-height: 100dvh;
+      background: linear-gradient(180deg, #09080F 0%, #110D1D 48%, #09080F 100%);
+      overflow: hidden;
+    }
+
+    @media (min-width: 480px) {
+      .cathedral-shell {
+        min-height: 0;
+        height: min(880px, 95dvh);
+        border-radius: 34px;
+        border: 1px solid rgba(242, 210, 139, 0.22);
+        box-shadow:
+          0 40px 110px rgba(0, 0, 0, 0.92),
+          0 0 80px rgba(139, 92, 246, 0.12),
+          inset 0 1px 0 rgba(251, 240, 207, 0.16);
+      }
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Tipografia metálica em ouro antigo escovado */
+    .title-gold {
+      background: linear-gradient(180deg, #FFF7DF 0%, #F2D28B 50%, #C99A45 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 14px rgba(201, 154, 69, 0.22));
+    }
+
+    /* Superfícies de vidro obsidiana translúcido */
+    .obsidian-glass {
+      background: linear-gradient(180deg, rgba(26, 20, 44, 0.84) 0%, rgba(15, 11, 27, 0.90) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(242, 210, 139, 0.16);
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(251, 240, 207, 0.07);
+    }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(139, 92, 246, 0.20) 0%, transparent 48%),
+        radial-gradient(circle at 92% 88%, rgba(201, 154, 69, 0.18) 0%, transparent 50%),
+        linear-gradient(175deg, rgba(27, 20, 47, 0.92) 0%, rgba(15, 11, 27, 0.96) 100%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(242, 210, 139, 0.30);
+      box-shadow:
+        0 18px 44px rgba(0, 0, 0, 0.62),
+        0 0 36px rgba(139, 92, 246, 0.12),
+        inset 0 1px 0 rgba(251, 240, 207, 0.16);
+    }
+
+    .rush-card {
+      background:
+        radial-gradient(circle at 94% 12%, rgba(224, 108, 45, 0.16) 0%, transparent 46%),
+        linear-gradient(175deg, rgba(25, 18, 36, 0.88) 0%, rgba(14, 10, 24, 0.94) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(224, 108, 45, 0.28);
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.48),
+        inset 3px 0 0 rgba(224, 108, 45, 0.58),
+        inset 0 1px 0 rgba(244, 163, 108, 0.12);
+    }
+
+    .tournament-card {
+      background:
+        radial-gradient(circle at 88% 15%, rgba(139, 92, 246, 0.18) 0%, transparent 48%),
+        linear-gradient(175deg, rgba(24, 18, 42, 0.88) 0%, rgba(14, 11, 25, 0.94) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(167, 139, 250, 0.24);
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(196, 181, 253, 0.10);
+    }
+
+    .grimoire-card {
+      background: linear-gradient(180deg, rgba(21, 16, 37, 0.84) 0%, rgba(13, 10, 24, 0.92) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(139, 92, 246, 0.26);
+      box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.52),
+        inset 0 1px 0 rgba(196, 181, 253, 0.08);
+    }
+
+    /* Botão primário em ouro antigo escovado com shimmer suave */
+    .cta-gold {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #F6DD9F 0%, #E5BE6E 46%, #C4923B 100%);
+      border: 1px solid rgba(255, 246, 214, 0.78);
+      box-shadow:
+        0 10px 26px rgba(201, 154, 69, 0.30),
+        0 2px 6px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 252, 240, 0.72);
+      transition: transform 0.16s ease, box-shadow 0.24s ease, filter 0.24s ease;
+    }
+
+    .cta-gold::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -130%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(105deg, transparent 0%, rgba(255, 252, 236, 0.52) 50%, transparent 100%);
+      transform: skewX(-18deg);
+      transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .cta-gold:hover::after {
+      left: 165%;
+    }
+
+    .cta-gold:hover {
+      filter: brightness(1.04);
+      box-shadow:
+        0 14px 30px rgba(242, 210, 139, 0.38),
+        0 2px 8px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 252, 240, 0.85);
+    }
+
+    /* Botão secundário brasa-ouro refinado (Puzzle Rush) */
+    .cta-ember {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #EB8243 0%, #D96528 52%, #A94514 100%);
+      border: 1px solid rgba(251, 206, 166, 0.55);
+      box-shadow:
+        0 8px 20px rgba(224, 108, 45, 0.28),
+        inset 0 1px 0 rgba(255, 234, 214, 0.45);
+      transition: transform 0.15s ease, filter 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .cta-ember:hover {
+      filter: brightness(1.06);
+      box-shadow: 0 10px 24px rgba(224, 108, 45, 0.40);
+    }
+
+    /* Pulso dourado para Baú Pronto para Abrir */
+    @keyframes chestReadyPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(242, 210, 139, 0.26), 0 8px 24px rgba(0, 0, 0, 0.45);
+        border-color: rgba(242, 210, 139, 0.55);
+      }
+      50% {
+        box-shadow: 0 0 24px 2px rgba(242, 210, 139, 0.36), 0 8px 26px rgba(0, 0, 0, 0.45);
+        border-color: rgba(251, 240, 207, 0.85);
+      }
+    }
+
+    .chest-ready {
+      background:
+        radial-gradient(circle at 18% 50%, rgba(242, 210, 139, 0.18) 0%, transparent 56%),
+        linear-gradient(180deg, rgba(34, 25, 48, 0.92) 0%, rgba(19, 14, 30, 0.95) 100%) !important;
+      animation: chestReadyPulse 2.2s ease-in-out infinite;
+    }
+
+    /* Rolagem limpa sem barra aparente */
+    .arcane-scroll {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .arcane-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tap-scale {
+      transition: transform 0.14s ease, border-color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+    }
+    .tap-scale:active {
+      transform: scale(0.96);
+    }
+
+    /* Toast flutuante */
+    .toast-banner {
+      transform: translate(-50%, -16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease;
+    }
+    .toast-banner.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    /* Modais */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.26s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      transform: translateY(18px) scale(0.95);
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease;
+    }
+    .modal-backdrop.open .modal-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Mini tabuleiro tático 5x5 para Enigmas */
+    .mini-board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid rgba(242, 210, 139, 0.45);
+      box-shadow:
+        0 14px 32px rgba(0, 0, 0, 0.65),
+        inset 0 0 12px rgba(0, 0, 0, 0.45);
+    }
+
+    .mini-sq {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+      transition: background-color 0.16s ease;
+    }
+
+    .mini-sq-light {
+      background: linear-gradient(145deg, #EAE0CE 0%, #D7CBB4 100%);
+    }
+
+    .mini-sq-dark {
+      background: linear-gradient(145deg, #2A2241 0%, #1C162E 100%);
+    }
+
+    .mini-sq-selected::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(242, 210, 139, 0.50) 0%, rgba(201, 154, 69, 0.24) 100%);
+      box-shadow: inset 0 0 0 2px rgba(251, 240, 207, 0.90);
+      pointer-events: none;
+    }
+
+    .mini-sq-last::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(242, 210, 139, 0.28);
+      pointer-events: none;
+    }
+
+    .mini-sq-hint::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      border: 2px solid #A78BFA;
+      background: rgba(139, 92, 246, 0.24);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.7);
+      pointer-events: none;
+    }
+
+    .mini-sq-check::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.65) 0%, rgba(185, 28, 28, 0.28) 72%, transparent 100%);
+      box-shadow: inset 0 0 0 2px rgba(248, 113, 113, 0.90);
+      pointer-events: none;
+    }
+
+    .mini-dot {
+      width: 28%;
+      height: 28%;
+      border-radius: 999px;
+      background: radial-gradient(circle, #FFF7DF 0%, #F2D28B 65%, #C99A45 100%);
+      box-shadow: 0 0 10px rgba(242, 210, 139, 0.85);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .mini-capture {
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      border: 2.5px solid rgba(224, 108, 45, 0.92);
+      box-shadow: 0 0 10px rgba(224, 108, 45, 0.65);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* Partículas celebratórias (baú & enigma resolvido) */
+    .fx-spark {
+      position: fixed;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 100;
+      animation: burstSpark 0.78s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes burstSpark {
+      0% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      55% { transform: translateX(5px); }
+      80% { transform: translateX(-3px); }
+    }
+
+    .shake-board {
+      animation: wrongShake 0.34s ease;
+    }
+  
+  
+    /* =====================================================================
+       MODAL DE PAUSA — MENU DA BATALHA (ESTASE ARCANA & FILIGRANA)
+       ===================================================================== */
+    #canvas-container,
+    .hud-top,
+    .dock-hud,
+    #dock-hud,
+    #player-card,
+    #opponent-card,
+    #eval-bar-container {
+      transition: filter 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.36s ease !important;
+      will-change: filter, transform;
+    }
+
+    body.is-paused #canvas-container,
+    body.is-paused .hud-top,
+    body.is-paused .dock-hud,
+    body.is-paused #dock-hud,
+    body.is-paused #player-card,
+    body.is-paused #opponent-card,
+    body.is-paused #eval-bar-container {
+      filter: blur(7px) brightness(0.58) saturate(0.86) !important;
+      transform: scale(0.985) !important;
+      pointer-events: none !important;
+    }
+
+    .pause-backdrop {
+      background:
+        radial-gradient(circle at 50% 34%, rgba(155, 123, 255, 0.14) 0%, rgba(9, 8, 16, 0.72) 48%, rgba(6, 5, 12, 0.90) 100%) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.32s ease !important;
+    }
+
+    .pause-backdrop.open {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      display: flex !important;
+    }
+
+    .pause-card {
+      background: linear-gradient(175deg, rgba(24, 19, 41, 0.94) 0%, rgba(15, 12, 26, 0.97) 55%, rgba(10, 8, 18, 0.99) 100%) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(229, 190, 110, 0.28) !important;
+      box-shadow:
+        0 30px 76px rgba(0, 0, 0, 0.88),
+        0 0 56px rgba(155, 123, 255, 0.14),
+        inset 0 1px 0 rgba(255, 244, 214, 0.16),
+        inset 0 -1px 0 rgba(155, 123, 255, 0.10) !important;
+      transform: translateY(14px) scale(0.94);
+      opacity: 0;
+      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease !important;
+    }
+
+    .pause-backdrop.open .pause-card {
+      transform: translateY(0) scale(1) !important;
+      opacity: 1 !important;
+    }
+
+    /* Brilho metálico suave no título do modal */
+    .pause-title-gold {
+      background: linear-gradient(180deg, #FFF7DF 0%, #E8C374 52%, #B8893A 100%) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      filter: drop-shadow(0 2px 12px rgba(229, 190, 110, 0.26)) !important;
+    }
+
+    /* Faixa de resumo congelado (efeito estase / geada arcana) */
+    .stasis-strip {
+      position: relative !important;
+      background: linear-gradient(180deg, rgba(13, 10, 24, 0.88) 0%, rgba(19, 15, 34, 0.82) 100%) !important;
+      border: 1px solid rgba(197, 179, 255, 0.20) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(197, 179, 255, 0.14),
+        inset 0 -8px 20px rgba(7, 5, 14, 0.55) !important;
+      overflow: hidden !important;
+    }
+
+    .stasis-strip::before {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      background: linear-gradient(118deg, rgba(197, 179, 255, 0.10) 0%, transparent 42%, rgba(229, 190, 110, 0.06) 72%, rgba(197, 179, 255, 0.08) 100%) !important;
+      pointer-events: none !important;
+    }
+
+    /* Botão primário em ouro escovado com reflexo animado */
+    .cta-gold-btn {
+      position: relative !important;
+      overflow: hidden !important;
+      background: linear-gradient(180deg, #F3D792 0%, #E5BE6E 44%, #C4933F 100%) !important;
+      border: 1px solid rgba(255, 243, 206, 0.78) !important;
+      box-shadow:
+        0 10px 26px rgba(196, 147, 63, 0.34),
+        0 2px 6px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 252, 238, 0.65) !important;
+      transition: transform 0.16s ease, box-shadow 0.24s ease, filter 0.24s ease !important;
+      cursor: pointer !important;
+    }
+
+    .cta-gold-btn::after {
+      content: '' !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: -130% !important;
+      width: 65% !important;
+      height: 100% !important;
+      background: linear-gradient(105deg, transparent 0%, rgba(255, 252, 236, 0.48) 50%, transparent 100%) !important;
+      transform: skewX(-18deg) !important;
+      transition: left 0.68s cubic-bezier(0.22, 1, 0.36, 1) !important;
+      pointer-events: none !important;
+    }
+
+    .cta-gold-btn:hover::after {
+      left: 165% !important;
+    }
+
+    .cta-gold-btn:hover {
+      filter: brightness(1.04) !important;
+      box-shadow:
+        0 14px 32px rgba(229, 190, 110, 0.42),
+        0 2px 8px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 252, 238, 0.80) !important;
+    }
+
+    /* Chips de configuração rápida */
+    .quick-chip {
+      transition: border-color 0.22s ease, background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease, transform 0.14s ease !important;
+      cursor: pointer !important;
+    }
+
+    .quick-chip-on {
+      background: linear-gradient(180deg, rgba(35, 28, 59, 0.90) 0%, rgba(22, 17, 39, 0.92) 100%) !important;
+      border-color: rgba(229, 190, 110, 0.34) !important;
+      color: #F6EFE2 !important;
+      box-shadow: inset 0 1px 0 rgba(255, 244, 214, 0.10), 0 4px 12px rgba(0, 0, 0, 0.28) !important;
+    }
+
+    .quick-chip-off {
+      background: rgba(14, 11, 25, 0.72) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      color: #82799D !important;
+    }
+
+    /* Animação suave de entrada das barras de confirmação inline */
+    @keyframes morphReveal {
+      from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .morph-in {
+      animation: morphReveal 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+    }
+
+    body.in-lobby #pause-modal {
+      display: none !important;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -5193,380 +5720,439 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       <!-- ============================================================== -->
       <!-- VIEW: ABA DOS DESAFIOS (Marcado em Rosa)                      -->
       <!-- ============================================================== -->
-      <div id="menu-view-challenges" class="menu-subview">
-        <div class="menu-view-header">
-          <button type="button" class="btn-subview-back" id="btn-challenges-back">
-            <span class="material-symbols-rounded">arrow_back</span>
-            <span>Voltar</span>
-          </button>
-          <div class="brand-pill" style="border-color: rgba(233, 30, 99, 0.4); color: #f48fb1;">
-            <span class="material-symbols-rounded">extension</span>
-            <span>ABA DOS DESAFIOS</span>
-          </div>
-        </div>
+            <!-- ============================================================== -->
+      <!-- VIEW: DESAFIOS & ENIGMAS ARCANOS (DESIGN SYSTEM CATEDRAL)       -->
+      <!-- ============================================================== -->
+      <div id="menu-view-challenges" class="menu-subview relative overflow-hidden flex flex-col h-full w-full select-none" style="padding: 0 !important; max-width: 430px; margin: 0 auto;">
+        <canvas id="challenges-arcane-dust" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
-        <h2 class="subview-title" style="color: #f06292;">Desafios & Enigmas Arcanos</h2>
-        <p class="subview-desc">Encontre o lance vencedor e decifre as posições mágicas no tabuleiro.</p>
+        <!-- ==================== BARRA SUPERIOR FIXA ==================== -->
+    <header class="relative z-20 px-4 pt-3.5 pb-2 flex items-center justify-between gap-2 shrink-0">
+      <!-- Botão Voltar -->
+      <button type="button" onclick="handleBackClick()"
+              class="tap-scale obsidian-glass rounded-full pl-2.5 pr-3.5 py-1.5 flex items-center gap-1.5 border-gold-light/25 hover:border-gold-light/55 text-[#F5EFE3]">
+        <svg class="w-3.5 h-3.5 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5" />
+          <path d="M11 6L5 12L11 18" />
+        </svg>
+        <span class="text-xs font-semibold tracking-wide">Voltar</span>
+      </button>
 
-        <!-- PAINEL DE MISSÕES DIÁRIAS (DAILY QUESTS) -->
-        <div class="quests-panel-container" id="daily-quests-container">
-          <div class="quests-header">
-            <div class="quests-title">
-              <span class="material-symbols-rounded" style="color: #ffd700;">task_alt</span>
-              <span>MISSÕES DIÁRIAS DO GRIMÓRIO</span>
-            </div>
-            <span class="quests-timer" id="quests-reset-timer">Renova em 24h</span>
-          </div>
-
-          <!-- Baú Arcano Diário (Daily Arcane Chest) -->
-          <div class="daily-chest-box" id="daily-chest-card">
-            <div class="chest-icon-wrapper">
-              <span class="chest-emoji" id="chest-emoji-icon">🎁</span>
-            </div>
-            <div class="chest-info">
-              <div class="chest-header-row">
-                <span class="chest-title">Baú Arcano Diário</span>
-                <span class="chest-badge-reward">+200 🪙 • +100 XP</span>
-              </div>
-              <span class="chest-desc" id="chest-desc-text">Disponível para abertura a cada 24 horas</span>
-            </div>
-            <button type="button" class="btn-claim-chest" id="btn-claim-daily-chest">Abrir Baú</button>
-          </div>
-
-          <div id="quests-list">
-            <!-- Quest 1: Caçador de Peças -->
-            <div class="quest-item" id="quest-item-captures">
-              <div class="quest-top">
-                <span class="quest-info-title">⚔️ Caçador de Peças</span>
-                <span class="quest-reward-tag">+120 🪙 • +80 XP</span>
-              </div>
-              <div class="quest-progress-bar-container">
-                <div class="quest-progress-fill" id="quest-progress-captures" style="width: 0%;"></div>
-              </div>
-              <div class="quest-bottom">
-                <span id="quest-label-captures">Capture 8 peças em batalha (0/8)</span>
-                <button type="button" class="btn-collect-quest" id="btn-collect-quest-captures" disabled>Coletar</button>
-              </div>
-            </div>
-
-            <!-- Quest 2: Vitória Estratégica -->
-            <div class="quest-item" id="quest-item-win">
-              <div class="quest-top">
-                <span class="quest-info-title">🏆 Vitória Estratégica</span>
-                <span class="quest-reward-tag">+100 🪙 • +70 XP</span>
-              </div>
-              <div class="quest-progress-bar-container">
-                <div class="quest-progress-fill" id="quest-progress-win" style="width: 0%;"></div>
-              </div>
-              <div class="quest-bottom">
-                <span id="quest-label-win">Vença 1 partida no modo IA ou Torre (0/1)</span>
-                <button type="button" class="btn-collect-quest" id="btn-collect-quest-win" disabled>Coletar</button>
-              </div>
-            </div>
-
-            <!-- Quest 3: Decifrador de Enigmas -->
-            <div class="quest-item" id="quest-item-puzzle">
-              <div class="quest-top">
-                <span class="quest-info-title">🧩 Decifrador de Enigmas</span>
-                <span class="quest-reward-tag">+80 🪙 • +60 XP</span>
-              </div>
-              <div class="quest-progress-bar-container">
-                <div class="quest-progress-fill" id="quest-progress-puzzle" style="width: 0%;"></div>
-              </div>
-              <div class="quest-bottom">
-                <span id="quest-label-puzzle">Resolva 1 Enigma Tático (0/1)</span>
-                <button type="button" class="btn-collect-quest" id="btn-collect-quest-puzzle" disabled>Coletar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-<!-- CARD DO DESAFIO DIÁRIO (MODO DE DESAFIOS DIÁRIOS) -->
-        <div class="daily-challenge-card" id="daily-challenge-card">
-          <div class="daily-card-badge">
-            <span><span class="material-symbols-rounded">calendar_today</span> <span id="daily-challenge-date">DESAFIO DIÁRIO DE HOJE</span></span>
-            <span class="daily-xp-pill">⭐ +100 XP</span>
-          </div>
-          <div class="daily-card-body">
-            <div class="daily-card-icon">⚡</div>
-            <div class="daily-card-text">
-              <h3 class="daily-challenge-title" id="daily-challenge-title">Enigma das Runas do Solstício</h3>
-              <p class="daily-challenge-desc" id="daily-challenge-desc">Encontre o mate tático em 2 lances com o Cavalo Arcano e domine as energias cósmicas do tabuleiro!</p>
-              <div class="daily-challenge-status" id="daily-challenge-status">
-                <span class="status-dot"></span>
-                <span id="daily-status-text">Disponível para jogar hoje</span>
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn-play-daily" id="btn-play-daily-challenge">
-            <span>Jogar Desafio Diário</span>
-            <span class="material-symbols-rounded">swords</span>
-          </button>
-        </div>
-
-        <!-- CARD CORRIDA DOS ENIGMAS (PUZZLE RUSH) -->
-        <div class="puzzle-rush-entry-card" id="btn-open-puzzle-rush" onclick="if(window._openPuzzleRush) window._openPuzzleRush();" style="cursor: pointer; margin-bottom: 14px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(255, 61, 0, 0.25) 0%, rgba(35, 10, 10, 0.95) 100%); border: 1.5px solid rgba(255, 109, 0, 0.7); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(255, 61, 0, 0.25);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 2.2rem; line-height: 1;">⏱️</span>
-            <div style="text-align: left;">
-              <div style="font-size: 0.92rem; font-weight: 800; color: #ffab00;">CORRIDA DOS ENIGMAS (PUZZLE RUSH)</div>
-              <div style="font-size: 0.75rem; color: #ffccbc;">3 Minutos • 3 Vidas • Resolva quebra-cabeças em sequência!</div>
-              <div style="font-size: 0.72rem; color: #ffd700; margin-top: 3px;">Recorde Atual: <span id="puzzle-rush-high-score-display">0</span> acertos</div>
-            </div>
-          </div>
-          <button type="button" class="promo-btn" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 900; background: linear-gradient(135deg, #ff3d00, #ff9100); color: #fff; border: none; border-radius: 12px; pointer-events: none; box-shadow: 0 2px 10px rgba(255,61,0,0.5);">
-            INICIAR
-          </button>
-        </div>
-
-        <!-- CARD TORNEIO DOS ARQUIMAGOS (COPA MATA-MATA) -->
-        <div class="tournament-entry-card" id="btn-open-tournament-card" onclick="if(window._openTournamentModal) window._openTournamentModal();" style="cursor: pointer; margin-bottom: 14px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.22) 0%, rgba(30, 20, 5, 0.95) 100%); border: 1.5px solid rgba(255, 215, 0, 0.7); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.25);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 2.2rem; line-height: 1;">🏆</span>
-            <div style="text-align: left;">
-              <div style="font-size: 0.92rem; font-weight: 800; color: #ffd700;">TORNEIO DOS ARQUIMAGOS</div>
-              <div style="font-size: 0.75rem; color: #ffe082;">Copa Eliminatória Mata-Mata • Conquiste a Grande Taça!</div>
-              <div style="font-size: 0.72rem; color: #81c784; margin-top: 3px;">Taças Conquistadas: <span id="tournament-trophies-count">0</span> 🏆</div>
-            </div>
-          </div>
-          <button type="button" class="promo-btn" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; border: none; border-radius: 12px; pointer-events: none; box-shadow: 0 2px 10px rgba(255,215,0,0.5);">
-            DISPUTAR
-          </button>
-        </div>
-
-        <!-- Botão de Iniciar Desafio Rápido -->
-        <button type="button" class="rpg-card-challenges pink-action-card" id="btn-launch-random-puzzle" style="margin-bottom: 14px;">
-          <div class="rpg-card-inner">
-            <div class="rpg-card-left">
-              <div class="rpg-card-icon-box pink-glow">
-                <span class="material-symbols-rounded">play_arrow</span>
-              </div>
-              <div class="rpg-card-text">
-                <span class="rpg-card-title">Desafio Rápido</span>
-                <span class="rpg-card-subtitle">Inicia um enigma tático instantâneo</span>
-              </div>
-            </div>
-            <div class="rpg-card-arrow pink-arrow">
-              <span class="material-symbols-rounded">arrow_forward</span>
-            </div>
-          </div>
+      <!-- Direita: Controle de Áudio + Pílula DESAFIOS -->
+      <div class="flex items-center gap-1.5">
+        <button id="sound-toggle-btn" type="button" onclick="toggleAudio()" aria-label="Alternar efeitos sonoros"
+                class="tap-scale obsidian-glass w-8 h-8 rounded-full flex items-center justify-center text-gold-light hover:border-gold-light/50">
+          <span id="sound-icon-slot"></span>
         </button>
 
-        <!-- Lista de Desafios -->
-        <!-- SEÇÃO: GRIMÓRIO DE ENIGMAS TÁTICOS -->
-        <div class="puzzles-section-container">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-symbols-rounded" style="color: #f06292;">auto_stories</span>
-              <span style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">GRIMÓRIO DE ENIGMAS TÁTICOS</span>
-            </div>
-            <span style="font-size: 0.75rem; color: #b3a7cb;">Posições de Mestre</span>
+        <div class="obsidian-glass rounded-full px-3 py-1.5 flex items-center gap-1.5 border-amethyst-soft/30">
+          <!-- Ícone Runa de Enigma SVG -->
+          <svg class="w-3.5 h-3.5 text-amethyst-soft shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L14.8 7.6L21 8.5L16.5 12.9L17.6 19.1L12 16.1L6.4 19.1L7.5 12.9L3 8.5L9.2 7.6L12 2Z" fill="rgba(167, 139, 250, 0.22)" />
+          </svg>
+          <span class="font-display text-[10.5px] font-bold tracking-[0.15em] text-gold-bright uppercase">DESAFIOS</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== CONTEÚDO ROLÁVEL ==================== -->
+    <div id="scroll-container" class="arcane-scroll relative z-10 flex-1 overflow-y-auto px-4 pb-8 flex flex-col gap-4">
+
+      <!-- 1. HERO HEADER -->
+      <section class="text-center pt-1 pb-0.5 flex flex-col items-center">
+        <h1 class="font-display text-[21px] sm:text-[23px] font-extrabold tracking-[0.07em] leading-tight title-gold">
+          DESAFIOS &amp; ENIGMAS ARCANOS
+        </h1>
+
+        <!-- Divisor Rúnico Delicado -->
+        <div class="w-44 flex items-center justify-center gap-2 my-2" aria-hidden="true">
+          <span class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-gold-deep/60 to-gold-light/70"></span>
+          <svg class="w-3 h-3 text-gold-light shrink-0" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1.5L14.5 8L8 14.5L1.5 8L8 1.5Z" stroke="currentColor" stroke-width="1.2" fill="rgba(242, 210, 139, 0.24)" />
+            <circle cx="8" cy="8" r="1.4" fill="currentColor" />
+          </svg>
+          <span class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-gold-deep/60 to-gold-light/70"></span>
+        </div>
+
+        <p class="text-[12.5px] text-[#BCB4D1] leading-relaxed max-w-[320px]">
+          Encontre o lance vencedor e decifre as posições mágicas no tabuleiro.
+        </p>
+
+        <!-- Barra discreta de essência acumulada na sessão -->
+        <div class="mt-2.5 inline-flex items-center gap-3 rounded-full bg-[#120E20]/85 border border-gold-light/18 px-3.5 py-1 text-[11px] font-bold tabular-nums">
+          <span class="flex items-center gap-1.5 text-gold-light">
+            <svg class="w-3.5 h-3.5 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.5" fill="rgba(242, 210, 139, 0.16)" />
+              <path d="M12 7.5V16.5M9.5 10C9.5 9 10.6 8.5 12 8.5C13.4 8.5 14.5 9 14.5 10.1C14.5 11.4 13 11.8 12 12C10.8 12.2 9.5 12.6 9.5 14C9.5 15 10.6 15.6 12 15.6C13.4 15.6 14.5 15 14.5 14" stroke-linecap="round"/>
+            </svg>
+            <span id="wallet-gold">180</span>
+            <span class="text-[10px] font-semibold text-[#9F96B8]">Ouro</span>
+          </span>
+          <span class="w-[1px] h-3 bg-white/12"></span>
+          <span class="flex items-center gap-1.5 text-amethyst-bright">
+            <svg class="w-3.5 h-3.5 text-amethyst-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+              <path d="M12 3L14.5 8.6L20.5 9.3L16 13.4L17.2 19.3L12 16.3L6.8 19.3L8 13.4L3.5 9.3L9.5 8.6L12 3Z" fill="rgba(167, 139, 250, 0.22)" stroke-linejoin="round" />
+            </svg>
+            <span id="wallet-xp">420</span>
+            <span class="text-[10px] font-semibold text-[#9F96B8]">XP</span>
+          </span>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           2. HERO CARD — DESAFIO DE HOJE • 26 DE NOVEMBRO
+           =================================================================== -->
+      <section class="hero-card relative rounded-[24px] p-4 flex flex-col gap-3.5 overflow-hidden">
+        <!-- Filigrana nos 4 cantos -->
+        <svg class="absolute top-2.5 left-2.5 w-3.5 h-3.5 text-gold-light/55 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M1 11V1H11" stroke="currentColor" stroke-width="1.15" />
+          <path d="M4.5 4.5L6.5 2.5L8.5 4.5L6.5 6.5Z" fill="currentColor" opacity="0.6" />
+        </svg>
+        <svg class="absolute top-2.5 right-2.5 w-3.5 h-3.5 text-gold-light/55 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M15 11V1H5" stroke="currentColor" stroke-width="1.15" />
+          <path d="M7.5 4.5L9.5 2.5L11.5 4.5L9.5 6.5Z" fill="currentColor" opacity="0.6" />
+        </svg>
+        <svg class="absolute bottom-2.5 left-2.5 w-3.5 h-3.5 text-gold-light/40 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M1 5V15H11" stroke="currentColor" stroke-width="1.15" />
+        </svg>
+        <svg class="absolute bottom-2.5 right-2.5 w-3.5 h-3.5 text-gold-light/40 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M15 5V15H5" stroke="currentColor" stroke-width="1.15" />
+        </svg>
+
+        <!-- Cabeçalho do Hero Card -->
+        <div class="relative z-10 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <!-- Calendário Arcano SVG -->
+            <svg class="w-3.5 h-3.5 text-gold-light shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4.5" width="18" height="16.5" rx="3" />
+              <path d="M16 2.5V6.5M8 2.5V6.5M3 10H21" />
+              <path d="M12 13L13 15L15 16L13 17L12 19L11 17L9 16L11 15L12 13Z" fill="currentColor" stroke="none" />
+            </svg>
+            <span class="text-[10px] font-extrabold tracking-[0.13em] text-gold-light uppercase truncate">
+              DESAFIO DE HOJE • 26 DE NOVEMBRO
+            </span>
           </div>
 
-          <div class="puzzles-grid" id="tactical-puzzles-grid">
-            <!-- Puzzle 1 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_1">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-easy">Iniciante</span>
-                <span class="puzzle-reward">🪙 80 • ⭐ +50 XP</span>
-              </div>
-              <div class="puzzle-card-name">1. O Pastor Sagrado</div>
-              <div class="puzzle-card-desc">A Rainha e o Bispo avançam em harmonia para aplicar o clássico xeque-mate em 1 lance.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e dão mate</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_1">Resolver</button>
-              </div>
-            </div>
+          <!-- Pílula de recompensa XP -->
+          <span id="daily-xp-badge" class="shrink-0 inline-flex items-center gap-1 rounded-full bg-gold-light/12 border border-gold-light/40 px-2.5 py-0.5 text-[10.5px] font-extrabold text-gold-bright tabular-nums">
+            <svg class="w-3 h-3 text-gold-light" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.5L14.7 8.4L21 9.1L16.3 13.4L17.6 19.7L12 16.5L6.4 19.7L7.7 13.4L3 9.1L9.3 8.4L12 2.5Z" />
+            </svg>
+            <span>+100 XP</span>
+          </span>
+        </div>
 
-            <!-- Puzzle 2 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_2">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-easy">Fácil</span>
-                <span class="puzzle-reward">🪙 100 • ⭐ +60 XP</span>
-              </div>
-              <div class="puzzle-card-name">2. O Corredor de Pedra</div>
-              <div class="puzzle-card-desc">Os próprios peões negros trancam a fuga do Rei. A Torre de Mármore sela o destino em 1 lance.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e dão mate</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_2">Resolver</button>
-              </div>
-            </div>
+        <!-- Corpo: Brasão Cavalo Arcano & Raio + Título + Descrição -->
+        <div class="relative z-10 flex items-start gap-3.5">
+          <!-- Medalhão Cavalo Arcano SVG -->
+          <div class="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2C1E4B] via-[#1B1330] to-[#0E0A1A] border border-gold-light/40 flex items-center justify-center shrink-0 shadow-[0_0_24px_rgba(224,108,45,0.22)]">
+            <svg class="w-9 h-9" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <!-- Relâmpago Brasa-Ouro ao fundo -->
+              <path d="M27 5L19 18H25.5L18.5 34L31 16.5H24.2L27 5Z" fill="url(#bolt-grad)" opacity="0.88" />
+              <!-- Silhueta Cavalo Arcano -->
+              <path d="M12 31.5C12 26 14.8 23.6 16.2 21.4C14.2 21.8 11.8 22.3 10.4 21.3C9.1 20.4 9.5 18.2 10.9 16.5L14.1 12.6L13.4 9.5L17 11.3C21 11.2 24.6 14.3 25.5 20.3C26.2 24.8 25.1 28.8 24 31.5H12Z" fill="#161128" stroke="#F2D28B" stroke-width="1.5" stroke-linejoin="round" />
+              <circle cx="15.3" cy="15.2" r="1.1" fill="#F4A36C" />
+              <path d="M10 33H26.5V35.5H10V33Z" fill="#E5BE6E" />
+              <defs>
+                <linearGradient id="bolt-grad" x1="18" y1="5" x2="29" y2="34" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FBF0CF" />
+                  <stop offset="50%" stop-color="#E06C2D" />
+                  <stop offset="100%" stop-color="#A34315" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
 
-            <!-- Puzzle 3 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_3">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-medium">Médio</span>
-                <span class="puzzle-reward">🪙 120 • ⭐ +80 XP</span>
-              </div>
-              <div class="puzzle-card-name">3. O Salto Noturno</div>
-              <div class="puzzle-card-desc">O Cavalo Arcano executa um garfo fulminante atacando o Rei e a Dama simultaneamente.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas jogam e vencem</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_3">Resolver</button>
-              </div>
-            </div>
+          <div class="min-w-0 flex-1">
+            <h2 class="font-display text-[16px] font-bold text-[#FFF8E7] leading-snug tracking-wide">
+              Enigma das Runas do Solstício
+            </h2>
+            <p class="text-[12px] text-[#C6BED8] leading-relaxed mt-1">
+              Encontre o mate tático em 2 lances com o Cavalo Arcano e domine o tabuleiro.
+            </p>
 
-            <!-- Puzzle 4 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_4">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-medium">Médio</span>
-                <span class="puzzle-reward">🪙 130 • ⭐ +90 XP</span>
-              </div>
-              <div class="puzzle-card-name">4. A Emboscada dos Bispos</div>
-              <div class="puzzle-card-desc">Dois bispos cortam as diagonais reais para encurralar o monarca de obsidiana em 2 lances.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_4">Resolver</button>
-              </div>
-            </div>
-
-            <!-- Puzzle 5 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_5">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-hard">Difícil</span>
-                <span class="puzzle-reward">🪙 150 • ⭐ +100 XP</span>
-              </div>
-              <div class="puzzle-card-name">5. O Sacrifício Real</div>
-              <div class="puzzle-card-desc">Entregue sua peça mais poderosa para quebrar as defesas e forçar o xeque-mate imparável.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_5">Resolver</button>
-              </div>
-            </div>
-
-            <!-- Puzzle 6 -->
-            <div class="puzzle-item-card" data-puzzle-id="puzzle_6">
-              <div class="puzzle-card-top">
-                <span class="puzzle-card-badge badge-hard">Mestre</span>
-                <span class="puzzle-reward">🪙 180 • ⭐ +120 XP</span>
-              </div>
-              <div class="puzzle-card-name">6. O Vórtice Cósmico</div>
-              <div class="puzzle-card-desc">Uma combinação magistral de arremate cósmico inspirada nos maiores mestres da história.</div>
-              <div class="puzzle-card-footer">
-                <span style="font-size: 0.72rem; color: #d0bcff;">Brancas dão mate em 2</span>
-                <button type="button" class="btn-solve-puzzle" data-puzzle-id="puzzle_6">Resolver</button>
-              </div>
+            <!-- Status Pill -->
+            <div class="mt-2.5 flex items-center">
+              <span id="daily-status-pill" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 border border-emerald-400/35 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34D399] animate-pulse"></span>
+                <span>Disponível hoje</span>
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- MODO CAMPANHA: A TORRE DOS MAGOS -->
-        <div class="tower-campaign-container" id="tower-campaign-container">
-          <div class="tower-header-card">
-            <div class="tower-header-left">
-              <span class="tower-castle-icon">🏰</span>
-              <div>
-                <div class="tower-badge-tag">MODO CAMPANHA</div>
-                <h3 class="tower-main-title">A Torre dos Magos</h3>
-                <p class="tower-subtitle">Derrote os 5 Guardiões Arcanos para conquistar a torre e tesouros lendários!</p>
+        <!-- Botão Primário em Ouro Antigo Escovado -->
+        <button id="daily-cta-btn" type="button" onclick="openDailyPuzzle()"
+                class="cta-gold tap-scale relative z-10 w-full h-[48px] rounded-2xl px-4 flex items-center justify-center gap-2.5 text-[#14101C]">
+          <!-- Espadas Cruzadas SVG -->
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.5 17.5L3 6V3H6L17.5 14.5" />
+            <path d="M13 19L19 13" />
+            <path d="M16 16L20 20" />
+            <path d="M19 21L21 19" />
+            <path d="M14.5 6.5L18 3H21V6L17.5 9.5" />
+            <path d="M5 14L9 18" />
+            <path d="M7 17L4 20" />
+            <path d="M3 19L5 21" />
+          </svg>
+          <span id="daily-cta-label" class="text-[13.5px] font-extrabold tracking-wide">Jogar Desafio Diário</span>
+        </button>
+      </section>
+
+      <!-- ===================================================================
+           3. MODOS COMPETITIVOS — PUZZLE RUSH & TORNEIO DOS ARQUIMAGOS
+           =================================================================== -->
+      <section class="flex flex-col gap-3" aria-label="Modos competitivos">
+        <div class="flex items-center justify-between px-0.5">
+          <span class="font-display text-[11px] font-bold tracking-[0.16em] text-gold-light/85 uppercase">
+            Modos Competitivos
+          </span>
+          <span class="text-[10.5px] font-medium text-[#8F87A8]">Acesso Imediato</span>
+        </div>
+
+        <!-- Card 3A: CORRIDA DOS ENIGMAS (PUZZLE RUSH) -->
+        <article class="rush-card rounded-[22px] p-3.5 flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0 flex-1">
+              <!-- Ícone Ampulheta / Cronômetro Arcano SVG -->
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#351A13] via-[#21121F] to-[#120C1B] border border-ember/45 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(224,108,45,0.20)]">
+                <svg class="w-5 h-5 text-ember-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6.5 3H17.5" />
+                  <path d="M6.5 21H17.5" />
+                  <path d="M8 3V6.5C8 8.8 10 10.6 12 12C14 10.6 16 8.8 16 6.5V3" fill="rgba(224, 108, 45, 0.18)" />
+                  <path d="M8 21V17.5C8 15.2 10 13.4 12 12C14 13.4 16 15.2 16 17.5V21" fill="rgba(242, 210, 139, 0.18)" />
+                </svg>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <h3 class="font-display text-[13.5px] font-bold text-[#FFF5E2] tracking-wide leading-tight">
+                    CORRIDA DOS ENIGMAS
+                  </h3>
+                  <span class="px-1.5 py-[1px] rounded bg-ember/15 border border-ember/35 text-[9px] font-bold tracking-wider text-ember-soft uppercase">
+                    Puzzle Rush
+                  </span>
+                </div>
+                <p class="text-[11.5px] text-[#BFB7D2] mt-1 leading-snug">
+                  Resolva enigmas táticos em sequência.
+                </p>
               </div>
             </div>
-            <div class="tower-progress-badge" id="tower-progress-badge">
-              <span id="tower-floor-current">Andar 1</span> / 5
-            </div>
+
+            <!-- Botão INICIAR -->
+            <button type="button" onclick="openRushModal()"
+                    class="cta-ember tap-scale shrink-0 rounded-xl px-3.5 py-2.5 text-[11.5px] font-extrabold tracking-wider text-[#FFF8EF] uppercase">
+              INICIAR
+            </button>
           </div>
 
-          <div class="tower-floors-list" id="tower-floors-list">
-            <!-- Floor 1 -->
-            <div class="tower-floor-card unlocked current" data-floor="1">
-              <div class="tower-floor-avatar">🧙‍♂️</div>
-              <div class="tower-floor-info">
-                <div class="tower-floor-name">Andar 1: O Aprendiz Rúnico</div>
-                <div class="tower-floor-desc">Leo, o Aprendiz • Dificuldade Inicial</div>
-                <div class="tower-floor-reward">Recompensa: 🪙 150 Moedas • ⭐ +100 XP</div>
+          <!-- Chips de Metadados -->
+          <div class="flex items-center gap-1.5 flex-wrap pt-0.5 border-t border-white/[0.06] tabular-nums">
+            <span class="inline-flex items-center gap-1 rounded-lg bg-[#0F0B1B]/85 border border-white/[0.08] px-2 py-1 text-[10.5px] font-semibold text-[#DCD4EC]">
+              <svg class="w-3 h-3 text-ember-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="13" r="8" />
+                <path d="M12 9V13L14.5 14.5M9.5 3H14.5" />
+              </svg>
+              <span>3 Min</span>
+            </span>
+            <span class="inline-flex items-center gap-1 rounded-lg bg-[#0F0B1B]/85 border border-white/[0.08] px-2 py-1 text-[10.5px] font-semibold text-[#DCD4EC]">
+              <svg class="w-3 h-3 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 20.5S4.5 15.6 4.5 9.8C4.5 7 6.6 5 9.2 5C10.7 5 12 5.9 12 7.1C12 5.9 13.3 5 14.8 5C17.4 5 19.5 7 19.5 9.8C19.5 15.6 12 20.5 12 20.5Z" fill="rgba(251, 113, 133, 0.22)" />
+              </svg>
+              <span>3 Vidas</span>
+            </span>
+            <span class="inline-flex items-center gap-1 rounded-lg bg-gold-light/10 border border-gold-light/25 px-2 py-1 text-[10.5px] font-bold text-gold-light">
+              <svg class="w-3 h-3 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M8 21H16M12 17V21M7 4H17V10C17 12.8 14.8 15 12 15C9.2 15 7 12.8 7 10V4Z" />
+              </svg>
+              <span id="rush-record-text">Recorde: 0 acertos</span>
+            </span>
+          </div>
+        </article>
+
+        <!-- Card 3B: TORNEIO DOS ARQUIMAGOS (Totalmente visível e redesenhado) -->
+        <article class="tournament-card rounded-[22px] p-3.5 flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-2.5">
+            <div class="flex items-start gap-3 min-w-0 flex-1">
+              <!-- Brasão Torre Coroada SVG -->
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#2B1F4C] via-[#1C1434] to-[#110C22] border border-amethyst-soft/45 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(139,92,246,0.22)]">
+                <svg class="w-5 h-5 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 10L7.5 4.5L12 8L16.5 4.5L19 10H5Z" fill="rgba(242, 210, 139, 0.24)" />
+                  <path d="M7 10V18.5H17V10" />
+                  <path d="M5 20.5H19" />
+                  <path d="M10.5 18.5V15.5C10.5 14.7 11.2 14 12 14C12.8 14 13.5 14.7 13.5 15.5V18.5" />
+                </svg>
               </div>
-              <button type="button" class="tower-battle-btn" data-floor="1">Desafiar</button>
+
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <h3 class="font-display text-[13.5px] font-bold text-[#FFF5E2] tracking-wide leading-tight">
+                    TORNEIO DOS ARQUIMAGOS
+                  </h3>
+                </div>
+                <div class="flex items-center gap-2 mt-1 flex-wrap">
+                  <span id="tournament-status-badge" class="inline-flex items-center gap-1 rounded-full bg-amethyst/18 border border-amethyst-soft/40 px-2 py-[1px] text-[9.5px] font-bold text-amethyst-bright">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amethyst-soft animate-pulse"></span>
+                    <span>Inscrições Abertas</span>
+                  </span>
+                  <span class="text-[10.5px] text-[#A299BC] font-medium tabular-nums">Próxima rodada em 18m</span>
+                </div>
+              </div>
             </div>
 
-            <!-- Floor 2 -->
-            <div class="tower-floor-card locked" data-floor="2">
-              <div class="tower-floor-avatar">🗿</div>
-              <div class="tower-floor-info">
-                <div class="tower-floor-name">Andar 2: O Golem de Obsidiana</div>
-                <div class="tower-floor-desc">Golem Ancestral • Defesa Impenetrável</div>
-                <div class="tower-floor-reward">Recompensa: 🪙 300 Moedas • ⭐ +200 XP</div>
-              </div>
-              <button type="button" class="tower-battle-btn" data-floor="2">🔒 Bloqueado</button>
+            <!-- Botão Outlined Gold: Ver Chave -->
+            <button type="button" onclick="openTournamentModal()"
+                    class="tap-scale shrink-0 rounded-xl bg-gold-light/10 hover:bg-gold-light/18 border border-gold-light/45 px-3 py-2 text-[11px] font-bold text-gold-bright whitespace-nowrap">
+              Ver Chave
+            </button>
+          </div>
+
+          <!-- Metadados do Torneio -->
+          <div class="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.06] text-[10.5px] text-[#C5BDD9] tabular-nums">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-amethyst-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="9" cy="8" r="3.2" />
+                  <path d="M3.5 19C3.5 16.2 6 14.5 9 14.5C12 14.5 14.5 16.2 14.5 19" />
+                  <circle cx="17" cy="9" r="2.5" />
+                  <path d="M16.5 14.8C18.8 15.1 20.5 16.5 20.5 19" />
+                </svg>
+                <span>8 Jogadores</span>
+              </span>
+              <span class="text-white/20">•</span>
+              <span>Mata-mata</span>
             </div>
 
-            <!-- Floor 3 -->
-            <div class="tower-floor-card locked" data-floor="3">
-              <div class="tower-floor-avatar">🧝‍♀️</div>
-              <div class="tower-floor-info">
-                <div class="tower-floor-name">Andar 3: A Feiticeira das Sombras</div>
-                <div class="tower-floor-desc">Morgana • Táticas e Ataques Rápidos</div>
-                <div class="tower-floor-reward">Recompensa: 🪙 500 Moedas • ⭐ +400 XP</div>
-              </div>
-              <button type="button" class="tower-battle-btn" data-floor="3">🔒 Bloqueado</button>
-            </div>
+            <span class="inline-flex items-center gap-1 font-bold text-gold-light shrink-0">
+              <svg class="w-3.5 h-3.5 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                <circle cx="12" cy="12" r="8.5" fill="rgba(242, 210, 139, 0.16)" />
+                <path d="M12 7.5V16.5M9.5 10C9.5 9 10.6 8.5 12 8.5C13.4 8.5 14.5 9 14.5 10.1C14.5 11.4 13 11.8 12 12C10.8 12.2 9.5 12.6 9.5 14C9.5 15 10.6 15.6 12 15.6C13.4 15.6 14.5 15 14.5 14" stroke-linecap="round"/>
+              </svg>
+              <span>500 Ouro</span>
+            </span>
+          </div>
+        </article>
+      </section>
 
-            <!-- Floor 4 -->
-            <div class="tower-floor-card locked" data-floor="4">
-              <div class="tower-floor-avatar">💀</div>
-              <div class="tower-floor-info">
-                <div class="tower-floor-name">Andar 4: O Necromante dos Cristais</div>
-                <div class="tower-floor-desc">Malakor • Pressão Implacável de Peças</div>
-                <div class="tower-floor-reward">Recompensa: 🪙 750 Moedas • ⭐ +600 XP</div>
-              </div>
-              <button type="button" class="tower-battle-btn" data-floor="4">🔒 Bloqueado</button>
+      <!-- ===================================================================
+           4. MISSÕES DIÁRIAS DO GRIMÓRIO (COMPACTO, CALMO & INTERATIVO)
+           =================================================================== -->
+      <section class="grimoire-card rounded-[24px] p-3.5 flex flex-col gap-3">
+        <!-- Cabeçalho do Grimório -->
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <!-- Selo do Grimório SVG -->
+            <div class="w-7 h-7 rounded-lg bg-amethyst/16 border border-amethyst-soft/35 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" fill="rgba(139, 92, 246, 0.18)" />
+                <path d="M9.5 9.5L11.5 11.5L15.5 7.5" stroke="#F2D28B" />
+              </svg>
             </div>
+            <h2 class="font-display text-[11.5px] font-bold tracking-[0.12em] text-gold-light uppercase truncate">
+              MISSÕES DIÁRIAS DO GRIMÓRIO
+            </h2>
+          </div>
 
-            <!-- Floor 5 -->
-            <div class="tower-floor-card locked" data-floor="5">
-              <div class="tower-floor-avatar">👑</div>
-              <div class="tower-floor-info">
-                <div class="tower-floor-name">Andar 5: O Arquimago Cósmico</div>
-                <div class="tower-floor-desc">Lorde Vane • O Soberano Supremo da Catedral</div>
-                <div class="tower-floor-reward">Recompensa: 🪙 1.500 Moedas • ⭐ +1.200 XP • Título Lendário</div>
-              </div>
-              <button type="button" class="tower-battle-btn" data-floor="5">🔒 Bloqueado</button>
-            </div>
+          <div class="flex items-center gap-1.5 shrink-0 tabular-nums">
+            <button id="grimoire-collapse-btn" type="button" onclick="toggleGrimoireCollapse()"
+                    aria-label="Alternar lista de missões"
+                    class="tap-scale inline-flex items-center gap-1 rounded-full bg-gold-light/12 border border-gold-light/30 px-2 py-0.5 text-[10px] font-extrabold text-gold-bright">
+              <span id="grimoire-counter">3/3</span>
+              <svg id="grimoire-chevron" class="w-3 h-3 text-gold-light transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9L12 15L18 9" />
+              </svg>
+            </button>
           </div>
         </div>
 
-        <div class="challenges-list">
-          <div class="challenge-item">
-            <div class="challenge-item-icon">🧩</div>
-            <div class="challenge-item-info">
-              <div class="challenge-item-header">
-                <span class="challenge-title">Mate do Pastor Arcano</span>
-                <span class="challenge-difficulty diff-easy">Fácil • 1 Lance</span>
-              </div>
-              <p class="challenge-desc">Ataque fulminante de Dama com suporte rúnico do Bispo.</p>
-            </div>
-            <button type="button" class="challenge-play-btn" data-challenge="mate-pastor">Jogar</button>
-          </div>
+        <!-- Linha auxiliar: Renovação + Alternador discreto "Simular Pendente" -->
+        <div class="flex items-center justify-between gap-2 text-[10.5px]">
+          <span class="inline-flex items-center gap-1.5 text-[#988FB2] tabular-nums">
+            <svg class="w-3 h-3 text-amethyst-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12A9 9 0 1 0 6 5.3L3 8" />
+              <path d="M3 3V8H8" />
+            </svg>
+            <span>Renova em 24h</span>
+          </span>
 
-          <div class="challenge-item">
-            <div class="challenge-item-icon">⚡</div>
-            <div class="challenge-item-info">
-              <div class="challenge-item-header">
-                <span class="challenge-title">Ataque Duplo de Cavalo</span>
-                <span class="challenge-difficulty diff-med">Médio • Garfo Real</span>
-              </div>
-              <p class="challenge-desc">O Cavalo salta pelas runas ameaçando Rei e Dama ao mesmo tempo.</p>
-            </div>
-            <button type="button" class="challenge-play-btn" data-challenge="garfo-cavalo">Jogar</button>
-          </div>
-
-          <div class="challenge-item">
-            <div class="challenge-item-icon">🔮</div>
-            <div class="challenge-item-info">
-              <div class="challenge-item-header">
-                <span class="challenge-title">O Sacrifício do Bispo de Fogo</span>
-                <span class="challenge-difficulty diff-hard">Difícil • Mate em 2</span>
-              </div>
-              <p class="challenge-desc">Rompa a fortaleza inimiga sacrificando o bispo na ala do rei.</p>
-            </div>
-            <button type="button" class="challenge-play-btn" data-challenge="sacrificio-bispo">Jogar</button>
-          </div>
-        </div>
-
-        <div style="margin-top: 14px;">
-          <button type="button" class="btn-primary-action" id="btn-challenges-footer-back">
-            <span class="material-symbols-rounded">arrow_back</span>
-            <span>Voltar ao Menu Principal</span>
+          <button id="simulate-pending-btn" type="button" onclick="toggleSimulatePending()"
+                  class="tap-scale rounded-full bg-white/[0.04] hover:bg-gold-light/12 border border-white/[0.10] hover:border-gold-light/35 px-2.5 py-0.5 text-[10px] font-semibold text-[#C9C0DE] hover:text-gold-bright transition-colors">
+            Simular Pendente
           </button>
+        </div>
+
+        <!-- Sub-card: BAÚ ARCANO DIÁRIO -->
+        <div id="daily-chest-card" class="rounded-2xl bg-[#100C1E]/90 border border-gold-light/18 p-3 flex items-center justify-between gap-3 transition-all">
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <!-- Ícone Baú Arcano Detalhado SVG -->
+            <div id="chest-icon-wrap" class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#2C2043] via-[#1A132C] to-[#100B1C] border border-gold-light/30 flex items-center justify-center shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <path d="M5 13.5C5 10.2 7.7 7.5 11 7.5H21C24.3 7.5 27 10.2 27 13.5V15H5V13.5Z" fill="url(#chest-lid)" stroke="#F2D28B" stroke-width="1.3" />
+                <rect x="5" y="15" width="22" height="10.5" rx="2.5" fill="#1E1533" stroke="#C99A45" stroke-width="1.3" />
+                <path d="M10.5 7.5V25.5M21.5 7.5V25.5" stroke="#C99A45" stroke-width="1.2" opacity="0.7" />
+                <rect x="13.5" y="13.2" width="5" height="5.4" rx="1.3" fill="#F2D28B" stroke="#181126" stroke-width="1" />
+                <circle cx="16" cy="15.8" r="0.9" fill="#181126" />
+                <defs>
+                  <linearGradient id="chest-lid" x1="5" y1="7.5" x2="27" y2="15" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#3E2A64" />
+                    <stop offset="100%" stop-color="#22173A" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <h3 class="text-[13px] font-bold text-[#F8F1E2] leading-tight">Baú Arcano Diário</h3>
+              <!-- Linha única limpa de recompensas (Ouro + XP) -->
+              <div class="flex items-center gap-2 mt-1 text-[10.5px] font-bold tabular-nums">
+                <span class="inline-flex items-center gap-1 text-gold-light">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5" fill="rgba(242, 210, 139, 0.20)" />
+                    <path d="M12 8V16" stroke-linecap="round" />
+                  </svg>
+                  <span>+200 Ouro</span>
+                </span>
+                <span class="text-white/25">•</span>
+                <span class="inline-flex items-center gap-1 text-amethyst-bright">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 3L14.5 8.6L20.5 9.3L16 13.4L17.2 19.3L12 16.3L6.8 19.3L8 13.4L3.5 9.3L9.5 8.6L12 3Z" />
+                  </svg>
+                  <span>+100 XP</span>
+                </span>
+              </div>
+              <!-- Status sem duplicar o cronômetro -->
+              <p id="chest-status-text" class="text-[10.5px] text-[#9A91B4] mt-0.5 truncate">
+                Recarregando essência arcana...
+              </p>
+            </div>
+          </div>
+
+          <!-- Direita: Cronômetro único ao vivo OU Botão "Abrir Baú" -->
+          <div id="chest-action-slot" class="shrink-0">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </div>
+
+        <!-- Lista das 3 Missões Diárias (Compacta & Calma) -->
+        <div id="missions-list" class="flex flex-col gap-2 transition-all">
+          <!-- Renderizado via JS -->
+        </div>
+      </section>
+
+    </div>
+
+        <!-- Elementos ocultos para compatibilidade com wizard-features.js -->
+        <div style="display: none !important;">
+          <button id="btn-challenges-back" onclick="if(window.switchSubView) window.switchSubView('home'); else if(window._switchSubView) window._switchSubView('home');"></button>
+          <button id="btn-challenges-footer-back" onclick="if(window.switchSubView) window.switchSubView('home'); else if(window._switchSubView) window._switchSubView('home');"></button>
+          <div id="daily-chest-card">
+            <button id="btn-claim-daily-chest"></button>
+            <span id="chest-desc-text"></span>
+          </div>
+          <div id="quest-item-captures"><button id="btn-collect-quest-captures"></button></div>
+          <div id="quest-item-win"><button id="btn-collect-quest-win"></button></div>
+          <div id="quest-item-puzzle"><button id="btn-collect-quest-puzzle"></button></div>
         </div>
       </div>
 
@@ -6407,7 +6993,7 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
         <!-- Botão Mais / Opções -->
         <button id="btn-pause" type="button" aria-label="Opções da partida"
                 class="tap-scale obsidian-glass w-9 h-9 rounded-full flex items-center justify-center text-[#DCD4EC] hover:text-gold hover:border-gold/45"
-                onclick="if(window._openMatchSheet) window._openMatchSheet();">
+                onclick="if(window._togglePause) window._togglePause(true); else if(window._openMatchSheet) window._openMatchSheet();">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <circle cx="12" cy="5.5" r="1.7" />
             <circle cx="12" cy="12" r="1.7" />
@@ -6578,7 +7164,7 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       </button>
 
       <!-- 5. Partida -->
-      <button type="button" id="btn-match-options" title="Opções da Partida" onclick="if(window._openMatchSheet) window._openMatchSheet();"
+      <button type="button" id="btn-match-options" title="Opções da Partida" onclick="if(window._togglePause) window._togglePause(true); else if(window._openMatchSheet) window._openMatchSheet();"
               class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
         <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 22S20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" />
@@ -6898,55 +7484,261 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
     </button>
   </div>
 
-    <!-- Modal de Pausa / Menu da Partida (Limpo, sem opções de personalização) -->
-  <div id="pause-modal" class="modal-overlay hidden">
-    <div class="modal-content pause-content" style="max-width: 520px; width: 95%; border-radius: 28px; padding: 24px 20px;">
-      <div class="brand-pill" style="margin: 0 auto 12px; width: fit-content;">
-        <span class="material-symbols-rounded">pause_circle</span>
-        <span>PAUSA</span>
-      </div>
-      <h3 style="font-size: 1.8rem; margin-bottom: 8px;">MENU DA BATALHA</h3>
-      <p style="color: #d0bcff; font-size: 0.9rem; margin-bottom: 20px;">O tempo e os movimentos estão congelados.</p>
+    <!-- ==================== MODAL DE PAUSA — MENU DA BATALHA (ESTASE ARCANA) ==================== -->
+  <div id="pause-modal"
+       class="pause-backdrop hidden fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-5"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="pause-modal-title">
 
-      <!-- Ações do Menu de Pausa -->
-      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-        <button id="btn-resume" class="promo-btn"
-          style="font-size: 1.05rem; padding: 14px 24px; width: 100%; font-weight: 700; background: rgba(208, 188, 255, 0.2); border-color: var(--md-primary);">
-          <span class="material-symbols-rounded"
-            style="vertical-align: middle; margin-right: 6px;">play_arrow</span>Continuar Batalha
+    <!-- Card Principal Obsidiana & Ouro Antigo -->
+    <div class="pause-card relative w-full max-w-[376px] rounded-[26px] px-4 py-5 sm:px-5 sm:py-6 flex flex-col items-center">
+
+      <!-- Ornamentos geométricos de filigrana nos 4 cantos -->
+      <svg class="absolute top-2.5 left-2.5 w-3.5 h-3.5 text-gold/55 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 11V1H11" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M4.5 4.5L6.5 2.5L8.5 4.5L6.5 6.5Z" fill="currentColor" opacity="0.65"/>
+      </svg>
+      <svg class="absolute top-2.5 right-2.5 w-3.5 h-3.5 text-gold/55 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M15 11V1H5" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M7.5 4.5L9.5 2.5L11.5 4.5L9.5 6.5Z" fill="currentColor" opacity="0.65"/>
+      </svg>
+      <svg class="absolute bottom-2.5 left-2.5 w-3.5 h-3.5 text-gold/45 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1 5V15H11" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M4.5 11.5L6.5 9.5L8.5 11.5L6.5 13.5Z" fill="currentColor" opacity="0.55"/>
+      </svg>
+      <svg class="absolute bottom-2.5 right-2.5 w-3.5 h-3.5 text-gold/45 pointer-events-none" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M15 5V15H5" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M7.5 11.5L9.5 9.5L11.5 11.5L9.5 13.5Z" fill="currentColor" opacity="0.55"/>
+      </svg>
+
+      <!-- Halo arcano sutil no topo do card -->
+      <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-48 h-20 rounded-full pointer-events-none"
+           style="background: radial-gradient(circle, rgba(155, 123, 255, 0.24) 0%, rgba(229, 190, 110, 0.12) 48%, transparent 74%); filter: blur(18px);">
+      </div>
+
+      <!-- 1. Status Badge: PAUSA • ESTASE -->
+      <div class="relative z-10 inline-flex items-center gap-2 rounded-full bg-[#0E0B1A]/95 border border-gold/30 pl-1.5 pr-3 py-1 shadow-[0_0_20px_rgba(155,123,255,0.20)]">
+        <span class="w-5 h-5 rounded-full bg-[#9B7BFF]/20 border border-[#C5B3FF]/50 flex items-center justify-center shadow-[0_0_10px_rgba(155,123,255,0.45)]">
+          <svg class="w-2.5 h-2.5 text-[#E5BE6E]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="6" y="4" width="4.4" height="16" rx="1.4" />
+            <rect x="13.6" y="4" width="4.4" height="16" rx="1.4" />
+          </svg>
+        </span>
+        <span class="font-display text-[10px] font-bold tracking-[0.20em] text-gold-bright uppercase whitespace-nowrap">
+          PAUSA • ESTASE
+        </span>
+      </div>
+
+      <!-- 2. Título & Subtítulo -->
+      <div class="relative z-10 text-center mt-3.5">
+        <h2 id="pause-modal-title" class="font-display text-[21px] sm:text-[23px] font-bold tracking-[0.09em] pause-title-gold leading-tight">
+          MENU DA BATALHA
+        </h2>
+        <p class="text-[12px] text-[#B9B2CE] font-medium mt-1.5 leading-snug">
+          O tempo e os movimentos estão congelados.
+        </p>
+      </div>
+
+      <!-- Divisor ornamentado com losango rúnico central -->
+      <div class="relative z-10 w-full flex items-center justify-center gap-2.5 my-3.5" aria-hidden="true">
+        <span class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/55"></span>
+        <svg class="w-3 h-3 text-gold shrink-0 drop-shadow-[0_0_6px_rgba(229,190,110,0.65)]" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5L14.5 8L8 14.5L1.5 8L8 1.5Z" stroke="currentColor" stroke-width="1.2" fill="rgba(229, 190, 110, 0.22)"/>
+          <circle cx="8" cy="8" r="1.6" fill="currentColor"/>
+        </svg>
+        <span class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/55"></span>
+      </div>
+
+      <!-- 3. Faixa de Resumo Congelado da Partida (Stasis Snapshot) -->
+      <div class="stasis-strip relative z-10 w-full rounded-2xl px-2.5 py-2.5">
+        <!-- Cristais de estase sutis nos cantos -->
+        <svg class="absolute top-1.5 right-1.5 w-3 h-3 text-[#C5B3FF]/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M12 2V22M2 12H22M4.9 4.9L19.1 19.1M19.1 4.9L4.9 19.1" />
+        </svg>
+
+        <div class="relative z-10 grid grid-cols-3 gap-2 items-center text-center">
+          <!-- Relógio Brancas (Jogador) -->
+          <div class="flex flex-col items-center">
+            <span class="text-[9.5px] font-bold tracking-wider text-[#A297BD] uppercase flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+              Você
+            </span>
+            <span id="pause-white-clock" class="font-mono text-[14.5px] font-bold text-[#FFF5DF] mt-0.5">
+              10:00
+            </span>
+          </div>
+
+          <!-- Lance Atual / Arena -->
+          <div class="flex flex-col items-center border-x border-[#C5B3FF]/15 px-1">
+            <span id="pause-move-label" class="font-display text-[9.5px] font-bold tracking-widest text-gold-bright uppercase">
+              LANCE 1
+            </span>
+            <span id="pause-arena-label" class="text-[10px] text-[#C4B7E0] font-medium mt-0.5 truncate max-w-[85px]">
+              Catedral Arcana
+            </span>
+          </div>
+
+          <!-- Relógio Pretas (Adversário / Ignis) -->
+          <div class="flex flex-col items-center">
+            <span class="text-[9.5px] font-bold tracking-wider text-[#A297BD] uppercase flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9B7BFF] inline-block"></span>
+              Ignis
+            </span>
+            <span id="pause-black-clock" class="font-mono text-[14.5px] font-bold text-[#E6DEFA] mt-0.5">
+              10:00
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Ajustes Rápidos da Partida (Chips de 1 toque) -->
+      <div class="relative z-10 w-full grid grid-cols-3 gap-2 mt-3.5">
+        <!-- Chip Efeitos Sonoros -->
+        <button id="chip-sfx" type="button" onclick="window._togglePauseSound()"
+                class="quick-chip quick-chip-on tap-scale rounded-xl border px-2 py-2 flex items-center justify-center gap-1.5 text-[11px] font-semibold whitespace-nowrap">
+          <span id="chip-sfx-icon">
+            <svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.5 8.5C16.8 9.8 16.8 14.2 15.5 15.5" />
+            </svg>
+          </span>
+          <span>Efeitos</span>
         </button>
-        <button id="btn-pause-restart" class="promo-btn" style="padding: 12px 20px; width: 100%; font-size: 0.95rem;">
-          <span class="material-symbols-rounded"
-            style="vertical-align: middle; margin-right: 6px;">restart_alt</span>Reiniciar Jogo
+
+        <!-- Chip Música de Fundo -->
+        <button id="chip-music" type="button" onclick="window._togglePauseMusic()"
+                class="quick-chip quick-chip-on tap-scale rounded-xl border px-2 py-2 flex items-center justify-center gap-1.5 text-[11px] font-semibold whitespace-nowrap">
+          <span id="chip-music-icon">
+            <svg class="w-3.5 h-3.5 text-[#C5B3FF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 18V5L21 3V16" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </span>
+          <span>Música</span>
         </button>
-        <button id="btn-pause-main-menu" class="promo-btn" onclick="if(window._goToMainMenuFromPause) window._goToMainMenuFromPause(event);" style="padding: 12px 20px; width: 100%; font-size: 0.95rem; background: rgba(255, 255, 255, 0.05);">
-          <span class="material-symbols-rounded" style="vertical-align: middle; margin-right: 6px;">castle</span>Menu
-          Inicial (Catedral)
+
+        <!-- Chip Visão 3D / 2D -->
+        <button id="chip-view3d" type="button" onclick="window._togglePauseView3D()"
+                class="quick-chip quick-chip-on tap-scale rounded-xl border px-2 py-2 flex items-center justify-center gap-1.5 text-[11px] font-semibold whitespace-nowrap">
+          <svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" />
+            <path d="M12 12L20 7.5M12 12V21M12 12L4 7.5" />
+          </svg>
+          <span id="chip-view3d-label">Visão 3D</span>
         </button>
       </div>
 
-      <!-- Grupos ocultos para manter compatibilidade com event listeners legados -->
-      <div style="display: none !important;">
-        <div id="pause-mode-group">
-          <button class="toggle-btn active" data-mode="ai"></button>
-          <button class="toggle-btn" data-mode="2p"></button>
-          <button class="toggle-btn" data-mode="online"></button>
-          <button class="toggle-btn" data-mode="puzzle"></button>
+      <!-- 5. Ações Principais com Hierarquia Clara -->
+      <div class="relative z-10 w-full flex flex-col gap-2.5 mt-4">
+
+        <!-- CTA Primário: Continuar Batalha (Ouro Antigo Escovado, 52px) -->
+        <button type="button" id="btn-resume-battle" onclick="window._togglePause(false)"
+                class="cta-gold-btn tap-scale w-full h-[52px] rounded-2xl px-4 flex items-center justify-center gap-2.5 text-[#14101C]">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M7.2 4.6C6.4 4.1 5.4 4.7 5.4 5.6V18.4C5.4 19.3 6.4 19.9 7.2 19.4L18.4 13C19.2 12.5 19.2 11.5 18.4 11L7.2 4.6Z" />
+          </svg>
+          <span class="text-[14px] font-extrabold tracking-wide">Continuar Batalha</span>
+        </button>
+
+        <!-- Ação Secundária: Reiniciar Jogo (com morph inline em 2 etapas) -->
+        <div id="pause-restart-slot" class="w-full">
+          <button id="pause-restart-btn" type="button" onclick="window._setPauseConfirm('restart')"
+                  class="tap-scale w-full h-[46px] rounded-2xl px-4 bg-[#1A152C]/85 hover:bg-[#221B39]/90 border border-[#C5B3FF]/25 hover:border-gold/45 flex items-center justify-center gap-2 text-[13px] font-semibold text-[#F1ECF9] transition-colors">
+            <svg class="w-4 h-4 text-[#C5B3FF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12A9 9 0 1 0 6 5.3L3 8" />
+              <path d="M3 3V8H8" />
+            </svg>
+            <span>Reiniciar Jogo</span>
+          </button>
+
+          <div id="pause-restart-confirm" class="hidden morph-in w-full rounded-2xl px-3 py-2.5 bg-[#1B1530]/95 border border-gold/40 flex items-center justify-between gap-2">
+            <span class="text-[12px] font-semibold text-gold-bright leading-tight">Reiniciar partida?</span>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="window._setPauseConfirm(null)"
+                      class="tap-scale px-2.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.11] border border-white/10 text-[11px] font-semibold text-[#D0C8E2]">
+                Cancelar
+              </button>
+              <button type="button" onclick="window._confirmPauseRestart()"
+                      class="tap-scale px-3 py-1.5 rounded-xl bg-gradient-to-b from-[#E8C374] to-[#B8893A] text-[#14101C] text-[11px] font-extrabold shadow-md">
+                Confirmar
+              </button>
+            </div>
+          </div>
         </div>
-        <div id="pause-arena-group">
-          <button class="toggle-btn active" data-arena="cathedral"></button>
-          <button class="toggle-btn" data-arena="inferno"></button>
-          <button class="toggle-btn" data-arena="frost"></button>
-          <button class="toggle-btn" data-arena="cosmos"></button>
+
+        <!-- Ação Terciária / Saída: Menu Inicial (Catedral) (com morph inline em 2 etapas) -->
+        <div id="pause-exit-slot" class="w-full">
+          <button id="pause-exit-btn" type="button" onclick="window._setPauseConfirm('exit')"
+                  class="tap-scale w-full h-[44px] rounded-2xl px-4 bg-[#110D1E]/72 hover:bg-[#19132B]/85 border border-white/[0.10] hover:border-[#E05A5A]/38 flex items-center justify-center gap-2 text-[12.5px] font-semibold text-[#CBC3DE] hover:text-[#F6EEF0] transition-colors">
+            <!-- Ícone Castelo Gótico SVG -->
+            <svg class="w-4 h-4 text-gold/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 20V9H7V5.5H9.5V8H11V5.5H13V8H14.5V5.5H17V9H20V20H4Z" fill="rgba(229, 190, 110, 0.14)" />
+              <path d="M9.8 20V15.4C9.8 14.1 10.8 13.1 12 13.1C13.2 13.1 14.2 14.1 14.2 15.4V20" />
+            </svg>
+            <span>Menu Inicial (Catedral)</span>
+          </button>
+
+          <div id="pause-exit-confirm" class="hidden morph-in w-full rounded-2xl p-3 bg-[#211018]/92 border border-[#E05A5A]/45 flex flex-col gap-2.5">
+            <div class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-[#E05A5A] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 9V13M12 17H12.01" />
+                <path d="M10.3 3.9L2.5 17.5C1.9 18.6 2.7 20 4 20H20C21.3 20 22.1 18.6 21.5 17.5L13.7 3.9C13 2.7 11 2.7 10.3 3.9Z" />
+              </svg>
+              <p class="text-[11.5px] font-medium text-[#F5D6D6] leading-snug">
+                Voltar à Catedral? O progresso atual será perdido.
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="window._setPauseConfirm(null)"
+                      class="tap-scale py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.11] border border-white/10 text-[11.5px] font-semibold text-[#D6CEE8]">
+                Cancelar
+              </button>
+              <button type="button" onclick="window._confirmPauseExit()"
+                      class="tap-scale py-1.5 rounded-xl bg-[#E05A5A] hover:bg-[#EA6B6B] text-white text-[11.5px] font-bold shadow-[0_4px_14px_rgba(224,90,90,0.35)]">
+                Sair
+              </button>
+            </div>
+          </div>
         </div>
-        <div id="pause-skin-group">
-          <button class="toggle-btn active" data-skin="classic"></button>
-          <button class="toggle-btn" data-skin="gold"></button>
-          <button class="toggle-btn" data-skin="amethyst"></button>
-          <button class="toggle-btn" data-skin="emerald"></button>
-        </div>
+
+      </div>
+
+      <!-- 6. Rodapé discreto (atalho de teclado) -->
+      <div class="relative z-10 mt-4 flex items-center justify-center gap-1.5 text-[10.5px] text-[#8E85A8]">
+        <span>Pressione</span>
+        <kbd class="px-1.5 py-0.5 rounded-md bg-white/[0.06] border border-gold/25 font-sans text-[9.5px] font-bold tracking-wider text-gold-bright">ESC</kbd>
+        <span>para retomar</span>
+      </div>
+
+    </div>
+
+    <!-- Grupos ocultos para manter compatibilidade com event listeners legados -->
+    <div style="display: none !important;">
+      <button id="btn-resume"></button>
+      <button id="btn-pause-restart"></button>
+      <button id="btn-pause-main-menu"></button>
+      <div id="pause-mode-group">
+        <button class="toggle-btn active" data-mode="ai"></button>
+        <button class="toggle-btn" data-mode="2p"></button>
+        <button class="toggle-btn" data-mode="online"></button>
+        <button class="toggle-btn" data-mode="puzzle"></button>
+      </div>
+      <div id="pause-arena-group">
+        <button class="toggle-btn active" data-arena="cathedral"></button>
+        <button class="toggle-btn" data-arena="inferno"></button>
+        <button class="toggle-btn" data-arena="frost"></button>
+        <button class="toggle-btn" data-arena="cosmos"></button>
+      </div>
+      <div id="pause-skin-group">
+        <button class="toggle-btn active" data-skin="classic"></button>
+        <button class="toggle-btn" data-skin="gold"></button>
+        <button class="toggle-btn" data-skin="amethyst"></button>
+        <button class="toggle-btn" data-skin="emerald"></button>
       </div>
     </div>
+  </div>
   </div>
 
     <!-- Modal de Perfil do Jogador (Personalizar Nome, Foto e Ver Conquistas) -->
@@ -7830,6 +8622,191 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       }
 
       // 2. Bottom sheets
+      
+      // ==================== LÓGICA DO MENU DE PAUSA (ESTASE ARCANA) ====================
+      window._togglePause = function(shouldPause) {
+        if (document.body.classList.contains('in-lobby')) return;
+        const modal = document.getElementById('pause-modal');
+        if (!modal) return;
+
+        const currentOpen = modal.classList.contains('open') && !modal.classList.contains('hidden');
+        const target = (typeof shouldPause === 'boolean') ? shouldPause : !currentOpen;
+
+        if (target) {
+          if (window._closeSheets) window._closeSheets();
+          if (window._toggleEmotePopover) window._toggleEmotePopover(false);
+          window._setPauseConfirm(null);
+
+          document.body.classList.add('is-paused');
+          modal.classList.remove('hidden');
+          modal.classList.add('open');
+          window._updatePauseModalUI();
+
+          try {
+            if (window._WIZARD_GAME?.Ie?.playClick) window._WIZARD_GAME.Ie.playClick();
+          } catch(err) {}
+        } else {
+          document.body.classList.remove('is-paused');
+          modal.classList.remove('open');
+          modal.classList.add('hidden');
+          window._setPauseConfirm(null);
+
+          try {
+            if (window._WIZARD_GAME?.Ie?.playClick) window._WIZARD_GAME.Ie.playClick();
+          } catch(err) {}
+        }
+      };
+
+      window._updatePauseModalUI = function() {
+        const wClock = document.getElementById('pause-white-clock');
+        const bClock = document.getElementById('pause-black-clock');
+        const timerW = document.getElementById('timer-w');
+        const timerB = document.getElementById('timer-b');
+
+        if (wClock) {
+          if (timerW && timerW.textContent.trim()) {
+            wClock.textContent = timerW.textContent.trim();
+          } else if (window._WIZARD_GAME?.getTimers) {
+            const t = window._WIZARD_GAME.getTimers();
+            const m = Math.floor(t.w / 60);
+            const s = Math.floor(t.w % 60);
+            wClock.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+          }
+        }
+
+        if (bClock) {
+          if (timerB && timerB.textContent.trim()) {
+            bClock.textContent = timerB.textContent.trim();
+          } else if (window._WIZARD_GAME?.getTimers) {
+            const t = window._WIZARD_GAME.getTimers();
+            const m = Math.floor(t.b / 60);
+            const s = Math.floor(t.b % 60);
+            bClock.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+          }
+        }
+
+        const moveLabel = document.getElementById('pause-move-label');
+        if (moveLabel) {
+          const historyList = document.querySelector('#history-modal .history-list') || document.getElementById('move-history-list');
+          const moveCount = historyList ? historyList.children.length : 1;
+          const moveNum = Math.max(1, Math.ceil(moveCount / 2));
+          moveLabel.textContent = 'LANCE ' + moveNum;
+        }
+
+        // Chip SFX
+        const sfxBtn = document.getElementById('chip-sfx');
+        const sfxIcon = document.getElementById('chip-sfx-icon');
+        const isMuted = document.body.classList.contains('sfx-muted') || (window._isSfxMuted === true);
+        if (sfxBtn) {
+          sfxBtn.classList.toggle('quick-chip-on', !isMuted);
+          sfxBtn.classList.toggle('quick-chip-off', isMuted);
+        }
+        if (sfxIcon) {
+          sfxIcon.innerHTML = !isMuted
+            ? '<svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.5 8.5C16.8 9.8 16.8 14.2 15.5 15.5" /></svg>'
+            : '<svg class="w-3.5 h-3.5 text-[#82799D] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>';
+        }
+
+        // Chip Música
+        const musicBtn = document.getElementById('chip-music');
+        const musicIcon = document.getElementById('chip-music-icon');
+        const isMusicOff = document.body.classList.contains('music-muted') || (window._isMusicMuted === true);
+        if (musicBtn) {
+          musicBtn.classList.toggle('quick-chip-on', !isMusicOff);
+          musicBtn.classList.toggle('quick-chip-off', isMusicOff);
+        }
+        if (musicIcon) {
+          musicIcon.innerHTML = !isMusicOff
+            ? '<svg class="w-3.5 h-3.5 text-[#C5B3FF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5L21 3V16" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>'
+            : '<svg class="w-3.5 h-3.5 text-[#82799D] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5L21 3V16" /><circle cx="6" cy="18" r="3" /><line x1="1" y1="1" x2="23" y2="23" /></svg>';
+        }
+
+        // Chip Visão 3D
+        const view3dBtn = document.getElementById('chip-view3d');
+        const viewLabel = document.getElementById('chip-view3d-label');
+        const pillLabel = document.getElementById('view-pill-label');
+        const is2D = pillLabel && pillLabel.textContent.includes('2D');
+        if (view3dBtn) {
+          view3dBtn.classList.toggle('quick-chip-on', !is2D);
+          view3dBtn.classList.toggle('quick-chip-off', is2D);
+        }
+        if (viewLabel) {
+          viewLabel.textContent = is2D ? 'Visão 2D' : 'Visão 3D';
+        }
+      };
+
+      window._togglePauseSound = function() {
+        const btn = document.getElementById('btn-hud-sound-toggle');
+        if (btn) btn.click();
+        window._isSfxMuted = !window._isSfxMuted;
+        document.body.classList.toggle('sfx-muted', window._isSfxMuted);
+        window._updatePauseModalUI();
+        if (window.showToast) {
+          window.showToast(window._isSfxMuted ? 'Efeitos sonoros desativados' : 'Efeitos sonoros ativados', 1800);
+        }
+      };
+
+      window._togglePauseMusic = function() {
+        window._isMusicMuted = !window._isMusicMuted;
+        document.body.classList.toggle('music-muted', window._isMusicMuted);
+        try {
+          if (window._WIZARD_GAME?.Ie?.toggleMusic) {
+            window._WIZARD_GAME.Ie.toggleMusic();
+          }
+        } catch(e) {}
+        window._updatePauseModalUI();
+        if (window.showToast) {
+          window.showToast(window._isMusicMuted ? 'Música da Catedral desativada' : 'Música da Catedral ativada', 1800);
+        }
+      };
+
+      window._togglePauseView3D = function() {
+        const btn = document.getElementById('btn-cam') || document.getElementById('btn-view-3d-toggle');
+        if (btn) btn.click();
+        setTimeout(window._updatePauseModalUI, 60);
+      };
+
+      window._setPauseConfirm = function(mode) {
+        const restartBtn = document.getElementById('pause-restart-btn');
+        const restartConfirm = document.getElementById('pause-restart-confirm');
+        const exitBtn = document.getElementById('pause-exit-btn');
+        const exitConfirm = document.getElementById('pause-exit-confirm');
+
+        const showRestart = (mode === 'restart');
+        const showExit = (mode === 'exit');
+
+        if (restartBtn && restartConfirm) {
+          restartBtn.classList.toggle('hidden', showRestart);
+          restartConfirm.classList.toggle('hidden', !showRestart);
+        }
+        if (exitBtn && exitConfirm) {
+          exitBtn.classList.toggle('hidden', showExit);
+          exitConfirm.classList.toggle('hidden', !showExit);
+        }
+      };
+
+      window._confirmPauseRestart = function() {
+        window._togglePause(false);
+        window._triggerReset();
+        if (window.showToast) window.showToast('Partida reiniciada!', 1800);
+      };
+
+      window._confirmPauseExit = function() {
+        window._togglePause(false);
+        window._returnToLobby();
+      };
+
+      // Atalho de Teclado ESC para Pausar / Retomar a Batalha
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (!document.body.classList.contains('in-lobby')) {
+            e.preventDefault();
+            e.stopPropagation();
+            window._togglePause();
+          }
+        }
+      }, true);
+
       window._openMatchSheet = function() {
         const s = document.getElementById('match-sheet');
         if (s) s.classList.add('open');
@@ -7940,6 +8917,1282 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
         }
       };
     })();
+  </script>
+<!-- =====================================================================
+         MODAL 1 — DESAFIO DIÁRIO (MINI TABULEIRO 5x5: MATE EM 2 COM CAVALO ARCANO)
+         ===================================================================== -->
+    <div id="daily-modal" class="modal-backdrop absolute inset-0 z-40 bg-[#05040A]/82 backdrop-blur-md flex items-center justify-center p-4" onclick="handleModalBackdrop(event, 'daily-modal')">
+      <div class="modal-card relative w-full max-w-[386px] rounded-[26px] bg-gradient-to-b from-[#1A142E] via-[#120E22] to-[#0B0816] border border-gold-light/35 p-4 shadow-2xl flex flex-col gap-3">
+        <!-- Cabeçalho -->
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <span class="font-display text-[10px] font-bold tracking-[0.18em] text-gold-light uppercase">
+              Enigma Diário • Mate em 2
+            </span>
+            <h3 class="font-display text-[16px] font-bold text-[#FFF7E2] mt-0.5 leading-tight">
+              Runas do Solstício
+            </h3>
+          </div>
+          <button type="button" onclick="closeModals()" aria-label="Fechar enigma"
+                  class="tap-scale w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] flex items-center justify-center text-[#CFC7E3]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M18 6L6 18M6 6L18 18" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Instrução dinâmica do passo -->
+        <div id="daily-puzzle-banner" class="rounded-xl bg-[#0D0A19]/90 border border-gold-light/20 px-3 py-2 flex items-center justify-between gap-2 text-xs">
+          <span id="daily-puzzle-status" class="text-[#DCD4EC] font-medium leading-snug">
+            Mármore joga. Sacrifique com maestria para o mate do Cavalo Arcano!
+          </span>
+          <span id="daily-step-pill" class="shrink-0 px-2 py-0.5 rounded-full bg-amethyst/20 border border-amethyst-soft/35 text-[10px] font-bold text-amethyst-bright tabular-nums">
+            Lance 1/2
+          </span>
+        </div>
+
+        <!-- Mini Tabuleiro Tático 5x5 (Colunas d–h, Fileiras 4–8) -->
+        <div id="daily-mini-board" class="mini-board w-full max-w-[310px] mx-auto"></div>
+
+        <!-- Rodapé de ações do Enigma -->
+        <div class="flex items-center justify-between gap-2 pt-0.5">
+          <button type="button" onclick="showDailyHint()"
+                  class="tap-scale flex-1 rounded-xl bg-amethyst/16 hover:bg-amethyst/24 border border-amethyst-soft/35 py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-bold text-amethyst-bright">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="11" r="6" />
+              <path d="M9 20H15M10.5 17L12 20L13.5 17" />
+            </svg>
+            <span>Dica do Oráculo</span>
+          </button>
+          <button type="button" onclick="resetDailyPuzzle()"
+                  class="tap-scale rounded-xl bg-white/[0.05] hover:bg-white/[0.10] border border-white/12 py-2.5 px-3.5 text-xs font-semibold text-[#DCD4EC]">
+            Reiniciar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 2 — CORRIDA DOS ENIGMAS (PUZZLE RUSH JOGÁVEL)
+         ===================================================================== -->
+    <div id="rush-modal" class="modal-backdrop absolute inset-0 z-40 bg-[#05040A]/82 backdrop-blur-md flex items-center justify-center p-4" onclick="handleModalBackdrop(event, 'rush-modal')">
+      <div class="modal-card relative w-full max-w-[386px] rounded-[26px] bg-gradient-to-b from-[#211420] via-[#130E20] to-[#0A0814] border border-ember/40 p-4 shadow-2xl flex flex-col gap-3">
+        <!-- Topo: Título + Fechar -->
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-ember shadow-[0_0_8px_#E06C2D] animate-pulse"></span>
+            <h3 class="font-display text-[15px] font-bold text-[#FFF4E4] tracking-wide">CORRIDA DOS ENIGMAS</h3>
+          </div>
+          <button type="button" onclick="closeModals()" aria-label="Fechar Puzzle Rush"
+                  class="tap-scale w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] flex items-center justify-center text-[#CFC7E3]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M18 6L6 18M6 6L18 18" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- HUD do Rush: Timer, Vidas & Acertos -->
+        <div class="grid grid-cols-3 gap-2 rounded-2xl bg-[#0C0916]/90 border border-white/[0.08] p-2.5 text-center tabular-nums">
+          <div>
+            <div class="text-[9.5px] font-semibold uppercase tracking-wider text-[#958CB0]">Tempo</div>
+            <div id="rush-timer" class="text-[14px] font-extrabold text-ember-soft mt-0.5">03:00</div>
+          </div>
+          <div class="border-x border-white/[0.08]">
+            <div class="text-[9.5px] font-semibold uppercase tracking-wider text-[#958CB0]">Vidas</div>
+            <div id="rush-lives" class="flex items-center justify-center gap-1 mt-1"></div>
+          </div>
+          <div>
+            <div class="text-[9.5px] font-semibold uppercase tracking-wider text-[#958CB0]">Acertos</div>
+            <div id="rush-score" class="text-[14px] font-extrabold text-gold-light mt-0.5">0</div>
+          </div>
+        </div>
+
+        <p id="rush-prompt" class="text-xs text-[#CFC7E3] text-center font-medium">
+          Encontre o xeque-mate em 1 lance!
+        </p>
+
+        <!-- Tabuleiro 5x5 do Rush -->
+        <div id="rush-mini-board" class="mini-board w-full max-w-[300px] mx-auto"></div>
+
+        <div class="flex items-center justify-between gap-2">
+          <button type="button" onclick="startRushSession()"
+                  class="tap-scale flex-1 rounded-xl bg-white/[0.05] hover:bg-white/[0.10] border border-white/12 py-2.5 text-xs font-semibold text-[#E5DDF5]">
+            Recomeçar Corrida
+          </button>
+          <button type="button" onclick="closeModals()"
+                  class="tap-scale rounded-xl bg-gold-light/14 hover:bg-gold-light/22 border border-gold-light/35 px-4 py-2.5 text-xs font-bold text-gold-bright">
+            Concluir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 3 — TORNEIO DOS ARQUIMAGOS (CHAVE MATA-MATA DE 8 JOGADORES)
+         ===================================================================== -->
+    <div id="tournament-modal" class="modal-backdrop absolute inset-0 z-40 bg-[#05040A]/82 backdrop-blur-md flex items-center justify-center p-4" onclick="handleModalBackdrop(event, 'tournament-modal')">
+      <div class="modal-card relative w-full max-w-[386px] rounded-[26px] bg-gradient-to-b from-[#1B1533] via-[#120E24] to-[#0B0816] border border-amethyst-soft/35 p-4 shadow-2xl flex flex-col gap-3.5">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <span class="font-display text-[10px] font-bold tracking-[0.18em] text-amethyst-bright uppercase">
+              Copa da Catedral • 8 Arquimagos
+            </span>
+            <h3 class="font-display text-[16px] font-bold text-[#FFF6DE] mt-0.5">
+              Chave do Torneio
+            </h3>
+          </div>
+          <button type="button" onclick="closeModals()" aria-label="Fechar torneio"
+                  class="tap-scale w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] flex items-center justify-center text-[#CFC7E3]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M18 6L6 18M6 6L18 18" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Prêmio e Formato -->
+        <div class="rounded-2xl bg-[#0D0A1A]/90 border border-gold-light/20 px-3 py-2.5 flex items-center justify-between text-xs tabular-nums">
+          <div class="flex flex-col">
+            <span class="text-[10px] uppercase tracking-wider text-[#9A91B4] font-semibold">Premiação do Campeão</span>
+            <span class="font-bold text-gold-light mt-0.5">500 Ouro + Selo Arquimago</span>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-amethyst/18 border border-amethyst-soft/35 text-[10.5px] font-bold text-amethyst-bright">
+            Em 18m
+          </span>
+        </div>
+
+        <!-- Quartas de Final (4 confrontos limpos) -->
+        <div class="grid grid-cols-2 gap-2 text-[11px] tabular-nums">
+          <div class="rounded-xl bg-white/[0.03] border border-gold-light/30 p-2.5 flex flex-col gap-1.5">
+            <span class="text-[9px] font-bold tracking-wider uppercase text-gold-light">Confronto I</span>
+            <div class="flex items-center justify-between font-bold text-[#FFF7E2]">
+              <span id="bracket-player-slot">Você (Mago)</span>
+              <span class="text-[10px] text-gold-light">574</span>
+            </div>
+            <div class="h-[1px] bg-white/[0.08]"></div>
+            <div class="flex items-center justify-between text-[#BDB4D4]">
+              <span>Elara</span>
+              <span class="text-[10px] text-[#8E85A8]">800</span>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white/[0.03] border border-white/[0.08] p-2.5 flex flex-col gap-1.5">
+            <span class="text-[9px] font-bold tracking-wider uppercase text-[#9A91B4]">Confronto II</span>
+            <div class="flex items-center justify-between text-[#E5DDF5] font-semibold">
+              <span>Ignis</span>
+              <span class="text-[10px] text-ember-soft">1300</span>
+            </div>
+            <div class="h-[1px] bg-white/[0.08]"></div>
+            <div class="flex items-center justify-between text-[#BDB4D4]">
+              <span>Vespera</span>
+              <span class="text-[10px] text-[#8E85A8]">1180</span>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white/[0.03] border border-white/[0.08] p-2.5 flex flex-col gap-1.5">
+            <span class="text-[9px] font-bold tracking-wider uppercase text-[#9A91B4]">Confronto III</span>
+            <div class="flex items-center justify-between text-[#E5DDF5] font-semibold">
+              <span>Glacia</span>
+              <span class="text-[10px] text-amethyst-bright">1700</span>
+            </div>
+            <div class="h-[1px] bg-white/[0.08]"></div>
+            <div class="flex items-center justify-between text-[#BDB4D4]">
+              <span>Solarius</span>
+              <span class="text-[10px] text-[#8E85A8]">1540</span>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white/[0.03] border border-white/[0.08] p-2.5 flex flex-col gap-1.5">
+            <span class="text-[9px] font-bold tracking-wider uppercase text-[#9A91B4]">Confronto IV</span>
+            <div class="flex items-center justify-between text-[#E5DDF5] font-semibold">
+              <span>Malakor</span>
+              <span class="text-[10px] text-gold-light">2100</span>
+            </div>
+            <div class="h-[1px] bg-white/[0.08]"></div>
+            <div class="flex items-center justify-between text-[#BDB4D4]">
+              <span>Nyx</span>
+              <span class="text-[10px] text-[#8E85A8]">1920</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botão de Inscrição -->
+        <button id="tournament-join-btn" type="button" onclick="toggleTournamentRegistration()"
+                class="cta-gold tap-scale w-full h-[46px] rounded-2xl text-[13px] font-extrabold text-[#14101C] tracking-wide">
+          Garantir Vaga na Chave
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== LÓGICA INTERATIVA, ENIGMAS & ÁUDIO ==================== -->
+  
+
+  <script>
+
+    /* =====================================================================
+       1. ESTADO DA TELA DE DESAFIOS & MISSÕES
+       ===================================================================== */
+    const state = {
+      gold: parseInt(localStorage.getItem('wizardCoins') || '180', 10),
+      xp: parseInt(localStorage.getItem('wizardXP') || '420', 10),
+      gold: 180,
+      xp: 420,
+      soundOn: true,
+      dailySolved: false,
+      rushRecord: 0,
+      tournamentJoined: false,
+      grimoireCollapsed: false,
+      simulatePending: false,
+      chestSeconds: 4 * 3600 + 58 * 60, // 04:58:00 inicial
+      chestReady: false,
+      chestClaimedToday: false,
+      missions: [
+        {
+          id: 'hunter',
+          title: 'Caçador de Peças',
+          desc: 'Capture 8 peças em batalha',
+          progress: '8/8',
+          gold: 120,
+          xp: 80,
+          claimed: true,
+          icon: 'swords'
+        },
+        {
+          id: 'victory',
+          title: 'Vitória Estratégica',
+          desc: 'Vença 1 partida no modo IA ou Torre',
+          progress: '1/1',
+          gold: 100,
+          xp: 70,
+          claimed: true,
+          icon: 'trophy'
+        },
+        {
+          id: 'decoder',
+          title: 'Decifrador de Enigmas',
+          desc: 'Resolva 1 Enigma Tático',
+          progress: '1/1',
+          gold: 80,
+          xp: 60,
+          claimed: true,
+          icon: 'rune'
+        }
+      ]
+    };
+
+    let audioCtx = null;
+    let toastTimer = null;
+
+    /* =====================================================================
+       2. SINTETIZADOR DE ÁUDIO ARCANA (WEB AUDIO API)
+       ===================================================================== */
+    function ensureAudio() {
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) audioCtx = new Ctx();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      } catch (_) {}
+    }
+
+    function playChime(type) {
+      if (!state.soundOn) return;
+      try {
+        ensureAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(680, now);
+          osc.frequency.exponentialRampToValueAtTime(480, now + 0.05);
+          g.gain.setValueAtTime(0.06, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.065);
+        } else if (type === 'move') {
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(190, now);
+          osc.frequency.exponentialRampToValueAtTime(75, now + 0.09);
+          g.gain.setValueAtTime(0.14, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.11);
+        } else if (type === 'error') {
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(155, now);
+          osc.frequency.exponentialRampToValueAtTime(98, now + 0.16);
+          g.gain.setValueAtTime(0.08, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.19);
+        } else if (type === 'reward') {
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + i * 0.065);
+            g.gain.setValueAtTime(0.085, now + i * 0.065);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.065 + 0.34);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(now + i * 0.065);
+            osc.stop(now + i * 0.065 + 0.36);
+          });
+        } else if (type === 'victory') {
+          [440, 554.37, 659.25, 880].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            g.gain.setValueAtTime(0.095, now + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.42);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.44);
+          });
+        }
+      } catch (_) {}
+    }
+
+    function renderSoundButton() {
+      const slot = document.getElementById('sound-icon-slot');
+      const btn = document.getElementById('sound-toggle-btn');
+      if (state.soundOn) {
+        btn.classList.add('text-gold-light');
+        btn.classList.remove('text-[#7D7596]');
+        slot.innerHTML = `
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.5 8.5C16.8 9.8 16.8 14.2 15.5 15.5" />
+          </svg>`;
+      } else {
+        btn.classList.remove('text-gold-light');
+        btn.classList.add('text-[#7D7596]');
+        slot.innerHTML = `
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M22 9L16 15M16 9L22 15" />
+          </svg>`;
+      }
+    }
+
+    function toggleAudio() {
+      state.soundOn = !state.soundOn;
+      renderSoundButton();
+      if (state.soundOn) {
+        playChime('click');
+        showToast('Efeitos sonoros arcanos ativados.');
+      } else {
+        showToast('Efeitos sonoros silenciados.');
+      }
+    }
+
+    /* =====================================================================
+       3. UTILITÁRIOS DE UI (TOAST, PARTÍCULAS, CARTEIRA, SVGs)
+       ===================================================================== */
+    function showToast(message, tone = 'gold') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const dot = document.getElementById('toast-dot');
+      msg.textContent = message;
+      dot.className = tone === 'amethyst'
+        ? 'w-2 h-2 rounded-full bg-amethyst-soft shrink-0 shadow-[0_0_8px_#A78BFA]'
+        : tone === 'emerald'
+          ? 'w-2 h-2 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_#34D399]'
+          : 'w-2 h-2 rounded-full bg-gold-light shrink-0 shadow-[0_0_8px_#F2D28B]';
+
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2700);
+    }
+
+    function spawnSparks(x, y, palette = ['#FBF0CF', '#F2D28B', '#A78BFA']) {
+      for (let i = 0; i < 16; i++) {
+        const el = document.createElement('span');
+        el.className = 'fx-spark';
+        const angle = (Math.PI * 2 * i) / 16 + (Math.random() - 0.5) * 0.35;
+        const dist = 28 + Math.random() * 44;
+        const col = palette[i % palette.length];
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        el.style.background = col;
+        el.style.boxShadow = `0 0 10px ${col}`;
+        el.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        el.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 800);
+      }
+    }
+
+    function updateWalletUI() {
+      document.getElementById('wallet-gold').textContent = state.gold;
+      document.getElementById('wallet-xp').textContent = state.xp;
+    }
+
+    function handleBackClick() {
+      playChime('click');
+      if (window.switchSubView) window.switchSubView('home');
+      else if (window._switchSubView) window._switchSubView('home');
+      else if (document.getElementById('btn-challenges-back')) document.getElementById('btn-challenges-back').click();
+      playChime('click');
+      showToast('Retornando à Catedral Arcana...');
+    }
+
+    function missionIconSVG(kind, claimed) {
+      const accent = claimed ? '#9F96B8' : '#F2D28B';
+      if (kind === 'swords') {
+        return `<svg class="w-4 h-4 shrink-0" style="color:${accent}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3H6L17.5 14.5"/><path d="M13 19L19 13M16 16L20 20"/><path d="M14.5 6.5L18 3H21V6L17.5 9.5M5 14L9 18"/></svg>`;
+      }
+      if (kind === 'trophy') {
+        return `<svg class="w-4 h-4 shrink-0" style="color:${accent}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21H16M12 17V21M7 4H17V10C17 12.8 14.8 15 12 15C9.2 15 7 12.8 7 10V4Z"/><path d="M7 6H4.5V8.5C4.5 10.2 5.6 11.4 7 11.5M17 6H19.5V8.5C19.5 10.2 18.4 11.4 17 11.5"/></svg>`;
+      }
+      return `<svg class="w-4 h-4 shrink-0" style="color:${accent}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L14.8 7.6L21 8.5L16.5 12.9L17.6 19.1L12 16.1L6.4 19.1L7.5 12.9L3 8.5L9.2 7.6L12 2Z"/></svg>`;
+    }
+
+    function formatHMS(totalSec) {
+      const s = Math.max(0, totalSec);
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const rem = s % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+    }
+
+    /* =====================================================================
+       4. RENDERIZAÇÃO DAS MISSÕES DIÁRIAS & BAÚ ARCANO
+       ===================================================================== */
+    function renderGrimoire() {
+      const claimedCount = state.missions.filter((m) => m.claimed).length;
+      document.getElementById('grimoire-counter').textContent = `${claimedCount}/${state.missions.length}`;
+
+      const simBtn = document.getElementById('simulate-pending-btn');
+      simBtn.textContent = state.simulatePending ? 'Voltar ao Coletado' : 'Simular Pendente';
+      simBtn.className = state.simulatePending
+        ? 'tap-scale rounded-full bg-gold-light/16 border border-gold-light/45 px-2.5 py-0.5 text-[10px] font-bold text-gold-bright transition-colors'
+        : 'tap-scale rounded-full bg-white/[0.04] hover:bg-gold-light/12 border border-white/[0.10] hover:border-gold-light/35 px-2.5 py-0.5 text-[10px] font-semibold text-[#C9C0DE] hover:text-gold-bright transition-colors';
+
+      // Baú Arcano Diário
+      const chestCard = document.getElementById('daily-chest-card');
+      const chestStatus = document.getElementById('chest-status-text');
+      const chestAction = document.getElementById('chest-action-slot');
+
+      if (state.chestReady && !state.chestClaimedToday) {
+        chestCard.classList.add('chest-ready');
+        chestStatus.textContent = 'Essência carregada! Pronto para abrir.';
+        chestStatus.className = 'text-[10.5px] text-gold-light font-semibold mt-0.5 truncate';
+        chestAction.innerHTML = `
+          <button type="button" onclick="claimDailyChest(event)"
+                  class="cta-gold tap-scale rounded-xl px-3 py-2 text-[11px] font-extrabold text-[#14101C] whitespace-nowrap">
+            Abrir Baú
+          </button>`;
+      } else {
+        chestCard.classList.remove('chest-ready');
+        chestStatus.textContent = 'Recarregando essência arcana...';
+        chestStatus.className = 'text-[10.5px] text-[#9A91B4] mt-0.5 truncate';
+        chestAction.innerHTML = `
+          <button type="button" onclick="handleLockedChestClick()"
+                  class="tap-scale inline-flex items-center gap-1.5 rounded-xl bg-[#0A0814]/90 border border-white/[0.08] px-2.5 py-2 text-[11px] font-bold text-[#ABA2C4] tabular-nums">
+            <svg class="w-3.5 h-3.5 text-gold-deep shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 3H17M7 21H17M8.5 3V6.5C8.5 8.8 10.3 10.5 12 12C13.7 10.5 15.5 8.8 15.5 6.5V3M8.5 21V17.5C8.5 15.2 10.3 13.5 12 12C13.7 13.5 15.5 15.2 15.5 17.5V21" />
+            </svg>
+            <span id="chest-timer-display">${formatHMS(state.chestSeconds)}</span>
+          </button>`;
+      }
+
+      // Lista de Missões (respeitando colapso opcional)
+      const list = document.getElementById('missions-list');
+      const chev = document.getElementById('grimoire-chevron');
+      chev.style.transform = state.grimoireCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+
+      if (state.grimoireCollapsed) {
+        list.innerHTML = '';
+        list.classList.add('hidden');
+        return;
+      }
+      list.classList.remove('hidden');
+
+      list.innerHTML = state.missions.map((m) => {
+        const cardStyle = m.claimed
+          ? 'bg-[#0E0B1A]/75 border-white/[0.07]'
+          : 'bg-gradient-to-r from-[#1D1634]/95 to-[#151026]/95 border-gold-light/40 shadow-[0_6px_18px_rgba(201,154,69,0.12)]';
+
+        const barGradient = m.claimed
+          ? 'from-amethyst-deep/75 via-amethyst/70 to-gold-deep/70'
+          : 'from-gold-deep via-gold-light to-gold-bright';
+
+        const rightControl = m.claimed
+          ? `<span class="inline-flex items-center gap-1 rounded-lg bg-white/[0.04] border border-white/[0.07] px-2.5 py-1 text-[10.5px] font-semibold text-[#8F87A8] shrink-0">
+               <svg class="w-3 h-3 text-gold-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13L9.5 17.5L19 7"/></svg>
+               <span>Coletado</span>
+             </span>`
+          : `<button type="button" onclick="claimMission('${m.id}', event)"
+                     class="cta-gold tap-scale rounded-lg px-3 py-1 text-[10.5px] font-extrabold text-[#14101C] shrink-0">
+               Resgatar
+             </button>`;
+
+        return `
+          <div class="rounded-2xl border p-3 flex flex-col gap-2 transition-all ${cardStyle}">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                ${missionIconSVG(m.icon, m.claimed)}
+                <span class="text-[12.5px] font-bold ${m.claimed ? 'text-[#DCD4EC]' : 'text-[#FFF7E2]'} truncate">${m.title}</span>
+              </div>
+              <div class="inline-flex items-center gap-1.5 rounded-full bg-[#0A0814]/85 border border-gold-light/18 px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0">
+                <span class="inline-flex items-center gap-0.5 text-gold-light">
+                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>
+                  +${m.gold}
+                </span>
+                <span class="text-white/25">•</span>
+                <span class="text-amethyst-bright">+${m.xp} XP</span>
+              </div>
+            </div>
+
+            <!-- Barra de Progresso Fina e Refinada -->
+            <div class="w-full h-1.5 rounded-full bg-[#1C1630] overflow-hidden">
+              <div class="h-full w-full rounded-full bg-gradient-to-r ${barGradient}"></div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] text-[#9A91B4] truncate tabular-nums">
+                ${m.desc} <strong class="font-semibold text-[#C6BED8]">(${m.progress})</strong>
+              </span>
+              ${rightControl}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleGrimoireCollapse() {
+      playChime('click');
+      state.grimoireCollapsed = !state.grimoireCollapsed;
+      renderGrimoire();
+    }
+
+    function toggleSimulatePending() {
+      playChime('click');
+      state.simulatePending = !state.simulatePending;
+      if (state.simulatePending) {
+        state.chestReady = true;
+        state.chestClaimedToday = false;
+        state.missions.forEach((m) => (m.claimed = false));
+        showToast('Modo Pendente ativo: resgate as missões e abra o Baú!', 'gold');
+      } else {
+        state.chestReady = false;
+        state.missions.forEach((m) => (m.claimed = true));
+        showToast('Visualização restaurada para estado coletado.');
+      }
+      renderGrimoire();
+    }
+
+    function handleLockedChestClick() {
+      playChime('click');
+      showToast('Baú em recarga. Use "Simular Pendente" acima para testar a abertura.', 'amethyst');
+    }
+
+    function claimDailyChest(ev) {
+      if (!state.chestReady || state.chestClaimedToday) return;
+      state.chestClaimedToday = true;
+      state.chestReady = false;
+      state.gold += 200;
+      state.xp += 100;
+      playChime('reward');
+      updateWalletUI();
+      if (ev && ev.clientX) spawnSparks(ev.clientX, ev.clientY);
+      showToast('Baú Arcano aberto! +200 Ouro e +100 XP adicionados.', 'gold');
+      renderGrimoire();
+    }
+
+    function claimMission(id, ev) {
+      const m = state.missions.find((item) => item.id === id);
+      if (!m || m.claimed) return;
+      m.claimed = true;
+      state.gold += m.gold;
+      state.xp += m.xp;
+      playChime('reward');
+      updateWalletUI();
+      if (ev && ev.clientX) spawnSparks(ev.clientX, ev.clientY);
+      showToast(`${m.title} resgatada! +${m.gold} Ouro • +${m.xp} XP`, 'gold');
+      renderGrimoire();
+    }
+
+    /* =====================================================================
+       5. PEÇAS SVG ESCULPIDAS PARA OS MINI TABULEIROS DE ENIGMAS
+       ===================================================================== */
+    function pieceSVG(color, type) {
+      const isW = color === 'w';
+      const fill = isW ? '#F2E7D3' : '#1E1733';
+      const stroke = isW ? '#8F6A25' : '#C4B5FD';
+      const accent = isW ? '#E5BE6E' : '#8B5CF6';
+
+      const body = {
+        k: `<path d="M22.5 6.5V12.5M19.5 9.2H25.5" stroke="${isW ? '#B88933' : '#D9CCFF'}" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M13.5 22C13.5 16.8 17.5 13.5 22.5 13.5C27.5 13.5 31.5 16.8 31.5 22C31.5 26 29.2 28.8 27 30.8L29.5 35.5H15.5L18 30.8C15.8 28.8 13.5 26 13.5 22Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12 36.2H33V40H12V36.2Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`,
+        q: `<circle cx="11.5" cy="14" r="2" fill="${accent}"/><circle cx="17" cy="10.5" r="2" fill="${accent}"/><circle cx="22.5" cy="9" r="2.2" fill="${accent}"/><circle cx="28" cy="10.5" r="2" fill="${accent}"/><circle cx="33.5" cy="14" r="2" fill="${accent}"/>
+            <path d="M12.5 16.5L16.2 26L17.5 13.2L22.5 25L27.5 13.2L28.8 26L32.5 16.5L30.2 34H14.8L12.5 16.5Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12.5 35H32.5V40H12.5V35Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`,
+        r: `<path d="M13 11.5H17V15.5H20.5V11.5H24.5V15.5H28V11.5H32V19.5L29.2 22V34H15.8V22L13 19.5V11.5Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12 35H33V40H12V35Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`,
+        b: `<circle cx="22.5" cy="8.5" r="2.3" fill="${accent}"/>
+            <path d="M22.5 11.2C17.2 14.5 14.8 19.8 15.8 26.2C16.2 28.8 17.5 30.8 18.2 33H26.8C27.5 30.8 28.8 28.8 29.2 26.2C30.2 19.8 27.8 14.5 22.5 11.2Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M20.2 18.2L25.4 23.4" stroke="${accent}" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M13 34.5H32V40H13V34.5Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`,
+        n: `<path d="M15.5 34C15.5 27.2 18.8 24.4 20.5 21.8C18 22.4 15.4 23.2 13.6 22.2C11.8 21.2 12.2 18.5 13.8 16.5L17.4 12.2L16.5 8.5L20.8 10.6C25.5 10.5 30.5 13.8 31.8 20.8C32.8 26 31.4 30.8 30.2 34H15.5Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle cx="19" cy="15.2" r="1.4" fill="${accent}"/>
+            <path d="M12.5 35H32.5V40H12.5V35Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`,
+        p: `<circle cx="22.5" cy="14.5" r="5.3" fill="${fill}" stroke="${stroke}" stroke-width="1.6"/>
+            <path d="M18.2 20.5H26.8C26.8 25.4 28.4 29.8 30.4 34H14.6C16.6 29.8 18.2 25.4 18.2 20.5Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M13 35H32V40H13V35Z" fill="${fill}" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round"/>`
+      };
+
+      const drop = isW
+        ? 'drop-shadow(0 3px 3px rgba(0,0,0,0.55))'
+        : 'drop-shadow(0 3px 4px rgba(0,0,0,0.75)) drop-shadow(0 0 3px rgba(167,139,250,0.35))';
+
+      return `<svg class="w-[82%] h-[82%] pointer-events-none z-10" style="filter:${drop}" viewBox="0 0 45 45" fill="none">${body[type]}</svg>`;
+    }
+
+    /* =====================================================================
+       6. DESAFIO DIÁRIO — MATE SUFOCADO EM 2 LANCES (5x5: d4..h8)
+          1. Dg8+! (d5 -> g8)  1... Txg8 (f8 -> g8)  2. Cf7# (h6 -> f7)
+       ===================================================================== */
+    const MINI_FILES = ['d', 'e', 'f', 'g', 'h'];
+    const dailyPuzzle = {
+      board: [],
+      step: 0, // 0 = aguarda Dg8+, 1 = aguarda Cf7#, 2 = resolvido
+      selected: null,
+      lastMove: null,
+      hint: null,
+      busy: false
+    };
+
+    function createEmpty5x5() {
+      return Array.from({ length: 5 }, () => Array(5).fill(null));
+    }
+
+    function resetDailyPuzzle() {
+      const b = createEmpty5x5();
+      // Coordenadas (row 0..4 = ranks 8..4, col 0..4 = files d..h)
+      b[0][4] = { c: 'b', t: 'k' }; // h8
+      b[0][2] = { c: 'b', t: 'r' }; // f8
+      b[1][3] = { c: 'b', t: 'p' }; // g7
+      b[1][4] = { c: 'b', t: 'p' }; // h7
+      b[3][0] = { c: 'w', t: 'q' }; // d5
+      b[2][4] = { c: 'w', t: 'n' }; // h6 (Cavalo Arcano)
+      b[4][0] = { c: 'w', t: 'k' }; // d4
+
+      dailyPuzzle.board = b;
+      dailyPuzzle.step = 0;
+      dailyPuzzle.selected = null;
+      dailyPuzzle.lastMove = null;
+      dailyPuzzle.hint = null;
+      dailyPuzzle.busy = false;
+
+      document.getElementById('daily-puzzle-status').textContent =
+        'Mármore joga. Sacrifique com maestria para o mate do Cavalo Arcano!';
+      document.getElementById('daily-step-pill').textContent = 'Lance 1/2';
+      renderDailyBoard();
+    }
+
+    function getMiniPseudoMoves(board, r, c) {
+      const p = board[r][c];
+      if (!p) return [];
+      const res = [];
+      const inB = (rr, cc) => rr >= 0 && rr < 5 && cc >= 0 && cc < 5;
+
+      if (p.t === 'n') {
+        [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => {
+          const nr = r + dr, nc = c + dc;
+          if (inB(nr, nc) && board[nr][nc]?.c !== p.c) res.push({ r: nr, c: nc });
+        });
+      } else if (p.t === 'q' || p.t === 'r' || p.t === 'b') {
+        const dirs = [];
+        if (p.t !== 'b') dirs.push([-1,0],[1,0],[0,-1],[0,1]);
+        if (p.t !== 'r') dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+        dirs.forEach(([dr, dc]) => {
+          let nr = r + dr, nc = c + dc;
+          while (inB(nr, nc)) {
+            if (!board[nr][nc]) {
+              res.push({ r: nr, c: nc });
+            } else {
+              if (board[nr][nc].c !== p.c) res.push({ r: nr, c: nc });
+              break;
+            }
+            nr += dr; nc += dc;
+          }
+        });
+      } else if (p.t === 'k') {
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (!dr && !dc) continue;
+            const nr = r + dr, nc = c + dc;
+            if (inB(nr, nc) && board[nr][nc]?.c !== p.c) res.push({ r: nr, c: nc });
+          }
+        }
+      }
+      return res;
+    }
+
+    function renderDailyBoard() {
+      const el = document.getElementById('daily-mini-board');
+      const legal = dailyPuzzle.selected
+        ? getMiniPseudoMoves(dailyPuzzle.board, dailyPuzzle.selected.r, dailyPuzzle.selected.c)
+        : [];
+
+      let html = '';
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const isLight = (r + c) % 2 === 0;
+          const piece = dailyPuzzle.board[r][c];
+          const isSel = dailyPuzzle.selected && dailyPuzzle.selected.r === r && dailyPuzzle.selected.c === c;
+          const isLegal = legal.some((m) => m.r === r && m.c === c);
+          const isLast = dailyPuzzle.lastMove && (
+            (dailyPuzzle.lastMove.fr === r && dailyPuzzle.lastMove.fc === c) ||
+            (dailyPuzzle.lastMove.tr === r && dailyPuzzle.lastMove.tc === c)
+          );
+          const isHint = dailyPuzzle.hint && (
+            (dailyPuzzle.hint.fr === r && dailyPuzzle.hint.fc === c) ||
+            (dailyPuzzle.hint.tr === r && dailyPuzzle.hint.tc === c)
+          );
+          const isCheck = dailyPuzzle.step === 2 && piece?.c === 'b' && piece?.t === 'k';
+
+          const cls = [
+            'mini-sq',
+            isLight ? 'mini-sq-light' : 'mini-sq-dark',
+            isLast ? 'mini-sq-last' : '',
+            isSel ? 'mini-sq-selected' : '',
+            isCheck ? 'mini-sq-check' : '',
+            isHint ? 'mini-sq-hint' : ''
+          ].filter(Boolean).join(' ');
+
+          const coordCol = isLight ? 'text-[#5A4B38]' : 'text-[#C6B8E3]';
+          const rLbl = c === 0 ? `<span class="absolute top-0.5 left-1 text-[8px] font-bold opacity-75 ${coordCol}">${8 - r}</span>` : '';
+          const fLbl = r === 4 ? `<span class="absolute bottom-0.5 right-1 text-[8px] font-bold opacity-75 ${coordCol}">${MINI_FILES[c]}</span>` : '';
+
+          const dot = isLegal
+            ? (piece ? `<span class="mini-capture"></span>` : `<span class="mini-dot"></span>`)
+            : '';
+
+          html += `
+            <div class="${cls}" onclick="handleDailySquareClick(${r}, ${c})">
+              ${rLbl}${fLbl}${dot}
+              ${piece ? pieceSVG(piece.c, piece.t) : ''}
+            </div>`;
+        }
+      }
+      el.innerHTML = html;
+    }
+
+    function handleDailySquareClick(r, c) {
+      if (dailyPuzzle.busy || dailyPuzzle.step === 2) return;
+      ensureAudio();
+
+      if (dailyPuzzle.selected) {
+        const legal = getMiniPseudoMoves(dailyPuzzle.board, dailyPuzzle.selected.r, dailyPuzzle.selected.c);
+        const valid = legal.some((m) => m.r === r && m.c === c);
+        if (valid) {
+          const fr = dailyPuzzle.selected.r, fc = dailyPuzzle.selected.c;
+
+          // Passo 0: solução única 1. Dg8+! (3,0 -> 0,3)
+          if (dailyPuzzle.step === 0 && fr === 3 && fc === 0 && r === 0 && c === 3) {
+            dailyPuzzle.board[0][3] = dailyPuzzle.board[3][0];
+            dailyPuzzle.board[3][0] = null;
+            dailyPuzzle.selected = null;
+            dailyPuzzle.hint = null;
+            dailyPuzzle.lastMove = { fr, fc, tr: r, tc: c };
+            dailyPuzzle.busy = true;
+            playChime('move');
+            document.getElementById('daily-puzzle-status').textContent =
+              'Brilhante! 1. Dg8+ força a Torre de Obsidiana a capturar...';
+            renderDailyBoard();
+
+            setTimeout(() => {
+              // Resposta única legal das Pretas: 1... Txg8 (0,2 -> 0,3)
+              dailyPuzzle.board[0][3] = dailyPuzzle.board[0][2];
+              dailyPuzzle.board[0][2] = null;
+              dailyPuzzle.lastMove = { fr: 0, fc: 2, tr: 0, tc: 3 };
+              dailyPuzzle.step = 1;
+              dailyPuzzle.busy = false;
+              playChime('move');
+              document.getElementById('daily-step-pill').textContent = 'Lance 2/2';
+              document.getElementById('daily-puzzle-status').textContent =
+                'Agora dê o golpe final com o Cavalo Arcano!';
+              renderDailyBoard();
+            }, 520);
+            return;
+          }
+
+          // Passo 1: solução única 2. Cf7# (2,4 -> 1,2)
+          if (dailyPuzzle.step === 1 && fr === 2 && fc === 4 && r === 1 && c === 2) {
+            dailyPuzzle.board[1][2] = dailyPuzzle.board[2][4];
+            dailyPuzzle.board[2][4] = null;
+            dailyPuzzle.selected = null;
+            dailyPuzzle.hint = null;
+            dailyPuzzle.lastMove = { fr, fc, tr: r, tc: c };
+            dailyPuzzle.step = 2;
+            playChime('victory');
+            document.getElementById('daily-step-pill').textContent = 'Mate!';
+            document.getElementById('daily-puzzle-status').textContent =
+              'Xeque-Mate Sufocado (2. Cf7#)! As Runas do Solstício foram dominadas.';
+            renderDailyBoard();
+
+            const rect = document.getElementById('daily-mini-board').getBoundingClientRect();
+            spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+            if (!state.dailySolved) {
+              state.dailySolved = true;
+              state.xp += 100;
+              updateWalletUI();
+              markDailySolvedUI();
+              showToast('Desafio Diário concluído! +100 XP conquistados.', 'emerald');
+            }
+            return;
+          }
+
+          // Lance errado: feedback suave com shake
+          playChime('error');
+          dailyPuzzle.selected = null;
+          renderDailyBoard();
+          const boardEl = document.getElementById('daily-mini-board');
+          boardEl.classList.remove('shake-board');
+          void boardEl.offsetWidth;
+          boardEl.classList.add('shake-board');
+          document.getElementById('daily-puzzle-status').textContent =
+            dailyPuzzle.step === 0
+              ? 'Quase! Procure um sacrifício de Dama protegido pelo Cavalo.'
+              : 'Quase! Salte com o Cavalo Arcano para sufocar o Rei em h8.';
+          return;
+        }
+      }
+
+      const p = dailyPuzzle.board[r][c];
+      if (p && p.c === 'w') {
+        dailyPuzzle.selected =
+          dailyPuzzle.selected && dailyPuzzle.selected.r === r && dailyPuzzle.selected.c === c
+            ? null
+            : { r, c };
+        playChime('click');
+        renderDailyBoard();
+      } else {
+        dailyPuzzle.selected = null;
+        renderDailyBoard();
+      }
+    }
+
+    function showDailyHint() {
+      if (dailyPuzzle.step === 2) return;
+      playChime('click');
+      dailyPuzzle.hint = dailyPuzzle.step === 0
+        ? { fr: 3, fc: 0, tr: 0, tc: 3 } // Dd5 -> g8
+        : { fr: 2, fc: 4, tr: 1, tc: 2 }; // Ch6 -> f7
+      renderDailyBoard();
+      showToast(
+        dailyPuzzle.step === 0 ? 'Oráculo: sacrifique a Dama em g8!' : 'Oráculo: salte o Cavalo para f7!',
+        'amethyst'
+      );
+    }
+
+    function markDailySolvedUI() {
+      const badge = document.getElementById('daily-xp-badge');
+      badge.className = 'shrink-0 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-400/40 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-300';
+      badge.innerHTML = `<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13L9.5 17.5L19 7"/></svg><span>Concluído</span>`;
+
+      const pill = document.getElementById('daily-status-pill');
+      pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-gold-light"></span><span class="text-gold-light">Enigma decifrado • +100 XP</span>`;
+      pill.className = 'inline-flex items-center gap-1.5 rounded-full bg-gold-light/12 border border-gold-light/35 px-2.5 py-0.5 text-[10.5px] font-bold text-gold-light';
+
+      document.getElementById('daily-cta-label').textContent = 'Rejogar Enigma Diário';
+    }
+
+    function openDailyPuzzle() {
+      playChime('click');
+      resetDailyPuzzle();
+      openModal('daily-modal');
+    }
+
+    /* =====================================================================
+       7. CORRIDA DOS ENIGMAS (PUZZLE RUSH — 3 MIN, 3 VIDAS, 3 ENIGMAS REAIS)
+       ===================================================================== */
+    const RUSH_PUZZLES = [
+      {
+        prompt: 'Mate em 1: explore a oitava fileira desprotegida!',
+        setup: (b) => {
+          b[0][4] = { c: 'b', t: 'k' }; // h8
+          b[1][3] = { c: 'b', t: 'p' }; // g7
+          b[1][4] = { c: 'b', t: 'p' }; // h7
+          b[3][1] = { c: 'w', t: 'r' }; // e5 -> e8# (0,1)
+          b[4][0] = { c: 'w', t: 'k' }; // d4
+        },
+        answer: { fr: 3, fc: 1, tr: 0, tc: 1 }
+      },
+      {
+        prompt: 'Mate em 1: salte com o Cavalo Arcano para o mate sufocado!',
+        setup: (b) => {
+          b[0][4] = { c: 'b', t: 'k' }; // h8
+          b[0][3] = { c: 'b', t: 'r' }; // g8
+          b[1][3] = { c: 'b', t: 'p' }; // g7
+          b[1][4] = { c: 'b', t: 'p' }; // h7
+          b[3][3] = { c: 'w', t: 'n' }; // g5 -> f7# (1,2)
+          b[4][0] = { c: 'w', t: 'k' }; // d4
+        },
+        answer: { fr: 3, fc: 3, tr: 1, tc: 2 }
+      },
+      {
+        prompt: 'Mate em 1: una o Bispo e a Dama no ataque decisivo!',
+        setup: (b) => {
+          b[0][3] = { c: 'b', t: 'k' }; // g8
+          b[0][2] = { c: 'b', t: 'r' }; // f8
+          b[1][2] = { c: 'b', t: 'p' }; // f7
+          b[1][4] = { c: 'b', t: 'p' }; // h7
+          b[3][3] = { c: 'w', t: 'q' }; // g5 -> g7# (1,3)
+          b[4][0] = { c: 'w', t: 'b' }; // d4 (protege g7)
+          b[4][2] = { c: 'w', t: 'k' }; // f4
+        },
+        answer: { fr: 3, fc: 3, tr: 1, tc: 3 }
+      }
+    ];
+
+    const rush = {
+      index: 0,
+      score: 0,
+      lives: 3,
+      seconds: 180,
+      board: [],
+      selected: null,
+      active: false,
+      intervalId: null
+    };
+
+    function openRushModal() {
+      playChime('click');
+      startRushSession();
+      openModal('rush-modal');
+    }
+
+    function startRushSession() {
+      if (rush.intervalId) clearInterval(rush.intervalId);
+      rush.index = 0;
+      rush.score = 0;
+      rush.lives = 3;
+      rush.seconds = 180;
+      rush.active = true;
+      loadRushPuzzle(0);
+
+      rush.intervalId = setInterval(() => {
+        if (!rush.active) return;
+        rush.seconds = Math.max(0, rush.seconds - 1);
+        renderRushHUD();
+        if (rush.seconds === 0) {
+          rush.active = false;
+          document.getElementById('rush-prompt').textContent = `Tempo esgotado! Você acertou ${rush.score}.`;
+        }
+      }, 1000);
+    }
+
+    function loadRushPuzzle(idx) {
+      const def = RUSH_PUZZLES[idx % RUSH_PUZZLES.length];
+      const b = createEmpty5x5();
+      def.setup(b);
+      rush.board = b;
+      rush.selected = null;
+      document.getElementById('rush-prompt').textContent = def.prompt;
+      renderRushHUD();
+      renderRushBoard();
+    }
+
+    function renderRushHUD() {
+      const m = Math.floor(rush.seconds / 60);
+      const s = rush.seconds % 60;
+      document.getElementById('rush-timer').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      document.getElementById('rush-score').textContent = rush.score;
+
+      const livesEl = document.getElementById('rush-lives');
+      livesEl.innerHTML = [0, 1, 2].map((i) => {
+        const alive = i < rush.lives;
+        return `<svg class="w-3.5 h-3.5 ${alive ? 'text-rose-400' : 'text-white/15'}" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.5S4.5 15.6 4.5 9.8C4.5 7 6.6 5 9.2 5C10.7 5 12 5.9 12 7.1C12 5.9 13.3 5 14.8 5C17.4 5 19.5 7 19.5 9.8C19.5 15.6 12 20.5 12 20.5Z"/></svg>`;
+      }).join('');
+    }
+
+    function renderRushBoard() {
+      const el = document.getElementById('rush-mini-board');
+      const legal = rush.selected
+        ? getMiniPseudoMoves(rush.board, rush.selected.r, rush.selected.c)
+        : [];
+
+      let html = '';
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const isLight = (r + c) % 2 === 0;
+          const piece = rush.board[r][c];
+          const isSel = rush.selected && rush.selected.r === r && rush.selected.c === c;
+          const isLegal = legal.some((m) => m.r === r && m.c === c);
+
+          const cls = [
+            'mini-sq',
+            isLight ? 'mini-sq-light' : 'mini-sq-dark',
+            isSel ? 'mini-sq-selected' : ''
+          ].filter(Boolean).join(' ');
+
+          const dot = isLegal
+            ? (piece ? `<span class="mini-capture"></span>` : `<span class="mini-dot"></span>`)
+            : '';
+
+          html += `
+            <div class="${cls}" onclick="handleRushSquareClick(${r}, ${c})">
+              ${dot}
+              ${piece ? pieceSVG(piece.c, piece.t) : ''}
+            </div>`;
+        }
+      }
+      el.innerHTML = html;
+    }
+
+    function handleRushSquareClick(r, c) {
+      if (!rush.active) return;
+      ensureAudio();
+
+      if (rush.selected) {
+        const legal = getMiniPseudoMoves(rush.board, rush.selected.r, rush.selected.c);
+        if (legal.some((m) => m.r === r && m.c === c)) {
+          const ans = RUSH_PUZZLES[rush.index % RUSH_PUZZLES.length].answer;
+          if (rush.selected.r === ans.fr && rush.selected.c === ans.fc && r === ans.tr && c === ans.tc) {
+            rush.board[r][c] = rush.board[rush.selected.r][rush.selected.c];
+            rush.board[rush.selected.r][rush.selected.c] = null;
+            rush.selected = null;
+            rush.score += 1;
+            playChime('reward');
+
+            if (rush.score > state.rushRecord) {
+              state.rushRecord = rush.score;
+              document.getElementById('rush-record-text').textContent =
+                `Recorde: ${state.rushRecord} ${state.rushRecord === 1 ? 'acerto' : 'acertos'}`;
+            }
+
+            renderRushHUD();
+            renderRushBoard();
+            const rect = document.getElementById('rush-mini-board').getBoundingClientRect();
+            spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2, ['#F4A36C', '#F2D28B', '#FBF0CF']);
+
+            setTimeout(() => {
+              if (!rush.active) return;
+              rush.index += 1;
+              loadRushPuzzle(rush.index);
+            }, 460);
+            return;
+          } else {
+            rush.lives = Math.max(0, rush.lives - 1);
+            rush.selected = null;
+            playChime('error');
+            renderRushHUD();
+            renderRushBoard();
+            const boardEl = document.getElementById('rush-mini-board');
+            boardEl.classList.remove('shake-board');
+            void boardEl.offsetWidth;
+            boardEl.classList.add('shake-board');
+
+            if (rush.lives === 0) {
+              rush.active = false;
+              document.getElementById('rush-prompt').textContent =
+                `Sem vidas restantes! Pontuação final: ${rush.score}.`;
+            }
+            return;
+          }
+        }
+      }
+
+      const p = rush.board[r][c];
+      if (p && p.c === 'w') {
+        rush.selected = rush.selected && rush.selected.r === r && rush.selected.c === c ? null : { r, c };
+        playChime('click');
+        renderRushBoard();
+      } else {
+        rush.selected = null;
+        renderRushBoard();
+      }
+    }
+
+    /* =====================================================================
+       8. TORNEIO DOS ARQUIMAGOS & CONTROLE DE MODAIS
+       ===================================================================== */
+    function openTournamentModal() {
+      playChime('click');
+      openModal('tournament-modal');
+    }
+
+    function toggleTournamentRegistration() {
+      state.tournamentJoined = !state.tournamentJoined;
+      const btn = document.getElementById('tournament-join-btn');
+      const badge = document.getElementById('tournament-status-badge');
+
+      if (state.tournamentJoined) {
+        playChime('reward');
+        btn.textContent = 'Inscrito na Chave • Cancelar';
+        btn.className = 'tap-scale w-full h-[46px] rounded-2xl bg-emerald-500/15 border border-emerald-400/45 text-[13px] font-bold text-emerald-300 tracking-wide';
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span class="text-emerald-300">Inscrito</span>`;
+        badge.className = 'inline-flex items-center gap-1 rounded-full bg-emerald-500/14 border border-emerald-400/35 px-2 py-[1px] text-[9.5px] font-bold text-emerald-300';
+        showToast('Vaga confirmada no Torneio dos Arquimagos!', 'emerald');
+      } else {
+        playChime('click');
+        btn.textContent = 'Garantir Vaga na Chave';
+        btn.className = 'cta-gold tap-scale w-full h-[46px] rounded-2xl text-[13px] font-extrabold text-[#14101C] tracking-wide';
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amethyst-soft animate-pulse"></span><span>Inscrições Abertas</span>`;
+        badge.className = 'inline-flex items-center gap-1 rounded-full bg-amethyst/18 border border-amethyst-soft/40 px-2 py-[1px] text-[9.5px] font-bold text-amethyst-bright';
+        showToast('Inscrição no torneio cancelada.');
+      }
+    }
+
+    function openModal(id) {
+      closeModals(true);
+      const el = document.getElementById(id);
+      if (el) el.classList.add('open');
+    }
+
+    function closeModals(silent = false) {
+      ['daily-modal', 'rush-modal', 'tournament-modal'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('open');
+      });
+      if (rush.intervalId) {
+        clearInterval(rush.intervalId);
+        rush.intervalId = null;
+      }
+      rush.active = false;
+      if (!silent) playChime('click');
+    }
+
+    function handleModalBackdrop(event, id) {
+      if (event.target.id === id) closeModals();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModals();
+    });
+
+    /* =====================================================================
+       9. CRONÔMETRO AO VIVO DO BAÚ & CANVAS DE POEIRA ARCANA
+       ===================================================================== */
+    function startChestCountdown() {
+      setInterval(() => {
+        if (state.chestReady || state.chestSeconds <= 0) return;
+        state.chestSeconds -= 1;
+        const timerEl = document.getElementById('chest-timer-display');
+        if (timerEl) timerEl.textContent = formatHMS(state.chestSeconds);
+        if (state.chestSeconds === 0) {
+          state.chestReady = true;
+          renderGrimoire();
+        }
+      }, 1000);
+    }
+
+    function initArcaneDust() {
+      const canvas = document.getElementById('challenges-arcane-dust');
+      const shell = document.getElementById('menu-view-challenges');
+      const ctx = canvas.getContext('2d');
+      let w = 0, h = 0, motes = [];
+
+      function resize() {
+        const rect = shell.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = rect.width;
+        h = rect.height;
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function spawnMote(randomY = false) {
+        return {
+          x: Math.random() * w,
+          y: randomY ? Math.random() * h : h + 10,
+          r: 0.75 + Math.random() * 1.4,
+          vy: 0.14 + Math.random() * 0.26,
+          vx: (Math.random() - 0.5) * 0.14,
+          phase: Math.random() * Math.PI * 2,
+          alpha: 0.14 + Math.random() * 0.30,
+          amethyst: Math.random() > 0.55
+        };
+      }
+
+      resize();
+      motes = Array.from({ length: 32 }, () => spawnMote(true));
+
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(resize).observe(shell);
+      } else {
+        window.addEventListener('resize', resize);
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < motes.length; i++) {
+          const m = motes[i];
+          m.y -= m.vy;
+          m.phase += 0.014;
+          m.x += m.vx + Math.sin(m.phase) * 0.1;
+          if (m.y < -10) {
+            motes[i] = spawnMote(false);
+            continue;
+          }
+          const op = (m.alpha * (0.65 + 0.35 * Math.sin(m.phase * 1.5))).toFixed(3);
+          ctx.fillStyle = m.amethyst
+            ? `rgba(167, 139, 250, ${op})`
+            : `rgba(242, 210, 139, ${op})`;
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    function initChallengesScreen() {
+      renderSoundButton();
+      updateWalletUI();
+      renderGrimoire();
+      startChestCountdown();
+      initArcaneDust();
+    }
+    window._initChallengesScreen = initChallengesScreen;
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initChallengesScreen);
+    } else {
+      setTimeout(initChallengesScreen, 200);
+    }
+    // Observer to re-render when challenges tab becomes active
+    const chObs = new MutationObserver(() => {
+      const el = document.getElementById('menu-view-challenges');
+      if (el && el.classList.contains('active')) {
+        updateWalletUI();
+        renderGrimoire();
+      }
+    });
+    const chEl = document.getElementById('menu-view-challenges');
+    if (chEl) chObs.observe(chEl, { attributes: true, attributeFilter: ['class', 'style'] });
+    function _unused_onload() {
+      renderSoundButton();
+      updateWalletUI();
+      renderGrimoire();
+      startChestCountdown();
+      initArcaneDust();
+    };
+  
   </script>
 </body>
 
