@@ -99,23 +99,89 @@
       100% { transform: translate(-50%) scale(1.03); box-shadow: 0 12px 36px rgba(0,0,0,0.85), 0 0 32px rgba(255, 77, 109, 0.75); }
     }
 
-    /* Dock Superior Compacto com Efeito Glassmorphism Arcane */
+    /* Dock Superior Compacto com Efeito Glassmorphism Arcane & Correção Mobile */
+    #btn-top-settings,
+    .rpg-top-bar .rpg-top-icon-btn {
+      display: none !important;
+    }
     .rpg-top-bar {
-      margin-bottom: 8px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 auto 8px !important;
+      padding: 0 4px !important;
+      box-sizing: border-box !important;
+      position: relative !important;
     }
     .rpg-top-resources-center {
-      background: rgba(18, 14, 28, 0.78) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-wrap: nowrap !important;
+      gap: clamp(3px, 1.2vw, 8px) !important;
+      background: rgba(18, 14, 28, 0.85) !important;
       -webkit-backdrop-filter: blur(14px) !important;
       backdrop-filter: blur(14px) !important;
-      padding: 4px 12px !important;
+      padding: 3px 8px !important;
       border-radius: 999px !important;
-      border: 1px solid rgba(245, 197, 107, 0.28) !important;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(245, 197, 107, 0.35) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      max-width: 98vw !important;
+      box-sizing: border-box !important;
       transition: all 0.25s ease !important;
     }
     .rpg-top-resources-center:hover {
-      border-color: rgba(245, 197, 107, 0.5) !important;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(245, 197, 107, 0.2) !important;
+      border-color: rgba(245, 197, 107, 0.55) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 197, 107, 0.25) !important;
+    }
+    .rpg-top-streak,
+    .rpg-top-crowns,
+    .rpg-top-coins,
+    .rpg-top-elo {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+      padding: 3px 7px !important;
+      font-size: clamp(0.70rem, 2.1vw, 0.82rem) !important;
+      white-space: nowrap !important;
+      flex-shrink: 1 !important;
+      box-sizing: border-box !important;
+    }
+    .rpg-top-streak .streak-flame,
+    .rpg-top-crowns .crown-icon,
+    .rpg-top-coins .coin-icon,
+    .rpg-top-elo .elo-rank-icon {
+      font-size: clamp(0.82rem, 2.5vw, 0.95rem) !important;
+      line-height: 1 !important;
+    }
+    .rpg-top-streak #player-streak-val,
+    .rpg-top-crowns #player-crowns-top,
+    .rpg-top-coins #player-coins-top,
+    .rpg-top-elo #top-elo-val {
+      font-size: clamp(0.72rem, 2.3vw, 0.84rem) !important;
+      font-weight: 800 !important;
+    }
+    .rpg-top-streak .streak-tag,
+    .rpg-top-elo .elo-tag {
+      font-size: clamp(0.55rem, 1.7vw, 0.65rem) !important;
+    }
+    .rpg-top-profile {
+      display: inline-flex !important;
+      align-items: center !important;
+      padding: 1px !important;
+      margin: 0 !important;
+      flex-shrink: 0 !important;
+    }
+    .rpg-top-avatar {
+      width: clamp(22px, 5.8vw, 26px) !important;
+      height: clamp(22px, 5.8vw, 26px) !important;
+      font-size: clamp(0.80rem, 2.3vw, 0.95rem) !important;
+    }
+    .rpg-top-lvl-badge {
+      font-size: clamp(0.50rem, 1.5vw, 0.60rem) !important;
+      padding: 1px 3px !important;
     }
 
     /* Card de Retomar Partida (Auto-Save) */
