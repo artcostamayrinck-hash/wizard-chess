@@ -63,6 +63,17 @@ const PST_Q = [
   -20, -10, -10, -5, -5, -10, -10, -20
 ];
 
+const PST_K_END = [
+  -50, -40, -30, -20, -20, -30, -40, -50,
+  -30, -20, -10,   0,   0, -10, -20, -30,
+  -30, -10,  20,  30,  30,  20, -10, -30,
+  -30, -10,  30,  40,  40,  30, -10, -30,
+  -30, -10,  30,  40,  40,  30, -10, -30,
+  -30, -10,  20,  30,  30,  20, -10, -30,
+  -30, -30,   0,   0,   0,   0, -30, -30,
+  -50, -30, -30, -30, -30, -30, -30, -50
+];
+
 const PST_K = [
   -30, -40, -40, -50, -50, -40, -40, -30,
   -30, -40, -40, -50, -50, -40, -40, -30,
@@ -77,11 +88,18 @@ const PST_K = [
 // Avaliação estática de posição
 function evaluateBoard(board, perspective = 'w') {
   let score = 0;
+  let wBishops = 0, bBishops = 0;
+  let nonPawnMaterial = 0;
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
       const p = board[r][c];
       if (!p) continue;
       const base = PIECE_VALS[p.type] || 0;
+      if (p.type !== 'P' && p.type !== 'K') nonPawnMaterial += base;
+      if (p.type === 'B') {
+        if (p.color === 'w') wBishops++;
+        else bBishops++;
+      }
       const sq = p.color === 'w' ? r * 8 + c : (7 - r) * 8 + c;
       let pst = 0;
       if (p.type === 'P') pst = PST_P[sq];
@@ -89,16 +107,20 @@ function evaluateBoard(board, perspective = 'w') {
       else if (p.type === 'B') pst = PST_B[sq];
       else if (p.type === 'R') pst = PST_R[sq];
       else if (p.type === 'Q') pst = PST_Q[sq];
-      else if (p.type === 'K') pst = PST_K[sq];
+      else if (p.type === 'K') {
+        const isEndgame = nonPawnMaterial < 1400;
+        pst = isEndgame ? PST_K_END[sq] : PST_K[sq];
+      }
 
       const val = base + pst;
       score += p.color === 'w' ? val : -val;
     }
   }
+  if (wBishops >= 2) score += 35;
+  if (bBishops >= 2) score -= 35;
   return perspective === 'w' ? score : -score;
 }
 
-// Classificação de lances pós-partida
 function classifyMoveDiff(diff) {
   // diff: diferença em centipeões comparado ao melhor lance
   if (diff >= -5) return { tag: 'best', label: 'Melhor Lance !', symbol: '!' };
