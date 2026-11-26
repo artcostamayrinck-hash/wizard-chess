@@ -10307,6 +10307,39 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       })();
 
   </script>
+
+  <script>
+
+      // ==================== RESILIÊNCIA WEBGL & CONTEXTO PERDIDO (FASE 1.4) ====================
+      (function() {
+        const setupCanvasResilience = () => {
+          const container = document.getElementById('canvas-container');
+          const canvas = container ? container.querySelector('canvas') : null;
+          if (!canvas) return;
+
+          canvas.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            console.warn('[WebGL] Contexto perdido. Mantendo estado do jogo para recuperação...');
+            if (window.showToast) window.showToast('Conexão gráfica suspensa temporariamente.', 3000);
+          }, false);
+
+          canvas.addEventListener('webglcontextrestored', () => {
+            console.info('[WebGL] Contexto gráfico restaurado com sucesso.');
+            if (window._WIZARD_GAME && window._WIZARD_GAME.Ds) {
+              try { window._WIZARD_GAME.Ds(); } catch (_) {}
+            }
+            if (window.showToast) window.showToast('Catedral Arcana restaurada com sucesso!', 2500);
+          }, false);
+        };
+
+        if (document.readyState === 'loading') {
+          window.addEventListener('DOMContentLoaded', setupCanvasResilience);
+        } else {
+          setTimeout(setupCanvasResilience, 500);
+        }
+      })();
+
+  </script>
 </body>
 
 </html>
