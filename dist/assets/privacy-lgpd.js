@@ -14,7 +14,11 @@
   function setConsent(accepted = true) {
     localStorage.setItem(PRIVACY_KEY, accepted ? 'accepted' : 'declined');
     const banner = document.getElementById('lgpd-consent-banner');
-    if (banner) banner.style.display = 'none';
+    if (banner) {
+      banner.style.opacity = '0';
+      banner.style.transform = 'translate(-50%, -40px)';
+      setTimeout(() => { banner.style.display = 'none'; }, 320);
+    }
   }
 
   function openPrivacyModal() {

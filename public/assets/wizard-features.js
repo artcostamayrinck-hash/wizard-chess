@@ -254,10 +254,54 @@ function checkDailyReward() {
   } catch(e) {}
 }
 
+function updateLoginStreak() {
+  try {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const lastLogin = localStorage.getItem("wizard_chess_last_login_date");
+    let streak = parseInt(localStorage.getItem("wizard_chess_login_streak") || "1", 10);
+
+    if (lastLogin !== todayStr) {
+      if (lastLogin) {
+        const lastDate = new Date(lastLogin);
+        const currDate = new Date(todayStr);
+        const diffDays = Math.round((currDate - lastDate) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          streak += 1;
+          const bonusCoins = 15 + Math.min(streak * 5, 50);
+          addPlayerCoins(bonusCoins, `Bônus de Sequência: Dia ${streak}!`);
+          setTimeout(() => {
+            showAchievementToast("🔥 SEQUÊNCIA ARCANA!", `Dia ${streak} consecutivo! Ganhou +${bonusCoins} 🪙`, "⚡");
+          }, 1800);
+        } else if (diffDays > 1) {
+          streak = 1;
+        }
+      } else {
+        streak = 1;
+      }
+      localStorage.setItem("wizard_chess_last_login_date", todayStr);
+      localStorage.setItem("wizard_chess_login_streak", streak.toString());
+    }
+
+    const streakEl = document.getElementById("player-streak-val");
+    if (streakEl) streakEl.textContent = streak.toString();
+
+    const streakBtn = document.getElementById("btn-top-streak");
+    if (streakBtn && !streakBtn.dataset.bound) {
+      streakBtn.dataset.bound = "true";
+      streakBtn.addEventListener("click", () => {
+        showToast(`🔥 Sequência Arcana: ${streak} dia(s) consecutivo(s)! Jogue diariamente para acumular recompensas.`);
+      });
+    }
+  } catch(e) {
+    console.warn("[Streak] Erro ao atualizar sequência:", e);
+  }
+}
+
 function setupRewardEconomySystem() {
   updateCoinsUI();
   updateSkinsShopUI();
   checkDailyReward();
+  updateLoginStreak();
 
   // Botão de moedas no topo abre a personalização (loja)
   const btnTopCoins = document.getElementById("btn-top-coins");
@@ -2447,11 +2491,57 @@ function setupStartMenuGrid() {
   };
   setTimeout(syncStatsMirror, 200);
 
+  // Estado do Lobby e Isolamento do HUD de Batalha
+  document.body.classList.add("in-lobby");
+  const ebInit = document.getElementById("eval-bar-container");
+  if (ebInit) ebInit.classList.add("hidden");
+
+  // Formatação amigável do badge de avaliação da partida
+  const evalBadge = document.getElementById("eval-score-badge");
+  if (evalBadge) {
+    const formatEval = () => {
+      const raw = evalBadge.textContent.trim();
+      if (raw === "0.0" || raw === "0") {
+        if (evalBadge.textContent !== "⚖️ 0.0") evalBadge.textContent = "⚖️ 0.0";
+      } else if (raw.startsWith("+") && !raw.includes("⚪")) {
+        evalBadge.textContent = "⚪ " + raw;
+      } else if (raw.startsWith("-") && !raw.includes("⚫")) {
+        evalBadge.textContent = "⚫ " + raw;
+      }
+    };
+    const obs = new MutationObserver(formatEval);
+    obs.observe(evalBadge, { childList: true, characterData: true, subtree: true });
+    formatEval();
+  }
+
   if (btnStart) {
+    btnStart.addEventListener("click", () => {
+      document.body.classList.remove("in-lobby");
+      const eb = document.getElementById("eval-bar-container");
+      if (eb) eb.classList.remove("hidden");
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.ctx) {
+        if (ArcaneAudio.ctx.state === "suspended") {
+          try { ArcaneAudio.ctx.resume(); } catch(e){}
+        }
+        if (!ArcaneAudio.bgm.isPlaying) {
+          ArcaneAudio.musicEnabled = true;
+          try { ArcaneAudio.bgm.start(ArcaneAudio.ctx); } catch(e){}
+        }
+      }
+    });
     bindAction(btnStart, (e) => {
       if (e && e.type === "touchend") {
         btnStart.click();
       }
+    });
+  }
+
+  const btnPauseMainMenu = document.getElementById("btn-pause-main-menu");
+  if (btnPauseMainMenu) {
+    btnPauseMainMenu.addEventListener("click", () => {
+      document.body.classList.add("in-lobby");
+      const eb = document.getElementById("eval-bar-container");
+      if (eb) eb.classList.add("hidden");
     });
   }
 

@@ -3298,30 +3298,91 @@
 }
 
 /* -------------------------------------------------------------
-   Aviso de Atualização Segura de Versão
+   Aviso de Atualização Segura de Versão & Consentimento LGPD
+   (Posicionado no topo para NUNCA sobrepor botões de ação e rodapé)
    ------------------------------------------------------------- */
 .banner-update-available {
   position: fixed !important;
-  bottom: 20px !important;
+  top: 14px !important;
+  bottom: auto !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   background: linear-gradient(135deg, rgba(28, 20, 42, 0.98), rgba(16, 11, 24, 0.98)) !important;
   border: 1.5px solid #00f5d4 !important;
   border-radius: 20px !important;
-  padding: 12px 18px !important;
+  padding: 10px 18px !important;
   display: flex !important;
   align-items: center !important;
+  justify-content: space-between !important;
   gap: 14px !important;
   z-index: 100000 !important;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.8), 0 0 24px rgba(0, 245, 212, 0.35) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.85), 0 0 24px rgba(0, 245, 212, 0.35) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
-  animation: slideUpUpdate 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  animation: slideDownUpdate 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
 }
 
-@keyframes slideUpUpdate {
-  from { transform: translate(-50%, 80px); opacity: 0; }
+#lgpd-consent-banner {
+  top: 14px !important;
+  bottom: auto !important;
+  border-color: rgba(245, 197, 107, 0.6) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.85), 0 0 24px rgba(245, 197, 107, 0.35) !important;
+}
+
+#banner-update-available[style*="display: flex"] ~ #lgpd-consent-banner,
+#banner-update-available:not([style*="display: none"]) ~ #lgpd-consent-banner {
+  top: 76px !important;
+}
+
+@keyframes slideDownUpdate {
+  from { transform: translate(-50%, -60px); opacity: 0; }
   to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* -------------------------------------------------------------
+   Isolamento de Visibilidade: Ocultar HUD de Batalha no Lobby
+   ------------------------------------------------------------- */
+body.in-lobby #eval-bar-container,
+body.in-lobby .md3-dock,
+body.in-lobby .player-bar,
+body.in-lobby #check-warning,
+body.in-lobby #emote-toast-container,
+#start-menu:not(.hidden) ~ #eval-bar-container,
+#start-menu:not(.hidden) ~ .md3-dock,
+#start-menu:not(.hidden) ~ .player-bar {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Badge de Sequência de Dias (Streak) */
+.rpg-top-streak {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.22), rgba(255, 60, 0, 0.10));
+  border: 1px solid rgba(255, 107, 0, 0.45);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffaa5a;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.rpg-top-streak:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 107, 0, 0.45);
+}
+.streak-flame {
+  font-size: 1rem;
+  animation: flameFlicker 1.5s ease-in-out infinite alternate;
+}
+@keyframes flameFlicker {
+  0% { transform: scale(0.95); filter: drop-shadow(0 0 2px #ff4500); }
+  100% { transform: scale(1.15); filter: drop-shadow(0 0 8px #ffaa00); }
 }
 
 .update-btn-action {
@@ -3431,11 +3492,11 @@
   </div>
 
   <!-- Barra de Avaliação Arcana (Eval Bar) -->
-  <div id="eval-bar-container" class="eval-bar-container" title="Balanço Arcano de Poder">
+  <div id="eval-bar-container" class="eval-bar-container hidden" title="Balanço Arcano de Poder">
     <div class="eval-bar-wrap">
       <div id="eval-bar-fill-w" class="eval-bar-fill-w" style="height: 50%;"></div>
     </div>
-    <div id="eval-score-badge" class="eval-score-badge">0.0</div>
+    <div id="eval-score-badge" class="eval-score-badge">⚖️ 0.0</div>
   </div>
 
   <!-- Painel de Desafios por Arena e Nível -->
@@ -3491,6 +3552,11 @@
           </button>
 
           <div class="rpg-top-resources-center" id="rpg-top-resources-center">
+            <div class="rpg-top-streak" id="btn-top-streak" title="Sequência de Dias Arcanos (Jogue diariamente para bônus!)" style="cursor: pointer; pointer-events: auto !important;">
+              <span class="streak-flame">🔥</span>
+              <span id="player-streak-val">1</span>
+              <span class="streak-tag" style="font-size: 0.65rem; color: #ffca28; margin-left: 2px;">DIA</span>
+            </div>
             <div class="rpg-top-crowns" id="btn-top-crowns" title="Coroas Arcanas (Toque para ver a Trilha de Recompensas)" style="cursor: pointer; pointer-events: auto !important;" onclick="if(window._openArcanePass) window._openArcanePass();">
               <span class="crown-icon">👑</span>
               <span id="player-crowns-top">0</span>
