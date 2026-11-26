@@ -21,6 +21,7 @@ const staticFiles = [
   'assets/privacy-lgpd.js',
   'assets/index-CrO8ZqHi.css',
   'assets/index-Dmtay6rb.js',
+  'assets/three.min.js',
   'assets/wizard-features.js'
 ];
 
