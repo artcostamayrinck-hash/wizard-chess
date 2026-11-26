@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wizard-chess-v1.5.15-arcane';
+const CACHE_NAME = 'wizard-chess-v1.5.16-arcane';
 
 const PRECACHE_ASSETS = [
   './',
@@ -8,6 +8,7 @@ const PRECACHE_ASSETS = [
   './icon-512.png',
   './assets/three.min.js',
   './assets/arcane-db.js',
+  './assets/chess-worker.js',
   './assets/privacy-lgpd.js',
   './assets/index-Dmtay6rb.js',
   './assets/wizard-features.js',
