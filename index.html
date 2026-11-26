@@ -49,7 +49,327 @@
   <script src="./assets/privacy-lgpd.js"></script>
   <script type="module" crossorigin src="./assets/index-Dmtay6rb.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CrO8ZqHi.css">
+  
+  <!-- Tailwind CSS com Preflight desativado para proteger estilos 3D e globais -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            obsidian: {
+              950: '#07050E',
+              900: '#0B0914',
+              850: '#110D1F',
+              800: '#161129',
+              700: '#211A3A',
+            },
+            arcane: {
+              gold: '#E8C273',
+              goldBright: '#F8E0A0',
+              goldDeep: '#B8872E',
+              amethyst: '#6E44FF',
+              amethystSoft: '#9D7BFF',
+              ember: '#F27D3B',
+            }
+          }
+        }
+      }
+    };
+  </script>
   <style>
+    /* ============================================================== */
+    /* DESIGN CATEDRAL ARCANA — BASE E PALETA                         */
+    /* ============================================================== */
+    :root {
+      --aura-primary: rgba(232, 194, 115, 0.28);
+      --aura-secondary: rgba(110, 68, 255, 0.24);
+      --ring-color: #E8C273;
+    }
+
+    /* Contêiner principal da Catedral Arcana */
+    #menu-view-home.cathedral-shell,
+    .cathedral-shell {
+      position: relative !important;
+      width: 100% !important;
+      max-width: 440px !important;
+      min-height: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      background: linear-gradient(180deg, #0D0A19 0%, #130E24 46%, #0B0914 100%) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      margin: 0 auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      box-sizing: border-box !important;
+      border-radius: 28px !important;
+      border: 1px solid rgba(232, 194, 115, 0.22) !important;
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.85), 0 0 60px rgba(110, 68, 255, 0.14) !important;
+    }
+
+    @media (max-width: 480px) {
+      #menu-view-home.cathedral-shell,
+      .cathedral-shell {
+        border-radius: 0 !important;
+        border: none !important;
+        max-width: 100% !important;
+        height: 100dvh !important;
+      }
+    }
+
+    /* Vidro obsidiana translúcido */
+    .obsidian-glass {
+      background: linear-gradient(180deg, rgba(26, 20, 46, 0.78) 0%, rgba(15, 11, 28, 0.88) 100%) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      border: 1px solid rgba(232, 194, 115, 0.16) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 236, 192, 0.08) !important;
+    }
+
+    /* Título metálico em ouro antigo */
+    .title-gold {
+      background: linear-gradient(180deg, #FFF5D6 0%, #E8C273 48%, #B48228 100%) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      filter: drop-shadow(0 3px 12px rgba(232, 194, 115, 0.28)) !important;
+    }
+
+    /* Botão Herói principal (Ouro Real Arcano) */
+    .cta-hero {
+      position: relative !important;
+      overflow: hidden !important;
+      background: linear-gradient(180deg, #F6DD9C 0%, #DFB256 48%, #B88329 100%) !important;
+      border: 1px solid rgba(255, 242, 204, 0.72) !important;
+      box-shadow: 0 12px 28px rgba(184, 131, 41, 0.34), 0 2px 8px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 252, 235, 0.85), inset 0 -2px 4px rgba(96, 61, 10, 0.45) !important;
+      transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+      cursor: pointer !important;
+    }
+
+    .cta-hero:hover {
+      filter: brightness(1.05) !important;
+      box-shadow: 0 14px 34px rgba(232, 194, 115, 0.44), inset 0 1px 1px rgba(255, 252, 235, 0.9) !important;
+    }
+
+    .cta-hero:active {
+      transform: scale(0.98) !important;
+    }
+
+    .cta-hero::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -65%;
+      width: 45%;
+      height: 150%;
+      background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.36) 50%, transparent 100%);
+      transform: skewX(-20deg);
+      animation: heroSheen 5.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes heroSheen {
+      0%, 72% { left: -65%; opacity: 0; }
+      78% { opacity: 1; }
+      100% { left: 135%; opacity: 0; }
+    }
+
+    /* Cards secundários (Desafios e Campanha) */
+    .mode-card {
+      position: relative !important;
+      background: linear-gradient(165deg, rgba(28, 21, 50, 0.86) 0%, rgba(14, 10, 26, 0.94) 100%) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      transition: transform 0.16s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+      cursor: pointer !important;
+    }
+
+    .mode-card:active {
+      transform: scale(0.97) !important;
+    }
+
+    .mode-card-ember {
+      border: 1px solid rgba(242, 125, 59, 0.34) !important;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 179, 128, 0.18), inset 0 0 24px rgba(242, 125, 59, 0.08) !important;
+    }
+
+    .mode-card-ember:hover {
+      border-color: rgba(242, 125, 59, 0.6) !important;
+      box-shadow: 0 10px 26px rgba(242, 125, 59, 0.18), inset 0 1px 0 rgba(255, 198, 155, 0.28) !important;
+    }
+
+    .mode-card-amethyst {
+      border: 1px solid rgba(138, 102, 255, 0.38) !important;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(188, 165, 255, 0.2), inset 0 0 24px rgba(110, 68, 255, 0.11) !important;
+    }
+
+    .mode-card-amethyst:hover {
+      border-color: rgba(157, 123, 255, 0.68) !important;
+      box-shadow: 0 10px 26px rgba(110, 68, 255, 0.22), inset 0 1px 0 rgba(208, 192, 255, 0.3) !important;
+    }
+
+    /* Animação de levitação da peça central */
+    .knight-float {
+      animation: arcaneFloat 4.2s ease-in-out infinite !important;
+      transform-style: preserve-3d !important;
+      will-change: transform !important;
+    }
+
+    @keyframes arcaneFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Rotação do círculo rúnico no pedestal */
+    .rune-spin {
+      animation: spinSlow 28s linear infinite !important;
+      transform-origin: center !important;
+    }
+
+    .rune-spin-reverse {
+      animation: spinSlow 40s linear infinite reverse !important;
+      transform-origin: center !important;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Pulso suave para runas e selo PRONTO */
+    .rune-pulse {
+      animation: pulseSoft 2.8s ease-in-out infinite !important;
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 0.78; filter: drop-shadow(0 0 4px var(--ring-color)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 10px var(--ring-color)); }
+    }
+
+    .badge-pulse {
+      animation: readyGlow 2.2s ease-in-out infinite !important;
+    }
+
+    @keyframes readyGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 194, 115, 0.45); }
+      50% { box-shadow: 0 0 12px 2px rgba(232, 194, 115, 0.65); }
+    }
+
+    /* Shimmer dourado discreto no Baú Grátis */
+    .chest-ready {
+      border: 1px solid rgba(232, 194, 115, 0.45) !important;
+      background: linear-gradient(180deg, rgba(46, 34, 24, 0.65) 0%, rgba(19, 14, 34, 0.9) 100%) !important;
+      box-shadow: 0 6px 18px rgba(200, 155, 60, 0.16), inset 0 1px 0 rgba(255, 232, 170, 0.25) !important;
+    }
+
+    /* Grade de tabuleiro em perspectiva sutil no horizonte */
+    .horizon-grid {
+      background-image:
+        linear-gradient(rgba(232, 194, 115, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 194, 115, 0.08) 1px, transparent 1px) !important;
+      background-size: 34px 34px !important;
+      transform: perspective(260px) rotateX(68deg) !important;
+      transform-origin: center top !important;
+      mask-image: radial-gradient(ellipse 68% 58% at 50% 35%, black 15%, transparent 78%) !important;
+      -webkit-mask-image: radial-gradient(ellipse 68% 58% at 50% 35%, black 15%, transparent 78%) !important;
+    }
+
+    /* Micro-interação de toque */
+    .tap-scale {
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+      cursor: pointer !important;
+    }
+    .tap-scale:active {
+      transform: scale(0.95) !important;
+    }
+
+    /* Transições dos modais Bottom Sheet */
+    .sheet-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease !important;
+    }
+    .sheet-backdrop.open {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .sheet-panel {
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+    .sheet-backdrop.open .sheet-panel {
+      transform: translateY(0) !important;
+    }
+
+    /* Toast de feedback */
+    .toast-enter {
+      transform: translate(-50%, -12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease !important;
+    }
+    .toast-enter.show {
+      transform: translate(-50%, 0) !important;
+      opacity: 1 !important;
+    }
+
+    /* Números tabulares */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums !important;
+    }
+
+    /* Aba ativa elevada na navegação inferior (Ouro Arcano) */
+    .nav-active-crest {
+      background: linear-gradient(180deg, rgba(232, 194, 115, 0.26) 0%, rgba(184, 135, 46, 0.14) 100%) !important;
+      border: 1px solid rgba(232, 194, 115, 0.62) !important;
+      box-shadow:
+        0 -4px 18px rgba(232, 194, 115, 0.22),
+        0 6px 14px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 244, 210, 0.45) !important;
+    }
+
+    /* Partícula de ganho de ouro */
+    @keyframes floatReward {
+      0% { transform: translate(-50%, 0) scale(0.85); opacity: 0; }
+      20% { transform: translate(-50%, -14px) scale(1.06); opacity: 1; }
+      100% { transform: translate(-50%, -52px) scale(1); opacity: 0; }
+    }
+    .reward-pop {
+      animation: floatReward 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+    }
+
+    /* Fallback utilitários essenciais offline */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .items-end { align-items: flex-end; }
+    .items-baseline { align-items: baseline; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .select-none { user-select: none; -webkit-user-select: none; }
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .shrink-0 { flex-shrink: 0; }
+    .min-w-0 { min-width: 0; }
+
     /* Aviso de Xeque Épico */
     .check-warning {
       position: fixed !important;
@@ -3633,7 +3953,114 @@ body.in-lobby #emote-toast-container,
   #banner-update-available { display: none !important; visibility: hidden !important; pointer-events: none !important; opacity: 0 !important; }
 body:not(.in-lobby) #lgpd-consent-banner { display: none !important; }
 body:not(.in-lobby) #banner-update-available { display: none !important; }
-</style>
+
+    /* =====================================================================
+       CATEDRAL ARCANA — IN-GAME HUD & MATCH DOCK (Baseado em pasted-text.txt)
+       ===================================================================== */
+    .hud-card {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+    .hud-card-ignis-active {
+      border-color: rgba(249, 115, 22, 0.62) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.50), 0 0 22px rgba(249, 115, 22, 0.18), inset 0 1px 0 rgba(253, 186, 116, 0.22) !important;
+    }
+    .hud-card-player-active {
+      border-color: rgba(232, 195, 116, 0.62) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.50), 0 0 22px rgba(232, 195, 116, 0.16), inset 0 1px 0 rgba(255, 245, 216, 0.24) !important;
+    }
+
+    /* Barra Horizontal de Avaliação (nunca obstrui as colunas do tabuleiro!) */
+    #eval-bar-container {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: 100% !important;
+      max-width: 420px !important;
+      height: 6px !important;
+      margin: 4px auto 0 auto !important;
+      border-radius: 999px !important;
+      background: #1D1631 !important;
+      border: 1px solid rgba(232, 195, 116, 0.25) !important;
+      overflow: hidden !important;
+      display: flex !important;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.6) !important;
+      opacity: 1 !important;
+      z-index: 25 !important;
+    }
+    #eval-bar-container .eval-bar-wrap {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      display: flex !important;
+    }
+    #eval-bar-fill-w {
+      height: 100% !important;
+      width: 50% !important;
+      background: linear-gradient(90deg, #F6ECD9 0%, #E8C374 55%, #C69540 100%) !important;
+      box-shadow: 0 0 10px rgba(232, 195, 116, 0.5) !important;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+    body.in-lobby #eval-bar-container {
+      display: none !important;
+    }
+
+    /* Balões de Emote flutuantes */
+    .emote-bubble {
+      opacity: 0;
+      transform: translateY(6px) scale(0.92);
+      pointer-events: none;
+      transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .emote-bubble.visible,
+    .emote-bubble:not(.hidden) {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Popover flutuante de emotes */
+    .popover-panel {
+      opacity: 0;
+      transform: translate(-50%, 10px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .popover-panel.open {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Sheets translúcidas da partida */
+    .sheet-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+    }
+    .sheet-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sheet-panel {
+      transform: translateY(28px);
+      transition: transform 0.30s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .sheet-backdrop.open .sheet-panel {
+      transform: translateY(0);
+    }
+
+    /* Ocultar barra superior antiga e barra md3 antiga caso sobrem classes */
+    body:not(.in-lobby) .hud-top {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    body.in-lobby .hud-top,
+    body.in-lobby #player-bar,
+    body.in-lobby .md3-dock {
+      display: none !important;
+    }
+  </style>
 <style>
 /* ========================================================================== */
 /* Melhorias Globais de UI, Badges de Vantagem e Transi��o da Barra de Avalia��o */
@@ -5934,62 +6361,126 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
 
   <!-- HUD Superior -->
     <!-- HUD Superior -->
-  <header class="hud-top">
-    <!-- Linha Superior com Pílulas Compactas e Botão de Pausa (Roxo) -->
-    <div class="hud-top-bar">
-      <div class="hud-left-pills">
-        <div id="btn-open-menu" class="brand-pill brand-pill-compact" style="cursor: pointer;" title="Abrir Menu de Configuração">
-          <span class="material-symbols-rounded">castle</span>
-          <span>WIZARD'S CHESS</span>
-        </div>
-        <div id="btn-achievements-hud" class="player-rank-pill player-rank-pill-compact" style="cursor: pointer; display: none !important;" title="Conquistas e Títulos">
-          <span class="material-symbols-rounded" style="color: var(--md-gold);">military_tech</span>
-          <span id="hud-player-rank">Iniciado</span>
-          <span id="hud-player-lvl" class="rank-tag">Nv. 1</span>
+  <!-- ==================== 1. CABEÇALHO SUPERIOR DA PARTIDA (ZERO SOBREPOSIÇÃO) ==================== -->
+  <header class="hud-top fixed top-0 left-1/2 -translate-x-1/2 z-30 px-3 pt-2.5 pb-1 flex flex-col gap-1.5 w-full max-w-[430px] pointer-events-auto select-none">
+    <!-- Linha Superior: Voltar / Menu + Título + Áudio + 3D/2D + Opções -->
+    <div class="flex items-center justify-between gap-2">
+      <!-- Esquerda: Voltar + Brasão Wizard's Chess -->
+      <div class="flex items-center gap-1.5 min-w-0">
+        <button type="button" id="btn-open-menu" aria-label="Menu da partida"
+                class="tap-scale obsidian-glass w-9 h-9 rounded-full flex items-center justify-center text-gold hover:border-gold/45 shrink-0"
+                onclick="if(window._openMatchSheet) window._openMatchSheet(); else if(document.getElementById('btn-pause')) document.getElementById('btn-pause').click();">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18L9 12L15 6" />
+          </svg>
+        </button>
+
+        <div class="obsidian-glass rounded-full px-2.5 py-1.5 flex items-center gap-1.5 border-gold/25 min-w-0">
+          <svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4 20V10H6.5V6H9V9H11V6H13V9H15V6H17.5V10H20V20H14.5V15.5C14.5 14.1 13.4 13 12 13C10.6 13 9.5 14.1 9.5 15.5V20H4Z" />
+          </svg>
+          <span class="font-display text-[11px] font-bold tracking-[0.11em] title-gold truncate">
+            WIZARD'S CHESS
+          </span>
         </div>
       </div>
 
-      <!-- Controles Rápidos de Áudio & Botão de Pausa -->
-      <div class="hud-audio-controls">
-        <button type="button" id="btn-hud-sound-toggle" class="hud-sound-btn active" title="Efeitos Sonoros (Ligar/Desligar)">
+      <!-- Direita: Som + 3D/2D + Opções da Partida -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Botão Som -->
+        <button type="button" id="btn-hud-sound-toggle" aria-label="Alternar som"
+                class="tap-scale obsidian-glass w-9 h-9 rounded-full flex items-center justify-center text-gold hover:border-gold/45">
           <span class="material-symbols-rounded" style="font-size: 18px;" id="icon-hud-sound">volume_up</span>
         </button>
-        <button type="button" id="btn-hud-music-toggle" class="hud-sound-btn" title="Música Arcana (Ligar/Desligar)">
-          <span class="material-symbols-rounded" style="font-size: 18px;" id="icon-hud-music">music_note</span>
+
+        <!-- Pílula 3D / 2D -->
+        <button type="button" id="btn-view-3d-toggle" aria-label="Alternar visão 3D e 2D"
+                class="tap-scale obsidian-glass h-9 px-2.5 rounded-full flex items-center gap-1 text-[11px] font-bold tracking-wider text-gold-bright border-gold/35 hover:border-gold/60"
+                onclick="const c = document.getElementById('btn-cam'); if(c) c.click();">
+          <svg class="w-3.5 h-3.5 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" />
+            <path d="M12 12L20 7.5M12 12V21M12 12L4 7.5" />
+          </svg>
+          <span id="view-pill-label">3D</span>
         </button>
-        <button id="btn-pause" class="hud-pause-btn" title="Pausar / Menu da Batalha">
-          <span class="material-symbols-rounded">pause</span>
+
+        <!-- Botão Mais / Opções -->
+        <button id="btn-pause" type="button" aria-label="Opções da partida"
+                class="tap-scale obsidian-glass w-9 h-9 rounded-full flex items-center justify-center text-[#DCD4EC] hover:text-gold hover:border-gold/45"
+                onclick="if(window._openMatchSheet) window._openMatchSheet();">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5.5" r="1.7" />
+            <circle cx="12" cy="12" r="1.7" />
+            <circle cx="12" cy="18.5" r="1.7" />
+          </svg>
         </button>
       </div>
     </div>
 
-    <!-- Barra do Oponente no Topo (Baseada na Imagem 2 - Chess.com) -->
-    <div id="opponent-bar" class="player-bar opponent-bar">
-      <div id="bubble-opponent" class="hud-speech-bubble bubble-top hidden"></div>
-      <div class="player-profile">
-        <div class="chess-avatar b-avatar" id="opponent-avatar-hud">🔥</div>
-        <div class="player-details">
-          <div class="player-name-row">
-            <span class="player-title-badge" id="opponent-badge-hud">PIROMANTE</span>
-            <span class="player-name" id="opponent-name-hud">Ignis</span>
-            <span class="player-rating" id="opponent-rating-hud">(1300)</span>
+    <!-- HUD do Oponente (Ignis / IA) -->
+    <div id="opponent-card" class="hud-card obsidian-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#2E1614] via-[#1B1022] to-[#110B18] border border-orange-500/50 flex items-center justify-center shrink-0 shadow-[0_0_14px_rgba(249,115,22,0.22)] text-xl" id="opponent-avatar-hud">
+          🔥
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[13.5px] font-bold text-[#FCF6EB] leading-tight" id="opponent-name-hud">Ignis</span>
+            <span class="px-1.5 py-0.5 rounded-md bg-orange-500/15 border border-orange-500/35 text-[9.5px] font-bold tracking-wide text-orange-300 uppercase tabular-nums whitespace-nowrap" id="opponent-badge-hud">
+              PIROMANTE • 1300 ELO
+            </span>
+            <span id="opponent-rating-hud" style="display: none !important;">(1300)</span>
           </div>
-          <div id="grave-b" class="graveyard b-dead" title="Obsidiana capturada"></div>
+          <div id="grave-b" class="graveyard b-dead flex items-center gap-0.5 mt-0.5 min-h-[14px] text-[11px] text-[#B7AECB]" title="Obsidiana capturada"></div>
         </div>
       </div>
 
-      <!-- Relógio do Oponente no Topo Direito (como na Imagem 2) -->
-      <div id="timer-b" class="chess-timer b-timer" title="Tempo do Oponente (Pretas)">
-        <span class="material-symbols-rounded timer-icon">timer</span>
-        <span class="timer-digits">05:00</span>
+      <!-- Relógio do Oponente -->
+      <div id="timer-b" class="chess-timer b-timer px-2.5 py-1.5 rounded-xl bg-[#0C0916]/90 border border-white/10 flex items-center gap-1.5 shrink-0 transition-colors" title="Tempo do Oponente (Pretas)">
+        <svg class="w-3.5 h-3.5 text-[#A59BC0] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="13" r="8" />
+          <path d="M12 9V13L14.5 14.5" />
+          <path d="M9.5 3H14.5" />
+        </svg>
+        <span class="timer-digits text-[13px] font-extrabold tracking-wide text-[#EFE8DC] tabular-nums" id="black-clock">05:00</span>
       </div>
     </div>
 
-    <div class="turn-container">
-      <div id="turn-banner" class="turn-pill">Turno: Mármore (Brancas)</div>
+    <!-- Balão de Emote flutuante de Ignis -->
+    <div id="bubble-opponent" class="hud-speech-bubble bubble-top emote-bubble absolute left-14 top-24 z-40 hidden">
+      <div class="obsidian-glass rounded-xl rounded-tl-sm px-3 py-1.5 border-orange-500/55 shadow-xl flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+        <span id="ignis-emote-text" class="text-[11px] font-semibold text-[#FFEAD5] whitespace-nowrap"></span>
+      </div>
     </div>
 
-    <!-- Diálogo e Falas do Chefe de Campanha (Boss Campaign Speech) -->
+    <!-- Linha de Turno & Avaliação Horizontal (Zero Obstrução do Tabuleiro) -->
+    <div class="flex flex-col gap-1 w-full pt-0.5">
+      <div class="flex items-center justify-between gap-2">
+        <div id="turn-pill" class="obsidian-glass rounded-full px-2.5 py-1 flex items-center gap-1.5 border-gold/30">
+          <span id="turn-dot" class="w-2 h-2 rounded-full bg-[#F7F0E2] shadow-[0_0_8px_rgba(247,240,226,0.9)]"></span>
+          <span id="turn-banner" class="text-[11px] font-bold text-[#F5EFE3] tracking-wide">Turno: Mármore (Brancas)</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 text-[10.5px] font-semibold text-[#ADA4C4] tabular-nums">
+          <span class="uppercase tracking-wider text-[9.5px] text-[#8E85A8]">Equilíbrio</span>
+          <span id="eval-score-badge" class="px-2 py-0.5 rounded-full bg-[#19132B] border border-gold/25 text-gold font-bold text-[10.5px]">
+            0.0
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Avaliação Arcana Horizontal -->
+      <div id="eval-bar-container" class="relative w-full h-2 rounded-full overflow-hidden bg-[#1D1631] border border-gold/20 shadow-inner" aria-label="Barra de avaliação da partida">
+        <div class="eval-bar-wrap w-full h-full relative">
+          <div id="eval-bar-fill-w" class="eval-fill h-full bg-gradient-to-r from-[#F6ECD9] via-[#E8C374] to-[#C69540] shadow-[0_0_10px_rgba(232,195,116,0.5)]" style="width: 50%;"></div>
+          <div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1.5px] bg-[#0B0814]/85 pointer-events-none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Falas do Chefe de Campanha (Oculto por padrão) -->
     <div id="boss-campaign-hud" class="boss-campaign-hud hidden">
       <div class="boss-speech-bubble" id="boss-speech-bubble">
         <span class="boss-speech-icon" id="boss-speech-avatar">🔥</span>
@@ -6001,89 +6492,150 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
     </div>
   </header>
 
-  <!-- Barra do Jogador na Base (Vermelho / Baseada na Imagem 2 - Chess.com) -->
-  <div id="player-bar" class="player-bar player-bar-bottom">
-      <div id="bubble-player" class="hud-speech-bubble bubble-bottom hidden"></div>
-    <div class="player-profile">
-      <div class="chess-avatar w-avatar" id="player-avatar-hud">🧙‍♂️</div>
-      <div class="player-details">
-        <div class="player-name-row">
-          <span class="player-title-badge" id="player-badge-hud">MAGO</span>
-          <span class="player-name" id="player-name-hud">Mago</span>
-          <span id="player-rating-bottom" class="player-rating">(Você)</span>
-        </div>
-        <div id="grave-w" class="graveyard w-dead" title="Mármore capturado"></div>
+  <!-- ==================== 2. HUD DO JOGADOR NA BASE (VOCÊ) ==================== -->
+  <div id="player-bar" class="player-bar player-bar-bottom fixed bottom-16 left-1/2 -translate-x-1/2 z-30 px-3 pb-1 pt-1 w-full max-w-[430px] pointer-events-auto select-none">
+    <!-- Balão de Emote do Jogador -->
+    <div id="bubble-player" class="hud-speech-bubble bubble-bottom emote-bubble absolute left-14 -top-8 z-40 hidden">
+      <div class="obsidian-glass rounded-xl rounded-bl-sm px-3 py-1.5 border-gold/55 shadow-xl flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+        <span id="player-emote-text" class="text-[11px] font-semibold text-gold-bright whitespace-nowrap"></span>
       </div>
     </div>
 
-    <!-- Relógio do Jogador na Base Direita (como na Imagem 2) -->
-    <div id="timer-w" class="chess-timer w-timer" title="Seu Tempo (Brancas)">
-      <span class="material-symbols-rounded timer-icon">timer</span>
-      <span class="timer-digits">05:00</span>
+    <div id="player-card" class="hud-card hud-card-player-active obsidian-glass rounded-2xl px-3 py-2 flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#2B204A] via-[#1B1530] to-[#110C20] border border-gold/50 flex items-center justify-center shrink-0 shadow-[0_0_14px_rgba(232,195,116,0.18)] text-xl" id="player-avatar-hud">
+          🧙‍♂️
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[13.5px] font-bold text-[#FCF6EB] leading-tight" id="player-name-hud">Você</span>
+            <span class="px-1.5 py-0.5 rounded-md bg-gold/15 border border-gold/35 text-[9.5px] font-bold tracking-wide text-gold-bright uppercase tabular-nums whitespace-nowrap" id="player-badge-hud">
+              MAGO • 574 ELO
+            </span>
+            <span id="player-rating-bottom" style="display: none !important;">(Você)</span>
+          </div>
+          <div id="grave-w" class="graveyard w-dead flex items-center gap-0.5 mt-0.5 min-h-[14px] text-[11px] text-[#B7AECB]" title="Mármore capturado"></div>
+        </div>
+      </div>
+
+      <!-- Relógio do Jogador -->
+      <div id="timer-w" class="chess-timer w-timer px-2.5 py-1.5 rounded-xl bg-gradient-to-b from-gold/20 to-gold-deep/10 border border-gold/55 flex items-center gap-1.5 shrink-0 shadow-[0_0_14px_rgba(232,195,116,0.18)] transition-colors" title="Seu Tempo (Brancas)">
+        <svg class="w-3.5 h-3.5 text-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="13" r="8" />
+          <path d="M12 9V13L14.5 14.5" />
+          <path d="M9.5 3H14.5" />
+        </svg>
+        <span class="timer-digits text-[13px] font-extrabold tracking-wide text-gold-bright tabular-nums" id="white-clock">05:00</span>
+      </div>
     </div>
   </div>
 
-  <!-- Barra de Navegação Inferior (Material Design 3 Dock) -->
-  <nav class="md3-dock">
-    <button id="btn-mode" class="dock-btn active" title="Alternar Modo de Jogo">
-      <span class="material-symbols-rounded">smart_toy</span>
-      <span class="btn-label">vs IA</span>
-    </button>
-    <button id="btn-undo" class="dock-btn hidden" style="display: none !important;" title="Desfazer Jogada (Modo Fácil)">
-      <span class="material-symbols-rounded">undo</span>
-      <span class="btn-label">Voltar</span>
-    </button>
-    <button id="btn-cam" class="dock-btn" title="Trocar Ângulo de Câmara">
-      <span class="material-symbols-rounded">videocam</span>
-      <span class="btn-label">Câmera</span>
-    </button>
-    <button id="btn-hint" class="dock-btn" title="Pedir Dica ao Oráculo">
-      <span class="material-symbols-rounded">lightbulb</span>
-      <span class="btn-label">Oráculo</span>
-    </button>
-    <button id="btn-music" style="display: none !important;" class="dock-btn" title="Música Arcana">
-      <span class="material-symbols-rounded">music_note</span>
-      <span class="btn-label">Música</span>
-    </button>
-    <button id="btn-audio" style="display: none !important;" class="dock-btn active" title="Efeitos Sonoros">
-      <span class="material-symbols-rounded">volume_up</span>
-      <span class="btn-label">Som</span>
-    </button>
-    <button id="btn-achievements" style="display: none !important;" class="dock-btn" title="Conquistas Arcanas">
-      <span class="material-symbols-rounded">emoji_events</span>
-      <span class="btn-label">Conquistas</span>
-    </button>
-    <button id="btn-emotes" class="dock-btn" title="Emotes Mágicos">
-      <span class="material-symbols-rounded">sentiment_satisfied</span>
-      <span class="btn-label">Emotes</span>
-    </button>
-    <button id="btn-resign" class="dock-btn" title="Abandonar Partida (Rendição)">
-      <span class="material-symbols-rounded">flag</span>
-      <span class="btn-label">Desistir</span>
-    </button>
-    <button id="btn-history" class="dock-btn" title="Histórico de Jogadas">
-      <span class="material-symbols-rounded">format_list_numbered</span>
-      <span class="btn-label">Registo</span>
-    </button>
-    <button id="btn-reset" class="dock-btn" title="Reiniciar Partida">
-      <span class="material-symbols-rounded">restart_alt</span>
-      <span class="btn-label">Reiniciar</span>
-    </button>
-    <button id="btn-fullscreen" class="dock-btn" title="Tela Cheia">
-      <span class="material-symbols-rounded">fullscreen</span>
-      <span class="btn-label">Tela Cheia</span>
-    </button>
-  </nav>
+  <!-- ==================== 3. BARRA DOCK INFERIOR (5 AÇÕES ERGONÔMICAS) ==================== -->
+  <nav class="md3-dock fixed bottom-2 left-1/2 -translate-x-1/2 z-30 px-3 pb-2 w-full max-w-[430px] pointer-events-auto select-none" aria-label="Ações da partida">
+    <div class="obsidian-glass rounded-2xl p-1.5 grid grid-cols-5 gap-1 border-gold/22 w-full">
+      <!-- 1. Câmera -->
+      <button type="button" id="btn-cam" title="Trocar Ângulo de Câmara"
+              class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
+        <svg class="w-[18px] h-[18px] text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 7L16 12L23 17V7Z" />
+          <rect x="2" y="5" width="14" height="14" rx="2.5" />
+        </svg>
+        <span class="text-[10px] font-semibold leading-none">Câmera</span>
+      </button>
 
-  <!-- Menu Flutuante de Emotes Mágicos -->
-  <div id="emotes-popup" class="emotes-popup hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 12px;">
-      <span style="width: 24px;"></span>
-      <div class="emotes-header" style="margin: 0;">Reações Rápidas</div>
-      <button id="btn-close-emotes" style="background: none; border: none; color: #d0bcff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;" title="Fechar">
-        <span class="material-symbols-rounded" style="font-size: 1.1rem;">close</span>
+      <!-- 2. Oráculo -->
+      <button type="button" id="btn-hint" title="Pedir Dica ao Oráculo"
+              class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-purple-300 hover:bg-purple-500/10">
+        <svg class="w-[18px] h-[18px] text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="11" r="6" />
+          <path d="M8.5 20H15.5M10 17L12 20L14 17" />
+          <path d="M12 8.2L12.7 10.2L14.7 11L12.7 11.8L12 13.8L11.3 11.8L9.3 11L11.3 10.2L12 8.2Z" fill="currentColor" stroke="none" />
+        </svg>
+        <span class="text-[10px] font-semibold leading-none">Oráculo</span>
+      </button>
+
+      <!-- 3. Emotes -->
+      <button type="button" id="btn-emotes" title="Emotes Mágicos" onclick="if(window._toggleEmotePopover) window._toggleEmotePopover();"
+              class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5C21 16 17 19.5 12 19.5C10.5 19.5 9.1 19.2 7.9 18.6L3 20L4.4 15.8C3.5 14.5 3 13.1 3 11.5C3 7 7 3.5 12 3.5C17 3.5 21 7 21 11.5Z" />
+          <path d="M9 10.5H9.01M15 10.5H15.01M9.5 14C10.3 14.9 11.1 15.2 12 15.2C12.9 15.2 13.7 14.9 14.5 14" />
+        </svg>
+        <span class="text-[10px] font-semibold leading-none">Emotes</span>
+      </button>
+
+      <!-- 4. Histórico -->
+      <button type="button" id="btn-history" title="Histórico de Jogadas" onclick="if(window._openHistorySheet) window._openHistorySheet();"
+              class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" />
+          <path d="M9 7H16M9 11H16" />
+        </svg>
+        <span class="text-[10px] font-semibold leading-none">Histórico</span>
+      </button>
+
+      <!-- 5. Partida -->
+      <button type="button" id="btn-match-options" title="Opções da Partida" onclick="if(window._openMatchSheet) window._openMatchSheet();"
+              class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22S20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" />
+          <path d="M9 12L11 14L15.5 9.5" />
+        </svg>
+        <span class="text-[10px] font-semibold leading-none">Partida</span>
       </button>
     </div>
+
+    <!-- Botões auxiliares e legados mantidos para compatibilidade com o motor Three.js -->
+    <div style="display: none !important;">
+      <button id="btn-mode"></button>
+      <button id="btn-reset"></button>
+      <button id="btn-resign"></button>
+      <button id="btn-fullscreen"></button>
+      <button id="btn-hud-music-toggle"></button>
+      <button id="btn-undo"></button>
+      <button id="btn-audio"></button>
+      <button id="btn-music"></button>
+      <button id="btn-achievements"></button>
+    </div>
+  </nav>
+
+  <!-- ==================== 4. POPOVER FLUTUANTE DE EMOTES ARCANOS ==================== -->
+  <div id="emote-popover" class="popover-panel fixed bottom-[74px] left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[360px] z-50">
+    <div class="obsidian-glass rounded-2xl p-2.5 border-gold/35 shadow-2xl">
+      <div class="flex items-center justify-between px-1.5 pb-2">
+        <span class="font-display text-[10px] font-bold tracking-[0.18em] text-gold uppercase">Emotes Arcanos</span>
+        <button type="button" onclick="window._toggleEmotePopover(false)" aria-label="Fechar emotes" class="text-[#9E95B8] hover:text-gold p-0.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M18 6L6 18M6 6L18 18" />
+          </svg>
+        </button>
+      </div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <button type="button" onclick="window._sendArcaneEmote('🧙‍♂️ Em guarda!')" class="tap-scale rounded-xl bg-white/[0.04] hover:bg-gold/12 border border-white/[0.08] hover:border-gold/40 px-3 py-2 flex items-center gap-2 text-xs font-semibold text-[#F4EFE4]">
+          <span class="text-base">🧙‍♂️</span>
+          <span>Saudações</span>
+        </button>
+        <button type="button" onclick="window._sendArcaneEmote('⚡ Belo lance!')" class="tap-scale rounded-xl bg-white/[0.04] hover:bg-gold/12 border border-white/[0.08] hover:border-gold/40 px-3 py-2 flex items-center gap-2 text-xs font-semibold text-[#F4EFE4]">
+          <span class="text-base">⚡</span>
+          <span>Jogada Mestra</span>
+        </button>
+        <button type="button" onclick="window._sendArcaneEmote('🔥 Sinta o fogo!')" class="tap-scale rounded-xl bg-white/[0.04] hover:bg-orange-500/15 border border-white/[0.08] hover:border-orange-500/45 px-3 py-2 flex items-center gap-2 text-xs font-semibold text-[#F4EFE4]">
+          <span class="text-base">🔥</span>
+          <span>Xeque!</span>
+        </button>
+        <button type="button" onclick="window._sendArcaneEmote('👏 Partida incrível!')" class="tap-scale rounded-xl bg-white/[0.04] hover:bg-purple-500/15 border border-white/[0.08] hover:border-purple-500/45 px-3 py-2 flex items-center gap-2 text-xs font-semibold text-[#F4EFE4]">
+          <span class="text-base">🔮</span>
+          <span>Boa Sorte</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Legado de Emotes mantido invisível para gatilhos do motor -->
+  <div id="emotes-popup" class="emotes-popup hidden" style="display: none !important;">
     <div class="emotes-grid" id="emotes-grid">
       <button class="emote-btn" data-msg="🧙‍♂️ Em guarda!">🧙‍♂️ Em guarda!</button>
       <button class="emote-btn" data-msg="🔥 Sinta o fogo!">🔥 Sinta o fogo!</button>
@@ -6096,19 +6648,100 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
     </div>
   </div>
 
-  <!-- Modal de Rendição (Desistir) -->
-  <div id="resign-modal" class="modal-overlay hidden">
-    <div class="modal-content" style="max-width: 480px; width: 92%; border-radius: 26px; padding: 24px 20px;">
-      <h3>RENDIÇÃO</h3>
-      <p style="color: #d0bcff; margin-bottom: 22px; font-size: 0.95rem;">Deseja realmente baixar suas armas e abandonar
-        a partida?</p>
-      <div style="display: flex; gap: 10px;">
-        <button id="btn-confirm-resign" class="promo-btn"
-          style="flex: 1; background: rgba(255, 77, 109, 0.2); border-color: #ff4d6d; color: #ff4d6d;">Abandonar
+  <!-- ==================== 5. BOTTOM SHEET: HISTÓRICO DE LANCES ==================== -->
+  <div id="history-sheet" class="sheet-backdrop fixed inset-0 z-50 bg-[#05030A]/75 backdrop-blur-sm flex items-end justify-center" onclick="if(event.target === this) window._closeSheets();">
+    <div class="sheet-panel w-full max-w-[430px] rounded-t-[28px] bg-gradient-to-b from-[#1A142D] to-[#0D0918] border-t border-gold/30 p-4 pb-6 shadow-2xl max-h-[68%] flex flex-col gap-3">
+      <div class="w-10 h-1 rounded-full bg-gold/30 mx-auto"></div>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-display text-sm font-bold tracking-[0.14em] text-gold uppercase">Grimório de Lances</h3>
+          <p id="history-material-summary" class="text-[11px] text-[#ACA3C4] mt-0.5 tabular-nums">Histórico de lances da partida</p>
+        </div>
+        <button type="button" onclick="window._closeSheets();" class="tap-scale w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center text-[#CFC8E2]">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M18 6L6 18M6 6L18 18" />
+          </svg>
         </button>
-        <button id="btn-cancel-resign" class="promo-btn" style="flex: 1;">Continuar</button>
+      </div>
+
+      <div id="move-history-list" class="arcane-scroll overflow-y-auto rounded-2xl bg-[#0A0713]/85 border border-gold/15 p-3 min-h-[140px] max-h-[280px] flex flex-col gap-1.5 text-xs tabular-nums text-[#EFE8DA]">
+        <!-- Preenchido dinamicamente via JS -->
       </div>
     </div>
+  </div>
+
+  <!-- ==================== 6. BOTTOM SHEET: OPÇÕES SEGURAS DA PARTIDA ==================== -->
+  <div id="match-sheet" class="sheet-backdrop fixed inset-0 z-50 bg-[#05030A]/75 backdrop-blur-sm flex items-end justify-center" onclick="if(event.target === this) window._closeSheets();">
+    <div class="sheet-panel w-full max-w-[430px] rounded-t-[28px] bg-gradient-to-b from-[#1A142D] to-[#0D0918] border-t border-gold/30 p-4 pb-6 shadow-2xl flex flex-col gap-3">
+      <div class="w-10 h-1 rounded-full bg-gold/30 mx-auto"></div>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-display text-sm font-bold tracking-[0.14em] text-gold uppercase">Opções da Partida</h3>
+          <p class="text-[11px] text-[#ACA3C4] mt-0.5">Catedral Arcana • Duelo em Andamento</p>
+        </div>
+        <button type="button" onclick="window._closeSheets();" class="tap-scale w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center text-[#CFC8E2]">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M18 6L6 18M6 6L18 18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <!-- Retornar ao Menu Principal / Salão Principal -->
+        <button type="button" onclick="window._returnToLobby();"
+                class="tap-scale w-full rounded-2xl bg-white/[0.04] hover:bg-gold/12 border border-gold/25 px-4 py-3 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gold/14 border border-gold/35 flex items-center justify-center text-gold">
+              <span class="material-symbols-rounded">castle</span>
+            </div>
+            <div>
+              <div class="text-[13px] font-bold text-[#FBF5EA]">Salão Principal</div>
+              <div class="text-[11px] text-[#A299BC]">Retornar ao menu da Catedral Arcana</div>
+            </div>
+          </div>
+        </button>
+
+        <!-- Reiniciar Partida -->
+        <button type="button" onclick="window._triggerReset();"
+                class="tap-scale w-full rounded-2xl bg-white/[0.04] hover:bg-gold/12 border border-gold/25 px-4 py-3 flex items-center justify-between text-left">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gold/14 border border-gold/35 flex items-center justify-center text-gold">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12A9 9 0 1 0 6 5.3L3 8" />
+                <path d="M3 3V8H8" />
+              </svg>
+            </div>
+            <div>
+              <div class="text-[13px] font-bold text-[#FBF5EA]">Reiniciar Partida</div>
+              <div class="text-[11px] text-[#A299BC]">Começar novo duelo limpo na Catedral</div>
+            </div>
+          </div>
+        </button>
+
+        <!-- Desistir com confirmação em 2 toques -->
+        <button id="resign-btn" type="button" onclick="window._handleResignClick();"
+                class="tap-scale w-full rounded-2xl bg-red-950/35 hover:bg-red-900/40 border border-red-500/35 px-4 py-3 flex items-center justify-between text-left transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-red-500/15 border border-red-400/40 flex items-center justify-center text-red-300">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 21V4" />
+                <path d="M4 5H17L14.5 9.5L17 14H4" />
+              </svg>
+            </div>
+            <div>
+              <div id="resign-title" class="text-[13px] font-bold text-red-200">Desistir da Partida</div>
+              <div id="resign-sub" class="text-[11px] text-red-300/75">Conceder a vitória ao adversário</div>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Rendição legado mantido para chamadas diretas -->
+  <div id="resign-modal" class="modal-overlay hidden" style="display: none !important;">
+    <button id="btn-confirm-resign"></button>
+    <button id="btn-cancel-resign"></button>
   </div>
 
   <!-- Modal de Promoção do Peão -->
@@ -7178,6 +7811,136 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       </div>
     </div>
   </div>
+
+  <script>
+    /* ============================================================== */
+    /* SINCRONIZAÇÃO DA PARTIDA ARCANA (HUD, SHEETS, EMOTES E AÇÕES)  */
+    /* ============================================================== */
+    (function() {
+      // 1. Sincroniza barra de avaliação horizontal com style.height
+      const evalFill = document.getElementById("eval-bar-fill-w");
+      if (evalFill) {
+        const syncEval = () => {
+          if (evalFill.style.height && evalFill.style.height !== '100%') {
+            evalFill.style.width = evalFill.style.height;
+          }
+        };
+        const obs = new MutationObserver(syncEval);
+        obs.observe(evalFill, { attributes: true, attributeFilter: ['style'] });
+      }
+
+      // 2. Bottom sheets
+      window._openMatchSheet = function() {
+        const s = document.getElementById('match-sheet');
+        if (s) s.classList.add('open');
+      };
+
+      window._openHistorySheet = function() {
+        const list = document.getElementById('move-history-list');
+        const legacyList = document.querySelector('#history-modal .history-list');
+        if (list) {
+          if (legacyList && legacyList.children.length > 0) {
+            list.innerHTML = legacyList.innerHTML;
+          } else if (list.children.length === 0) {
+            list.innerHTML = '<div class="text-[#8F86A8] text-center py-4">Nenhum lance registrado ainda.</div>';
+          }
+        }
+        const s = document.getElementById('history-sheet');
+        if (s) s.classList.add('open');
+      };
+
+      window._closeSheets = function() {
+        document.querySelectorAll('.sheet-backdrop').forEach(el => el.classList.remove('open'));
+        const resignBtn = document.getElementById('resign-btn');
+        if (resignBtn) {
+          resignBtn.dataset.armed = "false";
+          const title = document.getElementById('resign-title');
+          const sub = document.getElementById('resign-sub');
+          if (title) title.textContent = "Desistir da Partida";
+          if (sub) sub.textContent = "Conceder a vitória ao adversário";
+        }
+      };
+
+      window._toggleEmotePopover = function(force) {
+        const p = document.getElementById('emote-popover');
+        if (!p) return;
+        if (typeof force === 'boolean') {
+          p.classList.toggle('open', force);
+        } else {
+          p.classList.toggle('open');
+        }
+      };
+
+      window._sendArcaneEmote = function(text) {
+        window._toggleEmotePopover(false);
+        // Exibe no balão do jogador
+        const bubble = document.getElementById('bubble-player');
+        const bubbleText = document.getElementById('player-emote-text');
+        if (bubble && bubbleText) {
+          bubbleText.textContent = text;
+          bubble.classList.remove('hidden');
+          bubble.classList.add('visible');
+          setTimeout(() => {
+            bubble.classList.add('hidden');
+            bubble.classList.remove('visible');
+          }, 3200);
+        }
+        // Dispara no motor de xadrez legado
+        const btns = document.querySelectorAll('.emote-btn');
+        for (const b of btns) {
+          if (b.dataset.msg === text || b.textContent.includes(text)) {
+            b.click();
+            break;
+          }
+        }
+      };
+
+      window._returnToLobby = function() {
+        window._closeSheets();
+        document.body.classList.add('in-lobby');
+        const eb = document.getElementById('eval-bar-container');
+        if (eb) eb.classList.add('hidden');
+        if (window._switchSubView) {
+          window._switchSubView('home');
+        }
+      };
+
+      window._triggerReset = function() {
+        window._closeSheets();
+        const r = document.getElementById('btn-reset');
+        if (r) r.click();
+      };
+
+      window._handleResignClick = function() {
+        const btn = document.getElementById('resign-btn');
+        const title = document.getElementById('resign-title');
+        const sub = document.getElementById('resign-sub');
+        if (!btn) return;
+
+        if (btn.dataset.armed === "true") {
+          window._closeSheets();
+          const legacyResign = document.getElementById('btn-confirm-resign');
+          if (legacyResign) {
+            legacyResign.click();
+          } else {
+            const r = document.getElementById('btn-resign');
+            if (r) r.click();
+          }
+        } else {
+          btn.dataset.armed = "true";
+          if (title) title.textContent = "Toque novamente para confirmar";
+          if (sub) sub.textContent = "Abandonar a partida e aceitar derrota";
+          setTimeout(() => {
+            if (btn.dataset.armed === "true") {
+              btn.dataset.armed = "false";
+              if (title) title.textContent = "Desistir da Partida";
+              if (sub) sub.textContent = "Conceder a vitória ao adversário";
+            }
+          }, 3500);
+        }
+      };
+    })();
+  </script>
 </body>
 
 </html>
