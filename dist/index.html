@@ -99,74 +99,97 @@
       100% { transform: translate(-50%) scale(1.03); box-shadow: 0 12px 36px rgba(0,0,0,0.85), 0 0 32px rgba(255, 77, 109, 0.75); }
     }
 
-    /* Dock Superior Compacto com Efeito Glassmorphism Arcane & Correção Mobile */
-    #btn-top-settings,
-    .rpg-top-bar .rpg-top-icon-btn {
+    /* ============================================================== */
+    /* LOBBY PRINCIPAL MINIMALISTA & LIMPO (DECLUTTER ARCANE LOBBY)   */
+    /* ============================================================== */
+    /* 1. Ocultar banners secundários, botões repetidos e métricas no lobby */
+    #web-platform-banner,
+    .web-platform-banner,
+    .stats-banner-mini {
       display: none !important;
     }
+
+    /* 2. Top Bar Limpo, Minimalista e sem Colisões */
+    #btn-top-settings,
+    .rpg-top-bar .rpg-top-icon-btn,
+    #btn-top-crowns {
+      display: none !important;
+    }
+
     .rpg-top-bar {
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
       width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 auto 8px !important;
+      max-width: 420px !important;
+      margin: 0 auto clamp(4px, 0.8vh, 8px) !important;
       padding: 0 4px !important;
       box-sizing: border-box !important;
       position: relative !important;
     }
+
     .rpg-top-resources-center {
-      display: flex !important;
+      display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
       flex-wrap: nowrap !important;
-      gap: clamp(3px, 1.2vw, 8px) !important;
-      background: rgba(18, 14, 28, 0.85) !important;
-      -webkit-backdrop-filter: blur(14px) !important;
-      backdrop-filter: blur(14px) !important;
-      padding: 3px 8px !important;
+      gap: clamp(6px, 1.8vw, 12px) !important;
+      background: rgba(18, 14, 28, 0.88) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      backdrop-filter: blur(16px) !important;
+      padding: 4px 14px !important;
       border-radius: 999px !important;
       border: 1px solid rgba(245, 197, 107, 0.35) !important;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
       max-width: 98vw !important;
       box-sizing: border-box !important;
       transition: all 0.25s ease !important;
     }
+
     .rpg-top-resources-center:hover {
-      border-color: rgba(245, 197, 107, 0.55) !important;
+      border-color: rgba(245, 197, 107, 0.6) !important;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 197, 107, 0.25) !important;
     }
+
     .rpg-top-streak,
-    .rpg-top-crowns,
     .rpg-top-coins,
     .rpg-top-elo {
       display: inline-flex !important;
       align-items: center !important;
-      gap: 3px !important;
-      padding: 3px 7px !important;
-      font-size: clamp(0.70rem, 2.1vw, 0.82rem) !important;
+      gap: 4px !important;
+      padding: 2px 6px !important;
+      font-size: clamp(0.72rem, 2.2vw, 0.84rem) !important;
       white-space: nowrap !important;
-      flex-shrink: 1 !important;
+      flex-shrink: 0 !important;
       box-sizing: border-box !important;
     }
+
     .rpg-top-streak .streak-flame,
-    .rpg-top-crowns .crown-icon,
     .rpg-top-coins .coin-icon,
     .rpg-top-elo .elo-rank-icon {
-      font-size: clamp(0.82rem, 2.5vw, 0.95rem) !important;
+      font-size: clamp(0.85rem, 2.5vw, 0.98rem) !important;
       line-height: 1 !important;
     }
+
     .rpg-top-streak #player-streak-val,
-    .rpg-top-crowns #player-crowns-top,
     .rpg-top-coins #player-coins-top,
     .rpg-top-elo #top-elo-val {
-      font-size: clamp(0.72rem, 2.3vw, 0.84rem) !important;
+      font-size: clamp(0.74rem, 2.3vw, 0.86rem) !important;
       font-weight: 800 !important;
     }
+
+    /* Ocultar "DIA" e "+" no topo para manter visual limpo */
     .rpg-top-streak .streak-tag,
-    .rpg-top-elo .elo-tag {
-      font-size: clamp(0.55rem, 1.7vw, 0.65rem) !important;
+    .rpg-top-coins .top-pill-plus {
+      display: none !important;
     }
+
+    .rpg-top-elo .elo-tag {
+      font-size: 0.65rem !important;
+      color: #ffd700 !important;
+      opacity: 0.9 !important;
+    }
+
     .rpg-top-profile {
       display: inline-flex !important;
       align-items: center !important;
@@ -174,14 +197,103 @@
       margin: 0 !important;
       flex-shrink: 0 !important;
     }
+
     .rpg-top-avatar {
       width: clamp(22px, 5.8vw, 26px) !important;
       height: clamp(22px, 5.8vw, 26px) !important;
       font-size: clamp(0.80rem, 2.3vw, 0.95rem) !important;
     }
+
     .rpg-top-lvl-badge {
       font-size: clamp(0.50rem, 1.5vw, 0.60rem) !important;
       padding: 1px 3px !important;
+    }
+
+    /* 3. Ajuste Elegante de Título e Hero */
+    .home-game-title-wrap {
+      margin: clamp(2px, 0.5vh, 6px) auto clamp(4px, 0.8vh, 8px) !important;
+    }
+
+    .home-hero-split {
+      margin: clamp(4px, 0.8vh, 12px) auto !important;
+      gap: clamp(8px, 1.4vh, 16px) !important;
+    }
+
+    /* 4. Cartões de Recompensas Inferiores Minimalistas */
+    .home-chest-slots {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: clamp(6px, 1.5vw, 10px) !important;
+      width: 100% !important;
+      max-width: 400px !important;
+      margin: clamp(4px, 0.8vh, 8px) auto clamp(6px, 1vh, 10px) !important;
+      padding: 0 4px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Ocultar badges coloridas e botões internos nos slots */
+    .home-chest-card .chest-card-tag,
+    .home-chest-card .chest-card-action {
+      display: none !important;
+    }
+
+    .home-chest-card {
+      min-height: clamp(54px, 7.5vh, 64px) !important;
+      height: clamp(54px, 7.5vh, 64px) !important;
+      padding: 6px 4px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3px !important;
+      background: linear-gradient(180deg, rgba(30, 22, 46, 0.85) 0%, rgba(16, 11, 26, 0.92) 100%) !important;
+      border: 1px solid rgba(245, 197, 107, 0.22) !important;
+      border-radius: 14px !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      cursor: pointer !important;
+      box-sizing: border-box !important;
+    }
+
+    .home-chest-card:hover,
+    .home-chest-card:active {
+      transform: translateY(-2px) scale(1.04) !important;
+      border-color: rgba(245, 197, 107, 0.65) !important;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(245, 197, 107, 0.25) !important;
+    }
+
+    .home-chest-card .chest-card-icon-wrap {
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .home-chest-card .chest-emoji {
+      font-size: clamp(1.15rem, 2.5vh, 1.35rem) !important;
+      line-height: 1 !important;
+    }
+
+    .home-chest-card .chest-card-title {
+      font-size: clamp(0.60rem, 1.3vh, 0.68rem) !important;
+      font-weight: 700 !important;
+      color: #e2d9f3 !important;
+      white-space: nowrap !important;
+      margin: 0 !important;
+      letter-spacing: 0.2px !important;
+    }
+
+    .home-chest-card.chest-available {
+      border-color: #ffd700 !important;
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.45) !important;
+      animation: chestGlowPulse 2.2s infinite ease-in-out !important;
+    }
+
+    @keyframes chestGlowPulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.7); }
     }
 
     /* Card de Retomar Partida (Auto-Save) */
@@ -3985,12 +4097,8 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       <!-- VIEW 1: PÁGINA INICIAL (Layout Inspirado na Referência)         -->
       <!-- ============================================================== -->
       <div id="menu-view-home" class="menu-subview active">
-        <!-- Topo: Configurações (Esq) + Coroas, Moedas e Perfil Centralizados Acima -->
+        <!-- Topo: Coroas, Moedas e Perfil Centralizados Acima (Minimalista) -->
         <div class="rpg-top-bar">
-          <button type="button" class="rpg-top-icon-btn" id="btn-top-settings" title="Configurações">
-            <span class="material-symbols-rounded">settings</span>
-          </button>
-
           <div class="rpg-top-resources-center" id="rpg-top-resources-center">
             <div class="rpg-top-streak" id="btn-top-streak" title="Sequência de Dias Arcanos (Jogue diariamente para bônus!)" style="cursor: pointer; pointer-events: auto !important;">
               <span class="streak-flame">🔥</span>
@@ -4031,8 +4139,8 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
           <h1 class="rpg-top-game-title">WIZARD’S CHESS</h1>
         </div>
 
-        <!-- Banner de Eventos: Missões Diárias e Roda da Fortuna -->
-        <div class="web-platform-banner" id="web-platform-banner">
+        <!-- Banners Secundários Ocultos no Lobby para Layout Limpo (Acessíveis via Desafios e Perfil) -->
+        <div class="web-platform-banner" id="web-platform-banner" style="display: none !important;">
           <button type="button" class="web-banner-pill highlight-gold" id="btn-web-daily-quests" title="Ver Missões Diárias do Grimório">
             <span class="material-symbols-rounded" style="color: #ffd700; font-size: 16px;">task_alt</span>
             <span>Missões Diárias</span>
@@ -4043,7 +4151,7 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
           </button>
         </div>
 
-        <div class="stats-banner-mini" title="Suas Estatísticas Salvas">
+        <div class="stats-banner-mini" title="Suas Estatísticas Salvas" style="display: none !important;">
           <span class="stat-item"><span class="stat-icon">🏆</span> <span id="stat-wins">0</span> Vitórias</span>
           <span class="stat-divider">•</span>
           <span class="stat-item"><span class="stat-icon">⚖️</span> <span id="stat-draws">0</span> Empates</span>
