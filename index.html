@@ -528,6 +528,9 @@
       color: #e2dbec;
     }
     @media (max-width: 600px) {
+  /* Eval bar mobile refinement */
+  #eval-bar-container { left: 2px !important; width: 8px !important; opacity: 0.8 !important; }
+  .eval-score-badge { font-size: 0.52rem !important; padding: 1px 3px !important; }
       .achievement-toast {
         top: 14px;
         right: 14px;
@@ -3449,6 +3452,9 @@ body.in-lobby #emote-toast-container,
 }
 
     #canvas-container, #canvas-container canvas { touch-action: none !important; -webkit-touch-callout: none; user-select: none; }
+  #banner-update-available { display: none !important; visibility: hidden !important; pointer-events: none !important; opacity: 0 !important; }
+body:not(.in-lobby) #lgpd-consent-banner { display: none !important; }
+body:not(.in-lobby) #banner-update-available { display: none !important; }
 </style>
 </head>
 
@@ -5510,10 +5516,6 @@ body.in-lobby #emote-toast-container,
       <span class="material-symbols-rounded">videocam</span>
       <span class="btn-label">Câmera</span>
     </button>
-    <button id="btn-cam-reset" class="dock-btn" title="Resetar Posicao da Camera">
-      <span class="material-symbols-rounded">restart_alt</span>
-      <span class="btn-label">Resetar</span>
-    </button>
     <button id="btn-hint" class="dock-btn" title="Pedir Dica ao Oráculo">
       <span class="material-symbols-rounded">lightbulb</span>
       <span class="btn-label">Oráculo</span>
@@ -6371,22 +6373,9 @@ body.in-lobby #emote-toast-container,
     </div>
   </div>
 
-  <!-- Banner de Atualização Segura de Versão -->
-  <div id="banner-update-available" class="banner-update-available" style="display: none;">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="font-size: 1.4rem;">🔮</span>
-      <div>
-        <div style="font-weight: 800; font-size: 0.85rem; color: #00f5d4;">NOVA VERSÃO ARCANA DISPONÍVEL!</div>
-        <div style="font-size: 0.72rem; color: #d0bcff;">Atualize para receber novos feitiços e melhorias sem perder sua partida.</div>
-      </div>
-    </div>
-    <div style="display: flex; gap: 6px; align-items: center;">
-      <button type="button" id="btn-apply-update" class="update-btn-action">Atualizar</button>
-      <button type="button" id="btn-dismiss-update" style="background: transparent; border: none; color: #8c829e; font-size: 0.75rem; cursor: pointer; padding: 6px 8px;">Depois</button>
-    </div>
-  </div>
+  <!-- Banner de Atualiza��o Suprimido (Atualiza��o 100% Silenciosa em Background) -->
+  <div id="banner-update-available" style="display: none !important;"></div>
 
-  <!-- Script de PWA, Service Worker e Controle do Loading Screen -->
   <script>
     // 1. Simulação suave da barra de progresso da tela de carregamento inicial
     (function initLoadingProgress() {
@@ -6434,16 +6423,8 @@ body.in-lobby #emote-toast-container,
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Nova versão disponível!
-                  const updateBanner = document.getElementById('banner-update-available');
-                  if (updateBanner) updateBanner.style.display = 'flex';
-
-                  const btnApply = document.getElementById('btn-apply-update');
-                  if (btnApply) {
-                    btnApply.onclick = () => {
-                      newWorker.postMessage({ type: 'SKIP_WAITING' });
-                    };
-                  }
+                  // Atualiza��o transparente em background: ativa sem bloquear a tela do jogador
+                  newWorker.postMessage({ type: 'SKIP_WAITING' });
                 }
               });
             }
@@ -6454,7 +6435,8 @@ body.in-lobby #emote-toast-container,
 
         let refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          if (!refreshing) {
+          // Atualiza��o silenciosa: s� recarrega se o jogador estiver no lobby inicial (nunca durante partida ativa)
+          if (!refreshing && document.body.classList.contains('in-lobby')) {
             refreshing = true;
             window.location.reload();
           }
@@ -6462,7 +6444,7 @@ body.in-lobby #emote-toast-container,
       });
     }
 
-    // 3. Botão de Instalação PWA e Suporte a iOS Safari
+    // 3. Bot�o de Instala��o PWA e Suporte a iOS Safari
     (function setupPWAInstall() {
       let deferredPrompt = null;
       const btnInstall = document.getElementById('btn-pwa-install');
