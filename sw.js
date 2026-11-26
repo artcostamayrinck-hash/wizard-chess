@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wizard-chess-v1.5.16-arcane';
+const CACHE_NAME = 'wizard-chess-v1.5.17-arcane';
 
 const PRECACHE_ASSETS = [
   './',

@@ -3476,6 +3476,146 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
   vertical-align: middle !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
 }
+
+/* ========================================================================== */
+/* V1.5.17: Botão Flutuante de Visão 2D / 3D & Badge de Aberturas no HUD */
+/* ========================================================================== */
+.quick-cam-float-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(22, 16, 36, 0.88);
+  border: 1.5px solid rgba(245, 197, 107, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #f5c56b;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(245, 197, 107, 0.25);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+.quick-cam-float-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: rgba(36, 26, 58, 0.98);
+  border-color: #ffd700;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 197, 107, 0.45);
+}
+.quick-cam-float-btn:active {
+  transform: scale(0.95);
+}
+.quick-cam-float-btn .material-symbols-rounded {
+  font-size: 1.15rem;
+}
+
+.opening-book-badge {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 998;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(28, 20, 44, 0.94), rgba(16, 12, 26, 0.97));
+  border: 1.5px solid rgba(245, 197, 107, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 6px 16px;
+  color: #f5c56b;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), 0 0 16px rgba(245, 197, 107, 0.28);
+  animation: slideDownBadge 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: all 0.2s ease;
+  user-select: none;
+  max-width: 88vw;
+}
+.opening-book-badge:hover {
+  border-color: #ffd700;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.75), 0 0 22px rgba(245, 197, 107, 0.45);
+}
+.opening-book-badge.hidden {
+  display: none !important;
+}
+.opening-badge-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+}
+.opening-badge-hint-icon {
+  font-size: 0.95rem;
+  color: #b583ff;
+  opacity: 0.85;
+}
+@keyframes slideDownBadge {
+  from { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.opening-strategy-content {
+  max-width: 480px;
+  width: 92%;
+  padding: 22px 18px;
+  border-radius: 24px;
+  text-align: left;
+  border: 1.5px solid rgba(245, 197, 107, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 32px rgba(245, 197, 107, 0.25);
+}
+.strategy-moves-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 14px;
+}
+.strategy-move-pill {
+  background: rgba(181, 131, 255, 0.16);
+  border: 1px solid rgba(181, 131, 255, 0.4);
+  color: #d0bcff;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.76rem;
+  font-family: monospace;
+  font-weight: 700;
+}
+.strategy-desc-text {
+  font-size: 0.84rem;
+  color: #f1edfa;
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+.strategy-tips-card {
+  background: rgba(14, 10, 22, 0.75);
+  border: 1px solid rgba(245, 197, 107, 0.3);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+@media (max-width: 600px) {
+  .quick-cam-float-btn {
+    top: 10px;
+    right: 10px;
+    padding: 5px 11px;
+    font-size: 0.76rem;
+  }
+  .opening-book-badge {
+    top: 10px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+}
+
 </style>
 </head>
 
@@ -3496,6 +3636,43 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
   </div>
   <!-- Onde o tabuleiro 3D é desenhado -->
   <div id="canvas-container"></div>
+
+  <!-- Botão Flutuante de Alternância Rápida 2D / 3D -->
+  <button id="btn-quick-cam-toggle" class="quick-cam-float-btn" title="Alternar Visão 2D Tática / 3D" aria-label="Alternar Visão 2D / 3D">
+    <span class="material-symbols-rounded">view_quilt</span>
+    <span id="quick-cam-label">2D</span>
+  </button>
+
+  <!-- Badge Dinâmico de Reconhecimento de Abertura Arcana -->
+  <div id="opening-book-badge" class="opening-book-badge hidden" title="Toque para ver a estratégia desta abertura">
+    <span class="opening-badge-icon">📜</span>
+    <span id="opening-badge-name" class="opening-badge-name">Abertura Italiana</span>
+    <span class="opening-badge-hint-icon material-symbols-rounded">info</span>
+  </div>
+
+  <!-- Modal de Estratégia da Abertura -->
+  <div id="opening-strategy-modal" class="modal-overlay hidden">
+    <div class="modal-content opening-strategy-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div class="brand-pill" style="margin: 0;">
+          <span class="material-symbols-rounded">menu_book</span>
+          <span id="strategy-opening-title">ABERTURA ITALIANA</span>
+        </div>
+        <button type="button" id="btn-close-strategy-modal" class="modal-corner-close-btn" title="Fechar">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+      <div id="strategy-opening-moves" class="strategy-moves-pills"></div>
+      <div id="strategy-opening-desc" class="strategy-desc-text"></div>
+      <div class="strategy-tips-card">
+        <div style="font-weight: 700; color: #f5c56b; margin-bottom: 4px; font-size: 0.82rem;">💡 Plano Estratégico Arcano:</div>
+        <div id="strategy-opening-plan" style="font-size: 0.78rem; color: #d0bcff; line-height: 1.5;"></div>
+      </div>
+      <button type="button" id="btn-dismiss-strategy" class="promo-btn" style="margin-top: 14px; width: 100%; padding: 10px;">
+        Entendido!
+      </button>
+    </div>
+  </div>
 
   <!-- Banner Interativo do Modo Tutorial Durante a Partida -->
   <div id="tutorial-guide-banner" class="tutorial-guide-banner hidden">
