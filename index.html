@@ -5828,7 +5828,14 @@
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7015126547268342" data-ad-slot="9745233237"
       data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>
-      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+      window.addEventListener('load', () => {
+        try {
+          const adIns = document.querySelector('#ad-container .adsbygoogle');
+          if (adIns && adIns.offsetWidth > 0) {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          }
+        } catch (e) { }
+      });
     </script>
   </div>
 

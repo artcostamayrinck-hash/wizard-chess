@@ -2619,26 +2619,8 @@ function updateTutorialStepUI() {
 }
 
 // ========================================================
-// Inicialização Segura (Após todas as constantes e funções)
+// Definições de constantes e módulos avançados
 // ========================================================
-let _wizardAppInitialized = false;
-function startWizardApp() {
-  if (_wizardAppInitialized) return;
-  _wizardAppInitialized = true;
-  try {
-    initWizardFeatures();
-  } catch (err) {
-    console.error("[WizardChess] Erro no startWizardApp:", err);
-  }
-}
-
-// Execução segura garantida uma única vez
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", startWizardApp);
-} else {
-  startWizardApp();
-}
-window.addEventListener("load", startWizardApp);
 
 // --------------------------------------------------------
 // 11. Profile System: Customize Name, Avatar & View Achievements
@@ -7376,3 +7358,24 @@ function setupArcaneCardSystem() {
     btnCopy.addEventListener("click", () => ArcaneCard.copyCard());
   }
 }
+
+// ========================================================
+// Inicialização Segura (Garantida após todas as constantes)
+// ========================================================
+let _wizardAppInitialized = false;
+function startWizardApp() {
+  if (_wizardAppInitialized) return;
+  _wizardAppInitialized = true;
+  try {
+    initWizardFeatures();
+  } catch (err) {
+    console.error("[WizardChess] Erro no startWizardApp:", err);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startWizardApp);
+} else {
+  startWizardApp();
+}
+window.addEventListener("load", startWizardApp);
