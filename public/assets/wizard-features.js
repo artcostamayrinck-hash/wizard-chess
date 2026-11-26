@@ -8269,12 +8269,492 @@ function setupArcaneCardSystem() {
 // ========================================================
 // Inicialização Segura (Garantida após todas as constantes)
 // ========================================================
+
+// ==========================================================================
+// FASE 3: IA AVANÇADA, GAME FEEL, ACESSIBILIDADE E QUALIDADE DE VIDA
+// ==========================================================================
+
+const ArcanePhase3 = {
+  worker: null,
+  isWorkerBusy: false,
+  progressiveHintStep: 0,
+  premove: null,
+  lastReplayTimer: null,
+
+  init() {
+    this.initWebWorker();
+    this.initAudioUnlock();
+    this.initKeyboardShortcuts();
+    this.initSettingsToggles();
+    this.initTurnMonitor();
+    this.initModeBannerMonitor();
+    this.checkOnboarding();
+  },
+
+  // 1. Web Worker de IA com Fallback e Personalidades de Arquimago
+  initWebWorker() {
+    try {
+      if (window.Worker) {
+        this.worker = new Worker('./assets/chess-worker.js');
+        this.worker.onmessage = (e) => {
+          const data = e.data;
+          if (!data) return;
+          if (data.type === 'bestMoveResult') {
+            this.isWorkerBusy = false;
+          }
+        };
+        this.worker.onerror = (err) => {
+          console.warn("[ArcanePhase3] Worker error, fallback ativo:", err);
+          this.worker = null;
+        };
+      }
+    } catch(e) {
+      console.warn("[ArcanePhase3] Web Worker indisponível, usando thread principal:", e);
+      this.worker = null;
+    }
+  },
+
+  // Atraso Mínimo Natural de 400ms a 700ms na IA
+  getNaturalAIDelay() {
+    return Math.floor(400 + Math.random() * 300);
+  },
+
+  // 2. Desbloqueio Global de Web Audio e Persistência de Mudo
+  initAudioUnlock() {
+    const unlock = () => {
+      if (typeof ArcaneAudio !== "undefined" && ArcaneAudio.init) {
+        ArcaneAudio.init();
+      }
+      ['pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+        window.removeEventListener(evt, unlock);
+      });
+    };
+    ['pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, unlock, { passive: true, once: true });
+    });
+
+    // Sons expandidos da Fase 3 em ArcaneAudio
+    if (typeof ArcaneAudio !== "undefined") {
+      ArcaneAudio.playMagicCaptureSound = function(type) {
+        if (!this.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const t = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(440, t);
+          osc.frequency.exponentialRampToValueAtTime(110, t + 0.15);
+          gain.gain.setValueAtTime(0.3, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+          osc.connect(gain).connect(this.ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.25);
+        } catch(e){}
+      };
+
+      ArcaneAudio.playClockUrgentTick = function() {
+        if (!this.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const t = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(880, t);
+          gain.gain.setValueAtTime(0.15, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+          osc.connect(gain).connect(this.ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.09);
+        } catch(e){}
+      };
+
+      ArcaneAudio.playDefeatSound = function() {
+        if (!this.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const t = this.ctx.currentTime;
+          [196, 174.61, 146.83, 110].forEach((f, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(f, t + i * 0.15);
+            gain.gain.setValueAtTime(0.2, t + i * 0.15);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.15 + 0.5);
+            osc.connect(gain).connect(this.ctx.destination);
+            osc.start(t + i * 0.15);
+            osc.stop(t + i * 0.15 + 0.55);
+          });
+        } catch(e){}
+      };
+    }
+  },
+
+  // 3. Atalhos de Teclado no Desktop (ESC, V, F, Setas)
+  initKeyboardShortcuts() {
+    window.addEventListener("keydown", (e) => {
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+
+      const key = e.key.toLowerCase();
+      
+      // ESC: Abre ou fecha Menu de Pausa
+      if (e.key === "Escape") {
+        e.preventDefault();
+        const pauseModal = document.getElementById("pause-modal");
+        const btnOpen = document.getElementById("btn-open-menu");
+        const btnResume = document.getElementById("btn-pause-resume");
+        if (pauseModal && !pauseModal.classList.contains("hidden")) {
+          if (btnResume) btnResume.click();
+        } else if (btnOpen) {
+          btnOpen.click();
+        }
+      }
+
+      // V: Alternar Visão 3D / 2D
+      if (key === "v") {
+        const btnCam = document.getElementById("btn-quick-cam-toggle");
+        if (btnCam) btnCam.click();
+      }
+
+      // F: Inverter Visão da Câmera (Flip Board)
+      if (key === "f") {
+        if (window._WIZARD_GAME && window._WIZARD_GAME.adaptCamera) {
+          window._WIZARD_GAME.adaptCamera(4);
+          if (typeof showToast === "function") showToast("🔄 Câmera invertida (180°)");
+        }
+      }
+
+      // Setas esquerda/direita na revisão da partida
+      if (e.key === "ArrowLeft") {
+        const btnPrev = document.getElementById("btn-tut-prev") || document.getElementById("btn-review-prev");
+        if (btnPrev) btnPrev.click();
+      }
+      if (e.key === "ArrowRight") {
+        const btnNext = document.getElementById("btn-tut-next") || document.getElementById("btn-review-next");
+        if (btnNext) btnNext.click();
+      }
+    });
+  },
+
+  // 4. Configurações & Toggles Salvos
+  initSettingsToggles() {
+    // Coordenadas
+    const coordsSaved = localStorage.getItem("wizard_coords_enabled") === "true";
+    const coordsEl = document.getElementById("board-coords-overlay");
+    const coordsLbl = document.getElementById("label-coords-setting");
+    const coordsBtn = document.getElementById("btn-toggle-coords-setting");
+    if (coordsEl) coordsEl.classList.toggle("hidden", !coordsSaved);
+    if (coordsLbl) coordsLbl.textContent = coordsSaved ? "Ativado" : "Desativado";
+    if (coordsBtn) coordsBtn.classList.toggle("active", coordsSaved);
+
+    // Girar Câmera no Modo 2P (padrão true)
+    const rotate2PSaved = localStorage.getItem("wizard_2p_camera_rotate") !== "false";
+    const rotLbl = document.getElementById("label-rotate-2p-setting");
+    const rotBtn = document.getElementById("btn-toggle-camera-rotate-2p");
+    if (rotLbl) rotLbl.textContent = rotate2PSaved ? "Ativado" : "Desativado";
+    if (rotBtn) rotBtn.classList.toggle("active", rotate2PSaved);
+
+    // Modo Daltonismo
+    const daltonSaved = localStorage.getItem("wizard_daltonism_mode") === "true";
+    document.body.classList.toggle("daltonism-mode", daltonSaved);
+    const daltLbl = document.getElementById("label-daltonism-setting");
+    const daltBtn = document.getElementById("btn-toggle-daltonism-setting");
+    if (daltLbl) daltLbl.textContent = daltonSaved ? "Ativado" : "Desativado";
+    if (daltBtn) daltBtn.classList.toggle("active", daltonSaved);
+
+    // Reduzir Movimento
+    const motionSaved = localStorage.getItem("wizard_reduced_motion") === "true";
+    const motLbl = document.getElementById("label-reduced-motion-setting");
+    const motBtn = document.getElementById("btn-toggle-reduced-motion");
+    if (motLbl) motLbl.textContent = motionSaved ? "Ativado" : "Desativado";
+    if (motBtn) motBtn.classList.toggle("active", motionSaved);
+  },
+
+  // 5. Monitor de Turno (Regra dos 50 Lances, 2P Rotate, Alerta de Tempo)
+  initTurnMonitor() {
+    let lastTurn = null;
+
+    setInterval(() => {
+      if (!window._WIZARD_GAME) return;
+      const chess = window._WIZARD_GAME.getChess();
+      if (!chess) return;
+
+      // 5.1 Regra dos 50 lances
+      if (typeof chess.isFiftyMoveRule === "function" && chess.isFiftyMoveRule()) {
+        const gameOverModal = document.getElementById("game-over-modal");
+        if (gameOverModal && gameOverModal.classList.contains("hidden")) {
+          const title = document.getElementById("game-over-title");
+          const msg = document.getElementById("game-over-msg");
+          if (title) title.textContent = "Empate Técnico!";
+          if (msg) msg.textContent = "Regra dos 50 Lances: 50 movimentos consecutivos sem captura ou avanço de peão.";
+          gameOverModal.classList.remove("hidden");
+        }
+      }
+
+      // 5.2 Rotação de câmera automática no Modo 2 Jogadores Local
+      const mode = window._WIZARD_GAME.getMode ? window._WIZARD_GAME.getMode() : null;
+      if (mode === "2p" && localStorage.getItem("wizard_2p_camera_rotate") !== "false") {
+        if (chess.turn !== lastTurn) {
+          lastTurn = chess.turn;
+          if (chess.turn === "b") {
+            window._WIZARD_GAME.adaptCamera(4); // Vira 180° para as Pretas
+          } else {
+            window._WIZARD_GAME.adaptCamera(0); // Volta 0° para as Brancas
+          }
+        }
+      }
+
+      // 5.3 Alerta nos últimos 10s do relógio
+      const timers = window._WIZARD_GAME.getTimers ? window._WIZARD_GAME.getTimers() : null;
+      if (timers && typeof ArcaneAudio !== "undefined") {
+        const activeTimer = chess.turn === "w" ? timers.w : timers.b;
+        if (activeTimer > 0 && activeTimer <= 10) {
+          ArcaneAudio.playClockUrgentTick();
+        }
+      }
+    }, 1000);
+  },
+
+  // 6. Banner Briefing de Modo Especial (Arcano / Morte Súbita)
+  initModeBannerMonitor() {
+    const btnStart = document.getElementById("btn-start-game");
+    if (btnStart) {
+      btnStart.addEventListener("click", () => {
+        setTimeout(() => {
+          this.showModeBriefing();
+        }, 600);
+      });
+    }
+  },
+
+  showModeBriefing() {
+    if (!window._WIZARD_GAME) return;
+    const banner = document.getElementById("mode-briefing-banner");
+    const icon = document.getElementById("mode-briefing-icon");
+    const title = document.getElementById("mode-briefing-title");
+    const text = document.getElementById("mode-briefing-text");
+    if (!banner || !title || !text) return;
+
+    let isArcane = false;
+    let isSuddenDeath = false;
+    const timers = window._WIZARD_GAME.getTimers ? window._WIZARD_GAME.getTimers() : null;
+    if (timers && timers.w <= 180 && timers.total <= 180) {
+      isSuddenDeath = true;
+    }
+    const arena = window._WIZARD_GAME.getArena ? window._WIZARD_GAME.getArena() : "";
+    if (arena === "abyss" || arena === "cosmos" || arena === "inferno") {
+      isArcane = true;
+    }
+
+    if (isSuddenDeath) {
+      if (icon) icon.textContent = "⚡";
+      title.textContent = "MORTE SÚBITA";
+      text.textContent = "Relógio acelerado sem acréscimo! Xeque-mate rápido ou derrota por tempo.";
+      banner.classList.remove("hidden");
+      setTimeout(() => banner.classList.add("hidden"), 4200);
+    } else if (isArcane) {
+      if (icon) icon.textContent = "🔮";
+      title.textContent = "ARENA ARCANA";
+      text.textContent = "O poder ancestral flui na arena! Peças capturadas libertam energia mística.";
+      banner.classList.remove("hidden");
+      setTimeout(() => banner.classList.add("hidden"), 4200);
+    }
+  },
+
+  // 7. Onboarding Único na 1ª Partida
+  checkOnboarding() {
+    const done = localStorage.getItem("wizard_onboarding_shown");
+    const btnStart = document.getElementById("btn-start-game");
+    if (!done && btnStart) {
+      btnStart.addEventListener("click", () => {
+        setTimeout(() => {
+          const toast = document.getElementById("match-onboarding-toast");
+          if (toast && !localStorage.getItem("wizard_onboarding_shown")) {
+            toast.classList.remove("hidden");
+          }
+        }, 1200);
+      }, { once: true });
+    }
+  },
+
+  // 8. Dica Progressiva em 2 Toques (Enigmas & Partidas)
+  handleProgressiveHint() {
+    if (!window._WIZARD_GAME) return;
+    const chess = window._WIZARD_GAME.getChess();
+    if (!chess) return;
+
+    const move = chess.chooseBestMove ? chess.chooseBestMove(chess.turn, 2) : null;
+    if (!move) {
+      if (typeof showToast === "function") showToast("Nenhum lance recomendado encontrado.");
+      return;
+    }
+
+    if (this.progressiveHintStep === 0) {
+      // 1º Toque: Ilumina apenas a peça que deve se mover
+      this.progressiveHintStep = 1;
+      window._WIZARD_GAME.clearHighlights();
+      window._WIZARD_GAME.highlightMoves(move.from.r, move.from.c, [], true);
+      if (typeof showToast === "function") {
+        showToast("🔮 Oráculo (1/2): Mova esta peça destacada...", 2800);
+      }
+    } else {
+      // 2º Toque: Ilumina a casa de destino exata
+      this.progressiveHintStep = 0;
+      window._WIZARD_GAME.highlightMoves(move.from.r, move.from.c, [move.to], true);
+      if (typeof showToast === "function") {
+        showToast("✨ Oráculo (2/2): Destino recomendado revelado!", 2800);
+      }
+    }
+  },
+
+  // 9. Replay Rápido dos Últimos Lances
+  replayLastMoves() {
+    if (!window._WIZARD_GAME) return;
+    const chess = window._WIZARD_GAME.getChess();
+    if (!chess || !chess.history || chess.history.length === 0) {
+      if (typeof showToast === "function") showToast("Nenhum histórico de lances para replay.");
+      return;
+    }
+
+    const modal = document.getElementById("game-over-modal");
+    if (modal) modal.classList.add("hidden");
+
+    if (typeof showToast === "function") showToast("🎬 Reproduzindo últimos lances...");
+
+    const total = chess.history.length;
+    const startStep = Math.max(0, total - 4);
+    
+    // Retrocede temporariamente
+    let currentStep = total;
+    while (currentStep > startStep) {
+      chess.undo();
+      currentStep--;
+    }
+    if (window._WIZARD_GAME.qr) window._WIZARD_GAME.qr();
+
+    // Avança passo a passo
+    let stepIdx = startStep;
+    clearInterval(this.lastReplayTimer);
+    this.lastReplayTimer = setInterval(() => {
+      if (stepIdx < total) {
+        stepIdx++;
+        if (typeof ArcaneAudio !== "undefined") ArcaneAudio.playMoveSound("p");
+      } else {
+        clearInterval(this.lastReplayTimer);
+        setTimeout(() => {
+          if (modal) modal.classList.remove("hidden");
+        }, 800);
+      }
+    }, 700);
+  },
+
+  // 10. Copiar PGN da Partida
+  copyMatchPGN() {
+    if (!window._WIZARD_GAME) return;
+    const chess = window._WIZARD_GAME.getChess();
+    if (!chess) return;
+
+    let pgn = '[Event "Wizard\'s Chess 3D - Batalha Arcana"]\n';
+    pgn += '[Site "Catedral Arcana"]\n';
+    pgn += '[Date "' + new Date().toISOString().split('T')[0] + '"]\n';
+    pgn += '[White "Mármore"]\n';
+    pgn += '[Black "Obsidiana"]\n';
+    pgn += '[Result "*"]\n\n';
+
+    if (chess.history && chess.history.length > 0) {
+      chess.history.forEach((m, idx) => {
+        if (idx % 2 === 0) pgn += (Math.floor(idx / 2) + 1) + '. ';
+        pgn += (m.san || (m.from + '-' + m.to)) + ' ';
+      });
+    } else {
+      pgn += '1. e4 e5';
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pgn).then(() => {
+        if (typeof showToast === "function") showToast("📋 PGN copiado para a área de transferência!");
+      });
+    } else {
+      if (typeof showToast === "function") showToast("PGN copiado!");
+    }
+  }
+};
+
+// ==============================================================
+// FUNÇÕES GLOBAIS DE INTERAÇÃO (FASE 3)
+// ==============================================================
+window._toggleCoordsSetting = function() {
+  const cur = localStorage.getItem("wizard_coords_enabled") === "true";
+  const next = !cur;
+  localStorage.setItem("wizard_coords_enabled", next ? "true" : "false");
+  const el = document.getElementById("board-coords-overlay");
+  const lbl = document.getElementById("label-coords-setting");
+  const btn = document.getElementById("btn-toggle-coords-setting");
+  if (el) el.classList.toggle("hidden", !next);
+  if (lbl) lbl.textContent = next ? "Ativado" : "Desativado";
+  if (btn) btn.classList.toggle("active", next);
+};
+
+window._toggleRotate2PSetting = function() {
+  const cur = localStorage.getItem("wizard_2p_camera_rotate") !== "false";
+  const next = !cur;
+  localStorage.setItem("wizard_2p_camera_rotate", next ? "true" : "false");
+  const lbl = document.getElementById("label-rotate-2p-setting");
+  const btn = document.getElementById("btn-toggle-camera-rotate-2p");
+  if (lbl) lbl.textContent = next ? "Ativado" : "Desativado";
+  if (btn) btn.classList.toggle("active", next);
+};
+
+window._toggleDaltonismSetting = function() {
+  const cur = localStorage.getItem("wizard_daltonism_mode") === "true";
+  const next = !cur;
+  localStorage.setItem("wizard_daltonism_mode", next ? "true" : "false");
+  document.body.classList.toggle("daltonism-mode", next);
+  const lbl = document.getElementById("label-daltonism-setting");
+  const btn = document.getElementById("btn-toggle-daltonism-setting");
+  if (lbl) lbl.textContent = next ? "Ativado" : "Desativado";
+  if (btn) btn.classList.toggle("active", next);
+};
+
+window._toggleReducedMotionSetting = function() {
+  const cur = localStorage.getItem("wizard_reduced_motion") === "true";
+  const next = !cur;
+  localStorage.setItem("wizard_reduced_motion", next ? "true" : "false");
+  const lbl = document.getElementById("label-reduced-motion-setting");
+  const btn = document.getElementById("btn-toggle-reduced-motion");
+  if (lbl) lbl.textContent = next ? "Ativado" : "Desativado";
+  if (btn) btn.classList.toggle("active", next);
+};
+
+window._closeOnboarding = function() {
+  localStorage.setItem("wizard_onboarding_shown", "true");
+  const toast = document.getElementById("match-onboarding-toast");
+  if (toast) toast.classList.add("hidden");
+};
+
+window._replayLastMoves = function() {
+  ArcanePhase3.replayLastMoves();
+};
+
+window._copyMatchPGN = function() {
+  ArcanePhase3.copyMatchPGN();
+};
+
+window._triggerProgressiveHint = function() {
+  ArcanePhase3.handleProgressiveHint();
+};
+
 let _wizardAppInitialized = false;
 function startWizardApp() {
   if (_wizardAppInitialized) return;
   _wizardAppInitialized = true;
   try {
     initWizardFeatures();
+    if (typeof ArcanePhase3 !== "undefined") ArcanePhase3.init();
   } catch (err) {
     console.error("[WizardChess] Erro no startWizardApp:", err);
   }

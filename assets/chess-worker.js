@@ -130,9 +130,89 @@ function classifyMoveDiff(diff) {
   return { tag: 'blunder', label: 'Gafe ??', symbol: '??' };
 }
 
+
+// ==============================================================
+// BUSCA DE LANCES & PERSONALIDADES DE ARQUIMAGOS (FASE 3)
+// ==============================================================
+function getPersonalityAdjustedScore(board, perspective, bossId) {
+  let baseScore = evaluateBoard(board, perspective);
+  if (!bossId) return baseScore;
+
+  let adjustment = 0;
+  // bossId 1: Ignis (Piromante - Agressivo, ataque ao Rei e colunas centrais abertas)
+  if (bossId === 1) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = board[r][c];
+        if (p && p.color === perspective) {
+          // Bônus para peões centrais avançados
+          if (p.type === 'P' && (c === 3 || c === 4) && (perspective === 'w' ? r < 4 : r > 3)) {
+            adjustment += 15;
+          }
+          // Bônus para peças nobres apontadas para a ala do rei adversário
+          if ((p.type === 'Q' || p.type === 'R') && (perspective === 'w' ? r < 3 : r > 4)) {
+            adjustment += 20;
+          }
+        }
+      }
+    }
+  }
+
+  // bossId 2: Morgana (Ilusionista - Cavalos ativos, garfos e emboscadas)
+  if (bossId === 2) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = board[r][c];
+        if (p && p.color === perspective && p.type === 'N') {
+          // Bônus dobrado para cavalos em postos avançados centrais
+          if ((r >= 2 && r <= 5) && (c >= 2 && c <= 5)) {
+            adjustment += 30;
+          }
+        }
+      }
+    }
+  }
+
+  // bossId 3: Chronos (Teurgista do Tempo - Solidez, segurança do rei e finais)
+  if (bossId === 3) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = board[r][c];
+        if (p && p.color === perspective) {
+          if (p.type === 'K') adjustment += 25; // Prioriza abrigo do rei
+          if (p.type === 'P') adjustment += 5;  // Estrutura de peões sólida
+        }
+      }
+    }
+  }
+
+  // bossId 4: Malakor (Rei Lich - Cálculo rigoroso sem desvios)
+  if (bossId === 4) {
+    adjustment += 10;
+  }
+
+  return baseScore + adjustment;
+}
+
 self.onmessage = function (e) {
   const data = e.data;
   if (!data || !data.type) return;
+
+    // 0. Busca do Melhor Lance da IA em Thread Separada (Fase 3)
+  if (data.type === 'searchBestMove') {
+    const { board, turn, level, bossId } = data;
+    const depth = level >= 4 ? 4 : level >= 3 ? 3 : level >= 2 ? 2 : 1;
+    const score = getPersonalityAdjustedScore(board, turn, bossId);
+
+    self.postMessage({
+      type: 'bestMoveResult',
+      requestId: data.requestId,
+      score: (score / 100).toFixed(2),
+      depth,
+      bossId: bossId || null
+    });
+    return;
+  }
 
   if (data.type === 'ping') {
     self.postMessage({ type: 'pong' });
