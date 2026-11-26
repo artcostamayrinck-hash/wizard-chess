@@ -841,6 +841,10 @@ function handleGameOverRewards() {
   const isWin = title.toLowerCase().includes("xeque-mate") || title.toLowerCase().includes("vitória");
   const isDraw = title.toLowerCase().includes("empate");
 
+  if (typeof triggerHaptic === "function") {
+    triggerHaptic(isWin ? [70, 50, 70, 50, 120] : [50, 40, 50]);
+  }
+
   let coinsEarned = 15; // Mínimo de consolo
   let xpEarned = 25;
   let rewardText = "+15 Moedas (Honra em Batalha)";
@@ -1758,10 +1762,24 @@ function setupCenteredModalsClose() {
 }
 
 // --------------------------------------------------------
-// 7b. Copiar Registro no Formato Personalizado (Imagem 1)
+// 7a. Feedback Tátil (Haptic Vibration) Universal
+// --------------------------------------------------------
+function triggerHaptic(pattern = [20]) {
+  try {
+    const enabled = localStorage.getItem("wizard_chess_haptic") !== "false";
+    if (enabled && typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+  } catch(e) {}
+}
+window.triggerHaptic = triggerHaptic;
+
+// --------------------------------------------------------
+// 7b. Copiar Registro no Formato Personalizado (Imagem 1) & PGN FIDE Oficial
 // --------------------------------------------------------
 function setupCustomPGNCopy() {
   const btnCopy = document.getElementById("btn-copy-pgn");
+  const btnExportFide = document.getElementById("btn-export-fide-pgn");
   const btnHistory = document.getElementById("btn-history");
   const domainEl = document.getElementById("history-user-domain");
   const statusEl = document.getElementById("history-game-status");
@@ -1837,6 +1855,74 @@ ${movesText ? `\n${movesText.trim()}` : ""}`;
         });
       } else {
         fallbackCopy(output, onSuccess);
+      }
+    }, { capture: true });
+  }
+
+  if (btnExportFide) {
+    btnExportFide.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      const game = window._WIZARD_GAME;
+      const chess = game && game.chess ? game.chess : null;
+      let pgnOutput = "";
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+      const { userColor } = getMatchDetails();
+      let resFide = "*";
+      if (chess && chess.isGameOver) {
+        if (chess.inCheckmate) {
+          resFide = chess.turn === 'w' ? "0-1" : "1-0";
+        } else {
+          resFide = "1/2-1/2";
+        }
+      }
+
+      pgnOutput += `[Event "Wizard's Chess 3D: Catedral Arcana"]\n`;
+      pgnOutput += `[Site "https://wizard-chess-3d-rosy.vercel.app"]\n`;
+      pgnOutput += `[Date "${dateStr}"]\n`;
+      pgnOutput += `[Round "1"]\n`;
+      pgnOutput += `[White "${userColor.includes('Brancas') ? 'Jogador (Mármore)' : 'IA Arcana (Obsidiana)'}"]\n`;
+      pgnOutput += `[Black "${userColor.includes('Pretas') ? 'Jogador (Obsidiana)' : 'IA Arcana (Mármore)'}"]\n`;
+      pgnOutput += `[Result "${resFide}"]\n`;
+      if (chess && typeof chess.fen === "function") {
+        pgnOutput += `[CurrentFEN "${chess.fen()}"]\n`;
+      }
+      pgnOutput += `\n`;
+
+      const listItems = document.querySelectorAll("#history-list li");
+      let movePairs = [];
+      listItems.forEach((li) => {
+        const text = li.innerText.replace(/\s+/g, " ").trim();
+        if (text) movePairs.push(text);
+      });
+
+      if (movePairs.length > 0) {
+        pgnOutput += movePairs.join(" ") + ` ${resFide}\n`;
+      } else {
+        pgnOutput += `${resFide}\n`;
+      }
+
+      const onSuccess = () => {
+        const oldText = btnExportFide.innerHTML;
+        btnExportFide.innerHTML = "<span>PGN FIDE Copiado!</span>";
+        btnExportFide.style.background = "#ffd700";
+        btnExportFide.style.color = "#000000";
+        if (typeof triggerHaptic === "function") triggerHaptic([30]);
+        if (typeof showToast === "function") showToast("📜 PGN Oficial FIDE copiado para a área de transferência!");
+        setTimeout(() => {
+          btnExportFide.innerHTML = oldText;
+          btnExportFide.style.background = "";
+          btnExportFide.style.color = "";
+        }, 2200);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pgnOutput).then(onSuccess).catch(() => fallbackCopy(pgnOutput, onSuccess));
+      } else {
+        fallbackCopy(pgnOutput, onSuccess);
       }
     }, { capture: true });
   }
@@ -2470,6 +2556,24 @@ function setupStartMenuGrid() {
     });
   }
 
+  // 4b. Configurações: Alternar Vibração Tátil
+  const btnHaptic = document.getElementById("btn-toggle-haptic-setting");
+  if (btnHaptic) {
+    const isHaptic = localStorage.getItem("wizard_chess_haptic") !== "false";
+    btnHaptic.classList.toggle("active", isHaptic);
+    const spanH = btnHaptic.querySelector("span");
+    if (spanH) spanH.textContent = isHaptic ? "Ativado" : "Desativado";
+    bindAction(btnHaptic, () => {
+      const current = localStorage.getItem("wizard_chess_haptic") !== "false";
+      const next = !current;
+      localStorage.setItem("wizard_chess_haptic", next ? "true" : "false");
+      btnHaptic.classList.toggle("active", next);
+      if (spanH) spanH.textContent = next ? "Ativado" : "Desativado";
+      if (next && typeof triggerHaptic === "function") triggerHaptic([35]);
+      showToast(next ? "📳 Vibração ativada" : "📳 Vibração desativada");
+    });
+  }
+
   function updateSettingsUI() {
     if (window._WIZARD_GAME && window._WIZARD_GAME.Ie) {
       const isSound = window._WIZARD_GAME.Ie.enabled !== false;
@@ -2942,6 +3046,7 @@ function setupChessDynamics() {
       const now = Date.now();
       if (isVisible && now - lastNotifiedTime > 4000) {
         lastNotifiedTime = now;
+        if (typeof triggerHaptic === "function") triggerHaptic([60, 40, 60]);
         const dyn = localStorage.getItem("wizard_chess_dynamic") || "classic";
         if (dyn === "arcane") {
           showToast("👑 XEQUE REAL! O Monarca invoca proteção cósmica!", 3000);
@@ -2957,6 +3062,7 @@ function setupChessDynamics() {
   const btnHint = document.getElementById("btn-hint");
   if (btnHint) {
     btnHint.addEventListener("click", () => {
+      if (typeof triggerHaptic === "function") triggerHaptic([20, 20]);
       const dyn = localStorage.getItem("wizard_chess_dynamic") || "classic";
       if (dyn === "arcane") {
         showToast("🔮 Oráculo Arcano: Revelando as correntes místicas do tabuleiro!", 2500);
@@ -5529,6 +5635,9 @@ function setupSpellCaptureVFX() {
         }
 
         if (!scene || !ts || !hs || !Kt || !Se || !C) return;
+        const MatClass = (window.THREE && window.THREE.MeshStandardMaterial)
+          ? window.THREE.MeshStandardMaterial
+          : (window._WIZARD_GAME && window._WIZARD_GAME.ai ? window._WIZARD_GAME.ai : Kt);
 
         // 1. Feixe de Raio Vertical Descendente
         try {
@@ -5540,7 +5649,7 @@ function setupSpellCaptureVFX() {
 
           const beamHeight = 9;
           const beamGeom = xt ? new xt(0.1, 0.4, beamHeight, 16) : new hs(0.5, 0);
-          const beamMat = new Kt({
+          const beamMat = new MatClass({
             color: beamCol,
             emissive: beamCol,
             emissiveIntensity: 2.5,
@@ -5573,7 +5682,7 @@ function setupSpellCaptureVFX() {
           if (Ls) {
             const ringGeom = new Ls(0.1, 0.35, 32);
             ringGeom.rotateX(-Math.PI / 2);
-            const ringMat = new Kt({
+            const ringMat = new MatClass({
               color: 0xffffff,
               emissive: 0xffd700,
               emissiveIntensity: 1.8,
