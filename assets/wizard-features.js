@@ -568,8 +568,223 @@ function setupOnlinePlayerNames() {
   setTimeout(monitorOnlineRoom, 1000);
 }
 
+
+// ==========================================================================
+// V1.5.17: RECONHECIMENTO DINÂMICO DE ABERTURAS NO HUD & TÁTICA 2D/3D
+// ==========================================================================
+
+const CANONICAL_OPENINGS = [
+  // Abertura Italiana & variantes
+  { name: "Abertura Italiana (Giuoco Piano)", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5"], desc: "Desenvolvimento harmonioso e controle seguro do centro com mira direta na casa f7.", plan: "As brancas consolidam o centro com d3 ou c3+d4 e preparam o roque. As pretas sustentam e5 e manobram as peças leves." },
+  { name: "Defesa dos Dois Cavalos", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "Nf6"], desc: "Contra-ataque dinâmico e agudo sobre o peão central e4 das brancas.", plan: "As pretas contra-atacam e4 sem receio de Ng5, aceitando o sacrifício posicional em d5 para ganhar tempos no desenvolvimento." },
+  { name: "Abertura Italiana", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4"], desc: "Abertura clássica focada na vulnerabilidade original de f7.", plan: "Desenvolver com tempo, preparar o roque seguro e pressionar a ala do rei negra." },
+
+  // Ruy Lopez (Espanhola)
+  { name: "Abertura Espanhola (Ruy Lopez - Morphy)", moves: ["e4", "e5", "Nf3", "Nc6", "Bb5", "a6"], desc: "A variante de Morphy questionando a intenção do bispo invasor em b5.", plan: "As pretas ganham espaço na ala da dama com b5 e Bb7; as brancas recuam Ba4 e constroem forte centro com c3 e d4." },
+  { name: "Abertura Espanhola (Ruy Lopez)", moves: ["e4", "e5", "Nf3", "Nc6", "Bb5"], desc: "Pressão no cavalo defensor de e5 para construir domínio central duradouro.", plan: "As brancas planejam c3, d4 e Re1; as pretas buscam contra-jogo flexível na ala da dama." },
+
+  // Escocesa, Russa, Gambito do Rei
+  { name: "Abertura Escocesa", moves: ["e4", "e5", "Nf3", "Nc6", "d4"], desc: "Ruptura central direta e agressiva no lance 3.", plan: "As brancas forçam a troca em d4 para abrir o jogo rapidamente para suas damas e bispos." },
+  { name: "Defesa Russa (Petrov)", moves: ["e4", "e5", "Nf3", "Nf6"], desc: "Contra-ataque espelhado de alta solidez e precisão.", plan: "As pretas contra-atacam e4 sem perder tempos defendendo e5, gerando posições simétricas sólidas." },
+  { name: "Gambito do Rei", moves: ["e4", "e5", "f4"], desc: "Ataque romântico audacioso oferecendo o peão de flanco f.", plan: "As brancas abrem a coluna f para a torre e conquistam domínio territorial do centro." },
+
+  // Siciliana
+  { name: "Siciliana Najdorf", moves: ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3", "a6"], desc: "A lendária variante de Bobby Fischer e Garry Kasparov.", plan: "As pretas dominam a casa b5, preparam e5 e lançam expansão fulminante com b5 e Bb7." },
+  { name: "Siciliana Dragão", moves: ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6", "Nc3", "g6"], desc: "O bispo negro em g7 cospe chamas pela grande diagonal da catedral.", plan: "Guerra aberta de ataques aos reis opostos: brancas buscam h4-h5 e pretas pressionam a coluna c." },
+  { name: "Defesa Siciliana Aberta", moves: ["e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4"], desc: "A luta central mais aguda do xadrez moderno.", plan: "Brancas têm iniciativa dinâmica imediata; pretas contam com melhor estrutura de peões para o final." },
+  { name: "Defesa Siciliana", moves: ["e4", "c5"], desc: "A resposta mais desequilibrada e combativa contra 1. e4.", plan: "As pretas lutam pelo centro pela coluna semiaberta c, criando rica assimetria tática." },
+
+  // Francesa & Caro-Kann
+  { name: "Defesa Francesa (Avanço)", moves: ["e4", "e6", "d4", "d5", "e5"], desc: "Cadeias de peões entrelaçadas e disputa posicional de alas.", plan: "As brancas buscam iniciativa na ala do rei; as pretas golpeiam a base do centro com c5 e Qb6." },
+  { name: "Defesa Francesa", moves: ["e4", "e6", "d4", "d5"], desc: "Estrutura impenetrável preparando contra-golpes.", plan: "As pretas sustentam o ponto d5 com firmeza e atacam o centro branco por c5 e f6." },
+  { name: "Defesa Francesa", moves: ["e4", "e6"], desc: "Prepara o avanço central d5 com suporte seguro.", plan: "Construção de estrutura elástica sem concessões prematuras." },
+  { name: "Defesa Caro-Kann (Avanço)", moves: ["e4", "c6", "d4", "d5", "e5"], desc: "Cadeia central avançada com bispo livre fora dos peões.", plan: "As pretas desenvolvem o bispo para f5 antes de e6, mantendo todas as peças ativas." },
+  { name: "Defesa Caro-Kann", moves: ["e4", "c6", "d4", "d5"], desc: "Estrutura de rocha pura com contra-golpe em d5.", plan: "As pretas garantem estrutura imune a fraquezas e pressionam o centro branco." },
+  { name: "Defesa Caro-Kann", moves: ["e4", "c6"], desc: "Defesa extremamente sólida que apoia o centro em d5.", plan: "Prepara d5 com estrutura impenetrável sem prender o bispo de casas brancas." },
+
+  // Escandinava & Pirc
+  { name: "Defesa Escandinava", moves: ["e4", "d5"], desc: "Desafio central instantâneo no lance 1.", plan: "As pretas golpeiam e4 de imediato, abrindo as diagonais para jogo rápido de peças." },
+  { name: "Defesa Pirc", moves: ["e4", "d6", "d4", "Nf6"], desc: "Defesa hipermoderna permitindo centro branco para contra-atacá-lo.", plan: "As pretas constroem o fianchetto em g7 e contra-atacam o centro com e5 ou c5." },
+
+  // Gambito da Dama & 1.d4
+  { name: "Gambito da Dama Recusado", moves: ["d4", "d5", "c4", "e6"], desc: "A fortaleza clássica sustentando o peão em d5.", plan: "As pretas mantêm a casa d5 com firmeza máxima; as brancas tentam quebrar com Nc3, Bg5 e cxd5." },
+  { name: "Defesa Eslava", moves: ["d4", "d5", "c4", "c6"], desc: "Sustenta o centro mantendo livre a diagonal para o bispo c8.", plan: "As pretas defendem d5 com c6 e conservam mobilidade para desenvolver o bispo dama." },
+  { name: "Gambito da Dama Aceito", moves: ["d4", "d5", "c4", "dxc4"], desc: "As pretas aceitam o peão de flanco temporariamente.", plan: "As brancas recuperam c4 com Bxc4; as pretas contra-atacam o centro com c5 ou e5." },
+  { name: "Gambito da Dama", moves: ["d4", "d5", "c4"], desc: "Uma das armas mais poderosas e nobres do xadrez.", plan: "As brancas oferecem o peão c4 para desviar o peão negro e conquistar centro total com e4." },
+  { name: "Sistema Londres", moves: ["d4", "d5", "Bf4"], desc: "Sistema harmonioso e altamente resistente.", plan: "As brancas desenvolvem o bispo antes de jogar e3, criando pirâmide sólida em c3-d4-e3." },
+  { name: "Defesa Índia do Rei", moves: ["d4", "Nf6", "c4", "g6"], desc: "A favorita de Kasparov com contra-ataques devastadores.", plan: "As pretas fecham o centro com e5 e avançam f5-f4 em direção ao rei branco." },
+  { name: "Defesa Nimzoíndia", moves: ["d4", "Nf6", "c4", "e6", "Nc3", "Bb4"], desc: "Cravação do cavalo e controle implacável de e4.", plan: "As pretas cravam Nc3, ameaçam dobrar peões e dominam as casas centrais claras." },
+  { name: "Defesa Benoni", moves: ["d4", "Nf6", "c4", "c5"], desc: "Desequilíbrio tático com maioria de peões na ala da dama.", plan: "As pretas conquistam atividade dinâmica pelas colunas abertas e bispo em g7." },
+  { name: "Defesa Holandesa", moves: ["d4", "f5"], desc: "Controle imediato da casa e4 visando ataque na ala do rei.", plan: "As pretas impedem e4 e constroem ataques temáticos na coluna f." },
+
+  // Flanco & Inglesa
+  { name: "Abertura Inglesa", moves: ["c4"], desc: "Abordagem posicional refinada lutando pela casa central d5.", plan: "As brancas controlam d5 pelo flanco, mantendo flexibilidade para transpor sistemas." },
+  { name: "Abertura Réti", moves: ["Nf3"], desc: "Sistema hipermoderno atacando o centro à distância.", plan: "Desenvolvimento elástico adaptando-se com precisão à resposta adversária." }
+];
+
+function setupLiveOpeningDetector() {
+  const badge = document.getElementById("opening-book-badge");
+  const badgeName = document.getElementById("opening-badge-name");
+  const modal = document.getElementById("opening-strategy-modal");
+  const modalTitle = document.getElementById("strategy-opening-title");
+  const modalMoves = document.getElementById("strategy-opening-moves");
+  const modalDesc = document.getElementById("strategy-opening-desc");
+  const modalPlan = document.getElementById("strategy-opening-plan");
+  const btnClose = document.getElementById("btn-close-strategy-modal");
+  const btnDismiss = document.getElementById("btn-dismiss-strategy");
+
+  if (!badge || !badgeName) return;
+
+  let currentOpening = null;
+
+  function getPlayedMoves() {
+    const listItems = document.querySelectorAll("#history-list li span");
+    const moves = [];
+    listItems.forEach(s => {
+      const txt = s.textContent.trim().replace(/[+#]/g, "");
+      if (txt) moves.push(txt);
+    });
+    return moves;
+  }
+
+  function checkOpenings() {
+    const moves = getPlayedMoves();
+    if (moves.length === 0) {
+      currentOpening = null;
+      badge.classList.add("hidden");
+      return;
+    }
+
+    // Apenas nos primeiros 16 lances
+    if (moves.length > 16) {
+      badge.classList.add("hidden");
+      return;
+    }
+
+    let best = null;
+    for (const op of CANONICAL_OPENINGS) {
+      if (op.moves.length <= moves.length) {
+        const match = op.moves.every((m, i) => m.toLowerCase() === moves[i].toLowerCase());
+        if (match && (!best || op.moves.length > best.moves.length)) {
+          best = op;
+        }
+      }
+    }
+
+    if (best) {
+      currentOpening = best;
+      badgeName.textContent = best.name;
+      badge.classList.remove("hidden");
+    } else if (moves.length <= 4) {
+      // Lance inicial personalizado
+      badgeName.textContent = "Abertura em Desenvolvimento";
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+  }
+
+  function openStrategyModal() {
+    if (!currentOpening || !modal) return;
+    if (modalTitle) modalTitle.textContent = currentOpening.name.toUpperCase();
+    if (modalDesc) modalDesc.textContent = currentOpening.desc;
+    if (modalPlan) modalPlan.textContent = currentOpening.plan;
+    if (modalMoves) {
+      modalMoves.innerHTML = "";
+      currentOpening.moves.forEach((m, idx) => {
+        const pill = document.createElement("span");
+        pill.className = "strategy-move-pill";
+        const moveNum = Math.floor(idx / 2) + 1;
+        const isWhite = idx % 2 === 0;
+        pill.textContent = isWhite ? (moveNum + ". " + m) : m;
+        modalMoves.appendChild(pill);
+      });
+    }
+    modal.classList.remove("hidden");
+    if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(25);
+  }
+
+  function closeStrategyModal() {
+    if (modal) modal.classList.add("hidden");
+  }
+
+  badge.addEventListener("click", openStrategyModal);
+  if (btnClose) btnClose.addEventListener("click", closeStrategyModal);
+  if (btnDismiss) btnDismiss.addEventListener("click", closeStrategyModal);
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeStrategyModal();
+    });
+  }
+
+  // Monitora alterações na lista de histórico via MutationObserver
+  const historyList = document.getElementById("history-list");
+  if (historyList) {
+    const observer = new MutationObserver(() => {
+      setTimeout(checkOpenings, 50);
+    });
+    observer.observe(historyList, { childList: true, subtree: true });
+  }
+
+  // Limpa no reset
+  const btnReset = document.getElementById("btn-reset");
+  if (btnReset) {
+    btnReset.addEventListener("click", () => {
+      currentOpening = null;
+      badge.classList.add("hidden");
+      closeStrategyModal();
+    });
+  }
+
+  // Verifica inicial
+  checkOpenings();
+}
+
+function setupQuickCameraToggle() {
+  const btn = document.getElementById("btn-quick-cam-toggle");
+  const label = document.getElementById("quick-cam-label");
+  if (!btn) return;
+
+  let is2D = false;
+
+  btn.addEventListener("click", () => {
+    const game = window._WIZARD_GAME;
+    if (!game) return;
+
+    if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(20);
+
+    const icon = btn.querySelector(".material-symbols-rounded");
+
+    if (!is2D) {
+      // Muda para 2D Top-Down (índice 2)
+      if (typeof window.In === "function") {
+        window.In(2);
+      } else if (game.adaptCamera) {
+        game.adaptCamera(2);
+      }
+      is2D = true;
+      if (label) label.textContent = "3D";
+      if (icon) icon.textContent = "view_in_ar";
+      btn.title = "Voltar para Visão 3D Imersiva";
+    } else {
+      // Volta para Visão 3D Perspectiva
+      if (typeof window.In === "function") {
+        window.In(0);
+      } else if (game.adaptCamera) {
+        game.adaptCamera(0);
+      }
+      is2D = false;
+      if (label) label.textContent = "2D";
+      if (icon) icon.textContent = "view_quilt";
+      btn.title = "Alternar Visão 2D Tática / 3D";
+    }
+  });
+}
+
 function initWizardFeatures() {
   const tasks = [
+    { name: "LiveOpeningDetector", fn: setupLiveOpeningDetector },
+    { name: "QuickCameraToggle", fn: setupQuickCameraToggle },
     { name: "RewardEconomySystem", fn: setupRewardEconomySystem },
     { name: "OnlinePlayerNames", fn: setupOnlinePlayerNames },
     { name: "StartMenuGrid", fn: setupStartMenuGrid },
