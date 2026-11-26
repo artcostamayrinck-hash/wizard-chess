@@ -3616,6 +3616,155 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
   }
 }
 
+
+/* ========================================================================== */
+/* V1.5.18: ESTILOS DE PRÉ-MOVIMENTO, REPLAY BAR, SETAS & MODAIS AVANÇADOS   */
+/* ========================================================================== */
+.replay-nav-dock {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 997;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(22, 16, 36, 0.94);
+  border: 1.5px solid rgba(181, 131, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 6px 14px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7), 0 0 16px rgba(181, 131, 255, 0.3);
+  animation: slideUpReplay 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.replay-nav-dock.hidden {
+  display: none !important;
+}
+.replay-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1edfa;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.replay-btn:hover {
+  background: rgba(181, 131, 255, 0.3);
+  border-color: #b583ff;
+  color: #fff;
+  transform: scale(1.08);
+}
+.replay-move-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #f5c56b;
+  min-width: 60px;
+  text-align: center;
+}
+.replay-close-btn {
+  background: rgba(255, 77, 109, 0.2);
+  border: 1px solid #ff4d6d;
+  color: #ff4d6d;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+@keyframes slideUpReplay {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.hud-piece-count-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #e2dbec;
+  margin-left: 6px;
+}
+
+.settings-slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.settings-slider-row label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #e2dbec;
+  flex: 1;
+}
+.settings-slider-row input[type="range"] {
+  accent-color: #f5c56b;
+  flex: 1.2;
+}
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.settings-toggle-row label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #e2dbec;
+}
+
+.theme-pill-btn {
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  color: #d0bcff;
+}
+.theme-pill-btn.active {
+  background: rgba(245, 197, 107, 0.25);
+  border-color: #f5c56b;
+  color: #f5c56b;
+}
+
+.fischer-960-btn {
+  background: linear-gradient(135deg, rgba(181, 131, 255, 0.25), rgba(123, 44, 191, 0.4));
+  border: 1.5px solid #b583ff;
+  color: #f1edfa;
+  border-radius: 16px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  width: 100%;
+  margin-top: 8px;
+}
+.fischer-960-btn:hover {
+  background: linear-gradient(135deg, rgba(181, 131, 255, 0.4), rgba(123, 44, 191, 0.6));
+  border-color: #ffd700;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 </style>
 </head>
 
@@ -6744,6 +6893,114 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
         <button type="button" style="background: rgba(255, 77, 109, 0.15); border: 1px solid #ff4d6d; color: #ff4d6d; border-radius: 12px; padding: 8px 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer;" onclick="if(window.ArcanePrivacy) window.ArcanePrivacy.clearAllUserData();">
           Apagar Meus Dados
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dock Flutuante de Navegação Lance a Lance (Replay Interativo) -->
+  <div id="replay-nav-dock" class="replay-nav-dock hidden">
+    <button type="button" id="btn-replay-start" class="replay-btn" title="Primeiro Lance">
+      <span class="material-symbols-rounded">first_page</span>
+    </button>
+    <button type="button" id="btn-replay-prev" class="replay-btn" title="Lance Anterior">
+      <span class="material-symbols-rounded">chevron_left</span>
+    </button>
+    <span id="replay-move-label" class="replay-move-label">Lance 0</span>
+    <button type="button" id="btn-replay-next" class="replay-btn" title="Próximo Lance">
+      <span class="material-symbols-rounded">chevron_right</span>
+    </button>
+    <button type="button" id="btn-replay-end" class="replay-btn" title="Último Lance">
+      <span class="material-symbols-rounded">last_page</span>
+    </button>
+    <button type="button" id="btn-replay-close" class="replay-close-btn" title="Sair do Replay">
+      Fechar
+    </button>
+  </div>
+
+  <!-- Modal Avançado de Configurações Arcanas -->
+  <div id="advanced-settings-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 480px; width: 92%; max-height: 85vh; padding: 22px 18px; border-radius: 24px; text-align: left; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div class="brand-pill" style="margin: 0;">
+          <span class="material-symbols-rounded">tune</span>
+          <span>CONFIGURAÇÕES ARCANAS</span>
+        </div>
+        <button type="button" id="btn-close-advanced-settings" class="modal-corner-close-btn" title="Fechar">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <div style="margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <div style="font-weight: 800; font-size: 0.85rem; color: #f5c56b; margin-bottom: 10px;">🔊 ÁUDIO & IMERSÃO</div>
+        <div class="settings-slider-row">
+          <label for="slider-sfx-volume">Efeitos Mágicos (SFX):</label>
+          <input type="range" id="slider-sfx-volume" min="0" max="100" value="80">
+        </div>
+        <div class="settings-slider-row">
+          <label for="slider-music-volume">Trilha Sonora (BGM):</label>
+          <input type="range" id="slider-music-volume" min="0" max="100" value="70">
+        </div>
+        <div class="settings-toggle-row">
+          <label for="toggle-voice-barks">Vozes Místicas (Anúncios):</label>
+          <input type="checkbox" id="toggle-voice-barks" checked style="accent-color: #f5c56b; width: 18px; height: 18px;">
+        </div>
+        <div class="settings-toggle-row">
+          <label for="toggle-low-time-heartbeat">Batimento Cardíaco no Fim do Tempo:</label>
+          <input type="checkbox" id="toggle-low-time-heartbeat" checked style="accent-color: #f5c56b; width: 18px; height: 18px;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <div style="font-weight: 800; font-size: 0.85rem; color: #f5c56b; margin-bottom: 10px;">⚔️ JOGABILIDADE & CONTROLES</div>
+        <div class="settings-toggle-row">
+          <label for="toggle-auto-queen">Auto-Dama (Promover sem diálogo):</label>
+          <input type="checkbox" id="toggle-auto-queen" style="accent-color: #f5c56b; width: 18px; height: 18px;">
+        </div>
+        <div class="settings-toggle-row">
+          <label for="toggle-premoves">Pré-movimentos (Premoves no turno da IA):</label>
+          <input type="checkbox" id="toggle-premoves" checked style="accent-color: #f5c56b; width: 18px; height: 18px;">
+        </div>
+        <div class="settings-toggle-row">
+          <label for="toggle-autoflip-2p">Girar Tabuleiro no Modo 2P (Pass and Play):</label>
+          <input type="checkbox" id="toggle-autoflip-2p" style="accent-color: #f5c56b; width: 18px; height: 18px;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <div style="font-weight: 800; font-size: 0.85rem; color: #f5c56b; margin-bottom: 10px;">🎨 TEMA DAS CASAS DO TABULEIRO</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button type="button" class="theme-pill-btn active" data-board-theme="classic">Mármore Clássico</button>
+          <button type="button" class="theme-pill-btn" data-board-theme="sapphire">Safira de Alto Contraste</button>
+          <button type="button" class="theme-pill-btn" data-board-theme="emerald">Esmeralda Torneio</button>
+          <button type="button" class="theme-pill-btn" data-board-theme="amethyst">Ametista Real</button>
+        </div>
+      </div>
+
+      <button type="button" id="btn-save-advanced-settings" class="promo-btn" style="width: 100%; padding: 12px; font-weight: 800;">
+        Salvar Preferências
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal do Treinador de Finais Clássicos -->
+  <div id="endgame-trainer-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px; width: 92%; max-height: 85vh; padding: 22px 18px; border-radius: 24px; text-align: left; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div class="brand-pill" style="margin: 0;">
+          <span class="material-symbols-rounded">military_tech</span>
+          <span>TREINADOR DE FINAIS CLÁSSICOS</span>
+        </div>
+        <button type="button" id="btn-close-endgame-trainer" class="modal-corner-close-btn" title="Fechar">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <p style="font-size: 0.82rem; color: #d0bcff; margin-bottom: 14px;">
+        Domine os finais teóricos fundamentais do xadrez internacional para garantir a vitória mesmo com poucas peças no tabuleiro!
+      </p>
+
+      <div id="endgame-puzzles-list" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Puzzles injetados dinamicamente via JS -->
       </div>
     </div>
   </div>

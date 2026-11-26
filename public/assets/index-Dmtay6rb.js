@@ -3698,7 +3698,7 @@ window._WIZARD_GAME = {
   getTimeIncrement: () => timeIncrement,
   setTimeIncrement: (inc) => { timeIncrement = inc; },
   Ie, xe, Je, It, en, at, ut, un, ts, xr, Cn, Ft, Kt, ai, hs, C, Se, Ds, xt, Ls,
-  adaptCamera: () => In($i, !0),
+  adaptCamera: (idx, instant) => typeof idx === "number" ? In(idx, instant) : In($i, !0),
   getAdaptiveCamera: (idx) => getAdaptiveCamera(idx),
   highlightMoves: (r, c, moves, isHint) => xa(r, c, moves, isHint),
   clearHighlights: () => Mi(),

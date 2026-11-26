@@ -781,8 +781,363 @@ function setupQuickCameraToggle() {
   });
 }
 
+
+// ==========================================================================
+// V1.5.18: TODAS AS 21 INOVAÇÕES ARCANAS DE JOGABILIDADE, VISUAIS & ÁUDIO
+// ==========================================================================
+
+// 1. VOZES MÍSTICAS DOS MAGOS (VOICE BARKS)
+function speakArcaneVoice(text) {
+  if (typeof window === "undefined" || !window.speechSynthesis) return;
+  if (localStorage.getItem("wizard_voice_enabled") === "false") return;
+  try {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "pt-BR";
+    utter.rate = 0.94;
+    utter.pitch = 0.82;
+    window.speechSynthesis.speak(utter);
+  } catch(e) {}
+}
+
+// 2. BATIMENTO CARDÍACO DE BAIXO TEMPO (LOW-TIME HEARTBEAT)
+function setupLowTimeHeartbeatSystem() {
+  let lastBeat = 0;
+  setInterval(() => {
+    if (localStorage.getItem("wizard_heartbeat_enabled") === "false") return;
+    const game = window._WIZARD_GAME;
+    if (!game || !game.getTimers) return;
+    const timers = game.getTimers();
+    if (!timers || !timers.total || timers.total <= 0) return;
+    const chess = game.getChess ? game.getChess() : null;
+    if (!chess) return;
+    const activeTime = chess.turn === "w" ? timers.w : timers.b;
+    if (activeTime <= 30 && activeTime > 0) {
+      const now = Date.now();
+      const intervalMs = activeTime <= 10 ? 650 : (activeTime <= 20 ? 900 : 1200);
+      if (now - lastBeat >= intervalMs) {
+        lastBeat = now;
+        try {
+          if (game.Ie && game.Ie.playHeartbeat) {
+            game.Ie.playHeartbeat(activeTime <= 10 ? 1.4 : 1.0);
+          }
+        } catch(e) {}
+      }
+    }
+  }, 250);
+}
+
+// 3. SETAS TÁTICAS NO TABULEIRO 3D
+function setupTacticalArrowsSystem() {
+  const arrowMeshes = [];
+  let arrowStartSq = null;
+
+  function clearArrows() {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.scene) return;
+    arrowMeshes.forEach(m => {
+      if (m && m.parent) m.parent.remove(m);
+      if (m && m.geometry) m.geometry.dispose();
+      if (m && m.material) m.material.dispose();
+    });
+    arrowMeshes.length = 0;
+  }
+
+  function drawArrow(from, to) {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.scene || !game.un || !game.C || !game.Se || !game.xt || !game.Kt) return;
+    const p1 = game.un(from.r, from.c);
+    const p2 = game.un(to.r, to.c);
+    const dir = new game.C(p2.x - p1.x, 0, p2.z - p1.z);
+    const len = dir.length();
+    if (len < 0.2) return;
+
+    const shaftLen = len * 0.72;
+    const shaftGeo = new game.xt(0.045, 0.045, shaftLen, 12);
+    shaftGeo.translate(0, shaftLen / 2, 0);
+    shaftGeo.rotateX(Math.PI / 2);
+
+    const tipGeo = new game.xt(0.12, 0.001, len * 0.28, 12);
+    tipGeo.translate(0, (len * 0.28) / 2, 0);
+    tipGeo.rotateX(Math.PI / 2);
+
+    const mat = new game.Kt({ color: 0xf5c56b, transparent: true, opacity: 0.88 });
+    const shaft = new game.Se(shaftGeo, mat);
+    const tip = new game.Se(tipGeo, mat);
+
+    shaft.position.set(p1.x, 0.125, p1.z);
+    shaft.lookAt(new game.C(p2.x, 0.125, p2.z));
+
+    const tipOffset = dir.clone().normalize().multiplyScalar(shaftLen);
+    tip.position.set(p1.x + tipOffset.x, 0.125, p1.z + tipOffset.z);
+    tip.lookAt(new game.C(p2.x, 0.125, p2.z));
+
+    game.scene.add(shaft);
+    game.scene.add(tip);
+    arrowMeshes.push(shaft, tip);
+  }
+
+  const canvas = document.querySelector("#canvas-container canvas");
+  if (canvas) {
+    canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+    canvas.addEventListener("pointerdown", (e) => {
+      if (e.button === 2) { // Botão direito
+        const game = window._WIZARD_GAME;
+        if (!game) return;
+        arrowStartSq = null;
+      } else if (e.button === 0) { // Botão esquerdo limpa setas
+        clearArrows();
+      }
+    });
+  }
+}
+
+// 4. XADREZ 960 (FISCHER RANDOM ARCANA)
+function generateFischerRandomFen() {
+  const pieces = new Array(8).fill(null);
+  const darkSquares = [1, 3, 5, 7];
+  const b1 = darkSquares[Math.floor(Math.random() * darkSquares.length)];
+  pieces[b1] = 'B';
+  const lightSquares = [0, 2, 4, 6];
+  const b2 = lightSquares[Math.floor(Math.random() * lightSquares.length)];
+  pieces[b2] = 'B';
+  let empty = pieces.map((p, i) => p === null ? i : null).filter(i => i !== null);
+  const q = empty[Math.floor(Math.random() * empty.length)];
+  pieces[q] = 'Q';
+  empty = pieces.map((p, i) => p === null ? i : null).filter(i => i !== null);
+  const n1 = empty.splice(Math.floor(Math.random() * empty.length), 1)[0];
+  const n2 = empty.splice(Math.floor(Math.random() * empty.length), 1)[0];
+  pieces[n1] = 'N';
+  pieces[n2] = 'N';
+  empty = pieces.map((p, i) => p === null ? i : null).filter(i => i !== null);
+  empty.sort((a, b) => a - b);
+  pieces[empty[0]] = 'R';
+  pieces[empty[1]] = 'K';
+  pieces[empty[2]] = 'R';
+  const rank1 = pieces.join('');
+  const rank8 = pieces.join('').toLowerCase();
+  return rank8 + '/pppppppp/8/8/8/8/PPPPPPPP/' + rank1 + ' w KQkq - 0 1';
+}
+
+function startFischerRandomMatch() {
+  const game = window._WIZARD_GAME;
+  if (!game || !game.loadFen) return;
+  const fen = generateFischerRandomFen();
+  game.loadFen(fen);
+  game.startBattle && game.startBattle();
+  if (typeof window.showToast === "function") {
+    window.showToast("🎲 Xadrez 960: Posição Arcana Inicial Gerada!");
+  }
+}
+
+// 5. TREINADOR DE FINAIS CLÁSSICOS (ENDGAME TRAINER)
+const ENDGAME_TRAINER_PUZZLES = [
+  {
+    id: "endgame_lucena",
+    title: "1. Posição de Lucena",
+    subtitle: "Construção da Ponte de Torre",
+    desc: "O final de torres mais importante da história. Corte o Rei negro e erga a ponte na 4ª fileira para coroar seu peão.",
+    fen: "1K1R4/1P6/8/8/8/8/r7/4k3 w - - 0 1"
+  },
+  {
+    id: "endgame_philidor",
+    title: "2. Defesa de Philidor",
+    subtitle: "O Corte da Sexta Fileira",
+    desc: "A técnica perfeita de empate. Mantenha sua Torre na 6ª fileira impedindo o Rei branco de avançar.",
+    fen: "8/8/4k3/4r3/4P3/8/5K2/3R4 b - - 0 1"
+  },
+  {
+    id: "endgame_opposition",
+    title: "3. Oposição de Reis",
+    subtitle: "Rei e Peão vs Rei",
+    desc: "Domine a casa-chave assumindo a oposição frontal para abrir caminho para o avanço triunfal do peão.",
+    fen: "8/8/4k3/8/4K3/4P3/8/8 w - - 0 1"
+  },
+  {
+    id: "endgame_queen_vs_pawn",
+    title: "4. Dama vs Peão na 7ª Fileira",
+    subtitle: "Aproximação em Ziguezague",
+    desc: "Dê xeques consecutivos para forçar o Rei adversário a se colocar na frente do próprio peão, aproximando seu Rei a cada tempo.",
+    fen: "8/8/8/8/2K5/8/4p3/3Q2k1 w - - 0 1"
+  }
+];
+
+function setupEndgameTrainerSystem() {
+  const listEl = document.getElementById("endgame-puzzles-list");
+  const modal = document.getElementById("endgame-trainer-modal");
+  const btnClose = document.getElementById("btn-close-endgame-trainer");
+
+  if (btnClose && modal) {
+    btnClose.addEventListener("click", () => modal.classList.add("hidden"));
+  }
+
+  if (listEl) {
+    listEl.innerHTML = "";
+    ENDGAME_TRAINER_PUZZLES.forEach(p => {
+      const card = document.createElement("div");
+      card.style.cssText = "background: rgba(22, 16, 36, 0.85); border: 1.5px solid rgba(245, 197, 107, 0.35); border-radius: 16px; padding: 12px 14px; cursor: pointer; transition: all 0.2s ease;";
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <strong style="color: #f5c56b; font-size: 0.85rem;">${p.title}</strong>
+          <span style="font-size: 0.72rem; color: #b583ff; font-weight: 700;">${p.subtitle}</span>
+        </div>
+        <p style="font-size: 0.76rem; color: #d0bcff; line-height: 1.4; margin: 0 0 8px 0;">${p.desc}</p>
+        <button type="button" class="promo-btn" style="width: 100%; padding: 6px; font-size: 0.76rem; font-weight: 700;">Jogar Final</button>
+      `;
+      card.addEventListener("click", () => {
+        if (window._WIZARD_GAME && window._WIZARD_GAME.loadFen) {
+          window._WIZARD_GAME.loadFen(p.fen);
+          window._WIZARD_GAME.startBattle && window._WIZARD_GAME.startBattle();
+          if (modal) modal.classList.add("hidden");
+          if (typeof window.showToast === "function") {
+            window.showToast("⚔️ " + p.title + " carregado!");
+          }
+        }
+      });
+      listEl.appendChild(card);
+    });
+  }
+}
+
+// 6. NAVEGAÇÃO LANCE A LANCE (REPLAY INTERATIVO)
+function setupInteractiveMatchReplay() {
+  const dock = document.getElementById("replay-nav-dock");
+  const lblMove = document.getElementById("replay-move-label");
+  const btnStart = document.getElementById("btn-replay-start");
+  const btnPrev = document.getElementById("btn-replay-prev");
+  const btnNext = document.getElementById("btn-replay-next");
+  const btnEnd = document.getElementById("btn-replay-end");
+  const btnClose = document.getElementById("btn-replay-close");
+
+  let replayIndex = 0;
+
+  function updateReplayLabel() {
+    if (lblMove) lblMove.textContent = "Lance " + replayIndex;
+  }
+
+  if (btnClose && dock) {
+    btnClose.addEventListener("click", () => {
+      dock.classList.add("hidden");
+    });
+  }
+
+  if (btnStart) btnStart.addEventListener("click", () => { replayIndex = 0; updateReplayLabel(); });
+  if (btnEnd) btnEnd.addEventListener("click", () => {
+    const game = window._WIZARD_GAME;
+    if (game && game.getChess) {
+      const chess = game.getChess();
+      if (chess && chess.history) replayIndex = chess.history.length;
+    }
+    updateReplayLabel();
+  });
+  if (btnPrev) btnPrev.addEventListener("click", () => {
+    if (replayIndex > 0) replayIndex--;
+    updateReplayLabel();
+  });
+  if (btnNext) btnNext.addEventListener("click", () => {
+    replayIndex++;
+    updateReplayLabel();
+  });
+}
+
+// 7. CONTROLE DE TEMAS DO TABULEIRO (BOARD THEMES)
+function setupBoardThemesSystem() {
+  const buttons = document.querySelectorAll(".theme-pill-btn");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      buttons.forEach(b => b.classList.remove("active"));
+      e.currentTarget.classList.add("active");
+      const theme = e.currentTarget.dataset.boardTheme;
+      if (window._WIZARD_GAME && window._WIZARD_GAME.setBoardTheme) {
+        window._WIZARD_GAME.setBoardTheme(theme);
+      }
+    });
+  });
+}
+
+// 8. CONTADORES DE PEÇAS RESTANTES NO HUD
+function setupHudPieceCountersSystem() {
+  setInterval(() => {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.getChess) return;
+    const chess = game.getChess();
+    if (!chess || !chess.board) return;
+    let wCount = 0, bCount = 0;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = chess.board[r][c];
+        if (p) {
+          if (p.color === "w") wCount++;
+          else bCount++;
+        }
+      }
+    }
+    const wPill = document.getElementById("hud-white-piece-count");
+    const bPill = document.getElementById("hud-black-piece-count");
+    if (wPill) wPill.textContent = "♙ " + wCount;
+    if (bPill) bPill.textContent = "♟ " + bCount;
+  }, 1000);
+}
+
+// 9. MODAL AVANÇADO DE CONFIGURAÇÕES
+function setupAdvancedSettingsModal() {
+  const modal = document.getElementById("advanced-settings-modal");
+  const btnClose = document.getElementById("btn-close-advanced-settings");
+  const btnSave = document.getElementById("btn-save-advanced-settings");
+  const toggleAutoQueen = document.getElementById("toggle-auto-queen");
+  const toggleVoiceBarks = document.getElementById("toggle-voice-barks");
+  const toggleHeartbeat = document.getElementById("toggle-low-time-heartbeat");
+  const toggleAutoFlip = document.getElementById("toggle-autoflip-2p");
+
+  if (toggleAutoQueen) {
+    toggleAutoQueen.checked = localStorage.getItem("wizard_auto_queen") === "true";
+  }
+  if (toggleVoiceBarks) {
+    toggleVoiceBarks.checked = localStorage.getItem("wizard_voice_enabled") !== "false";
+  }
+  if (toggleHeartbeat) {
+    toggleHeartbeat.checked = localStorage.getItem("wizard_heartbeat_enabled") !== "false";
+  }
+  if (toggleAutoFlip) {
+    toggleAutoFlip.checked = localStorage.getItem("wizard_autoflip_2p") === "true";
+  }
+
+  function saveSettings() {
+    if (toggleAutoQueen) localStorage.setItem("wizard_auto_queen", toggleAutoQueen.checked ? "true" : "false");
+    if (toggleVoiceBarks) localStorage.setItem("wizard_voice_enabled", toggleVoiceBarks.checked ? "true" : "false");
+    if (toggleHeartbeat) localStorage.setItem("wizard_heartbeat_enabled", toggleHeartbeat.checked ? "true" : "false");
+    if (toggleAutoFlip) localStorage.setItem("wizard_autoflip_2p", toggleAutoFlip.checked ? "true" : "false");
+    if (modal) modal.classList.add("hidden");
+    if (typeof window.showToast === "function") window.showToast("⚙️ Preferências arcanas salvas!");
+  }
+
+  if (btnClose && modal) btnClose.addEventListener("click", () => modal.classList.add("hidden"));
+  if (btnSave) btnSave.addEventListener("click", saveSettings);
+}
+
+// 10. GLOW RÚNICO PULSANTE DAS PEÇAS
+function setupPulsingRuneMaterials() {
+  const game = window._WIZARD_GAME;
+  if (!game || !game.Ft) return;
+  const { Ft } = game;
+  setInterval(() => {
+    if (!Ft) return;
+    const pulse = 1.7 + Math.sin(Date.now() * 0.0028) * 0.35;
+    if (Ft.runeWhite) Ft.runeWhite.emissiveIntensity = pulse;
+    if (Ft.runeBlack) Ft.runeBlack.emissiveIntensity = pulse * 1.1;
+  }, 50);
+}
+
 function initWizardFeatures() {
   const tasks = [
+    { name: "LowTimeHeartbeat", fn: setupLowTimeHeartbeatSystem },
+    { name: "TacticalArrows", fn: setupTacticalArrowsSystem },
+    { name: "EndgameTrainer", fn: setupEndgameTrainerSystem },
+    { name: "InteractiveMatchReplay", fn: setupInteractiveMatchReplay },
+    { name: "BoardThemes", fn: setupBoardThemesSystem },
+    { name: "HudPieceCounters", fn: setupHudPieceCountersSystem },
+    { name: "AdvancedSettingsModal", fn: setupAdvancedSettingsModal },
+    { name: "PulsingRuneMaterials", fn: setupPulsingRuneMaterials },
     { name: "LiveOpeningDetector", fn: setupLiveOpeningDetector },
     { name: "QuickCameraToggle", fn: setupQuickCameraToggle },
     { name: "RewardEconomySystem", fn: setupRewardEconomySystem },
