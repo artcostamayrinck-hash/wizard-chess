@@ -4180,7 +4180,59 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       to   { box-shadow: 0 0 25px #ff0000, inset 0 0 15px #ef4444; }
     }
 
-  </style>
+  
+
+/* ==================== FASE 1: DIORAMA VIVO TRANSLÚCIDO & LOOKDEV ==================== */
+#start-menu {
+  background: radial-gradient(circle at 50% 20%, rgba(13, 10, 22, 0.40) 0%, rgba(8, 7, 14, 0.72) 100%) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+#start-menu .start-content.menu-photo2-modal {
+  background: linear-gradient(180deg, rgba(16, 12, 26, 0.76) 0%, rgba(10, 8, 16, 0.88) 100%) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(229, 190, 110, 0.28) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(155, 123, 255, 0.12) !important;
+}
+
+/* ==================== FASE 3: GRIMÓRIO ARCANO & FEITIÇOS ==================== */
+.arcane-grimoire-dock {
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+}
+.arcane-grimoire-dock.hidden {
+  display: none !important;
+}
+.spell-btn {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  cursor: pointer;
+}
+.spell-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(229, 190, 110, 0.5);
+  box-shadow: 0 4px 14px rgba(155, 123, 255, 0.25);
+}
+.spell-btn.active-spell {
+  background: rgba(155, 123, 255, 0.25) !important;
+  border-color: #f5c56b !important;
+  box-shadow: 0 0 15px rgba(245, 197, 107, 0.6) !important;
+  animation: pulse-spell 1.5s infinite;
+}
+@keyframes pulse-spell {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+body.in-lobby #arcane-grimoire-dock,
+#start-menu:not(.hidden) ~ #arcane-grimoire-dock {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+</style>
 <style>
 /* ========================================================================== */
 /* Melhorias Globais de UI, Badges de Vantagem e Transi��o da Barra de Avalia��o */
@@ -7042,6 +7094,21 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
             </div>
           </div>
 
+          <!-- 1b. Dinâmica de Jogo (Modo Arcano com Feitiços vs Clássico FIDE) -->
+          <div class="setup-group" id="menu-dynamic-section">
+            <label class="setup-label photo2-label">DINÂMICA DE JOGO</label>
+            <div class="toggle-group photo2-toggle-group" id="menu-dynamic-group">
+              <button type="button" class="toggle-btn active" data-dynamic="arcane" style="border-color: rgba(155, 123, 255, 0.45); color: #C5B3FF;">
+                <span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: middle; margin-right: 4px;">auto_awesome</span>
+                <span>Arcano (Feitiços)</span>
+              </button>
+              <button type="button" class="toggle-btn" data-dynamic="classic">
+                <span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: middle; margin-right: 4px;">chess</span>
+                <span>Clássico FIDE</span>
+              </button>
+            </div>
+          </div>
+
           <!-- 2. Arena da Batalha (Atmosfera: Grid 2x2 Organizado) -->
           <div class="setup-group" id="menu-arena-section">
             <label class="setup-label photo2-label">ARENA DA BATALHA</label>
@@ -8234,6 +8301,76 @@ body:not(.in-lobby) #banner-update-available { display: none !important; }
       </button>
 
       <!-- 3. Emotes -->
+
+  <!-- ==================== BANNER DE INÍCIO DA PARTIDA (MODO ARCANO / CLÁSSICO) ==================== -->
+  <div id="match-mode-banner" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[360px] pointer-events-none transition-all duration-500">
+    <div class="rounded-2xl px-4 py-2.5 bg-[#0F0B1E]/95 border border-gold/45 shadow-[0_0_25px_rgba(229,190,110,0.35)] backdrop-blur-md flex items-center gap-3">
+      <span class="text-xl shrink-0" id="match-mode-banner-icon">🔮</span>
+      <div class="flex flex-col">
+        <span class="font-display text-[11px] font-bold tracking-widest text-gold-bright uppercase" id="match-mode-banner-title">MODO ARCANO ATIVO</span>
+        <span class="text-[10.5px] text-[#CFC8E2] leading-tight" id="match-mode-banner-desc">Capture peças e domine o centro (d4, d5, e4, e5) para acumular Mana e conjurar feitiços.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GRIMÓRIO ARCANO & BARRA DE MANA (FASE 3.1) ==================== -->
+  <div id="arcane-grimoire-dock" class="arcane-grimoire-dock hidden fixed bottom-[78px] left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[390px] z-40 select-none">
+    <div class="grimoire-glass rounded-2xl px-3 py-2 border border-[#9B7BFF]/35 bg-[#0F0B1E]/92 backdrop-blur-md shadow-2xl flex items-center justify-between gap-2">
+      <!-- Indicador de Mana -->
+      <div class="flex items-center gap-1.5 min-w-0">
+        <div class="w-7 h-7 rounded-full bg-[#9B7BFF]/20 border border-[#C5B3FF]/45 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(155,123,255,0.4)]">
+          <span class="text-xs">🔮</span>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-1 text-[10px] font-bold tracking-wider text-[#C5B3FF] uppercase">
+            <span>MANA</span>
+            <span id="arcane-mana-count" class="font-mono text-gold-bright text-[11px]">2/10</span>
+          </div>
+          <div class="w-16 h-1.5 rounded-full bg-black/60 overflow-hidden border border-white/10 mt-0.5">
+            <div id="arcane-mana-fill" class="h-full bg-gradient-to-r from-[#9B7BFF] to-[#38BDF8] rounded-full transition-all duration-300" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divisor sutil -->
+      <div class="w-[1px] h-6 bg-white/12 shrink-0"></div>
+
+      <!-- 3 Feitiços do Grimório -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- 1. Escudo Rúnico (3 Mana) -->
+        <button type="button" id="btn-spell-shield" onclick="if(window.ArcaneMode) window.ArcaneMode.selectSpell('shield')" title="Escudo Rúnico (3 Mana): Protege uma peça aliada por 1 turno"
+                class="spell-btn tap-scale rounded-xl px-2 py-1.5 flex flex-col items-center justify-center bg-white/[0.04] hover:bg-gold/15 border border-white/10 hover:border-gold/45 text-white transition-all">
+          <div class="flex items-center gap-0.5 text-[11px]">
+            <span>🛡️</span>
+            <span class="text-[9px] font-bold text-gold">3</span>
+          </div>
+          <span class="text-[9px] font-semibold text-[#D5CEE8]">Escudo</span>
+        </button>
+
+        <!-- 2. Congelar Casa (4 Mana) -->
+        <button type="button" id="btn-spell-freeze" onclick="if(window.ArcaneMode) window.ArcaneMode.selectSpell('freeze')" title="Congelar Casa (4 Mana): Bloqueia uma casa vazia por 2 turnos"
+                class="spell-btn tap-scale rounded-xl px-2 py-1.5 flex flex-col items-center justify-center bg-white/[0.04] hover:bg-[#38BDF8]/15 border border-white/10 hover:border-[#38BDF8]/45 text-white transition-all">
+          <div class="flex items-center gap-0.5 text-[11px]">
+            <span>❄️</span>
+            <span class="text-[9px] font-bold text-[#38BDF8]">4</span>
+          </div>
+          <span class="text-[9px] font-semibold text-[#D5CEE8]">Congelar</span>
+        </button>
+
+        <!-- 3. Troca Astral (5 Mana) -->
+        <button type="button" id="btn-spell-astral" onclick="if(window.ArcaneMode) window.ArcaneMode.selectSpell('astral')" title="Troca Astral (5 Mana): Inverte duas peças menores/peões aliados"
+                class="spell-btn tap-scale rounded-xl px-2 py-1.5 flex flex-col items-center justify-center bg-white/[0.04] hover:bg-[#A855F7]/15 border border-white/10 hover:border-[#A855F7]/45 text-white transition-all">
+          <div class="flex items-center gap-0.5 text-[11px]">
+            <span>🌌</span>
+            <span class="text-[9px] font-bold text-[#C084FC]">5</span>
+          </div>
+          <span class="text-[9px] font-semibold text-[#D5CEE8]">Troca</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
       <button type="button" id="btn-emotes" title="Emotes Mágicos" onclick="if(window._toggleEmotePopover) window._toggleEmotePopover();"
               class="tap-scale rounded-xl py-2 px-1 flex flex-col items-center justify-center gap-1 text-[#C8C0DC] hover:text-gold-bright hover:bg-white/[0.04]">
         <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

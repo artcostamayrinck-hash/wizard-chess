@@ -9043,6 +9043,585 @@ window._generateBugReport = function() {
 };
 
 
+
+// ==============================================================
+// FASE 1.1: ARQUITETURA DE CENA CONTÍNUA & DIORAMA 3D (CÂMERA)
+// ==============================================================
+const ArcaneCameraDirector = {
+  activeView: 'home',
+  isDioramaActive: true,
+  dioramaAngle: 0,
+
+  init() {
+    this.setupViewListeners();
+    this.startDioramaLoop();
+  },
+
+  setView(viewName) {
+    this.activeView = viewName;
+    const game = window._WIZARD_GAME;
+    if (!game || !game.It || !game.at) return;
+
+    const camera = game.It;
+    const controls = game.at;
+
+    if (viewName === 'home') {
+      this.isDioramaActive = true;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.55;
+      this.transitionCamera({ x: 0, y: 7.2, z: 9.0 }, { x: 0, y: 0.1, z: 0 }, 44, 0.8);
+    } else if (viewName === 'customize') {
+      this.isDioramaActive = false;
+      controls.autoRotate = false;
+      this.transitionCamera({ x: 0, y: 3.2, z: 4.8 }, { x: 0, y: 0.7, z: 0 }, 32, 0.75);
+    } else if (viewName === 'battle' || viewName === 'match') {
+      this.isDioramaActive = false;
+      controls.autoRotate = false;
+      this.transitionCamera({ x: 0, y: 6.8, z: 8.2 }, { x: 0, y: 0, z: 0 }, 42, 0.8);
+    } else if (viewName === 'campaign') {
+      this.isDioramaActive = false;
+      controls.autoRotate = false;
+      this.transitionCamera({ x: 1.2, y: 6.5, z: 8.4 }, { x: 0, y: 0.2, z: 0 }, 42, 0.8);
+    }
+  },
+
+  transitionCamera(targetPos, targetLookAt, targetFov, duration = 0.8) {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.It || !game.Cn) return;
+
+    const camera = game.It;
+    const controls = game.at;
+    const startPos = camera.position.clone();
+    const startLookAt = controls.target.clone();
+    const startFov = camera.fov;
+
+    game.Cn.push({
+      elapsed: 0,
+      duration: duration,
+      update(delta) {
+        this.elapsed += delta;
+        const t = Math.min(this.elapsed / this.duration, 1);
+        const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        camera.position.set(
+          startPos.x + (targetPos.x - startPos.x) * ease,
+          startPos.y + (targetPos.y - startPos.y) * ease,
+          startPos.z + (targetPos.z - startPos.z) * ease
+        );
+        controls.target.set(
+          startLookAt.x + (targetLookAt.x - startLookAt.x) * ease,
+          startLookAt.y + (targetLookAt.y - startLookAt.y) * ease,
+          startLookAt.z + (targetLookAt.z - startLookAt.z) * ease
+        );
+        camera.fov = startFov + (targetFov - startFov) * ease;
+        camera.updateProjectionMatrix();
+        controls.update();
+
+        return t >= 1;
+      }
+    });
+  },
+
+  startDioramaLoop() {
+    const step = () => {
+      const startMenu = document.getElementById('start-menu');
+      const isLobby = startMenu && !startMenu.classList.contains('hidden');
+      const isHome = document.getElementById('menu-view-home')?.classList.contains('active');
+
+      if (isLobby && isHome && this.isDioramaActive) {
+        const game = window._WIZARD_GAME;
+        if (game && game.at) {
+          game.at.autoRotate = true;
+          game.at.autoRotateSpeed = 0.45;
+          game.at.update();
+        }
+      }
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  },
+
+  setupViewListeners() {
+    // Intercepta cliques de abas e botões de voltar
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.rpg-nav-item, .md3-dock-tab, .photo2-back-btn, #btn-battle-back, #btn-settings-back, #btn-tutorial-back, #btn-profile-back, #btn-configure-battle, #btn-quick-play');
+      if (btn) {
+        setTimeout(() => {
+          const activeSub = document.querySelector('.menu-subview.active');
+          if (activeSub) {
+            const id = activeSub.id.replace('menu-view-', '');
+            this.setView(id);
+          }
+        }, 60);
+      }
+    });
+  }
+};
+
+window.ArcaneCameraDirector = ArcaneCameraDirector;
+
+
+// ==============================================================
+// FASE 3.1: MODO ARCANO, MANA TÁTICA & GRIMÓRIO DE FEITIÇOS
+// ==============================================================
+const ArcaneMode = {
+  enabled: true,
+  mana: { w: 2, b: 2 },
+  maxMana: 10,
+  activeSpells: {
+    shieldedPiece: null, // { r, c, color, turnsLeft: 1 }
+    frozenSquare: null    // { r, c, turnsLeft: 2 }
+  },
+  spellCost: {
+    shield: 3,
+    freeze: 4,
+    astral: 5
+  },
+  selectedSpell: null, // 'shield' | 'freeze' | 'astral'
+  astralFirstPiece: null,
+
+  init() {
+    this.setupDynamicToggle();
+    this.setupSpellButtons();
+    this.hookBoardInteractions();
+    this.hookBattleStartAndTurns();
+    this.updateManaDisplay();
+  },
+
+  resetMatch() {
+    this.mana = { w: 2, b: 2 };
+    this.activeSpells = { shieldedPiece: null, frozenSquare: null };
+    this.selectedSpell = null;
+    this.astralFirstPiece = null;
+    this.updateManaDisplay();
+    this.clearVisualSpellEffects();
+  },
+
+  
+  hookBattleStartAndTurns() {
+    const handleStart = () => {
+      const activeDynamicBtn = document.querySelector('#menu-dynamic-group .toggle-btn.active');
+      const isArcane = !activeDynamicBtn || activeDynamicBtn.dataset.dynamic === 'arcane';
+      this.enabled = isArcane;
+      this.resetMatch();
+
+      const grimoireDock = document.getElementById('arcane-grimoire-dock');
+      if (grimoireDock) {
+        grimoireDock.classList.toggle('hidden', !isArcane);
+      }
+
+      this.showMatchModeBanner(isArcane ? 'arcane' : 'classic');
+
+      if (typeof ArcaneCameraDirector !== 'undefined') {
+        ArcaneCameraDirector.setView('match');
+      }
+    };
+
+    const btnStart = document.getElementById('btn-start-game');
+    if (btnStart) btnStart.addEventListener('click', handleStart);
+
+    const btnQuick = document.getElementById('btn-quick-play');
+    if (btnQuick) btnQuick.addEventListener('click', handleStart);
+
+    const historyList = document.getElementById('history-list');
+    if (historyList) {
+      let lastCount = 0;
+      const obs = new MutationObserver(() => {
+        const items = historyList.querySelectorAll('li');
+        if (items.length > lastCount) {
+          lastCount = items.length;
+          const game = window._WIZARD_GAME;
+          if (!game || !game.getChess) return;
+          const chess = game.getChess();
+          const finishedTurn = chess.turn === 'w' ? 'b' : 'w';
+
+          const lastItem = items[items.length - 1];
+          if (lastItem && lastItem.textContent.includes('x')) {
+            this.addMana(finishedTurn, 2, 'Captura de Peça (+2 Mana)');
+          }
+
+          this.onTurnCompleted(finishedTurn);
+        } else if (items.length === 0) {
+          lastCount = 0;
+          this.resetMatch();
+        }
+      });
+      obs.observe(historyList, { childList: true, subtree: true });
+    }
+
+    const checkGameHook = () => {
+      const game = window._WIZARD_GAME;
+      if (game && game.makeMove && !game._arcaneHooked) {
+        const origMakeMove = game.makeMove;
+        game.makeMove = (from, to) => {
+          if (this.enabled) {
+            if (this.activeSpells.frozenSquare) {
+              const fz = this.activeSpells.frozenSquare;
+              if (to.r === fz.r && to.c === fz.c) {
+                if (typeof showToast === 'function') showToast('❄️ Casa Congelada! Lance impedido.');
+                return false;
+              }
+            }
+            if (this.activeSpells.shieldedPiece) {
+              const sh = this.activeSpells.shieldedPiece;
+              if (to.r === sh.r && to.c === sh.c) {
+                if (typeof showToast === 'function') showToast('🛡️ Peça protegida por Escudo Rúnico! Captura impedida.');
+                return false;
+              }
+            }
+          }
+          return origMakeMove(from, to);
+        };
+        game._arcaneHooked = true;
+      } else {
+        setTimeout(checkGameHook, 300);
+      }
+    };
+    checkGameHook();
+  },
+
+  setupDynamicToggle() {
+    document.querySelectorAll('#menu-dynamic-group .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#menu-dynamic-group .toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.enabled = btn.dataset.dynamic === 'arcane';
+        if (typeof showToast === 'function') {
+          showToast(this.enabled ? '🔮 Modo Arcano ativado: Feitiços e Mana disponíveis.' : '♟️ Modo Clássico FIDE ativado: Regras 100% puras.');
+        }
+      });
+    });
+  },
+
+  setupSpellButtons() {
+    // Ligações dos 3 feitiços do Grimório
+    const bindSpell = (id, spellName) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.selectSpell(spellName);
+        });
+      }
+    };
+    bindSpell('btn-spell-shield', 'shield');
+    bindSpell('btn-spell-freeze', 'freeze');
+    bindSpell('btn-spell-astral', 'astral');
+  },
+
+  selectSpell(spellName) {
+    if (!this.enabled) {
+      if (typeof showToast === 'function') showToast('O Modo Arcano está desativado nesta partida clássica.');
+      return;
+    }
+
+    const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+    const cost = this.spellCost[spellName] || 3;
+
+    if (this.selectedSpell === spellName) {
+      // Cancela seleção
+      this.selectedSpell = null;
+      this.astralFirstPiece = null;
+      this.updateSpellButtonsUI();
+      if (typeof showToast === 'function') showToast('Feitiço desmarcado.');
+      return;
+    }
+
+    if (this.mana[myColor] < cost) {
+      if (typeof showToast === 'function') showToast(`⚠️ Mana insuficiente! Requer ${cost} Mana (Atual: ${this.mana[myColor]}).`);
+      return;
+    }
+
+    this.selectedSpell = spellName;
+    this.astralFirstPiece = null;
+    this.updateSpellButtonsUI();
+
+    if (typeof showToast === 'function') {
+      if (spellName === 'shield') showToast('🛡️ Toque em uma peça aliada para envolvê-la em Escudo Rúnico.');
+      else if (spellName === 'freeze') showToast('❄️ Toque em uma casa vazia para congelá-la por 2 turnos.');
+      else if (spellName === 'astral') showToast('🌌 Toque na 1ª peça aliada (peão ou menor) para a Troca Astral.');
+    }
+  },
+
+  updateSpellButtonsUI() {
+    ['shield', 'freeze', 'astral'].forEach(s => {
+      const btn = document.getElementById('btn-spell-' + s);
+      if (btn) {
+        btn.classList.toggle('active-spell', this.selectedSpell === s);
+      }
+    });
+  },
+
+  addMana(color, amount, reason) {
+    if (!this.enabled) return;
+    this.mana[color] = Math.min(this.maxMana, Math.max(0, (this.mana[color] || 0) + amount));
+    this.updateManaDisplay();
+    if (amount > 0 && color === 'w' && reason && typeof showToast === 'function') {
+      showToast(`✨ +${amount} Mana: ${reason}`);
+    }
+  },
+
+  updateManaDisplay() {
+    const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+    const cur = this.mana[myColor] || 0;
+    const countEl = document.getElementById('arcane-mana-count');
+    const fillEl = document.getElementById('arcane-mana-fill');
+    if (countEl) countEl.textContent = `${cur}/${this.maxMana}`;
+    if (fillEl) fillEl.style.width = `${(cur / this.maxMana) * 100}%`;
+  },
+
+  hookBoardInteractions() {
+    // Intercepta cliques no tabuleiro quando um feitiço está engatilhado
+    const container = document.getElementById('canvas-container');
+    if (!container) return;
+
+    container.addEventListener('pointerup', (e) => {
+      if (!this.selectedSpell || !this.enabled) return;
+
+      const game = window._WIZARD_GAME;
+      if (!game || !game.getChess) return;
+      const chess = game.getChess();
+
+      // Identifica casa clicada a partir do raycaster ou última posição
+      const sq = this.getHoveredSquareFromEvent(e);
+      if (!sq) return;
+
+      const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+
+      if (this.selectedSpell === 'shield') {
+        const piece = chess.board[sq.r][sq.c];
+        if (!piece || piece.color !== myColor) {
+          if (typeof showToast === 'function') showToast('⚠️ Escolha uma peça aliada para proteger!');
+          return;
+        }
+        this.mana[myColor] -= this.spellCost.shield;
+        this.activeSpells.shieldedPiece = { r: sq.r, c: sq.c, color: myColor, turnsLeft: 2 };
+        this.selectedSpell = null;
+        this.updateSpellButtonsUI();
+        this.updateManaDisplay();
+        this.spawnShieldVisual(sq);
+        if (typeof showToast === 'function') showToast('🛡️ Escudo Rúnico ativado! A peça não pode ser capturada no próximo turno.');
+      } else if (this.selectedSpell === 'freeze') {
+        const piece = chess.board[sq.r][sq.c];
+        if (piece) {
+          if (typeof showToast === 'function') showToast('⚠️ Escolha uma casa VAZIA para congelar!');
+          return;
+        }
+        this.mana[myColor] -= this.spellCost.freeze;
+        this.activeSpells.frozenSquare = { r: sq.r, c: sq.c, turnsLeft: 2 };
+        this.selectedSpell = null;
+        this.updateSpellButtonsUI();
+        this.updateManaDisplay();
+        this.spawnFreezeVisual(sq);
+        if (typeof showToast === 'function') showToast('❄️ Casa congelada por 2 turnos! Movimentos bloqueados nesta casa.');
+      } else if (this.selectedSpell === 'astral') {
+        const piece = chess.board[sq.r][sq.c];
+        if (!piece || piece.color !== myColor || piece.type === 'K' || piece.type === 'Q') {
+          if (typeof showToast === 'function') showToast('⚠️ Escolha um peão ou peça menor aliada (Cavalo/Bispo/Torre)!');
+          return;
+        }
+
+        if (!this.astralFirstPiece) {
+          this.astralFirstPiece = sq;
+          if (typeof showToast === 'function') showToast('🌌 1ª peça selecionada. Agora toque na 2ª peça aliada.');
+        } else {
+          if (this.astralFirstPiece.r === sq.r && this.astralFirstPiece.c === sq.c) {
+            this.astralFirstPiece = null;
+            if (typeof showToast === 'function') showToast('Seleção cancelada.');
+            return;
+          }
+
+          // Executa Troca Astral
+          const sq1 = this.astralFirstPiece;
+          const sq2 = sq;
+
+          // Testa se o rei ficaria em xeque
+          const tmp = chess.board[sq1.r][sq1.c];
+          chess.board[sq1.r][sq1.c] = chess.board[sq2.r][sq2.c];
+          chess.board[sq2.r][sq2.c] = tmp;
+
+          if (chess.isInCheck(myColor)) {
+            // Reverte
+            chess.board[sq2.r][sq2.c] = chess.board[sq1.r][sq1.c];
+            chess.board[sq1.r][sq1.c] = tmp;
+            if (typeof showToast === 'function') showToast('⚠️ Troca Astral proibida: seu Rei ficaria em xeque!');
+            return;
+          }
+
+          this.mana[myColor] -= this.spellCost.astral;
+          this.selectedSpell = null;
+          this.astralFirstPiece = null;
+          this.updateSpellButtonsUI();
+          this.updateManaDisplay();
+
+          if (game.Ds) game.Ds();
+          if (game.spawnArenaBurst) {
+            game.spawnArenaBurst(game.un(sq1.r, sq1.c));
+            game.spawnArenaBurst(game.un(sq2.r, sq2.c));
+          }
+
+          if (typeof showToast === 'function') showToast('🌌 Troca Astral realizada com sucesso!');
+        }
+      }
+    }, true);
+  },
+
+  getHoveredSquareFromEvent(e) {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.un || !game.scene || !game.It) return null;
+
+    // Converte coordenadas da tela para o plano do tabuleiro
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    // Raycast simples contra as casas do tabuleiro
+    let bestSquare = null;
+    let minDistance = Infinity;
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const worldPos = game.un(r, c).clone();
+        worldPos.project(game.It);
+        const dist = Math.hypot(worldPos.x - x, worldPos.y - y);
+        if (dist < minDistance && dist < 0.12) {
+          minDistance = dist;
+          bestSquare = { r, c };
+        }
+      }
+    }
+    return bestSquare;
+  },
+
+  spawnShieldVisual(sq) {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.un || !game.scene || !game.Se || !game.Kt || !game.ai) return;
+
+    try {
+      const pos = game.un(sq.r, sq.c);
+      const ringGeo = new game.Kt(0.38, 0.44, 24);
+      const ringMat = new game.ai({
+        color: 0xF5C56B,
+        emissive: 0xF5C56B,
+        emissiveIntensity: 0.8,
+        transparent: true,
+        opacity: 0.85
+      });
+      const ring = new game.Se(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.copy(pos);
+      ring.position.y += 0.25;
+      game.scene.add(ring);
+      this._shieldMesh = ring;
+    } catch (_) {}
+  },
+
+  spawnFreezeVisual(sq) {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.un || !game.scene || !game.Se || !game.hs || !game.ai) return;
+
+    try {
+      const pos = game.un(sq.r, sq.c);
+      const iceGeo = new game.hs(0.35, 0.12);
+      const iceMat = new game.ai({
+        color: 0x38BDF8,
+        emissive: 0x38BDF8,
+        emissiveIntensity: 0.6,
+        transparent: true,
+        opacity: 0.75
+      });
+      const ice = new game.Se(iceGeo, iceMat);
+      ice.position.copy(pos);
+      ice.position.y += 0.08;
+      game.scene.add(ice);
+      this._frozenMesh = ice;
+    } catch (_) {}
+  },
+
+  clearVisualSpellEffects() {
+    const game = window._WIZARD_GAME;
+    if (!game || !game.scene) return;
+    if (this._shieldMesh && this._shieldMesh.parent) {
+      this._shieldMesh.parent.remove(this._shieldMesh);
+      this._shieldMesh = null;
+    }
+    if (this._frozenMesh && this._frozenMesh.parent) {
+      this._frozenMesh.parent.remove(this._frozenMesh);
+      this._frozenMesh = null;
+    }
+  },
+
+  onTurnCompleted(finishedTurn) {
+    if (!this.enabled) return;
+
+    // 1. Mana por Domínio das Casas Centrais (d4, d5, e4, e5)
+    const game = window._WIZARD_GAME;
+    if (game && game.getChess) {
+      const chess = game.getChess();
+      const centerSquares = [
+        { r: 3, c: 3 }, { r: 3, c: 4 },
+        { r: 4, c: 3 }, { r: 4, c: 4 }
+      ];
+      let centerControlled = 0;
+      centerSquares.forEach(sq => {
+        const piece = chess.board[sq.r][sq.c];
+        if (piece && piece.color === finishedTurn) {
+          centerControlled++;
+        }
+      });
+      if (centerControlled >= 2) {
+        this.addMana(finishedTurn, 1, 'Domínio Central (d4/d5/e4/e5)');
+      }
+    }
+
+    // 2. Atualiza contadores de feitiços ativos
+    if (this.activeSpells.shieldedPiece) {
+      this.activeSpells.shieldedPiece.turnsLeft--;
+      if (this.activeSpells.shieldedPiece.turnsLeft <= 0) {
+        this.activeSpells.shieldedPiece = null;
+        this.clearVisualSpellEffects();
+      }
+    }
+    if (this.activeSpells.frozenSquare) {
+      this.activeSpells.frozenSquare.turnsLeft--;
+      if (this.activeSpells.frozenSquare.turnsLeft <= 0) {
+        this.activeSpells.frozenSquare = null;
+        this.clearVisualSpellEffects();
+      }
+    }
+  },
+
+  showMatchModeBanner(modeName) {
+    const banner = document.getElementById('match-mode-banner');
+    const title = document.getElementById('match-mode-banner-title');
+    const desc = document.getElementById('match-mode-banner-desc');
+    const icon = document.getElementById('match-mode-banner-icon');
+
+    if (!banner) return;
+
+    if (modeName === 'arcane') {
+      if (title) title.textContent = 'MODO ARCANO ATIVO';
+      if (desc) desc.textContent = 'Capture peças e domine o centro (d4, d5, e4, e5) para obter Mana e feitiços.';
+      if (icon) icon.textContent = '🔮';
+    } else {
+      if (title) title.textContent = 'MODO CLÁSSICO FIDE';
+      if (desc) desc.textContent = 'Partida tradicional de xadrez: regras FIDE oficiais puras, sem feitiços.';
+      if (icon) icon.textContent = '♟️';
+    }
+
+    banner.classList.remove('hidden');
+    banner.style.opacity = '1';
+
+    setTimeout(() => {
+      banner.style.opacity = '0';
+      setTimeout(() => banner.classList.add('hidden'), 500);
+    }, 3800);
+  }
+};
+
+window.ArcaneMode = ArcaneMode;
+
+
 let _wizardAppInitialized = false;
 function startWizardApp() {
   if (_wizardAppInitialized) return;
@@ -9051,6 +9630,8 @@ function startWizardApp() {
     initWizardFeatures();
     if (typeof ArcanePhase3 !== "undefined") ArcanePhase3.init();
     if (typeof ArcanePhase4And5 !== "undefined") ArcanePhase4And5.init();
+    if (typeof ArcaneCameraDirector !== "undefined") ArcaneCameraDirector.init();
+    if (typeof ArcaneMode !== "undefined") ArcaneMode.init();
   } catch (err) {
     console.error("[WizardChess] Erro no startWizardApp:", err);
   }
