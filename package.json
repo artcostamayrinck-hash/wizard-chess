@@ -1,11 +1,11 @@
 {
   "name": "wizards-chess-3d",
   "private": true,
-  "version": "1.5.26",
+  "version": "1.5.27",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node scripts/perft-and-rules-suite.cjs",
+    "test": "node scripts/perft-and-rules-suite.cjs && node scripts/mobile-layout-audit.cjs",
     "build": "node scripts/build.cjs",
     "preview": "vite preview",
     "push": "node scripts/git-push.js"

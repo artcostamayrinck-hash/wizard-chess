@@ -262,23 +262,42 @@ legalsP = engine.getLegalMoves(3, 3);
 hasEP = legalsP.some(m => m.enPassant);
 assert(!hasEP, "En Passant proibido se a captura abrir xeque por cravada horizontal");
 
-console.log(`\n${BOLD}[4] Testes de Promoção Quádrupla (Q, R, B, N):${RESET}`);
+console.log(`\n${BOLD}[4] Testes de Promoção Quádrupla (Q, R, B, N) & Subpromoção Tática:${RESET}`);
 
-// 4.1 Promoção na 8ª fileira
+// 4.1 Promoção na 8ª fileira (avanço legal para a casa de coroação)
 engine.loadFen("8/4P3/8/8/8/8/8/4K2k w - - 0 1");
 legalsP = engine.getLegalMoves(1, 4);
-assert(legalsP.length === 1 && legalsP[0].r === 0 && legalsP[0].c === 4, "Peão avança para a 8ª fileira para promoção");
+assert(legalsP.length === 1 && legalsP[0].r === 0 && legalsP[0].c === 4, "Peão avança para a 8ª fileira para coroação");
 
-// 4.2 Subpromoção para Cavalo dando xeque imediato
-engine.loadFen("8/3P4/8/8/4K2k/8/8/8 w - - 0 1");
-const promoKnight = { type: "N", color: "w", moved: true };
-engine.board[0][3] = promoKnight;
+// 4.2 Subpromoção para Cavalo com Garfo Real (Xeque no Rei e ataque simultâneo à Dama)
+engine.loadFen("8/1q1P4/4k3/8/8/8/8/4K3 w - - 0 1");
+engine.board[0][3] = { type: "N", color: "w", moved: true }; // d8=N
 engine.board[1][3] = null;
-const isCheckByKnight = engine.isSquareAttacked(4, 7, "w");
-// Casa h4 (r=4, c=7), Cavalo em d8 (r=0, c=3) -> dr=4, dc=4 (não alcança h4, mas e se Cavalo em f7? r=1, c=5 -> dr=3, dc=2)
-engine.board[1][5] = promoKnight;
-const isKnightCheck = engine.isSquareAttacked(3, 7, "w"); // h5
-assert(typeof engine.isSquareAttacked === 'function', "Detecção precisa de xeque após promoção");
+const knightChecksKing = engine.isSquareAttacked(2, 4, "w"); // Rei em e6
+const knightAttacksQueen = engine.isSquareAttacked(1, 1, "w"); // Dama em b7
+assert(knightChecksKing && knightAttacksQueen, "Subpromoção para Cavalo (N) executa garfo real simultâneo em Rei e Dama");
+
+// 4.3 Subpromoção para Torre (R) - Restrição estrita a movimentos ortogonais
+engine.board[0][3] = { type: "R", color: "w", moved: true };
+const subpromoRookMoves = engine.getLegalMoves(0, 3);
+const rookHasDiagonalMoves = subpromoRookMoves.some(m => Math.abs(m.r - 0) === Math.abs(m.c - 3) && m.r !== 0 && m.c !== 3);
+assert(subpromoRookMoves.length === 14 && !rookHasDiagonalMoves, "Subpromoção para Torre (R) garante apenas lances ortogonais (sem diagonais)");
+
+// 4.4 Subpromoção para Bispo (B) - Restrição estrita a movimentos diagonais
+engine.board[0][3] = { type: "B", color: "w", moved: true };
+const subpromoBishopMoves = engine.getLegalMoves(0, 3);
+const bishopHasOrthogonalMoves = subpromoBishopMoves.some(m => m.r === 0 || m.c === 3);
+assert(subpromoBishopMoves.length === 7 && !bishopHasOrthogonalMoves, "Subpromoção para Bispo (B) garante apenas lances diagonais (sem linhas/colunas)");
+
+// 4.5 Subpromoção para Cavalo (N) - Restrição estrita a saltos em 'L'
+engine.board[0][3] = { type: "N", color: "w", moved: true };
+const subpromoKnightMoves = engine.getLegalMoves(0, 3);
+const knightOnlyLShaped = subpromoKnightMoves.every(m => {
+  const dr = Math.abs(m.r - 0);
+  const dc = Math.abs(m.c - 3);
+  return (dr === 2 && dc === 1) || (dr === 1 && dc === 2);
+});
+assert(subpromoKnightMoves.length === 4 && knightOnlyLShaped, "Subpromoção para Cavalo (N) valida saltos em L exclusivos sem saltos lineares");
 
 console.log(`\n${BOLD}[5] Testes de Xeque Duplo & Peças Cravadas:${RESET}`);
 

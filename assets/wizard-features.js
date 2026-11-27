@@ -1415,7 +1415,19 @@ function handleGameOverRewards() {
     triggerHaptic(isWin ? [70, 50, 70, 50, 120] : [50, 40, 50]);
   }
 
-  let coinsEarned = 15; // Mínimo de consolo
+  // Sistema Anti-Farm (Fase 4): valida tempo mínimo de 15s e 3 lances
+  let matchValid = true;
+  if (window.ArcaneDB && typeof window.ArcaneDB.checkMatchValidity === 'function') {
+    const moveCount = (window._WIZARD_GAME && window._WIZARD_GAME.getMoveHistory) ? window._WIZARD_GAME.getMoveHistory().length : (window._matchMovesCount || 10);
+    const startTime = window._matchStartTime || (Date.now() - 60000);
+    const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+    const validity = window.ArcaneDB.checkMatchValidity(moveCount, elapsedSec);
+    if (!validity.valid) {
+      matchValid = false;
+    }
+  }
+
+  let coinsEarned = matchValid ? 15 : 0; // Mínimo de consolo ou 0 se anti-farm
   let xpEarned = 25;
   let rewardText = "+15 Moedas (Honra em Batalha)";
 
@@ -1461,6 +1473,13 @@ function handleGameOverRewards() {
     coinsEarned = 20;
     xpEarned = 40;
     rewardText = "+20 Moedas (Empate)";
+  }
+
+  if (!matchValid) {
+    coinsEarned = 0;
+    xpEarned = 0;
+    rewardText = "Anti-Farm: Partida muito curta (< 3 lances ou < 15s)";
+    if (typeof showToast === "function") showToast("🛡️ Anti-farm ativo: sem recompensas em partidas rápidas.");
   }
 
   addXP(xpEarned, rewardText);
@@ -8748,6 +8767,282 @@ window._triggerProgressiveHint = function() {
   ArcanePhase3.handleProgressiveHint();
 };
 
+
+// ==============================================================
+// FASE 4 & 5: MODO ONLINE, EMPATE, ANTI-FARM, PWA STANDALONE & LIVEOPS
+// ==============================================================
+const ArcanePhase4And5 = {
+  lastEmoteTimestamp: 0,
+  recentConsoleErrors: [],
+
+  init() {
+    this.setupErrorCapture();
+    this.checkPWAStandalone();
+    this.setupEmoteControls();
+    this.setupOnlineAndDraw();
+    this.setupDailyChallengeRotation();
+    this.setupSettingsUI();
+  },
+
+  setupErrorCapture() {
+    const origError = console.error;
+    const self = this;
+    console.error = function(...args) {
+      try {
+        const line = `[${new Date().toLocaleTimeString()}] ` + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+        self.recentConsoleErrors.push(line);
+        if (self.recentConsoleErrors.length > 25) self.recentConsoleErrors.shift();
+      } catch (_) {}
+      origError.apply(console, args);
+    };
+  },
+
+  checkPWAStandalone() {
+    const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    if (isStandalone) {
+      const btnInstall = document.getElementById('btn-pwa-install');
+      if (btnInstall) btnInstall.style.setProperty('display', 'none', 'important');
+      console.log('[PWA] Modo Standalone ativo: botão de instalação ocultado com sucesso.');
+    }
+  },
+
+  setupEmoteControls() {
+    const origSendEmote = window._sendArcaneEmote;
+    const self = this;
+
+    window._sendArcaneEmote = function(text) {
+      const now = Date.now();
+      if (now - self.lastEmoteTimestamp < 4000) {
+        if (typeof showToast === 'function') {
+          showToast('⏳ Aguarde 4s para conjurar outro emote.');
+        }
+        return;
+      }
+      self.lastEmoteTimestamp = now;
+
+      if (typeof origSendEmote === 'function') {
+        origSendEmote(text);
+      }
+
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const room = urlParams.get('room') || localStorage.getItem('myRoom');
+        if (room && window.db && window.dbUpdate && window.dbRef) {
+          const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+          window.dbUpdate(window.dbRef(window.db, 'rooms/' + room), {
+            lastEmote: { text, sender: myColor, timestamp: Date.now() }
+          });
+        }
+      } catch (_) {}
+    };
+
+    window._toggleMuteEmotes = function() {
+      const isMuted = localStorage.getItem('wizard_emotes_muted') === 'true';
+      const next = !isMuted;
+      localStorage.setItem('wizard_emotes_muted', String(next));
+
+      const btn = document.getElementById('btn-toggle-mute-emotes');
+      const label = document.getElementById('label-mute-emotes-setting');
+      if (btn) btn.classList.toggle('active', next);
+      if (label) label.textContent = next ? 'Silenciado' : 'Ativo';
+
+      if (typeof showToast === 'function') {
+        showToast(next ? '🔇 Emotes do oponente silenciados.' : '🔊 Emotes do oponente ativados.');
+      }
+    };
+  },
+
+  setupOnlineAndDraw() {
+    window._confirmPauseDraw = () => {
+      if (typeof window._setPauseConfirm === 'function') window._setPauseConfirm(null);
+      this.handleOfferDraw();
+    };
+
+    window._confirmPauseResign = () => {
+      if (typeof window._setPauseConfirm === 'function') window._setPauseConfirm(null);
+      this.handleResignMatch();
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const room = urlParams.get('room') || localStorage.getItem('myRoom');
+    if (room && window.db && window.dbRef && window.dbOnValue) {
+      window.dbOnValue(window.dbRef(window.db, 'rooms/' + room), snapshot => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+
+        if (data.drawOffer && data.drawOffer !== myColor && !data.drawHandled) {
+          this.showDrawOfferDialog(room, data.drawOffer);
+        }
+
+        if (data.drawAccepted && !data.drawNotified) {
+          window.dbUpdate(window.dbRef(window.db, 'rooms/' + room), { drawNotified: true });
+          if (typeof window.triggerCustomGameOver === 'function') {
+            window.triggerCustomGameOver('Empate por Acordo Mútuo', 'Ambos os magos concordaram com a trégua arcana.');
+          }
+        }
+      });
+    }
+  },
+
+  handleOfferDraw() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const room = urlParams.get('room') || localStorage.getItem('myRoom');
+    const mode = (window._WIZARD_GAME && window._WIZARD_GAME.getMode) ? window._WIZARD_GAME.getMode() : 'ai';
+
+    if (mode === 'online' && room && window.db && window.dbUpdate && window.dbRef) {
+      const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+      window.dbUpdate(window.dbRef(window.db, 'rooms/' + room), {
+        drawOffer: myColor,
+        drawHandled: false
+      });
+      if (typeof showToast === 'function') showToast('⚖️ Oferta de empate enviada ao adversário.');
+      if (typeof window._togglePause === 'function') window._togglePause(false);
+      return;
+    }
+
+    if (mode === 'ai') {
+      const moveCount = (window._WIZARD_GAME && window._WIZARD_GAME.getMoveHistory) ? window._WIZARD_GAME.getMoveHistory().length : 12;
+      if (moveCount < 8) {
+        if (typeof showToast === 'function') showToast('⚡ O Arquimago zomba da proposta prematura de empate!');
+      } else {
+        if (typeof window._togglePause === 'function') window._togglePause(false);
+        setTimeout(() => {
+          if (typeof showToast === 'function') showToast('📜 O Arquimago aceita a trégua arcana.');
+          if (typeof window.triggerCustomGameOver === 'function') {
+            window.triggerCustomGameOver('Empate por Acordo Mútuo', 'O Arquimago reconheceu sua honra e aceitou o empate.');
+          }
+        }, 600);
+      }
+      return;
+    }
+
+    if (confirm('Ambos os jogadores concordam com o empate?')) {
+      if (typeof window._togglePause === 'function') window._togglePause(false);
+      setTimeout(() => {
+        if (typeof window.triggerCustomGameOver === 'function') {
+          window.triggerCustomGameOver('Empate por Acordo Mútuo', 'Os dois mestres concordaram com o empate no tabuleiro.');
+        }
+      }, 300);
+    }
+  },
+
+  showDrawOfferDialog(room, offerColor) {
+    const sender = offerColor === 'w' ? 'Mármore (Brancas)' : 'Obsidiana (Pretas)';
+    const accepted = confirm(`O adversário (${sender}) ofereceu um empate!\n\nDeseja aceitar a trégua arcana?`);
+    if (accepted) {
+      if (window.db && window.dbUpdate && window.dbRef) {
+        window.dbUpdate(window.dbRef(window.db, 'rooms/' + room), {
+          drawAccepted: true,
+          drawHandled: true,
+          drawOffer: null
+        });
+      }
+      if (typeof window.triggerCustomGameOver === 'function') {
+        window.triggerCustomGameOver('Empate por Acordo Mútuo', 'Você aceitou a oferta de empate do oponente.');
+      }
+    } else {
+      if (window.db && window.dbUpdate && window.dbRef) {
+        window.dbUpdate(window.dbRef(window.db, 'rooms/' + room), {
+          drawHandled: true,
+          drawOffer: null
+        });
+      }
+      if (typeof showToast === 'function') showToast('Proposta de empate recusada.');
+    }
+  },
+
+  handleResignMatch() {
+    if (typeof window._togglePause === 'function') window._togglePause(false);
+    setTimeout(() => {
+      const myColor = (typeof window.Qe !== 'undefined') ? window.Qe : 'w';
+      const winner = myColor === 'w' ? 'Obsidiana' : 'Mármore';
+      if (typeof window.triggerCustomGameOver === 'function') {
+        window.triggerCustomGameOver(`Vitória da ${winner} por Abandono`, 'Você se rendeu e a partida foi encerrada.');
+      }
+    }, 400);
+  },
+
+  setupDailyChallengeRotation() {
+    const DAILY_CATALOG = [
+      { title: "O Salto do Grifo", desc: "Encontre o garfo duplo de Cavalo que decide a partida em 2 lances.", reward: 75 },
+      { title: "A Lança de Cristal", desc: "Aproveite a cravada da Dama na coluna 'e' e desferir o golpe fulminante.", reward: 80 },
+      { title: "O Despertar da Torre", desc: "Infiltração na 7ª fileira para cortar o Rei das sombras.", reward: 90 },
+      { title: "Xeque das Estrelas", desc: "Desvie a peça defensora com sacrifício brilhante de Bispo.", reward: 100 },
+      { title: "A Barreira Mágica", desc: "Construa a fortaleza perfeita e garanta o empate técnico.", reward: 70 }
+    ];
+
+    const dayNumber = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+    const challenge = DAILY_CATALOG[dayNumber % DAILY_CATALOG.length];
+
+    try {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }).toUpperCase();
+
+      const heroDateBadge = document.querySelector('.hero-card [data-daily-date]');
+      if (heroDateBadge) heroDateBadge.textContent = `HOJE • ${dateStr}`;
+
+      const titleEl = document.getElementById('daily-challenge-title');
+      if (titleEl) titleEl.textContent = challenge.title;
+
+      const descEl = document.getElementById('daily-challenge-desc');
+      if (descEl) descEl.textContent = challenge.desc;
+    } catch (_) {}
+  },
+
+  setupSettingsUI() {
+    const isMuted = localStorage.getItem('wizard_emotes_muted') === 'true';
+    const btnMute = document.getElementById('btn-toggle-mute-emotes');
+    const lblMute = document.getElementById('label-mute-emotes-setting');
+    if (btnMute) btnMute.classList.toggle('active', isMuted);
+    if (lblMute) lblMute.textContent = isMuted ? 'Silenciado' : 'Ativo';
+  }
+};
+
+window.ArcanePhase4And5 = ArcanePhase4And5;
+
+// Gerador de Diagnóstico Completo (Reportar Bug)
+window._generateBugReport = function() {
+  const currentFen = (window._WIZARD_GAME && window._WIZARD_GAME.getFen)
+    ? window._WIZARD_GAME.getFen()
+    : (window._currentEngineFen || 'Posição inicial / Menu Principal');
+  const ua = navigator.userAgent;
+  const screenRes = `${window.innerWidth}x${window.innerHeight} (DPR: ${window.devicePixelRatio || 1})`;
+  const mode = (window._WIZARD_GAME && window._WIZARD_GAME.getMode) ? window._WIZARD_GAME.getMode() : 'menu';
+  const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  const recentErrors = (ArcanePhase4And5.recentConsoleErrors || []).slice(-6).join('\n') || 'Nenhum erro registrado recentemente.';
+
+  const report = [
+    "=== WIZARD'S CHESS 3D - RELATÓRIO DE DIAGNÓSTICO (BUG REPORT) ===",
+    `Versão: 1.5.27 (FASE 4 & 5)`,
+    `Data/Hora: ${new Date().toISOString()}`,
+    `Modo Atual: ${mode}`,
+    `Resolução da Tela: ${screenRes}`,
+    `Modo Standalone (PWA): ${isStandalone ? 'Sim' : 'Não'}`,
+    `Navegador / Plataforma: ${ua}`,
+    `Posição FEN Atual: ${currentFen}`,
+    `Últimos Registros do Console:`,
+    recentErrors,
+    "================================================================"
+  ].join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(report).then(() => {
+      if (typeof showToast === 'function') {
+        showToast('📋 Diagnóstico copiado! Cole no Discord ou GitHub.', 3200);
+      } else {
+        alert('Diagnóstico copiado para a área de transferência!');
+      }
+    }).catch(() => {
+      prompt('Copie o relatório de diagnóstico abaixo:', report);
+    });
+  } else {
+    prompt('Copie o relatório de diagnóstico abaixo:', report);
+  }
+};
+
+
 let _wizardAppInitialized = false;
 function startWizardApp() {
   if (_wizardAppInitialized) return;
@@ -8755,6 +9050,7 @@ function startWizardApp() {
   try {
     initWizardFeatures();
     if (typeof ArcanePhase3 !== "undefined") ArcanePhase3.init();
+    if (typeof ArcanePhase4And5 !== "undefined") ArcanePhase4And5.init();
   } catch (err) {
     console.error("[WizardChess] Erro no startWizardApp:", err);
   }
